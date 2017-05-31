@@ -147,7 +147,8 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         $scope.showPanel = false;
         $scope.showPanel1 = true;
         $scope.filtros.idCliente= obj.idCliente;
-        $scope.getCarteraVencida($scope.filtros);
+        $scope.clienteDetalle = obj;
+        //$scope.getCarteraVencida($scope.filtros);
         
     };
 
