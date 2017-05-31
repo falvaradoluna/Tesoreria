@@ -133,12 +133,18 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         controlDepositosRepository.getClientById(idBusqueda).then(function(result) {
             if (result.data.length > 0) {
                 $scope.lstClient = result.data;
+                 $scope.clienteDetalle =  result.data[0];
                 /*setTimeout(function() {
                     $scope.setTablePaging('tblClient');
                     $("#tblClient_filter").removeClass("dataTables_info").addClass("hide-div");
                     $('#loadModal').modal('hide');
                 }, 1000);*/
-            } else { $('#loadModal').modal('hide'); }
+            } else { 
+
+                alertFactory.success('No existe el ID');  
+                $scope.filtros.idCliente = '';
+                $scope.clienteDetalle = '';              
+                $('#loadModal').modal('hide'); }
         });
     };
 
