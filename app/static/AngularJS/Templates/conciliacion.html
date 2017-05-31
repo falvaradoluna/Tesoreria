@@ -5,184 +5,90 @@
             <div class="ibox-title" style="text-align:center">
                 <h3>Detalles de Abonos y Cargos</h3>
             </div>
-            <!-- <div class="panel col-md-12">
-        <br/>
-        <div class="row">
-            <div class="form-group col-md-3">
-                <label class="form-label">Empresa:</label>
-                <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                    <option value="">Seleccioné Empresa</option>
-                </select>
+            <div class="tab">
+                <button class="tablinks active" onclick="openCity(event, 'AbonosC')"><span style="color:white; font-weight: bold;"> Abonos Contables </span></button>
+                <button class="tablinks" onclick="openCity(event, 'AbonosB')"><span style="color:white; font-weight: bold;"> Abonos Bancarios </span> </button>
+                <button class="tablinks" onclick="openCity(event, 'CargosC')"><span style="color:white; font-weight: bold;"> Cargo Contable </span></button>
+                <button class="tablinks" onclick="openCity(event, 'CargosB')"><span style="color:white; font-weight: bold;"> Cargo Bancario </span></button>
             </div>
-            <div class="form-group col-md-3" id="calendar">
-                <label for="fInicio">Fecha Elaboración:</label>
-                <div class="input-group date">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                    <input type="text" class="form-control" id="fInicio" ng-model="esquema.fechaElaboracion" value={{fechaElaboracion}} placeholder="dd/mm/yyyy">
-                </div>
-            </div>
-            <div class="form-group col-md-3">
-                <label class="form-label">Banco:</label>
-                <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                    <option value="">Seleccioné Banco</option>
-                </select>
-            </div>
-            <div class="form-group col-md-3">
-                <label class="form-label">Cuenta:</label>
-                <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                    <option value="">Seleccioné Cuenta</option>
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <div>
-                <div class="form-group col-md-3">
-                    <label class="form-label">Clave:</label>
-                    <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                        <option value="">Seleccioné Clave</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="form-label">Cuenta Contable:</label>
-                    <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                        <option value="">Seleccioné Cuenta Contable</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-3" id="calendar">
-                    <label for="fInicio">Fecha Corte:</label>
-                    <div class="input-group date">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                        <input type="text" class="form-control" id="fInicio" ng-model="esquema.fechaCorte" value={{fechaCorte}} placeholder="dd/mm/yyyy">
+            <div id="AbonosC" class="tabcontent" style="display: block;">
+                <h3>Abonos Contables no Bancarios </h3>
+                <br/>
+                <div id="aboConta">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo Poliza</th>
+                                <th>No Poliza</th>
+                                <th>Concepto</th>
+                                <th style="width: 10%; text-align: center;">Total</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div style="width: 100%; height: 400px; overflow-y: scroll;">
+                        <table class="table">
+                            <tbody>
+                                <tr ng-repeat="row in abonosContables">
+                                    <td>{{row.movFechaOpe}}</td>
+                                    <td>{{row.polTipo}}</td>
+                                    <td>{{row.numeroCuenta}}</td>
+                                    <td>{{row.movConcepto}}</td>
+                                    <td style="text-align: right;">{{row.abono | currency}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="padding-left: 85%;">Total: <span style="text-align: right;">{{totalAbonoContable | currency}}</span> </div>
+                    <div class="row col-md-12" style="text-align: right;">
+                        <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
+                            <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
+                        </div>
+                        <br/> &nbsp;
                     </div>
                 </div>
-                <div class="col-md-3" style="margin-top: 23px">
-                    <button class="btn btn-warning">Buscar</button>
-                </div>
             </div>
-        </div>
-        <ul class="nav nav-tabs">
-            <li class="active"><a data-toggle="tab" href="#aboConta">Abo Conta no Bancos</a></li>
-            <li><a data-toggle="tab" href="#aboBancos">Abo Bancos no Conta</a></li>
-            <li><a data-toggle="tab" href="#cargoConta">Cargo Conta no Bancos</a></li>
-            <li><a data-toggle="tab" href="#cargoBancos">Cargo Bancos no Conta</a></li>
-        </ul>
-        <div class="tab-content">
-            <div id="aboConta" class="tab-pane fade in active">
-                <h3>Abonos Contables no Bancarios</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo Pol</th>
-                            <th>No Pol</th>
-                            <th>Concepto</th>
-                            <th style="width: 10%; text-align: center;">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in aboContaBanco">
-                            <td>{{row.fecha}}</td>
-                            <td>{{row.tipoPol}}</td>
-                            <td>{{row.noPol}}</td>
-                            <td>{{row.concepto}}</td>
-                            <td style="text-align: right;">{{row.total | currency}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="padding-left: 85%;">Total: <span style="text-align: right;">{{totalAboContaBanco | currency}}</span> </div>
-                <div class="row col-md-12" style="text-align: right;">
-                    <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
-                       <a class="btn btn-success" href="/conciliacionInicio">Regresar DPI</a>
-                        <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
-                    </div>
-                    <br/> &nbsp;
-                </div>
-            </div>
-            <div id="aboBancos" class="tab-pane fade">
+            <div id="AbonosB" class="tabcontent">
                 <h3>Abonos Bancarios no Contables</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo Pol</th>
-                            <th>No Pol</th>
-                            <th>Concepto</th>
-                            <th style="width: 10%; text-align: center;">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: right;">{{row.total | currency}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="padding-left: 84%;">Total: {{totalAboBancoConta | currency}} </div>
+                <br/>                
+                <div ui-grid="gridDepositosBancos" ui-grid-selection ui-grid-pinning class="grid"></div>
+                <div style="padding-left: 84%;">Total: {{totalAbonoBancario | currency}} </div>
                 <div class="row col-md-12" style="text-align: right;">
                     <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
-                        <a class="btn btn-success" href="/conciliacionInicio">Regresar DPI</a>
+                        <button class="btn btn-success" ng-show="dpiSelected" ng-click="getAbonoBancario(0,0,0,2)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modalDPI">Enviar a DPI</button>
                         <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
                     </div>
                     <br/> &nbsp;
                 </div>
             </div>
-            <div id="cargoConta" class="tab-pane fade">
+            <div id="CargosC" class="tabcontent">
                 <h3>Cargo Contable no Bancario</h3>
+                <br/>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>Fecha</th>
-                            <th>Tipo Pol</th>
-                            <th>No Pol</th>
+                            <th>Tipo Poliza</th>
+                            <th>No Poliza</th>
                             <th>Concepto</th>
                             <th style="width: 10%; text-align: center;">Total</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: right;">{{row.total | currency}}</td>
-                        </tr>
-                    </tbody>
                 </table>
-                <div style="padding-left: 84%;">Total: {{totalCargoContaBanco | currency}} </div>
-                <div class="row col-md-12" style="text-align: right;">
-                    <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
-                        <a class="btn btn-success" href="/conciliacionInicio">Regresar DPI</a>
-                       <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
-                    </div>
-                    <br/> &nbsp;
+                <div style="width: 100%; height: 400px; overflow-y: scroll;">
+                    <table class="table">
+                        <tbody>
+                            <tr ng-repeat="row in cargosContables">
+                                <td>{{row.movFechaOpe}}</td>
+                                <td>{{row.polTipo}}</td>
+                                <td>{{row.numeroCuenta}}</td>
+                                <td>{{row.movConcepto}}</td>
+                                <td style="text-align: right;">{{row.cargo | currency}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div id="cargoBancos" class="tab-pane fade">
-                <h3>Cargo Bancario no Contable</h3>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo Pol</th>
-                            <th>No Pol</th>
-                            <th>Concepto</th>
-                            <th style="width: 10%; text-align: center;">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="row in cargBancoConta">
-                            <td>{{row.fecha}}</td>
-                            <td>{{row.tipoPol}}</td>
-                            <td>{{row.noPol}}</td>
-                            <td>{{row.concepto}}</td>
-                            <td style="text-align: right;">{{row.total | currency}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="padding-left: 84%;">Total: {{totalCargoBancoConta | currency}} </div>
+                <div style="padding-left: 84%;">Total: {{totalCargoContable | currency}} </div>
                 <div class="row col-md-12" style="text-align: right;">
                     <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
                         <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
@@ -190,216 +96,34 @@
                     <br/> &nbsp;
                 </div>
             </div>
-        </div>
-    </div> -->
-            <!--div class="panel">
+            <div id="CargosB" class="tabcontent">
+                <h3>Cargo Bancario no Contable</h3>
                 <br/>
-                <br/>
-                <div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="form-label">Empresa:</label>
-                        <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                            <option value="">Seleccioné Empresa</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3" id="calendar">
-                        <label for="fInicio">Fecha Elaboración:</label>
-                        <div class="input-group date">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                            <input type="text" class="form-control" id="fInicio" ng-model="esquema.fechaElaboracion" value={{fechaElaboracion}} placeholder="dd/mm/yyyy">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="form-label">Banco:</label>
-                        <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                            <option value="">Seleccioné Banco</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="form-label">Cuenta:</label>
-                        <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                            <option value="">Seleccioné Cuenta</option>
-                        </select>
-                    </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>No. Movimiento</th>
+                            <th>Referencia</th>
+                            <th>Concepto</th>
+                            <th style="width: 10%; text-align: center;">Total</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div style="width: 100%; height: 400px; overflow-y: scroll;">
+                    <table class="table">
+                        <tbody>
+                            <tr ng-repeat="row in cargosBancarios">
+                                <td>{{row.FECHA}}</td>
+                                <td>{{row.TIPO}}</td>
+                                <td>{{row.POLIZA}}</td>
+                                <td>{{row.CONCEPTO}}</td>
+                                <td style="text-align: right;">{{row.SALDO_ACTUAL | currency}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="row">
-                    <div>
-                        <div class="form-group col-md-3">
-                            <label class="form-label">Clave:</label>
-                            <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                                <option value="">Seleccioné Clave</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label class="form-label">Cuenta Contable:</label>
-                            <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
-                                <option value="">Seleccioné Cuenta Contable</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3" id="calendar">
-                            <label for="fInicio">Fecha Corte:</label>
-                            <div class="input-group date">
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                                <input type="text" class="form-control" id="fInicio" ng-model="esquema.fechaCorte" value={{fechaCorte}} placeholder="dd/mm/yyyy">
-                            </div>
-                        </div>
-                        <div class="col-md-3" style="margin-top: 23px">
-                            <button class="btn btn-warning">Buscar</button>
-                        </div>
-                    </div>
-                </div>
-                <br/>
-                <br/>
-            </div-->
-
-            <div class="panel panel-primary">
-                <!--Panel heading-->
-                <div class="panel-heading">
-                    <div class="panel-control">
-                        <!--Nav tabs-->
-                        <ul class="nav nav-tabs">
-                            <li><a data-toggle="tab" href="#demo-tabs-box-1">Abonos Contables</a></li>
-                            <li><a data-toggle="tab" href="#demo-tabs-box-2">Abonos Bancarios</a></li>
-                            <li><a data-toggle="tab" href="#demo-tabs-box-3">Cargo Contable</a></li>
-                            <li><a data-toggle="tab" href="#demo-tabs-box-4">Cargo Bancario</a></li>
-                        </ul>
-                    </div>
-                    <h3 class="panel-title"></h3>
-                </div>
-                <!--Panel body-->
-                <div class="panel-body">
-                    <!--Tabs content-->
-                    <div class="tab-content">
-                        <div id="demo-tabs-box-1" class="tab-pane fade in active">
-                            <h3>Abonos Contables no Bancarios</h3>
-                            <br/>
-                            <div id="aboConta">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Tipo Poliza</th>
-                                            <th>No Poliza</th>
-                                            <th>Concepto</th>
-                                            <th style="width: 10%; text-align: center;">Total</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <div style="width: 100%; height: 400px; overflow-y: scroll;">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr ng-repeat="row in abonosContables">
-                                                <td>{{row.movFechaOpe}}</td>
-                                                <td>{{row.polTipo}}</td>
-                                                <td>{{row.numeroCuenta}}</td>
-                                                <td>{{row.movConcepto}}</td>
-                                                <td style="text-align: right;">{{row.abono | currency}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div style="padding-left: 85%;">Total: <span style="text-align: right;">{{totalAbonoContable | currency}}</span> </div>
-                                <div class="row col-md-12" style="text-align: right;">
-                                    <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
-                                        <!--button class="btn btn-success" ng-show="abonosContables.length > 0" ng-click="getAbonoContable(0,0,0,2)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modalDPI">Regresar DPI</button-->
-                                        <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
-                                    </div>
-                                    <br/> &nbsp;
-                                </div>
-                            </div>
-                        </div>
-                        <div id="demo-tabs-box-2" class="tab-pane fade">
-                            <h3>Abonos Bancarios no Contables</h3>
-                            <br/>
-                            <!--table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>No. Movimiento</th>
-                                        <th>Referencia</th>
-                                        <th>Concepto</th>
-                                        <th style="width: 10%; text-align: center;">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="row in abonosBancarios">
-                                        <td>{{row.FECHA}}</td>
-                                        <td>{{row.TIPO}}</td>
-                                        <td>{{row.POLIZA}}</td>
-                                        <td>{{row.CONCEPTO}}</td>
-                                        <td style="text-align: right;">{{row.SALDO_ACTUAL | currency}}</td>
-                                    </tr>
-                                </tbody>
-                            </table-->
-                            <div ui-grid="gridDepositosBancos" ui-grid-selection ui-grid-pinning class="grid"></div>
-                            <div style="padding-left: 84%;">Total: {{totalAbonoBancario | currency}} </div>
-                            <div class="row col-md-12" style="text-align: right;">
-                                <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
-                                    <button class="btn btn-success" ng-show="dpiSelected" ng-click="getAbonoBancario(0,0,0,2)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modalDPI">Enviar a DPI</button>
-                                    <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
-                                </div>
-                                <br/> &nbsp;
-                            </div>
-                        </div>
-                        <div id="demo-tabs-box-3" class="tab-pane fade">
-                            <h3>Cargo Contable no Bancario</h3>
-                            <br/>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Tipo Poliza</th>
-                                        <th>No Poliza</th>
-                                        <th>Concepto</th>
-                                        <th style="width: 10%; text-align: center;">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="row in cargosContables">
-                                        <td>{{row.movFechaOpe}}</td>
-                                        <td>{{row.polTipo}}</td>
-                                        <td>{{row.numeroCuenta}}</td>
-                                        <td>{{row.movConcepto}}</td>
-                                        <td style="text-align: right;">{{row.cargo | currency}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div style="padding-left: 84%;">Total: {{totalCargoContable | currency}} </div>
-                            <div class="row col-md-12" style="text-align: right;">
-                                <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
-                                    <!--button class="btn btn-success" ng-show="cargosContables.length > 0" ng-click="getCargoContable(0,0,0,2)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modalDPI">Regresar DPI</button-->
-                                    <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
-                                </div>
-                                <br/> &nbsp;
-                            </div>
-                        </div>
-                        <div id="demo-tabs-box-4" class="tab-pane fade">
-                            <h3>Cargo Bancario no Contable</h3>
-                            <br/>
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>No. Movimiento</th>
-                                        <th>Referencia</th>
-                                        <th>Concepto</th>
-                                        <th style="width: 10%; text-align: center;">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="row in cargosBancarios">
-                                        <td>{{row.FECHA}}</td>
-                                        <td>{{row.TIPO}}</td>
-                                        <td>{{row.POLIZA}}</td>
-                                        <td>{{row.CONCEPTO}}</td>
-                                        <td style="text-align: right;">{{row.SALDO_ACTUAL | currency}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div style="padding-left: 84%;">Total: {{totalCargoBancario | currency}} </div>
-                        </div>
-                    </div>
-                </div>
+                <div style="padding-left: 84%;">Total: {{totalCargoBancario | currency}} </div>
             </div>
         </div>
     </div>
@@ -417,8 +141,8 @@
                         <div class="form-group">
                             <table class="table">
                                 <thead>
-                                    <tr>                                        
-                                        <th>BANCO</th>                                        
+                                    <tr>
+                                        <th>BANCO</th>
                                         <th>FECHA</th>
                                         <th style="width: 20%; text-align: right;">SALDO ACTUAL</th>
                                         <th>POLIZA </th>
@@ -442,8 +166,7 @@
                     <div class="col-sm-8"></div>
                     <div class="col-sm-4">
                         <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary" ng-click="getDepositosPendientes(1,1,idTipoAuxiliar)" data-dismiss="modal">Enviar a DPI</button>
-                        <!--button type="button" class="btn btn-primary " ng-click="enviarCorreo(timbrados,filtro.correo)">Generar</button-->
+                        <button type="button" class="btn btn-primary" ng-click="getDepositosPendientes(1,1,idTipoAuxiliar)" data-dismiss="modal">Enviar a DPI</button>                       
                     </div>
                 </div>
             </div>
