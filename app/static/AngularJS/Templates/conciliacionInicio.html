@@ -1,0 +1,223 @@
+<div ng-init="init()">
+    <div class="panel col-md-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title" style="text-align:center">
+                <h3>Conciliación  Contable Inicio</h3>
+            </div>
+            <div class="panel col-md-12">
+                <!--EMPIEZA Busqueda -->
+                <!--===================================================-->
+                <form>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="form-label text-main">Empresa:</label>
+                                <select class="form-control" ng-model="empresaActual" ng-options="empresa.emp_nombre for empresa in empresaUsuario track by empresa.emp_nombre" name="txtTipoContrato" ng-change="getBancos(empresaActual.emp_idempresa)" ng-disabled="timbradoPendiente">
+                                    <option value="">Seleccioné Empresa</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="form-label text-main">Banco:</label>
+                                <select class="form-control" ng-model="bancoActual" ng-options="banco.IdBanco as banco.Nombre for banco in bancoEmpresa" name="txtTipoContrato" ng-change="getCuenta(bancoActual,empresaActual.emp_idempresa)" ng-disabled="activaInputBanco">
+                                    <option value="">Seleccioné Banco</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label class="form-label text-main">Cuenta:</label>
+                                <select class="form-control" ng-model="cuentaActual" ng-options="bancoCuenta.Cuenta for bancoCuenta in bancoCuenta track by bancoCuenta.Cuenta" name="txtTipoContrato" ng-change="setCuenta(cuentaActual)" ng-disabled="activaInputCuenta">
+                                    <option value="">Seleccioné Cuenta</option>
+                                </select>
+                            </div>
+                            <div class="col-md-1" style="margin-top: 23px">
+                                <button class="btn btn-primary pull-right" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar"><i class="ti-search"></i> Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--===================================================-->
+                <!--TERMINA Busqueda -->
+                <!--EMPIEZA Información de la cuenta -->
+                <!--===================================================-->
+                <form class="form-inline">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="fInicio" class="text-main">Clave:</label>
+                                <div class="input-group date">
+                                    <label>01218000-195334667</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="fInicio" class="text-main">Cuenta Contable:</label>
+                                <div class="input-group date">
+                                    <label>{{cuentaActual.CuentaContable}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3" id="calendar">
+                                <label for="fInicio" class="text-main">Fecha Elaboración:</label>
+                                <div class="input-group date">
+                                    <label>{{fechaElaboracion | date:'dd/MM/yyyy'}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-3" id="calendar">
+                                <label for="fInicio" class="text-main">Fecha Corte:</label>
+                                <div class="input-group date">
+                                    <label>{{fechaCorte | date:'dd/MM/yyyy'}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!--===================================================-->
+                <!--TERMINA Información de la cuenta -->
+                <!--EMPIEZA El resumen de la cuenta y la seleccion de encargados-->
+                <!--===================================================-->
+                <div class="panel-body">
+                    <div class="row">
+                        <!--EMPIEZA El resumen de la cuenta -->
+                        <!--===================================================-->
+                        <div class="col-sm-7">
+                            <label class="text-main text-semibold" ng-show="InfoBusqueda">
+                            <span class="text-info">{{busqueda.Empresa}}</span> / 
+                            <span class="text-info">{{busqueda.Banco}}</span> / 
+                            <span class="text-info">{{busqueda.cuenta}}</span></label>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Resumen</th>
+                                        <th>Importe</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Saldo Banco</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].saldoBanco | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Abonos en Contabilidad no considerados en Bancos</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoContable | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Abonos en Bancos no considerados en Contabilidad</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoBancario | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cargos en Contabilidad no considerados en Bancos</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoContable | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Cargos Bancos no considerados en Contabilidad</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoBancario | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Depositos Referenciados</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].deptosReferenciados | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Auxiliares Referenciados</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].auxReferenciado | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saldo segun Conciliacion</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Saldo segun Contabilidad</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].sContabilidad | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Diferencia</td>
+                                        <td class="text-right">{{ totalesAbonosCargos[0].diferencia | currency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--TERMINA El resumen de la cuenta -->
+                        <!--===================================================-->
+                        <!--EMPIEZA La seleccion del encargado -->
+                        <!--===================================================-->
+                        <div class="col-sm-5">
+                            <form>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-primary" style="width:100px;" ng-disabled="activaBotonesReporte"><i class="ti-save"></i> Guardar</button>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-info" style="width:100px;" ng-disabled="activaBotonesReporte"><i class="ti-printer"></i> Imprimir</button>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-success" ng-controller="conciliacionDetalleRegistroController" ng-click="generaInfoReport(1)" ng-disabled="activaBotonesReporte"><i class="ti-export"></i> Ver Reporte</button>
+                                </div>
+                                <div class="form-group col-md-3" ng-controller="conciliacionDetalleRegistroController">
+                                    <button class="btn btn-mint" ng-click="generaInfoReport(2)" ng-disabled="activaBotonesReporte"><i class="ti-email"></i> Enviar Correo</button>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-10">
+                                            <label class="form-label">Elaboro:</label>
+                                            <label class="form-label">{{userData.nombreUsuario}}</label>
+                                            <!--select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
+                                                <option value="">Seleccioné Empresa</option>
+                                            </select-->
+                                        </div>
+                                        <div class="form-group col-md-10">
+                                            <label class="form-label">Gerente Administrativo:</label>
+                                            <label class="form-label">{{contadorGerente[0].NombreGerente}}</label>
+                                            <!--select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
+                                                <option value="">Seleccioné Fecha</option>
+                                            </select-->
+                                        </div>
+                                        <div class="form-group col-md-10">
+                                            <label class="form-label">Contador:</label>
+                                            <label class="form-label">{{contadorGerente[0].NombreContador}}</label>
+                                            <!--select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
+                                                <option value="">Seleccioné Banco</option>
+                                            </select-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group text-right">
+                                    <a class="btn btn-warning text-right" href="/conciliacionDetalleRegistros" ng-disabled="activaBotonesReporte"><i class="ti-agenda"></i> Detalle de registros</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-danger pull-right" href="/conciliacion" ng-disabled="activaBotonesReporte"><i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</a>
+                                </div>
+                            </form>
+                        </div>
+                        <!--TERMINA La seleccion del encargado-->
+                        <!--===================================================-->
+                    </div>
+                </div>
+                <!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
+                <!--===================================================-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--INICIA modal spinner -->
+<!--===================================================-->
+<div id="loading" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>
+<!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
+<!--===================================================-->
+<!--INICIA modal que muestra el reporte en pdf -->
+<!--===================================================-->
+<div id="reproteModalPdf" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:#1f897f;">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle" style="color:#fff;"></i></button>
+                <h4 class="modal-title text-center" id="myLargeModalLabel" style="color:#fff;">Conciliación</h4>
+            </div>
+            <div class="modal-body">
+                <div id="reportePdf">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
+<!--===================================================-->

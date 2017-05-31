@@ -1,0 +1,39 @@
+<div ng-init="init()">
+    <div class="panel col-md-12">
+    <br/>
+        <div class="ibox float-e-margins">
+            <div class="ibox-title" style="text-align:center">
+                <h4>AMARRE DE CAJA</h4>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Empresa:</label>
+                        <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
+                            <option value="">Seleccioné Empresa</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3" id="calendar">
+                                <label for="fInicio">Fecha Elaboración:</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <input type="text" class="form-control" id="fInicio" ng-model="esquema.fechaElaboracion" value={{fechaElaboracion}} placeholder="dd/mm/yyyy">
+                                </div>
+                            </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Banco:</label>
+                        <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
+                            <option value="">Seleccioné Banco</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label class="form-label">Cuenta:</label>
+                        <select class="form-control" ng-model="tipoEmpresa.idTipoEmpresa" ng-options="empresa.idEmpresa as empresa.nombreEmpresa for empresa in empresaUsuario" name="txtTipoContrato" ng-change="cargaDocTipoContrato(nuevoContrato)" ng-disabled="timbradoPendiente">
+                            <option value="">Seleccioné Cuenta</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
