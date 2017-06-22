@@ -34,7 +34,8 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         $scope.filtroscheck = { cargo: 1 };
         //console.log($rootScope.userData);
         
-   };
+
+    };
 
     $scope.calendario = function() {
         $('#calendar .input-group.date').datepicker({
@@ -49,25 +50,25 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
 
-     $scope.searchClients = function() {
+    $scope.searchClients = function() {
         if ($scope.searchTypeID == 1) {
             $scope.showPanel = true;
             $scope.individualEmpresa = false;
             $scope.lote = false,
-            $scope.individual = true;
+                $scope.individual = true;
             $scope.Clientefiltro = true;
             $scope.DocumentoFiltro = false;
-            $scope.sucursal= false;
+            $scope.sucursal = false;
             $scope.departament = false;
 
             $scope.getClientId($scope.filtros.idCliente);
             $scope.currentIDClient = $scope.filtros.idCliente;
-           
+
             $scope.nombreEmpresa = '';
             $scope.idEmpresa = null;
             $scope.idDepartamento = null;
         } else {
-            if($scope.searchTypeID == 2){
+            if ($scope.searchTypeID == 2) {
                 $scope.Clientefiltro = true;
                 $scope.mostrar = true;
                 $scope.nombreEmpresa = '';
@@ -75,16 +76,16 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 $scope.getClient($scope.filtros.idCliente);
                 $scope.showPanel = true;
                 $scope.showPanel1 = false;
-        }
+            }
         }
     }
 
 
-     $scope.lstClient = [];
+    $scope.lstClient = [];
 
     $scope.getClient = function(clientName) {
         $scope.lstClient = [];
-     
+
         $('#tblClient').DataTable().destroy();
         $('#loadModal').modal('show');
         $scope.showPanel1 = true;
@@ -104,7 +105,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
 
-     $scope.setTablePaging = function(idTable) {
+    $scope.setTablePaging = function(idTable) {
         $('#' + idTable).DataTable({
             dom: '<"html5buttons"B>lTfgitp',
             buttons: [{
@@ -122,7 +123,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             }]
         });
     };
-        
+
     $scope.getClientId = function(idBusqueda) {
 
         $scope.mostrar = false;
@@ -133,29 +134,30 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         controlDepositosRepository.getClientById(idBusqueda).then(function(result) {
             if (result.data.length > 0) {
                 $scope.lstClient = result.data;
-                 $scope.clienteDetalle =  result.data[0];
+                $scope.clienteDetalle = result.data[0];
                 /*setTimeout(function() {
                     $scope.setTablePaging('tblClient');
                     $("#tblClient_filter").removeClass("dataTables_info").addClass("hide-div");
                     $('#loadModal').modal('hide');
                 }, 1000);*/
-            } else { 
+            } else {
 
-                alertFactory.success('No existe el ID');  
+                alertFactory.success('No existe el ID');
                 $scope.filtros.idCliente = '';
-                $scope.clienteDetalle = '';              
-                $('#loadModal').modal('hide'); }
+                $scope.clienteDetalle = '';
+                $('#loadModal').modal('hide');
+            }
         });
     };
 
-     $scope.searchDocs = function(obj) {
-       
+    $scope.searchDocs = function(obj) {
+
         $scope.showPanel = false;
         $scope.showPanel1 = true;
-        $scope.filtros.idCliente= obj.idCliente;
+        $scope.filtros.idCliente = obj.idCliente;
         $scope.clienteDetalle = obj;
         //$scope.getCarteraVencida($scope.filtros);
-        
+
     };
 
 
@@ -194,6 +196,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 $scope.departamentosUsuario = result.data;
             }
         });
+        $scope.activa_calendariosCartera();
     };
 
     $scope.getBancos = function(idEmpresa) {
@@ -219,30 +222,14 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.getCarteraVencida = function(obj) {
+        console.log("objeto:", obj);
 
-        console.log("getCarteraVencida");
-        console.log(obj);
-
-            /*
-    obj.idEmpresa
-    obj.idSucursal
-    obj.idDepartamento
-    obj.idCuenta
-    obj.fechaInicioDeposito
-    obj.fechaFinDeposito
-    obj.idBanco
-    obj.idCliente
-    obj.fechaInicioCartera
-    obj.fechaFinCartera
-
-    */
-    
-        //ISSUE_2 modificar los filtros de getCarteraVencida convertir a objeto getCarteraVencida
         $scope.gridCartera.data = [];
         $('#mdlLoading').modal('show');
         filtrosRepository.getCartera(obj.idCliente, obj.idEmpresa, obj.idSucursal, obj.idDepartamento, obj.fechaInicioCartera, obj.fechaFinCartera).then(function(result) {
             if (result.data.length > 0) {
                 $scope.gridCartera.data = result.data;
+                console.log($scope.gridCartera.data);
                 $('#mdlLoading').modal('hide');
             } else {
                 $('#mdlLoading').modal('hide');
@@ -257,7 +244,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         $scope.gridDocumentos.data = [];
         filtrosRepository.getDepositosNoReferenciados(obj.idEmpresa, obj.idCuenta, obj.fechaInicioDeposito, obj.fechaFinDeposito).then(function(result) {
             if (result.data.length > 0) {
-                $scope.gridDocumentos.data = result.data;               
+                $scope.gridDocumentos.data = result.data;
                 $('#mdlLoading').modal('hide');
             } else {
                 $('#mdlLoading').modal('hide');
@@ -339,6 +326,66 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         }
     };
 
+
+    $scope.collumnIsvisible = true;
+
+    $scope.switchColumn = function() {
+
+
+
+        if ($scope.collumnIsvisible === true) {
+            $scope.collumnIsvisible = false;
+            $scope.removeColummGrid();
+
+        } else {
+            $scope.collumnIsvisible = true;
+            $scope.addColummGrid();
+        }
+
+
+    }
+
+
+
+    $scope.removeColummGrid = function() {
+        $scope.gridDocumentos.columnDefs = [
+            { name: 'banco', displayName: 'Banco', width: '10%' },
+            { name: 'idBmer', displayName: 'Cons', width: '5%' },
+            { name: 'referencia', displayName: 'Referencia', width: '15%' },
+            { name: 'concepto', displayName: 'Concepto', width: '15%' },
+            { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
+            { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
+                name: 'observaciones',
+                displayName: 'Observaciones',
+                width: '25%',
+                cellEditableCondition: true
+            }
+        ]
+
+    };
+
+    $scope.addColummGrid = function() {
+        $scope.gridDocumentos.columnDefs = [
+            { name: 'banco', displayName: 'Banco', width: '10%' },
+            { name: 'idBmer', displayName: 'Cons', width: '5%' },
+            { name: 'referencia', displayName: 'Referencia', width: '15%' },
+            { name: 'concepto', displayName: 'Concepto', width: '15%' },
+            { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
+            { name: 'cargo', displayName: 'Cargo', width: '10%', cellFilter: 'currency' },
+            { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
+                name: 'observaciones',
+                displayName: 'Observaciones',
+                width: '25%',
+                cellEditableCondition: true
+            }
+        ];
+
+    };
+
+
+
+
+
     $scope.gridDocumentos.columnDefs = [
         { name: 'banco', displayName: 'Banco', width: '10%' },
         { name: 'idBmer', displayName: 'Cons', width: '5%' },
@@ -353,6 +400,12 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             cellEditableCondition: true
         }
     ];
+
+
+
+
+
+
 
     $scope.gridDocumentos.multiSelect = false;
     $scope.gridDocumentos.modifierKeysToMultiSelect = false;
@@ -592,18 +645,18 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.setSearchType = function(val) {
-      if (val == 1) {
-          $scope.searchType = "ID cliente";
-          $scope.searchTypeID = 1;
-          $scope.nombreEmpresa = '';
-      } else {
-          if (val == 2) {
-              $scope.searchType = "Nombre Cliente";
-              $scope.searchTypeID = 2;
-          }
-      }
+        if (val == 1) {
+            $scope.searchType = "ID cliente";
+            $scope.searchTypeID = 1;
+            $scope.nombreEmpresa = '';
+        } else {
+            if (val == 2) {
+                $scope.searchType = "Nombre Cliente";
+                $scope.searchTypeID = 2;
+            }
+        }
 
-      $scope.txtSearchClient = "";
+        $scope.txtSearchClient = "";
     }
 
 

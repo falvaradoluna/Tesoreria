@@ -12,7 +12,7 @@
                 <div class="col-sm-6"></div>
                 <div class="col-sm-3">
                     <div class="pull-right">
-                        <input id="demo-show-off-contact-checkbox" class="toggle-switch" type="checkbox" ng-model="filtroscheck.cargo" ng-true-value="1" ng-false-value="0">
+                        <input id="demo-show-off-contact-checkbox" class="toggle-switch" type="checkbox" ng-model="filtroscheck.cargo" ng-true-value="1" ng-false-value="0" ng-click="switchColumn()">
                         <label for="demo-show-off-contact-checkbox">cargos</label>
                     </div>
                 </div>
@@ -54,10 +54,6 @@
                 <div ui-grid="gridDocumentos" ui-grid-grouping ui-grid-edit ui-grid-selection ui-grid-cellNav class="grid"></div>
                 <br/>
             </div>
-           
-             
-                
-            
             <div class="form-group col-md-5">
                 <label class="form-label">Sucursal:</label>
                 <select class="form-control" ng-model="filtros.idSucursal" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in sucursalesUsuario" name="txtSucursal" ng-change="getDepartamentos(filtros.idSucursal)" ng-disabled="activarSucursal">
@@ -91,9 +87,9 @@
                     <input type="text" class="form-control" ng-model="filtros.idCliente" placeholder="Numero de cliente" ng-disabled="activarBuscarCliente" ng-change="activa_BuscarCartera">
                 </div>
             </div> -->
-             <div class="form-group col-md-5" id="cliente">
-                     <label for="ffincartera">Cliente</label>
-                     <div class="input-group date">
+            <div class="form-group col-md-5" id="cliente">
+                <label for="ffincartera">Cliente</label>
+                <div class="input-group date">
                     <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Búsqueda por...
                         <span class="caret"></span></button>&nbsp;&nbsp;
                     <ul class="dropdown-menu">
@@ -103,10 +99,9 @@
                     &nbsp;&nbsp;
                     <input type="text" class="input-modify" id="txtSearch" ng-model="filtros.idCliente" placeholder="{{searchType}}">&nbsp;&nbsp;
                     <button type="button" class="btn btn-default" ng-click="searchClients()"><span class="glyphicon glyphicon-search"> </span> </button>
-                     </div>
-            </div>  
-
-                        <div class="ibox-content">
+                </div>
+            </div>
+            <div class="ibox-content">
                 <div class="row" ng-show="showPanel">
                     <div class="col-sm-12">
                         <table id="tblClient" class="table table-striped table-bordered">
@@ -138,8 +133,8 @@
                     </div>
                 </div>
                 <div class="row" ng-show="showPanel1">
-                    <div class="col-xs-6 col-sm-12">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<h4><span class="glyphicon glyphicon-list"></span> Datos Cliente</h4></div>
-                    
+                    <div class="col-xs-6 col-sm-12"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        <h4><span class="glyphicon glyphicon-list"></span> Datos Cliente</h4></div>
                     <div class="col-xs-6 col-sm-4">
                         ID Cliente:
                         <label>{{clienteDetalle.idCliente}}</label>
@@ -166,8 +161,6 @@
                     </div>
                 </div>
             </div>
-
-
             <div class="form-group col-md-5" style="margin-top: 23px">
                 <button class="btn btn-warning" ng-disabled="activarBuscarCartera" ng-click="getCarteraVencida(filtros)">Buscar</button>
             </div>
