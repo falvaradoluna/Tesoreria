@@ -1,43 +1,209 @@
 registrationModule.controller('controlDepositosController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, controlDepositosRepository) {
 
-    // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
-    $scope.idUsuario = 0;
+    $scope.idUsuario = $rootScope.userData.idUsuario;
 
-    $scope.filtros = {
-        idEmpresa: '',
-        idSucursal: '',
-        idDepartamento: ''
+    //Listas Onjetos BD
+    $scope.lstEmpresaUsuario = [];
+    $scope.lstBanco = [];
+    $scope.lstCuenta = [];
+    $scope.lstSucursal = [];
+    $scope.lstDepartamento = [];
+    $scope.lstCliente = [];
+    //Depositos controles Habilitados
+    $scope.ddlBancoDisabled = true;
+    $scope.ddlCuentaDisabled = true;
+    $scope.txtFechasDisabled = true;
+    $scope.btnBuscarDisabled = true;
+    $scope.carteraControlsDisabled = true;
+    //Depositos Filtros ID 
+    $scope.selectedValueEmpresaID = 0;
+    $scope.selectedValueBancoID = 0;
+    $scope.selectedValueCuentaID = 0;
+    $scope.selectedValueFechaInicio = '';
+    $scope.selectedValueFechaFin = '';
+    $scope.btnSwitchIsEnable = false;
+    //Cartera Filtros ID    
+    $scope.selectedValueSucursaID = 0;
+    $scope.selectedValueDepartamentoID = 0;
+    $scope.selectedValueCarteraFechaInicio = '';
+    $scope.selectedValuecarteraFechaFin = '';
+    $scope.showUserSearchPanel = false;
+    //init grids
+    $scope.gridDocumentos = controlDepositosRepository.gridDocumentosOptions;
+    $scope.gridDocumentos.columnDefs = controlDepositosRepository.gridDocumentosColumns($scope.btnSwitchIsEnable);
+    $scope.gridDocumentos.multiSelect = false;
+    $scope.gridCartera = controlDepositosRepository.gridCarteraOptions;
+    $scope.gridCartera.columnDefs = controlDepositosRepository.gridCarteraColumns();
+    $scope.gridCartera.multiSelect = true;
+    //busquedaCliente
+    $scope.searchType = "ID cliente";
+    $scope.searchTypeID = 1;
+    $scope.searchValue = '';
+    $scope.searchClienteID = 0;
+    //sumas
+    $scope.depositoTotal = 0;
+    $scope.carteraTotal = 0;
+
+
+
+    filtrosRepository.getEmpresas($scope.idUsuario).then(function(result) {
+        if (result.data.length > 0) {
+            $scope.lstEmpresaUsuario = result.data;
+            $scope.initCalendarstyle();
+        }
+    });
+
+    $scope.getBancos = function() {
+
+        var idEmpresa = $scope.selectedValueEmpresaID;
+        $scope.ddlBancoDisabled = false;
+
+        filtrosRepository.getBancos(idEmpresa).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.lstBanco = result.data;
+            }
+        });
     };
 
-    $scope.init = function() {
-        $scope.idUsuario = $rootScope.userData.idUsuario;
-        console.log($scope.idUsuario);
-        $scope.loadPendingDocs();
-        $scope.getEmpresa($scope.idUsuario);
-        $scope.calendario();
-        $scope.activarBanco = true;
-        $scope.activarCuenta = true;
-        $scope.activarFechaIniDeposito = true;
-        $scope.activarFechaFinDeposito = true;
-        $scope.activarSucursal = true;
-        $scope.activarDepartamento = true;
-        $scope.activarFechaIniCartera = true;
-        $scope.activarFechaFinCartera = true;
-        $scope.activarBuscarDepositos = true;
-        $scope.activarBuscarCartera = true;
-        $scope.activarBuscarCliente = true;
-        $scope.depositoTotal = 0;
-        $scope.carteraTotal = 0;
-        //$scope.getDepositosBancosNoReferenciados(1,1,'10/11/2015','31/12/2015');
-        //$scope.getCarteraVencida(31996,4,12,67,'10/11/2015','31/12/2015');
-        $scope.filtroscheck = { cargo: 1 };
-        //console.log($rootScope.userData);
-        
+    $scope.getCuentas = function() {
+
+        var idBanco = $scope.selectedValueBancoID;
+        var idEmpresa = $scope.selectedValueEmpresaID;
+        $scope.ddlCuentaDisabled = false;
+
+        filtrosRepository.getCuenta(idBanco, idEmpresa).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.lstCuenta = result.data;
+            }
+        });
+    };
+
+    $scope.enableCalendar = function() {
+        $scope.txtFechasDisabled = false;
+        $scope.btnBuscarDisabled = false;
+    };
+
+
+    $scope.getDepositosBancosNoReferenciados = function(obj) {
+
+        var empresaID = $scope.selectedValueEmpresaID;
+        var cuentaID = $scope.selectedValueCuentaID;
+        var fechaInicio = $scope.selectedValueFechaInicio;
+        var fechaFin = $scope.selectedValueFechaFin;
+        var bancoID = $scope.selectedValueBancoID;
+        $scope.carteraControlsDisabled = false;
+
+
+        $('#mdlLoading').modal('show');
+        $scope.gridDocumentos.data = [];
+        filtrosRepository.getDepositosNoReferenciados(empresaID, cuentaID, fechaInicio, fechaFin).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.gridDocumentos.data = result.data;
+                $('#mdlLoading').modal('hide');
+            } else {
+                $('#mdlLoading').modal('hide');
+            }
+        });
+
+        $scope.getSucursales();
+    };
+
+
+    $scope.getSucursales = function() {
+
+        var idEmpresa = $scope.selectedValueEmpresaID;
+
+        filtrosRepository.getSucursales($scope.idUsuario, idEmpresa).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.lstSucursal = result.data;
+            }
+        });
+    };
+
+
+    $scope.getDepartamentos = function() {
+
+        var idSucursal = $scope.selectedValueSucursaID;
+
+        filtrosRepository.getDepartamentos($scope.idUsuario, idSucursal).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.lstDepartamento = result.data;
+            }
+        });
 
     };
 
-    $scope.calendario = function() {
+    $scope.changeSwitch = function() {
+        console.log($scope.btnSwitchIsEnable);
+
+        if ($scope.btnSwitchIsEnable === 1) {
+            $scope.gridDocumentos.columnDefs =
+                controlDepositosRepository.gridDocumentosColumns(true);
+        } else {
+            $scope.gridDocumentos.columnDefs =
+                controlDepositosRepository.gridDocumentosColumns(false);
+        }
+    };
+
+    $scope.setSearchType = function(val) {
+        if (val == 1) {
+            $scope.searchType = "ID cliente";
+            $scope.searchTypeID = 1;
+        }
+        if (val == 2) {
+            $scope.searchType = "Nombre Cliente";
+            $scope.searchTypeID = 2;
+        }
+        $scope.lstCliente = [];
+        $scope.searchValue = '';
+        $scope.showUserSearchPanel = false;
+    };
+
+    $scope.searchClients = function() {
+        $scope.showUserSearchPanel = true;
+        if ($scope.searchTypeID == 1) {
+            $scope.getClientByID($scope.searchValue);
+            $scope.searchClienteID = $scope.searchValue;
+        }
+        if ($scope.searchTypeID == 2) {
+            $scope.getClientByName($scope.searchValue);
+        }
+    };
+
+    $scope.getClientByID = function(idBusqueda) {
+        $('#tblClient').DataTable().destroy();
+        $('#mdlLoading').modal('show');
+        controlDepositosRepository.getClientById(idBusqueda).then(function(result) {
+            if (result.data.length > 0) {
+                $('#mdlLoading').modal('hide');
+                $scope.lstCliente = result.data;
+                $scope.setTableStyle();
+
+            } else {
+                $('#mdlLoading').modal('hide');
+            }
+        });
+    };
+
+
+
+    $scope.getClientByName = function(clientName) {
+        $('#tblClient').DataTable().destroy();
+        $('#mdlLoading').modal('show');
+        controlDepositosRepository.getClientByName(clientName).then(function(result) {
+            if (result.data.length > 0) {
+                $('#mdlLoading').modal('hide');
+                $scope.lstCliente = result.data;
+                $scope.setTableStyle();
+            } else {
+                $('#mdlLoading').modal('hide');
+            }
+        });
+    };
+
+
+    $scope.initCalendarstyle = function() {
         $('#calendar .input-group.date').datepicker({
             todayBtn: "linked",
             keyboardNavigation: true,
@@ -50,455 +216,109 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
 
-    $scope.searchClients = function() {
-        if ($scope.searchTypeID == 1) {
-            $scope.showPanel = true;
-            $scope.individualEmpresa = false;
-            $scope.lote = false,
-                $scope.individual = true;
-            $scope.Clientefiltro = true;
-            $scope.DocumentoFiltro = false;
-            $scope.sucursal = false;
-            $scope.departament = false;
-
-            $scope.getClientId($scope.filtros.idCliente);
-            $scope.currentIDClient = $scope.filtros.idCliente;
-
-            $scope.nombreEmpresa = '';
-            $scope.idEmpresa = null;
-            $scope.idDepartamento = null;
-        } else {
-            if ($scope.searchTypeID == 2) {
-                $scope.Clientefiltro = true;
-                $scope.mostrar = true;
-                $scope.nombreEmpresa = '';
-                $scope.idEmpresa = null;
-                $scope.getClient($scope.filtros.idCliente);
-                $scope.showPanel = true;
-                $scope.showPanel1 = false;
-            }
-        }
-    }
-
-
-    $scope.lstClient = [];
-
-    $scope.getClient = function(clientName) {
-        $scope.lstClient = [];
-
-        $('#tblClient').DataTable().destroy();
-        $('#loadModal').modal('show');
-        $scope.showPanel1 = true;
-        controlDepositosRepository.getClientByName(clientName).then(function(result) {
-
-            if (result.data.length > 0) {
-                $scope.lstClient = result.data;
-
-
-                setTimeout(function() {
-                    $scope.setTablePaging('tblClient');
-                    $("#tblClient_filter").removeClass("dataTables_info").addClass("hide-div");
-                    $('#loadModal').modal('hide');
-                }, 1000);
-            } else { $('#loadModal').modal('hide'); }
-        });
+    $scope.setTableStyle = function() {
+        setTimeout(function() {
+            $('#tblClient').DataTable();
+            $('#tblClient_filter').remove();
+            $('#tblClient_length').remove();
+        }, 500);
     };
 
-
-    $scope.setTablePaging = function(idTable) {
-        $('#' + idTable).DataTable({
-            dom: '<"html5buttons"B>lTfgitp',
-            buttons: [{
-                extend: 'excel',
-                title: 'ExampleFile'
-            }, {
-                extend: 'print',
-                customize: function(win) {
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
-            }]
-        });
-    };
-
-    $scope.getClientId = function(idBusqueda) {
-
-        $scope.mostrar = false;
-        $scope.showPanel1 = true;
-        $scope.showPanel = false;
-        $('#tblClient').DataTable().destroy();
-        $('#loadModal').modal('show');
-        controlDepositosRepository.getClientById(idBusqueda).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.lstClient = result.data;
-                $scope.clienteDetalle = result.data[0];
-                /*setTimeout(function() {
-                    $scope.setTablePaging('tblClient');
-                    $("#tblClient_filter").removeClass("dataTables_info").addClass("hide-div");
-                    $('#loadModal').modal('hide');
-                }, 1000);*/
-            } else {
-
-                alertFactory.success('No existe el ID');
-                $scope.filtros.idCliente = '';
-                $scope.clienteDetalle = '';
-                $('#loadModal').modal('hide');
-            }
-        });
-    };
-
-    $scope.searchDocs = function(obj) {
-
-        $scope.showPanel = false;
-        $scope.showPanel1 = true;
-        $scope.filtros.idCliente = obj.idCliente;
-        $scope.clienteDetalle = obj;
-        //$scope.getCarteraVencida($scope.filtros);
-
-    };
-
-
-    $scope.getEmpresa = function(idUsuario) {
-        filtrosRepository.getEmpresas(idUsuario).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.empresaUsuario = result.data;
-            }
-        });
-    };
-
-    $scope.empresaSeleccionada = function(idEmpresa) {
-
-        $scope.activarBanco = true;
-        $scope.activarSucursal = true;
-        $scope.getSucursales($scope.idUsuario, idEmpresa); /*optimizar*/
-        $scope.getBancos(idEmpresa);
-
-    };
-
-
-    $scope.getSucursales = function(idEmpresa) {
-
-        $scope.activarSucursal = false;
-        filtrosRepository.getSucursales($scope.idUsuario, idEmpresa).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.sucursalesUsuario = result.data;
-            }
-        });
-    };
-
-    $scope.getDepartamentos = function(idSucursal) {
-        $scope.activarDepartamento = false;
-        filtrosRepository.getDepartamentos($scope.idUsuario, idSucursal).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.departamentosUsuario = result.data;
-            }
-        });
-        $scope.activa_calendariosCartera();
-    };
-
-    $scope.getBancos = function(idEmpresa) {
-        $scope.activarBanco = false;
-        $scope.cuentaBancaria =
-            filtrosRepository.getBancos(idEmpresa).then(function(result) {
-                if (result.data.length > 0) {
-                    $scope.bancoEmpresa = result.data;
-                }
-            });
-    };
-
-    $scope.getCuentas = function(idBanco, idEmpresa) {
-
-        $scope.activarCuenta = false;
-        $scope.cuentaBancaria = [];
-        filtrosRepository.getCuenta(idBanco, idEmpresa).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.cuentaBancaria = result.data;
-                console.log($scope.cuentaBancaria);
-            }
-        });
-    };
-
-    $scope.getCarteraVencida = function(obj) {
-        console.log("objeto:", obj);
-
-        $scope.gridCartera.data = [];
-        $('#mdlLoading').modal('show');
-        filtrosRepository.getCartera(obj.idCliente, obj.idEmpresa, obj.idSucursal, obj.idDepartamento, obj.fechaInicioCartera, obj.fechaFinCartera).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.gridCartera.data = result.data;
-                console.log($scope.gridCartera.data);
-                $('#mdlLoading').modal('hide');
-            } else {
-                $('#mdlLoading').modal('hide');
-            }
-        });
-
-    };
-
-    $scope.getDepositosBancosNoReferenciados = function(obj) {
-
-        $('#mdlLoading').modal('show');
-        $scope.gridDocumentos.data = [];
-        filtrosRepository.getDepositosNoReferenciados(obj.idEmpresa, obj.idCuenta, obj.fechaInicioDeposito, obj.fechaFinDeposito).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.gridDocumentos.data = result.data;
-                $('#mdlLoading').modal('hide');
-            } else {
-                $('#mdlLoading').modal('hide');
-            }
-        });
-    };
-
-    $scope.getCalendartios = function(idBanco, idEmpresa) {
-
-        $scope.activarCuenta = false;
-
-        filtrosRepository.getCuenta(idBanco, idEmpresa).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.cuentaBancaria = result.data;
-            }
-        });
-    };
-
-    $scope.empresaVacia = function() {
-
-        $scope.filtros.idCuenta = null;
-        $scope.filtros.fechaInicioDeposito = null;
-        $scope.filtros.fechaFinDeposito = null;
-        $scope.filtros.idDepartamento = null;
-        $scope.filtros.fechaInicioDeposito = null;
-        $scope.filtros.fechaFinDeposito = null;
-        $scope.activarCuenta = true;
-        $scope.activarFechaIniDeposito = true;
-        $scope.activarFechaFinDeposito = true;
-        $scope.activarDepartamento = true;
-        $scope.activarFechaIniCartera = true;
-        $scope.activarFechaFinCartera = true;
-        $scope.activarBuscarDepositos = true;
-        $scope.activarBuscarCartera = true;
-        $scope.gridCartera.data = [];
-        $scope.gridDocumentos.data = [];
-    };
-
-    $scope.gridCartera = {
-        enableColumnResize: true,
-        enableRowSelection: true,
-        enableGridMenu: true,
-        enableFiltering: true,
-        enableGroupHeaderSelection: false,
-        treeRowHeaderAlwaysVisible: true,
-        showColumnFooter: true,
-        showGridFooter: true,
-        height: 900,
-        cellEditableCondition: function($scope) {
-            return $scope.row.entity.seleccionable;
-        }
-    };
-
-    $scope.gridCartera.columnDefs = [
-        { name: 'nombreSucursal', width: '10%', displayName: 'Sucursal' },
-        { name: 'nombreDepartamento', width: '10%', displayName: 'Departamento' },
-        { name: 'folio', width: '10%', displayName: 'Factura' },
-        { name: 'fecha', width: '10%', displayName: 'fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },
-        { name: 'nombreCliente', width: '30%', displayName: 'Cliente' },
-        { name: 'importe', width: '10%', displayName: 'Importe', cellFilter: 'currency' },
-        { name: 'saldo', width: '10%', displayName: 'Saldo', cellFilter: 'currency' },
-
-    ];
-
-    $scope.gridCartera.multiSelect = true;
-
-    $scope.gridDocumentos = {
-        enableColumnResize: true,
-        enableRowSelection: true,
-        enableGridMenu: true,
-        enableFiltering: true,
-        enableGroupHeaderSelection: false,
-        treeRowHeaderAlwaysVisible: true,
-        showColumnFooter: true,
-        showGridFooter: true,
-        height: 900,
-        cellEditableCondition: function($scope) {
-            return $scope.row.entity.seleccionable;
-        }
-    };
-
-
-    $scope.collumnIsvisible = true;
-
-    $scope.switchColumn = function() {
-
-
-
-        if ($scope.collumnIsvisible === true) {
-            $scope.collumnIsvisible = false;
-            $scope.removeColummGrid();
-
-        } else {
-            $scope.collumnIsvisible = true;
-            $scope.addColummGrid();
-        }
-
-
-    }
-
-
-
-    $scope.removeColummGrid = function() {
-        $scope.gridDocumentos.columnDefs = [
-            { name: 'banco', displayName: 'Banco', width: '10%' },
-            { name: 'idBmer', displayName: 'Cons', width: '5%' },
-            { name: 'referencia', displayName: 'Referencia', width: '15%' },
-            { name: 'concepto', displayName: 'Concepto', width: '15%' },
-            { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
-            { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
-                name: 'observaciones',
-                displayName: 'Observaciones',
-                width: '25%',
-                cellEditableCondition: true
-            }
-        ]
-
-    };
-
-    $scope.addColummGrid = function() {
-        $scope.gridDocumentos.columnDefs = [
-            { name: 'banco', displayName: 'Banco', width: '10%' },
-            { name: 'idBmer', displayName: 'Cons', width: '5%' },
-            { name: 'referencia', displayName: 'Referencia', width: '15%' },
-            { name: 'concepto', displayName: 'Concepto', width: '15%' },
-            { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
-            { name: 'cargo', displayName: 'Cargo', width: '10%', cellFilter: 'currency' },
-            { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
-                name: 'observaciones',
-                displayName: 'Observaciones',
-                width: '25%',
-                cellEditableCondition: true
-            }
-        ];
-
-    };
-
-
-
-
-
-    $scope.gridDocumentos.columnDefs = [
-        { name: 'banco', displayName: 'Banco', width: '10%' },
-        { name: 'idBmer', displayName: 'Cons', width: '5%' },
-        { name: 'referencia', displayName: 'Referencia', width: '15%' },
-        { name: 'concepto', displayName: 'Concepto', width: '15%' },
-        { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
-        { name: 'cargo', displayName: 'Cargo', width: '10%', cellFilter: 'currency' },
-        { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
-            name: 'observaciones',
-            displayName: 'Observaciones',
-            width: '25%',
-            cellEditableCondition: true
-        }
-    ];
-
-
-
-
-
-
-
-    $scope.gridDocumentos.multiSelect = false;
-    $scope.gridDocumentos.modifierKeysToMultiSelect = false;
-    $scope.gridDocumentos.noUnselect = true;
-
-    $scope.gridDocumentos.onRegisterApi = function(gridApi) {
-        $scope.gridApi = gridApi;
-    };
-
-    $scope.toggleRowSelection = function() {
-        $scope.gridApi.selection.clearSelectedRows();
-        $scope.gridDocumentos.enableRowSelection = !$scope.gridDocumentos.enableRowSelection;
-        $scope.gridApi.core.notifyDataChange(uiGridConstants.dataChange.OPTIONS);
-    };
-
-
-    $scope.activa_calendariosDepositos = function() {
-        $scope.activarFechaIniDeposito = false;
-        $scope.activarFechaFinDeposito = false;
-        $scope.activarBuscarDepositos = false;
-    };
-
-    $scope.activa_calendariosCartera = function() {
-        $scope.activarFechaIniCartera = false;
-        $scope.activarFechaFinCartera = false;
-        $scope.activarBuscarCliente = false;
-        $scope.activarBuscarCartera = false;
-    };
-
-    $scope.activa_BuscarCartera = function() {
-        $scope.activarBuscarCartera = false;
-    };
-
-
-    $scope.selectedDocuments = {};
-    $scope.selectedCartera = [];
+    $scope.selectedRowDocuments = {};
+    $scope.selectedRowCartera = [];
 
     $scope.gridDocumentos.onRegisterApi = function(gridApi) {
 
         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-            //var msg = 'row selected ' + row.isSelected;
+
             if (row.isSelected === true) {
+                console.log(row.entity.abono);
                 $scope.depositoTotal = row.entity.abono;
-                $scope.selectedDocuments = null;
-                $scope.selectedDocuments = row.entity;
-            } else if (row.isSelected == false) {
-                $scope.selectedDocuments = null;
+                $scope.selectedRowDocuments = null;
+                $scope.selectedRowDocuments = row.entity;
+            } else if (row.isSelected === false) {
+                $scope.selectedRowDocuments = null;
             }
         });
-
-        gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
-            $scope.updateObservation(rowEntity.idDepositoBanco, rowEntity.observaciones);
-            $scope.$apply();
-        });
+        /*
+                gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
+                    $scope.updateObservation(rowEntity.idDepositoBanco, rowEntity.observaciones);
+                    $scope.$apply();
+                });*/
 
 
     };
+
 
     $scope.gridCartera.onRegisterApi = function(gridApi) {
 
         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
             var msg = 'row selected ' + row.isSelected;
-            if (row.isSelected == true) {
+            if (row.isSelected === true) {
                 $scope.carteraTotal = $scope.carteraTotal + parseFloat(row.entity.importe);
-                $scope.selectedCartera.push(row.entity);
-            } else if (row.isSelected == false) {
+                $scope.selectedRowCartera.push(row.entity);
+                if ($scope.carteraTotal > $scope.depositoTotal) {
+
+                    swal("Aviso", "El saldo de la cartera es mayor que el saldo del deposito.", "warning");
+
+                }
+            } else if (row.isSelected === false) {
                 $scope.carteraTotal = $scope.carteraTotal - parseFloat(row.entity.importe);
-                $scope.removeByAttr($scope.selectedCartera, 'IDB', row.entity.IDB);
+                $scope.removeByAttr($scope.selectedRowCartera, 'IDB', row.entity.IDB);
             }
 
         });
     };
 
+    $scope.removeByAttr = function(arr, attr, value) {
+        var i = arr.length;
+        while (i--) {
+            if (arr[i] && arr[i].hasOwnProperty(attr) && (arguments.length > 2 && arr[i][attr] === value)) {
+                arr.splice(i, 1);
+            }
+        }
+        return arr;
+    };
 
 
-    $scope.guardarGrid = function() {
-        //$('#mdlLoading').modal('show');    
-        var params = $scope.setReferenceParams($scope.selectedCartera[0], 0);
-        if ($scope.selectedCartera.length > 1) params.idTipoReferencia = 4;
+    $scope.getCarteraVencida = function() {
+
+        var clienteID = $scope.searchClienteID;
+        var empresa = $scope.selectedValueEmpresaID;
+        var sucursaID = $scope.selectedValueSucursaID;
+        var deptoID = $scope.selectedValueDepartamentoID;
+        var fIni = $scope.selectedValueCarteraFechaInicio;
+        var fFin = $scope.selectedValuecarteraFechaFin;
+
+        $scope.gridCartera.data = [];
+        $('#mdlLoading').modal('show');
+        filtrosRepository.getCartera(clienteID, empresa, sucursaID, deptoID, fIni, fFin).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.gridCartera.data = result.data;
+                $('#mdlLoading').modal('hide');
+            } else {
+                $('#mdlLoading').modal('hide');
+            }
+        });
+    };
+
+
+    $scope.creaReferenciaTemporal = function() {
+        var params = $scope.setReferenceParams($scope.selectedRowCartera[0], 0);
+        if ($scope.selectedRowCartera.length > 1) params.idTipoReferencia = 4;
         $scope.createReference(params);
         alertFactory.success('Referencia generada con exito.');
 
     };
 
-
     $scope.setReferenceParams = function(objCartera, idreferencia) {
 
         var params = {};
 
-        params.idEmpresa = $scope.filtros.idEmpresa;
+        params.idEmpresa = $scope.selectedValueEmpresaID;
         params.idReferencia = idreferencia;
-        params.idSucursal = $scope.filtros.idSucursal;
-        params.idDepartamento = $scope.filtros.idDepartamento;
+        params.idSucursal = $scope.selectedValueSucursaID;;
+        params.idDepartamento = $scope.selectedValueDepartamentoID;
         params.idTipoDocumento = 1;
         params.serie = objCartera.serie;
         params.folio = objCartera.idDocumento;
@@ -520,17 +340,17 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             if (result.data.length > 0) {
                 var idRef = result.data[0].idReferencia;
 
-                for (var i = 0; i < $scope.selectedCartera.length; i++) {
+                for (var i = 0; i < $scope.selectedRowCartera.length; i++) {
 
-                    var params = $scope.setReferenceParams($scope.selectedCartera[i], idRef);
+                    var params = $scope.setReferenceParams($scope.selectedRowCartera[i], idRef);
                     $scope.insertReferenceDetails(params);
                 }
 
-                $scope.updateReference($scope.selectedDocuments.idDepositoBanco, idRef);
+                $scope.updateReference($scope.selectedRowDocuments.idDepositoBanco, idRef);
                 $scope.updateCarteraVencida(idRef);
 
-                $scope.getDepositosBancosNoReferenciados($scope.filtros.idBanco, $scope.filtroscheck.cargo, $scope.filtros.fechaInicioDeposito, $scope.filtros.fechaFinDeposito);
-                $scope.getCarteraVencida($scope.filtros.idCliente, $scope.filtros.idTipoEmpresa, $scope.filtros.idSucursal, $scope.filtros.idDepartamento, $scope.filtros.fechaInicioCartera, $scope.filtros.fechaFinCartera);
+                //$scope.getDepositosBancosNoReferenciados($scope.filtros.idBanco, $scope.filtroscheck.cargo, $scope.filtros.fechaInicioDeposito, $scope.filtros.fechaFinDeposito);
+                //$scope.getCarteraVencida($scope.filtros.idCliente, $scope.filtros.idTipoEmpresa, $scope.filtros.idSucursal, $scope.filtros.idDepartamento, $scope.filtros.fechaInicioCartera, $scope.filtros.fechaFinCartera);
                 $scope.loadPendingDocs();
                 $('#mdlLoading').modal('hide');
 
@@ -548,7 +368,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.insertReferenceDetails = function(objData) {
 
-        $scope.promise = controlDepositosRepository.insertReferenceDetails(objData).then(function(result) {
+        controlDepositosRepository.insertReferenceDetails(objData).then(function(result) {
 
             if (result.data.length > 0) {
                 console.log('ok');
@@ -560,25 +380,37 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         });
     };
 
+    $scope.updateReference = function(idDepositoBanco, idReferencia) {
 
-    $scope.removeByAttr = function(arr, attr, value) {
-        var i = arr.length;
-        while (i--) {
-            if (arr[i] && arr[i].hasOwnProperty(attr) && (arguments.length > 2 && arr[i][attr] === value)) {
-                arr.splice(i, 1);
+        $scope.promise = controlDepositosRepository.updSetReferencia(idDepositoBanco, idReferencia).then(function(result) {
+
+            if (result.data.length > 0) {
+                console.log('OK update reference');
+            } else {
+                console.log('no trajo nada updateReference');
             }
-        }
-        return arr;
+        }, function(error) {
+            console.log('Error');
+        });
     };
 
-    $scope.tblPendientes = [];
-    $scope.tblPendientesDetalle = [];
 
+    $scope.updateCarteraVencida = function(idReferencia) {
+
+        controlDepositosRepository.updCarteraVencidaReferencia(idReferencia).then(function(result) {
+            if (result.data.length > 0) {
+                console.log('ok update cartera vencida');
+            } else {
+                console.log('no trajo nada updateCarteraVencida');
+            }
+        }, function(error) {
+            console.log('Error');
+        });
+    };
 
     $scope.loadPendingDocs = function() {
 
-        $scope.promise = controlDepositosRepository.getPendingReference().then(function(result) {
-
+        controlDepositosRepository.getPendingReference().then(function(result) {
             if (result.data.length > 0) {
                 $scope.tblPendientes = result.data;
             } else {
@@ -591,6 +423,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.showReferenceDetails = function(obj) {
+        console.log(obj)
         $scope.tblPendientesDetalle = null;
         $scope.loadPendingDocsDetails(obj.idReferencia);
         $('#mdlReferenciaDetalle').modal('show');
@@ -598,7 +431,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.loadPendingDocsDetails = function(idReferencia) {
 
-        $scope.promise = controlDepositosRepository.getPendingReferenceDetails(idReferencia).then(function(result) {
+        controlDepositosRepository.getPendingReferenceDetails(idReferencia).then(function(result) {
 
             if (result.data.length > 0) {
                 $scope.tblPendientesDetalle = result.data;
@@ -611,121 +444,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     };
 
-    $scope.applyReference = function(idReferencia) {
 
-        $scope.promise = controlDepositosRepository.insApplyReference(idReferencia).then(function(result) {
-
-            if (result.data.length > 0) {
-                $scope.loadPendingDocs();
-            } else {
-                console.log('no trajo nada applyReference');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
-
-
-    };
-
-
-    $scope.updateObservation = function(idDepositoBanco, observacion) {
-
-        $scope.promise = controlDepositosRepository.updSetObservation(idDepositoBanco, observacion).then(function(result) {
-
-            if (result.data.length > 0) {
-                console.log('OK');
-            } else {
-                console.log('no trajo nada updateObservation');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
-
-
-    };
-
-    $scope.setSearchType = function(val) {
-        if (val == 1) {
-            $scope.searchType = "ID cliente";
-            $scope.searchTypeID = 1;
-            $scope.nombreEmpresa = '';
-        } else {
-            if (val == 2) {
-                $scope.searchType = "Nombre Cliente";
-                $scope.searchTypeID = 2;
-            }
-        }
-
-        $scope.txtSearchClient = "";
-    }
-
-
-    $scope.updateReference = function(idDepositoBanco, idReferencia) {
-
-        $scope.promise = controlDepositosRepository.updSetReferencia(idDepositoBanco, idReferencia).then(function(result) {
-
-            if (result.data.length > 0) {
-                console.log('OKKKKKKKKKKKKKK');
-            } else {
-                console.log('no trajo nada updateReference');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
-    };
-
-
-    $scope.updateCarteraVencida = function(idReferencia) {
-
-        $scope.promise = controlDepositosRepository.updCarteraVencidaReferencia(idReferencia).then(function(result) {
-
-            if (result.data.length > 0) {
-                console.log('ok cartera vencida');
-            } else {
-                console.log('no trajo nada updateCarteraVencida');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
-    };
-
-
-    $scope.deleteReferenciaGenerada = function(idReferencia) {
-
-        $scope.promise = controlDepositosRepository.delReferenciaGenerada(idReferencia).then(function(result) {
-
-            if (result.data.length > 0) {
-                console.log('Ref Eliminada');
-            } else {
-                console.log('no trajo nada deleteReferenciaGenerada');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
-    };
-
-
-    $scope.testApi = function() {
-
-        $scope.promise = controlDepositosRepository.testApi({ val1: 1, val2: 'valor' }).then(function(result) {
-
-            if (result.data.length > 0) {
-                console.log(result.data);
-            } else {
-                console.log('no trajo nada deleteReferenciaGenerada');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
-    };
-
-
-    $scope.testClendar = function(obj) {
-
-        console.log("prueba Calendario");
-        console.log(obj.fechaFinCartera);
-        console.log(obj.fechaInicioCartera);
-    };
-
+    $scope.loadPendingDocs();
 
 });

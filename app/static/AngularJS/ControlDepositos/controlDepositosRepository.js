@@ -128,6 +128,67 @@ registrationModule.factory('controlDepositosRepository', function($http) {
             });
         },
 
+        gridDocumentosOptions: function() {
+            return {
+                enableColumnResize: true,
+                enableRowSelection: true,
+                enableGridMenu: true,
+                enableFiltering: true,
+                enableGroupHeaderSelection: false,
+                treeRowHeaderAlwaysVisible: true,
+                showColumnFooter: true,
+                showGridFooter: true,
+                height: 900,
+                cellEditableCondition: function($scope) {
+                    return $scope.row.entity.seleccionable;
+                }
+            };
+        },
+        gridDocumentosColumns: function(isVisible) {
+            return [
+                { name: 'banco', displayName: 'Banco', width: '10%' },
+                { name: 'idBmer', displayName: 'Cons', width: '5%' },
+                { name: 'referencia', displayName: 'Referencia', width: '15%' },
+                { name: 'concepto', displayName: 'Concepto', width: '15%' },
+                { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
+                { name: 'cargo', displayName: 'Cargo', width: '10%', cellFilter: 'currency', visible: isVisible },
+                { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
+                    name: 'observaciones',
+                    displayName: 'Observaciones',
+                    width: '25%',
+                    cellEditableCondition: true
+                }
+            ];
+        },
+
+        gridCarteraOptions: function() {
+            return {
+                enableColumnResize: true,
+                enableRowSelection: true,
+                enableGridMenu: true,
+                enableFiltering: true,
+                enableGroupHeaderSelection: false,
+                treeRowHeaderAlwaysVisible: true,
+                showColumnFooter: true,
+                showGridFooter: true,
+                height: 900,
+                cellEditableCondition: function($scope) {
+                    return $scope.row.entity.seleccionable;
+                }
+            };
+        },
+        gridCarteraColumns: function() {
+            return [
+                { name: 'nombreSucursal', width: '10%', displayName: 'Sucursal' },
+                { name: 'nombreDepartamento', width: '10%', displayName: 'Departamento' },
+                { name: 'folio', width: '10%', displayName: 'Factura' },
+                { name: 'fecha', width: '10%', displayName: 'fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },
+                { name: 'nombreCliente', width: '30%', displayName: 'Cliente' },
+                { name: 'importe', width: '10%', displayName: 'Importe', cellFilter: 'currency' },
+                { name: 'saldo', width: '10%', displayName: 'Saldo', cellFilter: 'currency' },
+            ];
+        },
+
         getClientById: function(idBusqueda) {
             return $http({
                 url: controlDepositosURL + 'clientById/',
@@ -138,10 +199,9 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-
             });
+
         }
+    };
 
-
-    }
 });
