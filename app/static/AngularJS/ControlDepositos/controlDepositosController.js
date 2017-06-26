@@ -492,7 +492,6 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
 
-
     $scope.insertReferenceDetails = function(objData) {
 
         $scope.promise = controlDepositosRepository.insertReferenceDetails(objData).then(function(result) {

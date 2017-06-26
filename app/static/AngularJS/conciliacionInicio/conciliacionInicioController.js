@@ -1,4 +1,5 @@
 registrationModule.controller('conciliacionInicioController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
+registrationModule.controller('conciliacionInicioController', function($filter,$scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
@@ -16,24 +17,28 @@ registrationModule.controller('conciliacionInicioController', function($scope, $
             $scope.InfoBusqueda=false;
             //***************************************************************
 
+            //*****Variables para ocultar Depositos y Pagos referenciados
+            $scope.elementState = {}
+            $scope.elementState.show = false;
+            //***********************************************************
+
+            //*****Cambio del formato en fechas predeterminadas para la búsqueda
+            $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
+            $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
+            //******************************************************************
+
             $scope.init = function() {
                 //$scope.calendario();
+                
                 $scope.getEmpresa(15);
-                //$scope.getBancos(1);
-                //$scope.getCuentaBanco(1, 1)
-                //$scope.getClaveBanco(1)
-                //$scope.getCuentacontable(1)
-
-                // if($rootScope.userData == null){
-                //  location.href = '/';
-                //  alertFactory.warning('Inicie Sesión')
-                // }else{
-                //  alertFactory.success('Bienvenido '+ $rootScope.userData.nombreUsuario)
-                // }
+                $scope.calendario();
+                
                 $rootScope.mostrarMenu = 1;
                 $scope.paramBusqueda = [];
                 variablesLocalStorage();
+
             }
+
             var variablesLocalStorage = function() {
                 $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
                 console.log($scope.busqueda, 'Soy la busqueda')
@@ -44,6 +49,7 @@ registrationModule.controller('conciliacionInicioController', function($scope, $
                     'NombreContador':$scope.busqueda.contador
                     }];
                        conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable, 2).then(function(result) {
+                       conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, 2).then(function(result) {
                         if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
@@ -96,33 +102,6 @@ registrationModule.controller('conciliacionInicioController', function($scope, $
                     }
                 }
 
-                /*
-                $scope.getCuentaBanco = function(idCuentaBanco, idempresa) {
-                    filtrosRepository.getCuentaBanco(idCuentaBanco, idempresa).then(function(result) {
-                        if (result.data.length > 0) {
-                            $scope.bancoCuenta = result.data;
-                            //console.log(result.data)
-                        }
-                    });
-                }
-
-                $scope.getClaveBanco = function(idClaveBanco) {
-                    filtrosRepository.getClaveBanco(idClaveBanco).then(function(result) {
-                        if (result.data.length > 0) {
-                            $scope.bancoClave = result.data;
-                            //console.log(result.data)
-                        }
-                    });
-                }
-
-                $scope.getCuentacontable = function(idCuentacontable) {
-                    filtrosRepository.getCuentacontable(idCuentacontable).then(function(result) {
-                        if (result.data.length > 0) {
-                            $scope.cuentacontable = result.data;
-                        }
-                    });
-                }*/
-
                 //LQMA 27022017 add obtiene datos para llenar filtro de cuenta
                 $scope.getCuenta = function(idBanco, idEmpresa) {
                     $scope.activaBotonBuscar = true;
@@ -155,6 +134,7 @@ registrationModule.controller('conciliacionInicioController', function($scope, $
 
 
                     conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable, 2).then(function(result) {
+                    conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, 2).then(function(result) {
                         if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
@@ -164,6 +144,7 @@ registrationModule.controller('conciliacionInicioController', function($scope, $
 
                             setTimeout(function() {
                                 $scope.paramBusqueda = { "idBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "idEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "cuenta": $scope.cuentaActual.Cuenta, "cuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador };
+                                $scope.paramBusqueda = { "idBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "idEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "cuenta": $scope.cuentaActual.Cuenta, "cuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
                                 console.log($scope.paramBusqueda)
@@ -205,4 +186,19 @@ registrationModule.controller('conciliacionInicioController', function($scope, $
                     console.log(cuenta)
                 }
 
+                $scope.cambiarMenu = function(){
+                $scope.elementState.show = !$scope.elementState.show;   
+                };
+
+                $scope.calendario = function() {
+                 $('#calendar .input-group.date').datepicker({
+                todayBtn: "linked",
+                keyboardNavigation: true,
+                forceParse: false,
+                calendarWeeks: true,
+                autoclose: true,
+                todayHighlight: true,
+                format : "yyyy-mm-dd"
+                });
+    };
             });
