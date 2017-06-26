@@ -1,4 +1,3 @@
-registrationModule.controller('conciliacionInicioController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
 registrationModule.controller('conciliacionInicioController', function($filter,$scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
 
             // ****************** Se guarda la información del usuario en variable userData
@@ -28,7 +27,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
             //******************************************************************
 
             $scope.init = function() {
-                //$scope.calendario();
                 
                 $scope.getEmpresa(15);
                 $scope.calendario();
@@ -48,7 +46,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                     $scope.contadorGerente=[{'NombreGerente':$scope.busqueda.gerente,
                     'NombreContador':$scope.busqueda.contador
                     }];
-                       conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable, 2).then(function(result) {
                        conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, 2).then(function(result) {
                         if (result.data.length > 0) {
                             //console.log('entra')                
@@ -133,7 +130,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                     console.log($scope.cuentaActual)
 
 
-                    conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable, 2).then(function(result) {
                     conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, 2).then(function(result) {
                         if (result.data.length > 0) {
                             //console.log('entra')                
@@ -143,7 +139,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                             $scope.paramBusqueda = [];
 
                             setTimeout(function() {
-                                $scope.paramBusqueda = { "idBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "idEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "cuenta": $scope.cuentaActual.Cuenta, "cuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador };
                                 $scope.paramBusqueda = { "idBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "idEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "cuenta": $scope.cuentaActual.Cuenta, "cuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
