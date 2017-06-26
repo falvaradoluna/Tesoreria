@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="text-main">
+            <h4>Depositos</h4>
+        </div>
+        <table class="table table-striped table-bordered tabla-punteo" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>No. Cuenta</th>
+                    <th>referencia</th>
+                    <th>Nombre Banco</th>
+                    <th>Tipo Referencia</th>
+                    <th>Empresa</th>
+                    <th>Fecha</th>
+                    <th>Importe</th>
+                    <th data-sort-ignore="true" class="min-width"></th>
+                    <th data-sort-ignore="true" class="min-width"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="pendiente in tblPendientes">
+                    <td>{{pendiente.nocuenta}}</td>
+                    <td>{{pendiente.referencia}}</td>
+                    <td>{{pendiente.nombreBanco}}</td>
+                    <td>{{pendiente.tipoRefNombre}}</td>
+                    <td>{{pendiente.nomEmpresa}}</td>
+                    <td>{{pendiente.fecha | date:'dd/MM/yyyy'}}</td>
+                    <td>{{pendiente.importe | currency}}</td>
+                    <td>
+                        <button class="btn btn-success btn-xs" ng-click="applyReference(pendiente.idReferencia)" ng-show="userData.idPerfil>2"><i class="ti-check"></i></button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info btn-xs" ng-click="showReferenceDetails(pendiente)"><i class="ti-eye"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10"></div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-success" ng-click="guardarGrid()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> | Aplicar Referencias</button>
+    </div>
+</div>

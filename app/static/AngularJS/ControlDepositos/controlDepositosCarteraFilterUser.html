@@ -1,0 +1,63 @@
+<div class="row ">
+    <div class="form-group col-md-6">
+        <label class="form-label">Sucursal:</label>
+        <select class="form-control" ng-model="selectedValueSucursaID" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in lstSucursal" name="txtSucursal" ng-change="getDepartamentos()" ng-disabled="carteraControlsDisabled">
+            <option value="">Seleccioné Sucursal</option>
+        </select>
+    </div>
+    <div class="form-group col-md-6" id="cliente">
+        <label for="ffincartera">Búsqueda por:</label>
+        <div class="input-group">
+            <div class="input-group-btn">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" ng-disabled="carteraControlsDisabled">
+                    {{searchType}}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a ng-click="setSearchType(1)">ID Cliente</a>
+                    </li>
+                    <li>
+                        <a ng-click="setSearchType(2)">Nombre</a>
+                    </li>
+                </ul>
+            </div>
+            <input type="text" class="form-control" style="display:inline-block" id="txtSearch" ng-model="searchValue" placeholder="{{searchType}}" ng-disabled="carteraControlsDisabled">
+            <div class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="searchClients()" ng-disabled="carteraControlsDisabled"><span class="glyphicon glyphicon-search"> </span> </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row ">
+    <div class="col-md-12">
+        <div id="contentUserTable" ng-show="showUserSearchPanel">
+            <table id="tblClient" class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th>idCliente</th>
+                        <th>rfc</th>
+                        <th>nombre</th>
+                        <th>email</th>
+                        <th>telefono</th>
+                        <th>telefonoCelular</th>
+                        <th>selecciona</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="itemCliente in lstCliente">
+                        <td>{{itemCliente.idCliente}}</td>
+                        <td>{{itemCliente.rfc}}</td>
+                        <td>{{itemCliente.nombre}}</td>
+                        <td>{{itemCliente.email}}</td>
+                        <td>{{itemCliente.telefono}}</td>
+                        <td>{{itemCliente.telefonoCelular}}</td>
+                        <td>
+                            <button class="btn btn-default" ng-click="searchDocs(itemCliente)"><span class="glyphicon glyphicon-ok"> </span></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

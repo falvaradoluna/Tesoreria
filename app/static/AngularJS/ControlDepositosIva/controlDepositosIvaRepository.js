@@ -1,7 +1,7 @@
 var controlDepositosURL = global_settings.urlCORS + 'api/controlDepositos/';
 
 
-registrationModule.factory('controlDepositosRepository', function($http) {
+registrationModule.factory('controlDepositosIvaRepository', function($http) {
     return {
 
         createReference: function(objData) {

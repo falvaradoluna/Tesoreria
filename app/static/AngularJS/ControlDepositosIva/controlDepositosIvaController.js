@@ -1,4 +1,4 @@
-registrationModule.controller('controlDepositosController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, controlDepositosRepository) {
+registrationModule.controller('controlDepositosControllerIva', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, controlDepositosIvaRepository) {
 
     $rootScope.userData = localStorageService.get('userData');
     $scope.idUsuario = $rootScope.userData.idUsuario;
@@ -363,6 +363,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             $('#mdlLoading').modal('hide');
         });
     };
+
 
 
     $scope.insertReferenceDetails = function(objData) {
