@@ -11,7 +11,9 @@ registrationModule.factory('conciliacionRepository', function($http) {
                     idEmpresa: idEmpresa,
                     noCuenta: noCuenta, 
                     cuentaContable: cuentaContable,
-                    opcion: opcion
+                    opcion: opcion,
+                    fechaElaboracion: fInicial,
+                    fechaCorte: fFinal
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -28,7 +30,9 @@ registrationModule.factory('conciliacionRepository', function($http) {
                     idEmpresa: idEmpresa,
                     noCuenta: noCuenta, 
                     cuentaContable: cuentaContable,
-                    opcion: opcion
+                    opcion: opcion,
+                    fechaElaboracion: fInicial,
+                    fechaCorte: fFinal
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -45,7 +49,9 @@ registrationModule.factory('conciliacionRepository', function($http) {
                     idEmpresa: idEmpresa,
                     noCuenta: noCuenta, 
                     cuentaContable: cuentaContable,
-                    opcion: opcion
+                    opcion: opcion,
+                    fechaElaboracion: fInicial,
+                    fechaCorte: fFinal
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,7 +68,9 @@ registrationModule.factory('conciliacionRepository', function($http) {
                     idEmpresa: idEmpresa,
                     noCuenta: noCuenta, 
                     cuentaContable: cuentaContable,
-                    opcion: opcion
+                    opcion: opcion,
+                    fechaElaboracion: fInicial,
+                    fechaCorte: fFinal
                 },
                 headers: {
                     'Content-Type': 'application/json'

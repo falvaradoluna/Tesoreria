@@ -18,7 +18,7 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Fecha</th>
+                                <th>Cuenta</th>
                                 <th>Tipo Poliza</th>
                                 <th>No Poliza</th>
                                 <th>Concepto</th>
@@ -30,11 +30,16 @@
                         <table class="table">
                             <tbody>
                                 <tr ng-repeat="row in abonosContables">
-                                    <td>{{row.movFechaOpe}}</td>
-                                    <td>{{row.polTipo}}</td>
-                                    <td>{{row.numeroCuenta}}</td>
-                                    <td>{{row.movConcepto}}</td>
-                                    <td style="text-align: right;">{{row.abono | currency}}</td>
+                                    <td>{{row.MOV_NUMCTA}}</td>
+                                    <td>{{row.MOV_TIPOPOL}}</td>
+                                    <td>{{row.MOV_CONSPOL}}</td>
+                                    <td>{{row.MOV_CONSMOV}}</td>
+                                    <td>{{row.MOV_MES}}</td>
+                                    <td>{{row.MOV_CONCEPTO}}</td>
+                                    <td>{{row.MOV_DEBE | currency}}</td>
+                                    <td>{{row.MOV_HABER | currency}}</td>
+                                    <td>{{row.MOV_FECHOPE}}</td>
+                                    <td style="text-align: right;">{{row.MOV_HABER | currency}}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -81,11 +86,16 @@
                     <table class="table">
                         <tbody>
                             <tr ng-repeat="row in cargosContables">
-                                <td>{{row.movFechaOpe}}</td>
-                                <td>{{row.polTipo}}</td>
-                                <td>{{row.numeroCuenta}}</td>
-                                <td>{{row.movConcepto}}</td>
-                                <td style="text-align: right;">{{row.cargo | currency}}</td>
+                                <td>{{row.MOV_NUMCTA}}</td>
+                                    <td>{{row.MOV_TIPOPOL}}</td>
+                                    <td>{{row.MOV_CONSPOL}}</td>
+                                    <td>{{row.MOV_CONSMOV}}</td>
+                                    <td>{{row.MOV_MES}}</td>
+                                    <td>{{row.MOV_CONCEPTO}}</td>
+                                    <td>{{row.MOV_DEBE | currency}}</td>
+                                    <td>{{row.MOV_HABER | currency}}</td>
+                                    <td>{{row.MOV_FECHOPE}}</td>
+                                <td style="text-align: right;">{{row.MOV_DEBE | currency}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -117,11 +127,14 @@
                     <table class="table">
                         <tbody>
                             <tr ng-repeat="row in cargosBancarios">
-                                <td>{{row.FECHA}}</td>
-                                <td>{{row.TIPO}}</td>
-                                <td>{{row.POLIZA}}</td>
+                                <td>{{row.BANCO}}</td>
+                                <td>{{row.CUENTA}}</td>
+                                <td>{{row.FECHAOP}}</td>
+                                <td>{{row.HORAOP}}</td>
                                 <td>{{row.CONCEPTO}}</td>
-                                <td style="text-align: right;">{{row.SALDO_ACTUAL | currency}}</td>
+                                <td>{{row.REFERENCIA}}</td>
+                                <td>{{row.REFAMPLIADA}}</td>
+                                <td style="text-align: right;">{{row.IMPORTE | currency}}</td>
                             </tr>
                         </tbody>
                     </table>

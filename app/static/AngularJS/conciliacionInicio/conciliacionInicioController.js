@@ -46,7 +46,7 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                     $scope.contadorGerente=[{'NombreGerente':$scope.busqueda.gerente,
                     'NombreContador':$scope.busqueda.contador
                     }];
-                       conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, 2).then(function(result) {
+                       conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, 2).then(function(result) {
                         if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
