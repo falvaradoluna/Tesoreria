@@ -38,6 +38,18 @@ registrationModule.factory('controlDepositosRepository', function($http) {
             });
         },
 
+
+        insertaRefAntipag: function(bankTableName, currentBase) {
+            return $http({
+                url: controlDepositosURL + 'insertaRefAntipag/',
+                method: "GET",
+                params: { bankTableName: bankTableName, currentBase: currentBase },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
         getPendingReference: function() {
             return $http({
                 url: controlDepositosURL + 'pendingReference/',
