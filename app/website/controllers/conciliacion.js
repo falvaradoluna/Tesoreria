@@ -28,8 +28,9 @@ Conciliacion.prototype.get_abonoContable = function(req, res, next) {
                   { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
                   { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT }];
-
+                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT },
+                  { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }];
     /*var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'fInicial', value: req.query.fInicial, type: self.model.types.STRING },
                   { name: 'fFinal', value: req.query.fFinal, type: self.model.types.STRING },
@@ -51,7 +52,9 @@ Conciliacion.prototype.get_cargoContable = function(req, res, next) {
                   { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
                   { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT }];
+                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT },
+                  { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING}];
     
     console.log('SEL_CARGO_CONTABLE_SP')
     console.log(params)
@@ -78,7 +81,9 @@ Conciliacion.prototype.get_abonoBancario = function(req, res, next) {
                   { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
                   { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT }];
+                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT },
+                  { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }];
 
     /*var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'fInicial', value: req.query.fInicial, type: self.model.types.STRING },
@@ -101,7 +106,9 @@ Conciliacion.prototype.get_cargoBancario = function(req, res, next) {
                   { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
                   { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT }];
+                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT },
+                  { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }];
 
     /*var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
                   { name: 'fInicial', value: req.query.fInicial, type: self.model.types.STRING },

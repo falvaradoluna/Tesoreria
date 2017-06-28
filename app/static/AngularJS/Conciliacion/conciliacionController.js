@@ -50,10 +50,10 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
     $scope.obtieneCargosAbonos = function() {
 
-        $scope.getAbonoContable($scope.busqueda.idEmpresa,0,0,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
-        $scope.getAbonoBancario($scope.busqueda.idEmpresa,0,0,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
-        $scope.getCargoContable($scope.busqueda.idEmpresa,0,0,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
-        $scope.getCargoBancario($scope.busqueda.idEmpresa,0,0,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
+        $scope.getAbonoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
+        $scope.getAbonoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
+        $scope.getCargoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
+        $scope.getCargoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
     }
 
 
@@ -70,14 +70,16 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
     };
 
     $scope.gridDepositosBancos.columnDefs = [
-        { name: 'idDepositoBanco', displayName: '', width: 20, visible: false},
-        { name: 'BANCO', displayName: 'Banco', width: 150 },
-        { name: 'FECHA', displayName: 'Fecha', width: 100 },
-        { name: "SALDO_ACTUAL", displayName: "Importe", width: 200, cellTemplate: '<div class="text-right text-success text-semibold"><div class="text-right">{{row.entity.SALDO_ACTUAL | currency}}</div></div>'},
-        { name: 'TIPO', displayName: 'Tipo', width: 200 },
-        { name: 'POLIZA', displayName: 'Polioza', width: 200 },
-        { name: 'CONCEPTO', displayName: 'Concepto', width: 300 }
+        { name: 'BANCO', displayName: 'Banco', width: 150, align:'center' },
+        { name: 'CUENTA', displayName: 'Cuenta', width: 150 },
+        { name: 'FECHAOP', displayName: 'Fecha de Operación', width: 150 },
+        { name: 'HORAOP', displayName: 'Hora de Operación', width: 150 },
+        { name: 'CONSEPTO', displayName: 'Concepto', width: 150 },
+        { name: 'REFERENCIA', displayName: 'Referencia', width: 150 },
+        { name: 'REFAMPLIADA', displayName: 'Referencia Ampliada', width: 250 },
+        { name: "IMPORTE", displayName: "Importe", width: 200, cellTemplate: '<div class="text-right text-success text-semibold"><div class="text-right">{{row.entity.IMPORTE | currency}}</div></div>'}
     ];
+
 
     $scope.gridDepositosBancos.multiSelect = false;
 
@@ -106,7 +108,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.abonosContables = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
-                        $scope.totalAbonoContable = $scope.totalAbonoContable + result.data[i].abono;
+                        $scope.totalAbonoContable = $scope.totalAbonoContable + result.data[i].MOV_HABER;
                 } else {
                     /*console.log('entro a getAbonoContable')
                     console.log(result.data);
@@ -130,7 +132,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.abonosBancarios = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
-                        $scope.totalAbonoBancario = $scope.totalAbonoBancario + result.data[i].SALDO_ACTUAL;
+                        $scope.totalAbonoBancario = $scope.totalAbonoBancario + result.data[i].IMPORTE;
 
                     $scope.gridDepositosBancos.data = result.data;
 
@@ -158,7 +160,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.cargosContables = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
-                        $scope.totalCargoContable = $scope.totalCargoContable + result.data[i].cargo;
+                        $scope.totalCargoContable = $scope.totalCargoContable + result.data[i].MOV_DEBE;
                 } else {
                     $scope.resumenDPI = result.data;
                     $scope.idTipoAuxiliar = result.data[0].idTipoAuxiliar;
@@ -178,7 +180,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.cargosBancarios = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
-                        $scope.totalCargoBancario = $scope.totalCargoBancario + result.data[i].SALDO_ACTUAL;
+                        $scope.totalCargoBancario = $scope.totalCargoBancario + result.data[i].IMPORTE;
                 } else {
                     $scope.resumenDPI = result.data;
                     $scope.idTipoAuxiliar = result.data[0].idTipoAuxiliar;
