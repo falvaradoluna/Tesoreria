@@ -37,11 +37,37 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'idCliente', value: req.query.idCliente, type: self.model.types.INT },
         { name: 'idAlma', value: req.query.idAlma, type: self.model.types.STRING },
         { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.INT },
-        { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING }
+        { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING },
+        { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT }
     ];
 
     this.model.query('SEL_REFERENCIA_SP', params, function(error, result) {
         self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_createTempReference = function(req, res, next) {
+
+    var self = this;
+     
+    var params = [
+        { name: 'bancoNumberID', value: req.query.bancoNumberID, type: self.model.types.INT },
+        { name: 'bancoConsTableID', value: req.query.bancoConsTableID, type: self.model.types.INT },
+        { name: 'referenciaID', value: req.query.referenciaID, type: self.model.types.INT },
+        { name: 'carteraVencidaID', value: req.query.carteraVencidaID, type: self.model.types.INT },
+        { name: 'referenciaTemporal', value: req.query.referenciaTemporal, type: self.model.types.STRING },
+        { name: 'estatusID', value: req.query.estatusID, type: self.model.types.INT },
+        { name: 'tipoReferenciaID', value: req.query.tipoReferenciaID, type: self.model.types.INT }
+        
+    ];
+
+    
+
+    this.model.query('INS_REFERENCIA_TEMP_SP', params, function(error, result) {
+            self.view.expositor(res, {
             error: error,
             result: result
         });
@@ -257,6 +283,36 @@ controlDepositos.prototype.get_clientByName = function (req, res, next) {
     }];
 
     this.model.query('SEL_CLIENTE_SP', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+controlDepositos.prototype.get_comisiones = function (req, res, next) {
+
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [];
+
+    this.model.query('SEL_COMISIONES', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+controlDepositos.prototype.get_comisionesIva = function (req, res, next) {
+
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [];
+
+    this.model.query('SEL_COMISIONES_IVA', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

@@ -57,6 +57,26 @@ registrationModule.factory('controlDepositosIvaRepository', function($http) {
                 }
             });
         },
+        getcomisiones: function(idReferencia) {
+            return $http({
+                url: controlDepositosURL + 'comisiones/',
+                method: "GET",
+                params: { idReferencia: idReferencia },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        getcomisionesIva: function(idReferencia) {
+            return $http({
+                url: controlDepositosURL + 'comisionesIva/',
+                method: "GET",
+                params: { idReferencia: idReferencia },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         updCarteraVencidaReferencia: function(idReferencia) {
             return $http({
                 url: controlDepositosURL + 'updCarteraVencidaReferencia/',
@@ -128,7 +148,7 @@ registrationModule.factory('controlDepositosIvaRepository', function($http) {
             });
         },
 
-        gridDocumentosOptions: function() {
+        gridComisionesOptions: function() {
             return {
                 enableColumnResize: true,
                 enableRowSelection: true,
@@ -144,7 +164,7 @@ registrationModule.factory('controlDepositosIvaRepository', function($http) {
                 }
             };
         },
-        gridDocumentosColumns: function(isVisible) {
+        gridComisionesColumns: function(isVisible) {
             return [
                 { name: 'banco', displayName: 'Banco', width: '10%' },
                 { name: 'idBmer', displayName: 'Cons', width: '5%' },
@@ -161,7 +181,7 @@ registrationModule.factory('controlDepositosIvaRepository', function($http) {
             ];
         },
 
-        gridCarteraOptions: function() {
+        gridInteresOptions: function() {
             return {
                 enableColumnResize: true,
                 enableRowSelection: true,
@@ -177,17 +197,23 @@ registrationModule.factory('controlDepositosIvaRepository', function($http) {
                 }
             };
         },
-        gridCarteraColumns: function() {
+        gridInteresColumns: function(isVisible) {
             return [
-                { name: 'nombreSucursal', width: '10%', displayName: 'Sucursal' },
-                { name: 'nombreDepartamento', width: '10%', displayName: 'Departamento' },
-                { name: 'folio', width: '10%', displayName: 'Factura' },
-                { name: 'fecha', width: '10%', displayName: 'fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },
-                { name: 'nombreCliente', width: '30%', displayName: 'Cliente' },
-                { name: 'importe', width: '10%', displayName: 'Importe', cellFilter: 'currency' },
-                { name: 'saldo', width: '10%', displayName: 'Saldo', cellFilter: 'currency' },
+                { name: 'banco', displayName: 'Banco', width: '10%' },
+                { name: 'idBmer', displayName: 'Cons', width: '5%' },
+                { name: 'referencia', displayName: 'Referencia', width: '15%' },
+                { name: 'concepto', displayName: 'Concepto', width: '15%' },
+                { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
+                { name: 'cargo', displayName: 'Cargo', width: '10%', cellFilter: 'currency', visible: isVisible },
+                { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
+                    name: 'observaciones',
+                    displayName: 'Observaciones',
+                    width: '25%',
+                    cellEditableCondition: true
+                }
             ];
         },
+
 
         getClientById: function(idBusqueda) {
             return $http({

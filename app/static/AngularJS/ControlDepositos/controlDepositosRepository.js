@@ -15,6 +15,17 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
+        createTempReference: function(objData) {
+
+            return $http({
+                url: controlDepositosURL + 'createTempReference/',
+                method: "GET",
+                params: objData,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
 
         insertReferenceDetails: function(objData) {
             return $http({

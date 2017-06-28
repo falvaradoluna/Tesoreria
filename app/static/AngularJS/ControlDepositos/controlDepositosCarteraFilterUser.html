@@ -41,7 +41,7 @@
                         <th>email</th>
                         <th>telefono</th>
                         <th>telefonoCelular</th>
-                        <th>selecciona</th>
+                        <th ng-hide="searchTypeID == 1">selecciona</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,8 +52,8 @@
                         <td>{{itemCliente.email}}</td>
                         <td>{{itemCliente.telefono}}</td>
                         <td>{{itemCliente.telefonoCelular}}</td>
-                        <td>
-                            <button class="btn btn-default" ng-click="searchDocs(itemCliente)"><span class="glyphicon glyphicon-ok"> </span></button>
+                        <td ng-hide="searchTypeID == 1">
+                            <button class="btn btn-default" ng-click="SetClienteID(itemCliente)"><span class="glyphicon glyphicon-ok"> </span></button>
                         </td>
                     </tr>
                 </tbody>

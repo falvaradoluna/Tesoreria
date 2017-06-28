@@ -5,7 +5,7 @@
 // -- Modificó: 
 // -- Fecha: 
 // -- =============================================
-var registrationModule = angular.module("registrationModule", ["ngRoute", "LocalStorageModule", 'ui.grid', 'ui.grid.selection', 'ui.grid.grouping', 'ui.grid.pinning','ui.grid.edit'])
+var registrationModule = angular.module("registrationModule", ["ngRoute", "LocalStorageModule", 'ui.grid', 'ui.grid.selection', 'ui.grid.grouping', 'ui.grid.pinning', 'ui.grid.edit'])
     .config(function($routeProvider, $locationProvider) {
 
         /*cheange the routes*/
@@ -30,10 +30,10 @@ var registrationModule = angular.module("registrationModule", ["ngRoute", "Local
             controller: 'conciliacionDetalleRegistroController'
         });
 
-$routeProvider.when('/controlDepositosIva', {
+        $routeProvider.when('/controlDepositosIva', {
             templateUrl: 'AngularJS/Templates/controldepositosIva.html', //FAL 19012017
-            controller: 'controlDepositosControllerIva'
-        });        
+            controller: 'controlDepositosIvaController'
+        });
 
 
         $routeProvider.when('/controlDepositos', {

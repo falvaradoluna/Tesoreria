@@ -14,10 +14,7 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="ibox-title" style="text-align:center">
-        <h3>Control de Depositos IVA</h3>
-    </div>
+<div class="row">    
     <div class="form-group col-md-5">
         <label class="form-label">Banco:</label>
         <select class="form-control" ng-model="selectedValueBancoID" ng-options="banco.IdBanco as banco.Nombre for banco in lstBanco" name="txtBanco" ng-change="getCuentas()" ng-disabled="ddlBancoDisabled">
@@ -47,6 +44,6 @@
         </div>
     </div>
     <div class="form-group col-md-3" style="margin-top: 23px">
-        <button class="btn btn-primary" ng-disabled="btnBuscarDisabled" ng-click="getDepositosBancosNoReferenciados()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> | Buscar</button>
+        <button class="btn btn-primary" ng-disabled="btnBuscarDisabled" ng-click="getComisiones()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> | Buscar</button>
     </div>
 </div>

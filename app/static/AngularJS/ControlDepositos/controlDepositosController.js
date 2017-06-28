@@ -44,7 +44,10 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     //sumas
     $scope.depositoTotal = 0;
     $scope.carteraTotal = 0;
+    //
 
+    $scope.selectedRowDocuments = {};
+    $scope.selectedRowCartera = [];
 
 
     filtrosRepository.getEmpresas($scope.idUsuario).then(function(result) {
@@ -85,7 +88,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
 
-    $scope.getDepositosBancosNoReferenciados = function(obj) {
+    $scope.getDepositosBancosNoReferenciados = function() {
 
         var empresaID = $scope.selectedValueEmpresaID;
         var cuentaID = $scope.selectedValueCuentaID;
@@ -171,6 +174,14 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         }
     };
 
+    $scope.SetClienteID = function(cliente) {
+        $scope.lstCliente = [];
+        $scope.searchClienteID = cliente.idCliente;
+        $scope.lstCliente.push(cliente);
+        $scope.searchTypeID = 1;
+        $('#tblClient').DataTable().destroy();
+    };
+
     $scope.getClientByID = function(idBusqueda) {
         $('#tblClient').DataTable().destroy();
         $('#mdlLoading').modal('show');
@@ -178,8 +189,6 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             if (result.data.length > 0) {
                 $('#mdlLoading').modal('hide');
                 $scope.lstCliente = result.data;
-                $scope.setTableStyle();
-
             } else {
                 $('#mdlLoading').modal('hide');
             }
@@ -224,8 +233,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         }, 500);
     };
 
-    $scope.selectedRowDocuments = {};
-    $scope.selectedRowCartera = [];
+
 
     $scope.gridDocumentos.onRegisterApi = function(gridApi) {
 
@@ -240,11 +248,11 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 $scope.selectedRowDocuments = null;
             }
         });
-        /*
-                gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
-                    $scope.updateObservation(rowEntity.idDepositoBanco, rowEntity.observaciones);
-                    $scope.$apply();
-                });*/
+
+        gridApi.edit.on.afterCellEdit($scope, function(rowEntity, colDef, newValue, oldValue) {
+            $scope.updateObservation(rowEntity.idDepositoBanco, rowEntity.observaciones);
+            $scope.$apply();
+        });
 
 
     };
@@ -283,42 +291,92 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.getCarteraVencida = function() {
 
-        var clienteID = $scope.searchClienteID;
-        var empresa = $scope.selectedValueEmpresaID;
-        var sucursaID = $scope.selectedValueSucursaID;
-        var deptoID = $scope.selectedValueDepartamentoID;
-        var fIni = $scope.selectedValueCarteraFechaInicio;
-        var fFin = $scope.selectedValuecarteraFechaFin;
+        if ($scope.searchClienteID === 0) {
+            swal("Aviso", "Usuario es requerido.", "warning");
+        } else {
 
-        $scope.gridCartera.data = [];
-        $('#mdlLoading').modal('show');
-        filtrosRepository.getCartera(clienteID, empresa, sucursaID, deptoID, fIni, fFin).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.gridCartera.data = result.data;
-                $('#mdlLoading').modal('hide');
-            } else {
-                $('#mdlLoading').modal('hide');
-            }
-        });
+            var clienteID = $scope.searchClienteID;
+            var empresa = $scope.selectedValueEmpresaID;
+            var sucursaID = $scope.selectedValueSucursaID;
+            var deptoID = $scope.selectedValueDepartamentoID;
+            var fIni = $scope.selectedValueCarteraFechaInicio;
+            var fFin = $scope.selectedValuecarteraFechaFin;
+
+            $scope.gridCartera.data = [];
+            $('#mdlLoading').modal('show');
+            filtrosRepository.getCartera(clienteID, empresa, sucursaID, deptoID, fIni, fFin).then(function(result) {
+                if (result.data.length > 0) {
+                    $scope.gridCartera.data = result.data;
+                    $('#mdlLoading').modal('hide');
+                } else {
+                    $('#mdlLoading').modal('hide');
+                }
+            });
+        }
     };
 
 
     $scope.creaReferenciaTemporal = function() {
-        var params = $scope.setReferenceParams($scope.selectedRowCartera[0], 0);
-        if ($scope.selectedRowCartera.length > 1) params.idTipoReferencia = 4;
-        $scope.createReference(params);
-        alertFactory.success('Referencia generada con exito.');
+
+        if ($scope.carteraTotal > $scope.depositoTotal) {
+            swal("Aviso", "El saldo de la cartera debe ser menor que el saldo del deposito.  ", "warning");
+        } else {
+            swal({
+                    title: "¿Esta seguro?",
+                    text: "Se creara una referencia temporal.",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#21B9BB",
+                    confirmButtonText: "Aceptar",
+                    closeOnConfirm: false
+                },
+                function() {
+                    var params = $scope.setReferenceParams($scope.selectedRowCartera[0], 0, $scope.selectedRowDocuments.idDepositoBanco);
+                    if ($scope.selectedRowCartera.length > 1) params.idTipoReferencia = 4;
+                    $scope.createReference(params);
+                });
+        }
 
     };
 
-    $scope.setReferenceParams = function(objCartera, idreferencia) {
+
+    $scope.createReference = function(objData) {
+
+        $scope.promise = controlDepositosRepository.createReference(objData).then(function(result) {
+            if (result.data.length > 0) {
+
+                var idRef = result.data[0].idReferencia;
+
+                for (var i = 0; i < $scope.selectedRowCartera.length; i++) {
+                    var params = $scope.setReferenceParams($scope.selectedRowCartera[i], idRef, $scope.selectedRowDocuments.idDepositoBanco);
+                    $scope.insertReferenceDetails(params);
+                }
+
+                $scope.reloadGrids();
+
+            } else {
+                console.log('createReference empty');
+            }
+        }, function(error) {
+            console.log('Error');
+        });
+    };
+
+    $scope.reloadGrids = function() {
+        $scope.getDepositosBancosNoReferenciados();
+        $scope.getCarteraVencida();
+        $scope.loadPendingDocs();
+    };
+
+
+    $scope.setReferenceParams = function(objCartera, idreferencia, depositoID) {
 
         var params = {};
 
-        params.idEmpresa = $scope.selectedValueEmpresaID;
+        params.idEmpresa = objCartera.idEmpresa;
         params.idReferencia = idreferencia;
-        params.idSucursal = $scope.selectedValueSucursaID;;
-        params.idDepartamento = $scope.selectedValueDepartamentoID;
+        params.idSucursal = objCartera.idSucursal;
+        params.idDepartamento = objCartera.idDepartamento;
         params.idTipoDocumento = 1;
         params.serie = objCartera.serie;
         params.folio = objCartera.idDocumento;
@@ -326,45 +384,11 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         params.idAlma = 0;
         params.importeDocumento = objCartera.importe;
         params.idTipoReferencia = 3;
+        params.depositoID = depositoID;
 
         return params;
 
     };
-
-
-    $scope.createReference = function(objData) {
-
-        $('#mdlLoading').modal('show');
-
-        $scope.promise = controlDepositosRepository.createReference(objData).then(function(result) {
-            if (result.data.length > 0) {
-                var idRef = result.data[0].idReferencia;
-
-                for (var i = 0; i < $scope.selectedRowCartera.length; i++) {
-
-                    var params = $scope.setReferenceParams($scope.selectedRowCartera[i], idRef);
-                    $scope.insertReferenceDetails(params);
-                }
-
-                $scope.updateReference($scope.selectedRowDocuments.idDepositoBanco, idRef);
-                $scope.updateCarteraVencida(idRef);
-
-                //$scope.getDepositosBancosNoReferenciados($scope.filtros.idBanco, $scope.filtroscheck.cargo, $scope.filtros.fechaInicioDeposito, $scope.filtros.fechaFinDeposito);
-                //$scope.getCarteraVencida($scope.filtros.idCliente, $scope.filtros.idTipoEmpresa, $scope.filtros.idSucursal, $scope.filtros.idDepartamento, $scope.filtros.fechaInicioCartera, $scope.filtros.fechaFinCartera);
-                $scope.loadPendingDocs();
-                $('#mdlLoading').modal('hide');
-
-            } else {
-                console.log('no trajo nada createReference');
-                $('#mdlLoading').modal('hide');
-            }
-        }, function(error) {
-            console.log('Error');
-            $('#mdlLoading').modal('hide');
-        });
-    };
-
-
 
     $scope.insertReferenceDetails = function(objData) {
 
@@ -380,33 +404,47 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         });
     };
 
-    $scope.updateReference = function(idDepositoBanco, idReferencia) {
 
-        $scope.promise = controlDepositosRepository.updSetReferencia(idDepositoBanco, idReferencia).then(function(result) {
+    $scope.aplicarReferencia = function(idReferencia) {
 
-            if (result.data.length > 0) {
-                console.log('OK update reference');
-            } else {
-                console.log('no trajo nada updateReference');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
+        swal({
+                title: "¿Esta seguro?",
+                text: "Se aplicará la referencia.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: false
+            },
+            function() {
+                controlDepositosRepository.insApplyReference(idReferencia).then(function(result) {
+                    swal("Aplicado", "Referencia aplicada", "success");
+                    $scope.loadPendingDocs();
+                });
+            });
     };
 
+    $scope.aplicarReferenciaTodas = function(data) {
 
-    $scope.updateCarteraVencida = function(idReferencia) {
+        swal({
+                title: "¿Esta seguro?",
+                text: "Se aplicarán todas la referencias.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: false
+            },
+            function() {
+                for (var i = 0; i < data.length; i++) {
+                    controlDepositosRepository.insApplyReference(data.idReferencia).then(function(result) {});
+                }
 
-        controlDepositosRepository.updCarteraVencidaReferencia(idReferencia).then(function(result) {
-            if (result.data.length > 0) {
-                console.log('ok update cartera vencida');
-            } else {
-                console.log('no trajo nada updateCarteraVencida');
-            }
-        }, function(error) {
-            console.log('Error');
-        });
+                swal("Aplicado", "Se aplicaron todas las referncias", "success");
+                $scope.loadPendingDocs();
+            });
     };
+
 
     $scope.loadPendingDocs = function() {
 
@@ -423,7 +461,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.showReferenceDetails = function(obj) {
-        console.log(obj)
+
         $scope.tblPendientesDetalle = null;
         $scope.loadPendingDocsDetails(obj.idReferencia);
         $('#mdlReferenciaDetalle').modal('show');
@@ -443,6 +481,47 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         });
 
     };
+
+
+    $scope.guardarGrid = function(idReferencia) {
+        swal({
+                title: "¿Esta seguro?",
+                text: "Se asignaran los depositos seleccionados. ",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: false
+            },
+            function() {
+                swal("Asignados", "Los Depositos han sido asignados", "success");
+            });
+    };
+
+    $scope.updateObservation = function(idDepositoBanco, observacion) {
+
+        $scope.promise = controlDepositosRepository.updSetObservation(idDepositoBanco, observacion).then(function(result) {
+
+            if (result.data.length > 0) {
+                console.log('OK');
+            } else {
+                console.log('no trajo nada updateObservation');
+            }
+        }, function(error) {
+            console.log('Error');
+        });
+
+
+    };
+
+    function guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
+    }
 
 
     $scope.loadPendingDocs();
