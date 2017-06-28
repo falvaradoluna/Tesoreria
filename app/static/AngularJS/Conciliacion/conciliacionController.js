@@ -56,9 +56,34 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.getCargoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
     }
 
+    //****************************************************************************************************
+    // INICIA las variables para el GRID ABONOS CONTABLES
+    //******
+    $scope.gridAbonosContables = {
+        enableRowSelection: true,
+        enableSelectAll: false,
+        selectionRowHeaderWidth: 35,
+        rowHeight: 35,
+        showGridFooter: true,
+        enableFiltering: true,
+    };
+    
+      $scope.gridAbonosContables.columnDefs = [
+        { name: 'MOV_NUMCTA', displayName: 'Numero de Cuenta', width: 150, align:'center' },
+        { name: 'MOV_TIPOPOL', displayName: 'Tipo de Poliza', width: 150 },
+        { name: 'MOV_CONSPOL', displayName: 'Número de Poliza', width: 150 },
+        { name: 'MOV_CONSMOV', displayName: 'Consecutivo', width: 150 },
+        { name: 'MOV_MES', displayName: 'Mes del Movimiento', width: 150 },
+        { name: 'MOV_DEBE', displayName: "Cargos", width: 150, cellTemplate: '<div><div>{{row.entity.MOV_DEBE | currency}}</div></div>'},
+        { name: 'MOV_FECHOPE', displayName: 'Fecha de Operacion', width: 250,  cellFilter: 'date:\'yyyy-MM-dd\''},
+        { name: "MOV_HABER", displayName: "Abonos", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.MOV_HABER | currency}}</div></div>'}
+    ];
+
+
+    $scope.gridAbonosContables.multiSelect = false;
 
     //****************************************************************************************************
-    // INICIA las variables para el GRID BANCOS
+    // INICIA las variables para el GRID ABONOS BANCOS
     //****************************************************************************************************
     $scope.gridDepositosBancos = {
         enableRowSelection: true,
@@ -66,7 +91,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         selectionRowHeaderWidth: 35,
         rowHeight: 35,
         showGridFooter: true,
-        enableFiltering: true
+        enableFiltering: true,
     };
 
     $scope.gridDepositosBancos.columnDefs = [
@@ -77,11 +102,64 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         { name: 'CONSEPTO', displayName: 'Concepto', width: 150 },
         { name: 'REFERENCIA', displayName: 'Referencia', width: 150 },
         { name: 'REFAMPLIADA', displayName: 'Referencia Ampliada', width: 250 },
-        { name: "IMPORTE", displayName: "Importe", width: 200, cellTemplate: '<div class="text-right text-success text-semibold"><div class="text-right">{{row.entity.IMPORTE | currency}}</div></div>'}
+        { name: "IMPORTE", displayName: "Importe", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.IMPORTE | currency}}</div></div>'}
     ];
 
 
     $scope.gridDepositosBancos.multiSelect = false;
+
+     //****************************************************************************************************
+    // INICIA las variables para el GRID CARGOS CONTABLES
+    //****************************************************************************************************
+    $scope.gridCargosContables = {
+        enableRowSelection: true,
+        enableSelectAll: false,
+        selectionRowHeaderWidth: 35,
+        rowHeight: 35,
+        showGridFooter: true,
+        enableFiltering: true,
+    };
+
+    $scope.gridCargosContables.columnDefs = [
+        { name: 'MOV_NUMCTA', displayName: 'Numero de Cuenta', width: 150, align:'center' },
+        { name: 'MOV_TIPOPOL', displayName: 'Tipo de Poliza', width: 150 },
+        { name: 'MOV_CONSPOL', displayName: 'Número de Poliza', width: 150 },
+        { name: 'MOV_CONSMOV', displayName: 'Consecutivo', width: 150 },
+        { name: 'MOV_MES', displayName: 'Mes del Movimiento', width: 150 },
+        { name: 'MOV_HABER', displayName: "Abonos", width: 150, cellTemplate: '<div><div>{{row.entity.MOV_HABER | currency}}</div></div>'},
+        { name: 'MOV_FECHOPE', displayName: 'Fecha de Operacion', width: 250,  cellFilter: 'date:\'yyyy-MM-dd\'' },
+        { name: "Cargos", displayName: "Cargos", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.MOV_DEBE | currency}}</div></div>'}
+    ];
+
+
+    $scope.gridCargosContables.multiSelect = false;
+
+     //****************************************************************************************************
+    // INICIA las variables para el GRID CARGOS BANCOS
+    //****************************************************************************************************
+    $scope.gridCargosBancarios = {
+        enableRowSelection: true,
+        enableSelectAll: false,
+        selectionRowHeaderWidth: 35,
+        rowHeight: 35,
+        showGridFooter: true,
+        enableFiltering: true,
+    };
+
+    $scope.gridCargosBancarios.columnDefs = [
+        { name: 'BANCO', displayName: 'Banco', width: 150, align:'center' },
+        { name: 'CUENTA', displayName: 'Cuenta', width: 150 },
+        { name: 'FECHAOP', displayName: 'Fecha de Operación', width: 150 },
+        { name: 'HORAOP', displayName: 'Hora de Operación', width: 150 },
+        { name: 'CONSEPTO', displayName: 'Concepto', width: 150 },
+        { name: 'REFERENCIA', displayName: 'Referencia', width: 150 },
+        { name: 'REFAMPLIADA', displayName: 'Referencia Ampliada', width: 250 },
+        { name: "IMPORTE", displayName: "Importe", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.IMPORTE | currency}}</div></div>'}
+    ];
+
+
+    $scope.gridCargosBancarios.multiSelect = false;
+
 
     $scope.calendario = function() {
         $('#calendar .input-group.date').datepicker({
@@ -105,7 +183,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                 if (opcion == 1) {
 
                     //console.log(result.data)
-                    $scope.abonosContables = result.data;
+                    $scope.gridAbonosContables.data = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
                         $scope.totalAbonoContable = $scope.totalAbonoContable + result.data[i].MOV_HABER;
@@ -118,7 +196,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                 }
 
             } else {
-                $scope.abonosContables = [];
+                $scope.gridAbonosContables.data = [];
                 $scope.totalAbonoContable = 0;
             }
         });
@@ -157,7 +235,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
             if (result.data.length > 0) {
 
                 if (opcion == 1) {
-                    $scope.cargosContables = result.data;
+                    $scope.gridCargosContables.data = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
                         $scope.totalCargoContable = $scope.totalCargoContable + result.data[i].MOV_DEBE;
@@ -166,7 +244,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.idTipoAuxiliar = result.data[0].idTipoAuxiliar;
                 }
             } else {
-                $scope.cargosContables = [];
+                $scope.gridCargosContables.data = [];
                 $scope.totalCargoContable = 0;
             }
         });
@@ -177,7 +255,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
             if (result.data.length > 0) {
 
                 if (opcion == 1) {
-                    $scope.cargosBancarios = result.data;
+                    $scope.gridCargosBancarios.data = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
                         $scope.totalCargoBancario = $scope.totalCargoBancario + result.data[i].IMPORTE;
@@ -230,15 +308,4 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
             });*/
         });
     };
-
-    //   $scope.setActiveClass = function(currentTab) {
-    //      console.log(currentTab)
-    //     for (var i = 0; i < $scope.panels.length; i++) {
-    //         $scope.panels[i].active = false;
-    //         $scope.panels[i].className = "";
-    //     }
-    //     currentTab.active = true;
-    //     currentTab.className = "active";
-    //     console.log(currentTab)
-    // };
 });

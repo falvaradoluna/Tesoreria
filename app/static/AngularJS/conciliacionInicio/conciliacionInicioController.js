@@ -125,6 +125,11 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
 
                 $scope.getTotalesAbonoCargo = function() {
+                    console.log($scope.fechaElaboracion.substr(-5,2));
+                    if($scope.fechaElaboracion.substr(-5,2) != $scope.fechaCorte.substr(-5,2)){
+                      alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
+                    }
+                    else{
                     $scope.activaBotonesReporte = false;
                     console.log('$scope.cuentaActual')
                     console.log($scope.cuentaActual)
@@ -167,7 +172,7 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                             //console.log($scope.contadorGerente[0].NombreGerente)
                         }
                     });
-
+                  }
                 }
 
                 $scope.setCuenta = function(cuenta) {
