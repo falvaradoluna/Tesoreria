@@ -320,6 +320,8 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
         if ($scope.carteraTotal > $scope.depositoTotal) {
             swal("Aviso", "El saldo de la cartera debe ser menor que el saldo del deposito.  ", "warning");
+        } else if ($scope.depositoTotal === 0 || $scope.carteraTotal === 0) {
+            swal("Aviso", "Seleccione almenos un deposito  y un documento.", "warning");
         } else {
             swal({
                     title: "¿Esta seguro?",
@@ -328,12 +330,17 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                     showCancelButton: true,
                     confirmButtonColor: "#21B9BB",
                     confirmButtonText: "Aceptar",
-                    closeOnConfirm: false
+                    closeOnConfirm: true
                 },
                 function() {
-                    var params = $scope.setReferenceParams($scope.selectedRowCartera[0], 0, $scope.selectedRowDocuments.idDepositoBanco);
-                    if ($scope.selectedRowCartera.length > 1) params.idTipoReferencia = 4;
-                    $scope.createReference(params);
+
+                    setTimeout(function() {
+                        var params = $scope.setReferenceParams($scope.selectedRowCartera[0], 0, $scope.selectedRowDocuments.idDepositoBanco);
+                        if ($scope.selectedRowCartera.length > 1) params.idTipoReferencia = 4;
+                        $scope.createReference(params);
+
+                    }, 1000);
+
                 });
         }
 
@@ -363,6 +370,8 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.reloadGrids = function() {
+        $scope.depositoTotal = 0;
+        $scope.carteraTotal = 0;
         $scope.getDepositosBancosNoReferenciados();
         $scope.getCarteraVencida();
         $scope.loadPendingDocs();
@@ -414,12 +423,14 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Aceptar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function() {
                 controlDepositosRepository.insApplyReference(idReferencia).then(function(result) {
                     swal("Aplicado", "Referencia aplicada", "success");
+                    $scope.insertaRefAntipag();
                     $scope.loadPendingDocs();
+
                 });
             });
     };
@@ -433,11 +444,11 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 showCancelButton: true,
                 confirmButtonColor: "#21B9BB",
                 confirmButtonText: "Aceptar",
-                closeOnConfirm: false
+                closeOnConfirm: true
             },
             function() {
                 for (var i = 0; i < data.length; i++) {
-                    controlDepositosRepository.insApplyReference(data.idReferencia).then(function(result) {});
+                    controlDepositosRepository.insApplyReference(data.idReferencia);
                 }
 
                 swal("Aplicado", "Se aplicaron todas las referncias", "success");
@@ -448,6 +459,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.loadPendingDocs = function() {
 
+        $scope.tblPendientes = [];
         controlDepositosRepository.getPendingReference().then(function(result) {
             if (result.data.length > 0) {
                 $scope.tblPendientes = result.data;
@@ -474,7 +486,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             if (result.data.length > 0) {
                 $scope.tblPendientesDetalle = result.data;
             } else {
-                console.log('no trajo nada loadPendingDocsDetails');
+                console.log('loadPendingDocsDetails no result');
             }
         }, function(error) {
             console.log('Error');
@@ -483,19 +495,15 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
 
-    $scope.guardarGrid = function(idReferencia) {
-        swal({
-                title: "¿Esta seguro?",
-                text: "Se asignaran los depositos seleccionados. ",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#21B9BB",
-                confirmButtonText: "Aceptar",
-                closeOnConfirm: false
-            },
-            function() {
-                swal("Asignados", "Los Depositos han sido asignados", "success");
-            });
+
+
+    $scope.insertaRefAntipag = function() {
+
+        var bankTableName = "";
+        var currentBase = "";
+
+        controlDepositosRepository.insertaRefAntipag(bankTableName, currentBase);
+
     };
 
     $scope.updateObservation = function(idDepositoBanco, observacion) {

@@ -52,7 +52,7 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
 controlDepositos.prototype.get_createTempReference = function(req, res, next) {
 
     var self = this;
-     
+
     var params = [
         { name: 'bancoNumberID', value: req.query.bancoNumberID, type: self.model.types.INT },
         { name: 'bancoConsTableID', value: req.query.bancoConsTableID, type: self.model.types.INT },
@@ -61,13 +61,13 @@ controlDepositos.prototype.get_createTempReference = function(req, res, next) {
         { name: 'referenciaTemporal', value: req.query.referenciaTemporal, type: self.model.types.STRING },
         { name: 'estatusID', value: req.query.estatusID, type: self.model.types.INT },
         { name: 'tipoReferenciaID', value: req.query.tipoReferenciaID, type: self.model.types.INT }
-        
+
     ];
 
-    
+
 
     this.model.query('INS_REFERENCIA_TEMP_SP', params, function(error, result) {
-            self.view.expositor(res, {
+        self.view.expositor(res, {
             error: error,
             result: result
         });
@@ -248,7 +248,7 @@ controlDepositos.prototype.get_delReferenciaGenerada = function(req, res, next) 
 };
 
 
-controlDepositos.prototype.get_clientById = function (req, res, next) {
+controlDepositos.prototype.get_clientById = function(req, res, next) {
     //Con req.query se obtienen los parametros de la url
     //Ejemplo: ?p1=a&p2=b
     //Retorna {p1:'a',p2:'b'}
@@ -263,7 +263,7 @@ controlDepositos.prototype.get_clientById = function (req, res, next) {
         type: self.model.types.INT
     }];
 
-    this.model.query('SEL_CLIENTE_ID_SP', params, function (error, result) {
+    this.model.query('SEL_CLIENTE_ID_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -272,7 +272,7 @@ controlDepositos.prototype.get_clientById = function (req, res, next) {
 };
 
 
-controlDepositos.prototype.get_clientByName = function (req, res, next) {
+controlDepositos.prototype.get_clientByName = function(req, res, next) {
 
     var self = this;
     //asignación de valores mediante parámetros del request
@@ -282,7 +282,7 @@ controlDepositos.prototype.get_clientByName = function (req, res, next) {
         type: self.model.types.STRING
     }];
 
-    this.model.query('SEL_CLIENTE_SP', params, function (error, result) {
+    this.model.query('SEL_CLIENTE_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -291,13 +291,13 @@ controlDepositos.prototype.get_clientByName = function (req, res, next) {
 };
 
 
-controlDepositos.prototype.get_comisiones = function (req, res, next) {
+controlDepositos.prototype.get_comisiones = function(req, res, next) {
 
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [];
 
-    this.model.query('SEL_COMISIONES', params, function (error, result) {
+    this.model.query('SEL_COMISIONES', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -306,13 +306,30 @@ controlDepositos.prototype.get_comisiones = function (req, res, next) {
 };
 
 
-controlDepositos.prototype.get_comisionesIva = function (req, res, next) {
+controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
 
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [];
 
-    this.model.query('SEL_COMISIONES_IVA', params, function (error, result) {
+    this.model.query('SEL_COMISIONES_IVA', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_insertaRefAntipag = function(req, res, next) {
+
+    var self = this;
+    
+    var params = [
+        { name: 'bankTableName', value: req.query.bankTableName, type: self.model.types.STRING },
+        { name: 'currentBase', value: req.query.currentBase, type: self.model.types.STRING }
+    ];
+
+    this.model.query('INS_REFANTIPAG', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
