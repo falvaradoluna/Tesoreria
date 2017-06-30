@@ -126,14 +126,16 @@ registrationModule.factory('filtrosRepository', function($http) {
 
             });
         },
-        getAuxiliar: function(idEmpresa, numero_cuenta, idestatus) {
+        getAuxiliar: function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte) {
             return $http({
                 url: filtrosURL + 'auxiliarContable/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
                     numero_cuenta: numero_cuenta,
-                    idEstatus: idestatus
+                    idEstatus: idestatus,
+                    fElaboracion: fElaboracion,
+                    fCorte: fCorte
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -141,14 +143,16 @@ registrationModule.factory('filtrosRepository', function($http) {
 
             });
         },
-        getDepositos: function(idBanco, idestatus, cuentaBancaria) {
+        getDepositos: function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte) {
             return $http({
                 url: filtrosURL + 'depositos/',
                 method: "GET",
                 params: {
                     idBanco: idBanco,
                     idEstatus: idestatus,
-                    cuentaBancaria: cuentaBancaria
+                    cuentaBancaria: cuentaBancaria,
+                    fElaboracion: fElaboracion,
+                    fCorte: fCorte
                 },
                 headers: {
                     'Content-Type': 'application/json'

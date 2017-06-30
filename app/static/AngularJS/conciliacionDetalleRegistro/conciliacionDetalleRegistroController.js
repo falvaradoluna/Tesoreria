@@ -30,13 +30,12 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         enableFiltering: true
     };
     $scope.gridAuxiliarContable.columnDefs = [
-        { name: 'polFecha', displayName: 'Fecha', width: 100, type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },//, cellFilter: 'date:\'dd-MM-yyyy\''
-        { name: 'polTipo', displayName: 'Tipo Pol', width: 200 },
-        { name: 'polReferencia2', displayName: 'No Pol', width: 100 },
-        //{ name: 'polReferencia1', displayName: 'CHQ', width: 300 },
-        { name: 'movConcepto', displayName: 'Concepto', width: 600 },
-        { name: 'cargo', displayName: 'Cargo', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
-        { name: 'abono', displayName: 'Abono', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' }
+        { name: 'MOV_FECHOPE', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\''},//, cellFilter: 'date:\'dd-MM-yyyy\''
+        { name: 'MOV_TIPOPOL', displayName: 'Tipo de Poliza', width: 200 },
+        { name: 'MOV_CONSMOV', displayName: 'Número Poliza', width: 100 },
+        { name: 'MOV_CONCEPTO', displayName: 'Concepto', width: 600 },
+        { name: 'MOV_DEBE', displayName: 'Cargo', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.MOV_DEBE > 0">{{row.entity.MOV_DEBE | currency}}</span></div><div class="text-right"><span ng-if="row.entity.MOV_DEBE == 0">{{row.entity.MOV_DEBE | currency}}</span></div>' },
+        { name: 'MOV_HABER', displayName: 'Abono', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.MOV_HABER > 0">{{row.entity.MOV_HABER | currency}}</span></div><div class="text-right"><span ng-if="row.entity.MOV_HABER == 0">{{row.entity.MOV_HABER | currency}}</span></div>' }
     ];
     $scope.gridAuxiliarContable.multiSelect = true;
     //****************************************************************************************************
@@ -51,11 +50,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         enableFiltering: true
     };
     $scope.gridDepositosBancos.columnDefs = [
-        { name: 'banco', displayName: 'Banco', width: 100 },
-        { name: 'referencia', displayName: 'Referencia', width: 200 },
-        { name: 'concepto', displayName: 'Concepto', width: 300 },
-        { name: 'cargo', displayName: 'Cargo', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
-        { name: 'abono', displayName: 'Abono', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' }
+        { name: 'BANCO', displayName: 'Banco', width: 100 },
+        { name: 'REFERENCIA', displayName: 'Referencia', width: 200 },
+        { name: 'CONCEPTO', displayName: 'Concepto', width: 300 },
+        { name: 'CARGO', displayName: 'Cargo', type: 'number', width: 100, cellTemplate: '<div class="text-success text-semibold"><span ng-if="row.entity.CARGO > 0">{{row.entity.CARGO | currency}}</span></div><div><span ng-if="row.entity.CARGO == 0">{{row.entity.CARGO | currency}}</span></div>' },
+        { name: 'ABONO', displayName: 'Abono', type: 'number', width: 100, cellTemplate: '<div class="text-success text-semibold"><span ng-if="row.entity.ABONO > 0">{{row.entity.ABONO | currency}}</span></div><div><span ng-if="row.entity.ABONO == 0">{{row.entity.ABONO | currency}}</span></div>' }
     ];
     $scope.gridDepositosBancos.multiSelect = true;
     //****************************************************************************************************
@@ -63,8 +62,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     $scope.init = function() {
         variablesLocalStorage();
-        $scope.getDepositosBancos($scope.idBanco, 1, $scope.cuentaBanco);
-        $scope.getAuxiliarContable($scope.idEmpresa, $scope.cuenta, 1);
+        $scope.getDepositosBancos($scope.idBanco, 1, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+        $scope.getAuxiliarContable($scope.idEmpresa, $scope.cuenta, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         $scope.getAuxiliarPunteo($scope.idEmpresa, $scope.cuenta);
         $scope.getBancoPunteo($scope.idEmpresa, $scope.cuentaBanco);
         $rootScope.mostrarMenu = 1;
@@ -81,9 +80,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.nombreGerente = $scope.busqueda.gerente;
         $scope.nombreContador = $scope.busqueda.contador;
     };
-    $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus) {
+    $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte) {
         if (idestatus == 1) { //Consigo los datos del Auxiliar Contable sin puntear
-            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus).then(function(result) {
+            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte).then(function(result) {
                 if (result.data.length >= 0) {
                     $scope.auxiliarContable = result.data;
                     $scope.gridAuxiliarContable.data = result.data;
@@ -98,9 +97,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
             });
         }
     };
-    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria) {
+    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte) {
         if (idestatus == 1) { //Consigo los datos del Banco sin Puntear
-            filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria).then(function(result) {
+            filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte).then(function(result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data;
                     $scope.gridDepositosBancos.data = result.data;
@@ -152,11 +151,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
             var msg = 'row selected ' + row.isSelected;
             if (row.isSelected == true) {
-                $scope.abonoAuxiliar = $scope.abonoAuxiliar + row.entity.abono;
-                $scope.cargoAuxiliar = $scope.cargoAuxiliar + row.entity.cargo;
+                $scope.abonoAuxiliar = $scope.abonoAuxiliar + row.entity.MOV_HABER;
+                $scope.cargoAuxiliar = $scope.cargoAuxiliar + row.entity.MOV_DEBE;
             } else if (row.isSelected == false) {
-                $scope.abonoAuxiliar = $scope.abonoAuxiliar - row.entity.abono;
-                $scope.cargoAuxiliar = $scope.cargoAuxiliar - row.entity.cargo;
+                $scope.abonoAuxiliar = $scope.abonoAuxiliar - row.entity.MOV_HABER;
+                $scope.cargoAuxiliar = $scope.cargoAuxiliar - row.entity.MOV_DEBE;
             }
             //console.log(msg, 'Estoy en rowSelectionChanged');
         }); //Este me dice cuales van siendo seleccionadas
@@ -178,11 +177,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
             var msg = 'row selected ' + row.isSelected;
             if (row.isSelected == true) {
-                $scope.abonoBanco = $scope.abonoBanco + row.entity.abono;
-                $scope.cargoBanco = $scope.cargoBanco + row.entity.cargo;
+                $scope.abonoBanco = $scope.abonoBanco + row.entity.ABONO;
+                $scope.cargoBanco = $scope.cargoBanco + row.entity.CARGO;
             } else if (row.isSelected == false) {
-                $scope.abonoBanco = $scope.abonoBanco - row.entity.abono;
-                $scope.cargoBanco = $scope.cargoBanco - row.entity.cargo;
+                $scope.abonoBanco = $scope.abonoBanco - row.entity.ABONO;
+                $scope.cargoBanco = $scope.cargoBanco - row.entity.CARGO;
             }
             //console.log(msg, 'Estoy en rowSelectionChanged');
 
