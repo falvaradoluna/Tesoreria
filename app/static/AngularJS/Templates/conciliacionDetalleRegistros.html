@@ -116,9 +116,9 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="auxiliar in auxiliarPadre">
-                                <td>{{auxiliar.polFecha}}</td>
+                                <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
                                 <td>{{auxiliar.polTipo}}</td>
-                                <td>{{auxiliar.polReferencia2}}</td>
+                                <td>{{auxiliar.polConsecutivo}}</td>
                                 <td>{{auxiliar.movConcepto}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>

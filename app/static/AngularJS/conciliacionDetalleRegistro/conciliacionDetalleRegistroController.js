@@ -265,7 +265,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
             var valueAuxiliar = value.idAuxiliarContable;
             var conceptoPago = value.movConcepto;
             angular.forEach($scope.punteoBanco, function(value, key) {
-                conciliacionDetalleRegistroRepository.insertPuntoDeposito(value.idDepositoBanco, valueAuxiliar, conceptoPago, 2, tipopunteo).then(function(result) {
+                conciliacionDetalleRegistroRepository.insertPuntoDeposito(value.idBmer, valueAuxiliar, conceptoPago, 2, tipopunteo).then(function(result) {
                     if (result.data[0].length) {
                         console.log('Respuesta Incorrecta');
                     } else {
