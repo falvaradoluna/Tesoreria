@@ -143,18 +143,18 @@
                         <!--===================================================-->
                         <div class="col-sm-5">
                             <form>
-                                <div class="form-group col-md-3">
+                                <!--<div class="form-group col-md-3">
                                     <button class="btn btn-primary" style="width:100px;" ng-disabled="activaBotonesReporte"><i class="ti-save"></i> Guardar</button>
-                                </div>
+                                </div>-->
                                 <!--<div class="form-group col-md-3">
                                     <button class="btn btn-info" style="width:100px;" ng-disabled="activaBotonesReporte"><i class="ti-printer"></i> Imprimir</button>
                                 </div>-->
                                 <div class="form-group col-md-3">
                                     <button class="btn btn-success" ng-controller="conciliacionDetalleRegistroController" ng-click="generaInfoReport(1)" ng-disabled="activaBotonesReporte"><i class="ti-export"></i> Ver Reporte</button>
                                 </div>
-                                <div class="form-group col-md-3" ng-controller="conciliacionDetalleRegistroController">
+                                <!--<div class="form-group col-md-3" ng-controller="conciliacionDetalleRegistroController">
                                     <button class="btn btn-mint" ng-click="generaInfoReport(2)" ng-disabled="activaBotonesReporte"><i class="ti-email"></i> Enviar Correo</button>
-                                </div>
+                                </div>-->
                                 <div class="panel-body">
                                     <div class="row">
                                         <div class="form-group col-md-10">
@@ -226,3 +226,25 @@
 </div>
 <!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
 <!--===================================================-->
+
+<!--Modal Actualizar BD-->
+<!--===================================================-->
+<div class="modal fade" id="actualizarBD" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="media-left bg-warning pad-all">
+                <i class="ti-alert icon-5x"></i>
+            </div>
+            <div class="media-body pad-lft">
+                <div class="modal-body">
+                    <br>
+                    <h4 class="text-title">Actualizando las Bases de Datos, por favor espere...
+                    </h4>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Modal actualizarBD-->

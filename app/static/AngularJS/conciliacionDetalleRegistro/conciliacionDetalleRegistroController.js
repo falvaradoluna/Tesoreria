@@ -210,6 +210,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.gridApiBancos.selection.clearSelectedRows();
         $scope.gridApiAuxiliar.selection.clearSelectedRows();
         if ($scope.punteoAuxiliar.length > 0 && $scope.punteoBanco.length > 0) {
+          
+
+
             if ($scope.punteoAuxiliar.length == 1) {
                 if ($scope.cargoBanco != 0 && $scope.abonoBanco != 0) {
                     $scope.limpiaVariables();
@@ -226,8 +229,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 }
             } else {
                 $scope.limpiaVariables();
-                alertFactory.warning('Punteo no valido')
+                alertFactory.warning('No puedes selecionar múltiples registros en ambas columnas')
             }
+        
+
+
         } else {
             $scope.limpiaVariables();
             alertFactory.warning('No ha seleccionado ninguna relación');
@@ -419,24 +425,24 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     $scope.generaInfoReport = function(accion) {
         variablesLocalStorage();
-        conciliacionRepository.getAbonoContable($scope.busqueda.idEmpresa, 0, 0, 1, $scope.busqueda.idBanco, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable).then(function(result) {
+        conciliacionRepository.getAbonoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable).then(function(result) {
             console.log(result, 'soy el Abono Contable');
             $scope.abonoContable = result.data;
-            conciliacionRepository.getCargoContable($scope.busqueda.idEmpresa, 0, 0, 1, $scope.busqueda.idBanco, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable).then(function(result) {
+            conciliacionRepository.getCargoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable).then(function(result) {
                 console.log(result, 'Soy el cargo contable');
                 $scope.cargoContable = result.data;
-                conciliacionRepository.getCargoBancario($scope.busqueda.idEmpresa, 0, 0, 1, $scope.busqueda.idBanco, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable).then(function(result) {
+                conciliacionRepository.getCargoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable).then(function(result) {
                     console.log(result, 'Soy el cargo bancario');
                     $scope.cargoBancario = result.data;
-                    conciliacionRepository.getAbonoBancario($scope.busqueda.idEmpresa, 0, 0, 1, $scope.busqueda.idBanco, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable).then(function(result) {
+                    conciliacionRepository.getAbonoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable).then(function(result) {
                         console.log(result, 'Soy el abono bancario');
                         $scope.abonoBancario = result.data;
-                        conciliacionInicioRepository.getTotalAbonoCargo(null, '', '', '', 2).then(function(result) {
-                            console.log(result.data, 'Soy el total de todo esto');
+                        conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, 1).then(function(result) {
                             var date = new Date();
                             $scope.fecha = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
                             console.log($scope.fecha, 'Soy la fecha');
                             $scope.totalReporte = result.data;
+                            console.log(result.data, 'Soy el total de todo esto');
                             $scope.infReporte = {
                                 "titulo": "CONCILIACIÓN BANCARIA",
                                 "titulo2": "BANCOS",
