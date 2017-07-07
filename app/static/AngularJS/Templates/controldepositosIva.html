@@ -3,12 +3,12 @@
     <div ng-switch="selectedPanel">
         <div ng-switch-when="pnlCuenta">
             <ctrdepiva-Banco-Table> </ctrdepiva-Banco-Table>
-            <button class="btn btn-primary pull-right" ng-click="changePanel('pnlCuentaIva')">siguiente</button>
+            
         </div>
         <div ng-switch-when="pnlCuentaIva">
             <ctrdepiva-Banco-Table-B> </ctrdepiva-Banco-Table-B>
             <button class="btn btn-primary" ng-click="changePanel('pnlCuenta')">anterior</button>
-            <button class="btn btn-success pull-right">agregar</button>
+            <button class="btn btn-success pull-right" ng-click="tempSave()">agregar</button>
         </div>
     </div>
     <div>

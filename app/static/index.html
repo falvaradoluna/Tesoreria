@@ -19,6 +19,7 @@
     <link href="css/datepicker3.css" rel="stylesheet">
     <link href="css/nifty.min.css" rel="stylesheet">
     <link href="css/tab.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
     <link href="css/demo/nifty-demo-icons.min.css" rel="stylesheet">
     <link href="css/demo/nifty-demo.min.css" rel="stylesheet">
     <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -129,9 +130,17 @@
                                     <!--Menu list item-->
                                     <li ng-show="controlDepositosAcceso == 1">
                                         <a href="/controlDepositos">
-                                            <i class="glyphicon glyphicon-usd"></i>
+                                            <i class="glyphicon glyphicon-credit-card"></i>
                                             <span class="menu-title">
                                                 <strong>Control de Depositos</strong>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li ng-show="controlDepositosAcceso == 1">
+                                        <a href="/comisiones">
+                                            <i class="glyphicon glyphicon-usd"></i>
+                                            <span class="menu-title">
+                                                <strong>Comisiones</strong>
                                             </span>
                                         </a>
                                     </li>
@@ -180,7 +189,7 @@
     <script src="js/jquery-2.2.4.min.js"></script>
     <script src="js/libs/angular/angular.min.js"></script>
     <script src="js/libs/angular/angular-route.min.js"></script>
-    <script src="js/libs/angular/angular-local-storage.min.js"></script>    
+    <script src="js/libs/angular/angular-local-storage.min.js"></script>
     <!--BootstrapJS [ RECOMMENDED ]-->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
@@ -192,7 +201,7 @@
     <link href="plugins/pace/pace.min.css" rel="stylesheet">
     <script src="plugins/pace/pace.min.js"></script>
     <script src="js/demo/nifty-demo.min.js"></script>
-    <script src="js/vfs_fonts.js"></script> 
+    <script src="js/vfs_fonts.js"></script>
     <script src="js/ui-grid.js"></script>
     <link rel="stylesheet" href="css/ui-grid.css" type="text/css">
     <!--Responsive table-->
@@ -224,10 +233,10 @@
     <script src="AngularJS/Filtros/filtrosRepository.js"></script>
     <script src="AngularJS/ControlDepositos/controlDepositosController.js"></script>
     <script src="AngularJS/ControlDepositos/controlDepositosRepository.js"></script>
-    <script src="AngularJS/ControlDepositos/controlDepositosDirectives.js"></script>
-    <script src="AngularJS/ControlDepositosIva/controlDepositosIvaController.js"></script>
-    <script src="AngularJS/ControlDepositosIva/controlDepositosIvaRepository.js"></script>
-    <script src="AngularJS/ControlDepositosIva/controlDepositosIvaDirectives.js"></script>
+    <script src="AngularJS/ControlDepositos/controlDepositosDirectives.js"></script>    
+    <script src="AngularJS/comisiones/comisionesController.js"></script>
+    <script src="AngularJS/comisiones/comisionesRepository.js"></script>
+    <script src="AngularJS/comisiones/comisionesDirectives.js"></script>
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroController.js"></script>
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroRepository.js"></script>
 </body>

@@ -295,7 +295,12 @@ controlDepositos.prototype.get_comisiones = function(req, res, next) {
 
     var self = this;
     //asignación de valores mediante parámetros del request
-    var params = [];
+    var params = [
+        { name: 'idBanco', value:  req.query.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
+        { name: 'fechaIni', value: req.query.fechaIni, type: self.model.types.STRING },
+        { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING }
+    ];
 
     this.model.query('SEL_COMISIONES', params, function(error, result) {
         self.view.expositor(res, {
@@ -310,7 +315,7 @@ controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
 
     var self = this;
     //asignación de valores mediante parámetros del request
-    var params = [];
+    var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
 
     this.model.query('SEL_COMISIONES_IVA', params, function(error, result) {
         self.view.expositor(res, {
@@ -319,6 +324,62 @@ controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
         });
     });
 };
+
+controlDepositos.prototype.get_interesComision = function(req, res, next) {
+
+    var self = this;
+    
+    var params = [
+        { name: 'interesID', value: req.query.interesID, type: self.model.types.INT },
+        { name: 'comisionID', value: req.query.comisionID, type: self.model.types.INT },
+        { name: 'bancoID', value: req.query.bancoID, type: self.model.types.INT },
+        { name: 'userID', value: req.query.userID, type: self.model.types.INT },
+        { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
+
+        
+    ];
+
+    this.model.query('[INS_INTERESCOMISION_SP]', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
+controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
+
+    var self = this;
+    
+    var params = [];
+
+    this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next) {
+
+    var self = this;
+    
+    var params = [];
+
+    this.model.query('INS_CXPCOMISIONESINTERESES_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
+
 
 controlDepositos.prototype.get_insertaRefAntipag = function(req, res, next) {
 
@@ -330,6 +391,27 @@ controlDepositos.prototype.get_insertaRefAntipag = function(req, res, next) {
     ];
 
     this.model.query('INS_REFANTIPAG', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
+controlDepositos.prototype.get_departamentoBpro = function(req, res, next) {
+
+    var self = this;
+
+
+    
+    var params = [
+        { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT }        
+    ];
+
+    this.model.query('SEL_DEPARTAMENTOBPRO_SP', params, function(error, result) {
+        
         self.view.expositor(res, {
             error: error,
             result: result

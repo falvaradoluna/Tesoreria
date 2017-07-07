@@ -25,9 +25,9 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     $scope.btnSwitchIsEnable = false;
     //Cartera Filtros ID    
     $scope.selectedValueSucursaID = 0;
-    $scope.selectedValueDepartamentoID = 0;
-    $scope.selectedValueCarteraFechaInicio = '';
-    $scope.selectedValuecarteraFechaFin = '';
+    $scope.selectedValueDepartamentoID = null;
+    $scope.selectedValueCarteraFechaInicio = null;
+    $scope.selectedValuecarteraFechaFin = null;
     $scope.showUserSearchPanel = false;
     //init grids
     $scope.gridDocumentos = controlDepositosRepository.gridDocumentosOptions;
@@ -138,7 +138,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.changeSwitch = function() {
-        console.log($scope.btnSwitchIsEnable);
+        
 
         if ($scope.btnSwitchIsEnable === 1) {
             $scope.gridDocumentos.columnDefs =
@@ -240,7 +240,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
 
             if (row.isSelected === true) {
-                console.log(row.entity.abono);
+                //console.log(row.entity.abono);
                 $scope.depositoTotal = row.entity.abono;
                 $scope.selectedRowDocuments = null;
                 $scope.selectedRowDocuments = row.entity;
@@ -301,11 +301,13 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             var deptoID = $scope.selectedValueDepartamentoID;
             var fIni = $scope.selectedValueCarteraFechaInicio;
             var fFin = $scope.selectedValuecarteraFechaFin;
+        
 
             $scope.gridCartera.data = [];
             $('#mdlLoading').modal('show');
             filtrosRepository.getCartera(clienteID, empresa, sucursaID, deptoID, fIni, fFin).then(function(result) {
                 if (result.data.length > 0) {
+                    
                     $scope.gridCartera.data = result.data;
                     $('#mdlLoading').modal('hide');
                 } else {
@@ -474,7 +476,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.showReferenceDetails = function(obj) {
 
-        $scope.tblPendientesDetalle = null;
+        $scope.tblPendientesDetalle = [];
         $scope.loadPendingDocsDetails(obj.idReferencia);
         $('#mdlReferenciaDetalle').modal('show');
     };

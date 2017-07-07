@@ -1,0 +1,66 @@
+<div class="row">
+    <div class="col-md-4">
+        <h2>Departamento</h2>
+    </div>
+    <div class="col-md-4">
+        <h5>Monto {{objEdicion.usarMontoUsuario == true ? 'usuario' : 'automático' }}</h5>
+        <h2>{{objEdicion.usarMontoUsuario == true ? objEdicion.montoAcumuladoUsuario : gridComisionesRow.abono  | currency}}</h2>
+    </div>
+    <div class="col-md-4">
+        <h5>Monto Total</h5>
+        <h2>{{gridComisionesRow.abono | currency}}</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <select class="form-control" ng-model="selectedValueSucursalID" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in lstSucursal" name="txtSucursal" ng-change="getDepartamentosBpro(selectedValueSucursalID)">
+            <option value="">Seleccioné Sucursal</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <select class="form-control" ng-model="selectedDepartamentoID" ng-options="itemDepartamento.subCuenta as itemDepartamento.descripcion for itemDepartamento in lstDepartamento" name="txtDepto" ng-change="setCuentaContable()">
+            <option value="">Seleccioné Sucursal</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Registro Contable</h3>
+        <table class="table" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Cuenta</th>
+                    <th>Concepto</th>
+                    <th>Descripción</th>
+                    <th>Cargo</th>
+                    <th>Abono</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="registro in lstRegistroContable">
+                <tr>
+                    <td>{{registro.consecutivo}}</td>
+                    <td>{{registro.cuenta}}</td>
+                    <td>{{registro.concepto}}</td>
+                    <td>{{registro.descripcion}}</td>
+                    <td>{{registro.cargo}}</td>
+                    <td>{{registro.abono}}</td>
+                    <td>
+                        <button class="btn btn-success" ng-click="toggleShowSub()" ng-show="registro.showSub">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-show="showSub" style="padding:70px">
+                    <td colspan="7" ng-if="registro.showSub">
+                        <comisiones-Departamento-Inner></comisiones-Departamento-Inner>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="row">
+    <div class="col-md-12 bhoechie-tab-container">
+        <div class="col-md-1 bhoechie-tab-menu">
+            <div class="list-group" ng-repeat="itemTab in lstTabs">
+                <a ng-class="itemTab.className" ng-click="setActiveTab(itemTab)">
+                    <h4 ng-class="itemTab.iconName"></h4>
+                    <br/>{{itemTab.description}}
+                </a>
+            </div>
+        </div>
+        <div class="col-md-11">
+            <div class="contentPadding" ng-show="lstTabs[0].isActive">
+                <comisiones-Buscar> </comisiones-Buscar>
+            </div>
+            <div class="contentPadding" ng-show="lstTabs[1].isActive">
+                <comisiones-Iva> </comisiones-Iva>
+            </div>
+            <div class="contentPadding" ng-show="lstTabs[2].isActive">
+                <comisiones-Departamento> </comisiones-Departamento>
+                <button class="btn btn-success pull-right" ng-click="validarMontos()">Aceptar</button>
+            </div>
+            <div class="contentPadding" ng-show="lstTabs[3].isActive">
+                <comisiones-Detalle> </comisiones-Detalle>
+            </div>
+        </div>
+    </div>
+</div>
+<comisiones-Modals></comisiones-Modals>
