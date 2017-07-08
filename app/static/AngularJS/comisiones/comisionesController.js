@@ -249,6 +249,11 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.aplicar = function() {
 
+
+
+        $scope.insInteresComisionDetalle();
+        /*
+
         swal({
                 title: "¿Esta seguro?",
                 text: "Se aplicarán todas la referencia.",
@@ -271,6 +276,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
                 swal("Aplicado", "Referencia aplicada", "success");
             });
+        */
     };
 
 
@@ -352,6 +358,43 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.showSubcuentas = function() {
         $('#mdlSubcuentas').modal('show');
+    };
+
+
+    $scope.insInteresComisionDetalle = function() {
+
+
+
+
+
+
+
+     
+ 
+        
+                var params = {
+                    cuentacontable: $scope.lstRegistroContable[0].cuenta,
+                    concepto: $scope.lstRegistroContable[0].concepto,
+                    cargo: $scope.lstRegistroContable[0].cargo,
+                    abono: $scope.lstRegistroContable[0].abono,
+                    documento: 0,
+                    idpersona: $scope.idUsuario,
+                    idcomisionesintereses: 1, //Pipus aun no trae el valor de este dato
+                    tipodocumento: '', //Tampoco sabe aun que poner ahi 
+                    fechavencimiento: '2017/01/01' ,//Tampoco sabe que ira aqui 
+                    poriva: 16 ,
+                    referencia: '12345678910',//Menos este lo hace BPRO?
+                    banco: $scope.selectedValueBancoID,
+                    referenciabancaria: '0',//Tampoco hay info de parte de pipus :P
+                    conpoliza: 1 
+                };
+
+                comisionesRepository.insInteresComisionDetalle(params).then(function(result) {
+                    console.log(result.data, 'Soy la respuesta del store de pipus');
+                });
+        
+
+
     };
 
 

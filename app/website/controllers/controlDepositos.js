@@ -296,7 +296,7 @@ controlDepositos.prototype.get_comisiones = function(req, res, next) {
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [
-        { name: 'idBanco', value:  req.query.idBanco, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
         { name: 'fechaIni', value: req.query.fechaIni, type: self.model.types.STRING },
         { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING }
@@ -328,7 +328,7 @@ controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
 controlDepositos.prototype.get_interesComision = function(req, res, next) {
 
     var self = this;
-    
+
     var params = [
         { name: 'interesID', value: req.query.interesID, type: self.model.types.INT },
         { name: 'comisionID', value: req.query.comisionID, type: self.model.types.INT },
@@ -336,7 +336,7 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
         { name: 'userID', value: req.query.userID, type: self.model.types.INT },
         { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
 
-        
+
     ];
 
     this.model.query('[INS_INTERESCOMISION_SP]', params, function(error, result) {
@@ -352,7 +352,7 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
 controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
 
     var self = this;
-    
+
     var params = [];
 
     this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
@@ -366,7 +366,7 @@ controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
 controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next) {
 
     var self = this;
-    
+
     var params = [];
 
     this.model.query('INS_CXPCOMISIONESINTERESES_SP', params, function(error, result) {
@@ -378,13 +378,49 @@ controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next
 };
 
 
+controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, next) {
+
+    var self = this;
+
+
+
+    var params = [
+        { name: 'cuentacontable', value: req.query.cuentacontable, type: self.model.types.STRING },
+        { name: 'concepto', value: req.query.concepto, type: self.model.types.STRING },
+        { name: 'cargo', value: req.query.cargo, type: self.model.types.STRING },
+        { name: 'abono', value: req.query.abono, type: self.model.types.STRING },
+        { name: 'documento', value: req.query.documento, type: self.model.types.STRING },
+        { name: 'idpersona', value: req.query.idpersona, type: self.model.types.STRING },
+        { name: 'idcomisionesintereses', value: req.query.idcomisionesintereses, type: self.model.types.STRING },
+        { name: 'tipodocumento', value: req.query.tipodocumento, type: self.model.types.STRING },
+        { name: 'fechavencimiento', value: req.query.fechavencimiento, type: self.model.types.STRING },
+        { name: 'poriva', value: req.query.poriva, type: self.model.types.STRING },
+        { name: 'referencia', value: req.query.referencia, type: self.model.types.STRING },
+        { name: 'banco', value: req.query.banco, type: self.model.types.STRING },
+        { name: 'referenciabancaria', value: req.query.referenciabancaria, type: self.model.types.STRING },
+        { name: 'conpoliza', value: req.query.conpoliza, type: self.model.types.STRING }
+    ];
+
+    this.model.query('INS_CXPCOMISIONESINTERESESDET_SP', params, function(error, result) {
+        console.log(error,'Soy el errror');
+        console.log(result,'Soy el exito ');
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
+
 
 
 
 controlDepositos.prototype.get_insertaRefAntipag = function(req, res, next) {
 
     var self = this;
-    
+
     var params = [
         { name: 'bankTableName', value: req.query.bankTableName, type: self.model.types.STRING },
         { name: 'currentBase', value: req.query.currentBase, type: self.model.types.STRING }
@@ -405,19 +441,22 @@ controlDepositos.prototype.get_departamentoBpro = function(req, res, next) {
     var self = this;
 
 
-    
+
     var params = [
-        { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT }        
+        { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT }
     ];
 
     this.model.query('SEL_DEPARTAMENTOBPRO_SP', params, function(error, result) {
-        
+
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
+
+
+
 
 
 

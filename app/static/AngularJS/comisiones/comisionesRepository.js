@@ -55,6 +55,16 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
+        insInteresComisionDetalle: function(params) {
+            return $http({
+                url: comisionesURL + 'insInteresComisionDetalle/',
+                method: "GET",
+                params: params,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         insCxpComisionesInteres: function() {
             return $http({
                 url: comisionesURL + 'insCxpComisionesInteres/',
