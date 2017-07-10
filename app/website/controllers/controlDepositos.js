@@ -402,8 +402,7 @@ controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, ne
     ];
 
     this.model.query('INS_CXPCOMISIONESINTERESESDET_SP', params, function(error, result) {
-        console.log(error,'Soy el errror');
-        console.log(result,'Soy el exito ');
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -448,6 +447,41 @@ controlDepositos.prototype.get_departamentoBpro = function(req, res, next) {
 
     this.model.query('SEL_DEPARTAMENTOBPRO_SP', params, function(error, result) {
 
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+controlDepositos.prototype.get_interes = function(req, res, next) {
+
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
+        { name: 'fechaIni', value: req.query.fechaIni, type: self.model.types.STRING },
+        { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING }
+    ];
+
+    this.model.query('SEL_INTERESES', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+controlDepositos.prototype.get_interesIva = function(req, res, next) {
+
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
+
+    this.model.query('SEL_INTERESES_IVA', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

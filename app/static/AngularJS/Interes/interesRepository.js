@@ -1,12 +1,12 @@
-var comisionesURL = global_settings.urlCORS + 'api/controlDepositos/';
+var interesURL = global_settings.urlCORS + 'api/controlDepositos/';
 
 
-registrationModule.factory('comisionesRepository', function($http) {
+registrationModule.factory('interesRepository', function($http) {
     return {
 
         getDepartamentoBpro: function(sucursalID) {
             return $http({
-                url: comisionesURL + 'departamentoBpro/',
+                url: interesURL + 'departamentoBpro/',
                 method: "GET",
                 params: { sucursalID: sucursalID },
                 headers: {
@@ -15,9 +15,9 @@ registrationModule.factory('comisionesRepository', function($http) {
             });
         },
 
-        getcomisiones: function(params) {
+        getInteres: function(params) {
             return $http({
-                url: comisionesURL + 'comisiones/',
+                url: interesURL + 'interes/',
                 method: "GET",
                 params: params,
                 headers: {
@@ -25,9 +25,9 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        getcomisionesIva: function(idDepositoBanco) {
+        getInteresIva: function(idDepositoBanco) {
             return $http({
-                url: comisionesURL + 'comisionesIva/',
+                url: interesURL + 'interesIva/',
                 method: "GET",
                 params: { idDepositoBanco: idDepositoBanco },
                 headers: {
@@ -37,7 +37,7 @@ registrationModule.factory('comisionesRepository', function($http) {
         },
         selInteresComision: function() {
             return $http({
-                url: comisionesURL + 'selInteresComision/',
+                url: interesURL + 'selInteresComision/',
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ registrationModule.factory('comisionesRepository', function($http) {
 
         insInteresComision: function(params) {
             return $http({
-                url: comisionesURL + 'interesComision/',
+                url: interesURL + 'interesComision/',
                 method: "GET",
                 params: params,
                 headers: {
@@ -57,7 +57,7 @@ registrationModule.factory('comisionesRepository', function($http) {
         },
         insInteresComisionDetalle: function(params) {
             return $http({
-                url: comisionesURL + 'insInteresComisionDetalle/',
+                url: interesURL + 'insInteresComisionDetalle/',
                 method: "GET",
                 params: params,
                 headers: {
@@ -67,7 +67,7 @@ registrationModule.factory('comisionesRepository', function($http) {
         },
         insCxpComisionesInteres: function() {
             return $http({
-                url: comisionesURL + 'insCxpComisionesInteres/',
+                url: interesURL + 'insCxpComisionesInteres/',
                 method: "GET",
                 params: {},
                 headers: {
@@ -81,7 +81,7 @@ registrationModule.factory('comisionesRepository', function($http) {
             console.log(objData);
 
             return $http({
-                url: comisionesURL + 'testApi/',
+                url: interesURL + 'testApi/',
                 method: "GET",
                 params: objData,
                 headers: {
@@ -92,7 +92,7 @@ registrationModule.factory('comisionesRepository', function($http) {
 
         getClientByName: function(clientName) {
             return $http({
-                url: comisionesURL + 'clientByName/',
+                url: interesURL + 'clientByName/',
                 method: "GET",
                 params: {
                     clientName: clientName
@@ -143,7 +143,7 @@ registrationModule.factory('comisionesRepository', function($http) {
             ];
         },
 
-        getComisionTemplate: function() {
+        getInteresTemplate: function() {
             return [{
                 consecutivo: 1,
                 cuenta: "700A-000B-0002-0009",
@@ -181,7 +181,7 @@ registrationModule.factory('comisionesRepository', function($http) {
 
         getClientById: function(idBusqueda) {
             return $http({
-                url: comisionesURL + 'clientById/',
+                url: interesURL + 'clientById/',
                 method: "GET",
                 params: {
                     idBusqueda: idBusqueda
