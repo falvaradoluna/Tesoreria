@@ -35,6 +35,11 @@ var registrationModule = angular.module("registrationModule", ["ngRoute", "Local
             controller: 'comisionesController'
         });
 
+        $routeProvider.when('/interes', {
+            templateUrl: 'AngularJS/Templates/interes.html', //FAL 19012017
+            controller: 'interesController'
+        });
+
 
         $routeProvider.when('/controlDepositos', {
             templateUrl: 'AngularJS/Templates/controldepositos.html', //FAL 19012017
