@@ -70,12 +70,13 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        detallePunteo: function(idPunteo) {
+        detallePunteo: function(idPunteo,accionBusqueda) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detallePunteo/',
                 method: "POST",
                 data: {
-                    idPunteoAuxiliarBanco: idPunteo
+                    idPunteoAuxiliarBanco: idPunteo,
+                    accionBusqueda: accionBusqueda
                 },
                 headers: {
                     'Content-Type': 'application/json'

@@ -9,13 +9,13 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.cargoBanco = 0;
     $scope.auxiliarPadre = '';
     $scope.bancoPadre = '';
-    $scope.bancoDetalle = '';
-    $scope.auxiliarDetalle = '';
+    $scope.detallePunteo = '';
     i18nService.setCurrentLang('es'); //Para seleccionar el idioma  
     $scope.infReporte = '';
     $scope.jsonData = '';
     $scope.ruta = '';
     $scope.clabe = '';
+    $scope.idBusqueda = '';
 
 
     //****************************************************************************************************
@@ -361,37 +361,46 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
-    $scope.verDetallePunteo = function(detallepunteo, tipopunteo) {
-        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo.idPunteoAuxiliarBanco).then(function(result) {
+    $scope.verDetallePunteo = function(detallepunteo,opcion) {
+        var accionBusqueda = 0;
+        if(opcion == 1){
+            $scope.idBusqueda = detallepunteo.idDepositoBanco;
+            accionBusqueda = 1;
+        } else { 
+           $scope.idBusqueda = detallepunteo.idAuxiliarContable;
+           accionBusqueda = 2;
+        }
+        conciliacionDetalleRegistroRepository.detallePunteo($scope.idBusqueda, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
-            if (tipopunteo == 1) {
-                $scope.bancoDetalle = { detallepunteo };
-                $scope.auxiliarDetalle = result.data;
-                $scope.calculaTotal($scope.bancoDetalle, $scope.auxiliarDetalle);
-            } else if (tipopunteo == 2) {
-                $scope.bancoDetalle = result.data;
-                $scope.auxiliarDetalle = { detallepunteo };
-                $scope.calculaTotal($scope.bancoDetalle, $scope.auxiliarDetalle);
-            } else {
-                alertFactory.error('Ocurrio un problema');
+
+                $scope.detallePunteo = result.data;
+                if($scope.detallePunteo.length > 0){
+                $scope.calculaTotal($scope.detallePunteo, accionBusqueda);
+                $scope.idBusqueda = '';
             }
+            else{
+                alertFactory.error('No existen punteos en este detalle')
+            }
+            
         });
     };
     //****************************************************************************************************
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************
-    $scope.calculaTotal = function(bancodetalle, auxiliardetalle) {
+    $scope.calculaTotal = function(detallePunteo, opcion) {
         $scope.abonoTotalBanco = 0;
         $scope.cargoTotalBanco = 0;
         $scope.abonoTotalAuxiliar = 0;
         $scope.cargoTotalAuxiliar = 0;
-        angular.forEach(bancodetalle, function(value, key) {
-            $scope.abonoTotalBanco += value.abono;
-            $scope.cargoTotalBanco += value.cargo;
-        });
-        angular.forEach(auxiliardetalle, function(value, key) {
+        
+        angular.forEach(detallePunteo, function(value, key) {
+              
+            $scope.abonoTotalBanco += value.abonoBanco;
+            $scope.cargoTotalBanco += value.cargoBanco;
+            
             $scope.abonoTotalAuxiliar += value.abono;
             $scope.cargoTotalAuxiliar += value.cargo;
+
         });
     };
     //****************************************************************************************************
@@ -461,7 +470,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                                 "cCB": $scope.totalReporte.tCargoBancario,
                                 "saldoConciliacion": "435965.15",
                                 "saldoContabilidad": "435965.15",
-                                "diferencia": "0.00",
+                                "diferencia": $scope.totalReporte.di,
                                 "menosBanco": $scope.abonoBancario,
                                 "masContabilidad": $scope.cargoContable,
                                 "menosContabilidad": $scope.abonoContable,
@@ -488,7 +497,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                             }
                             console.log($scope.infReporte, 'Es el información del reporte')
                             if (accion == 1) { //mostrar el reporte
-                                $scope.generarReporte();
+                               // $scope.generarReporte();
                             } else if (accion == 2) { //enviar el reporte por mail
                                 $scope.envioMail();
                             } else {

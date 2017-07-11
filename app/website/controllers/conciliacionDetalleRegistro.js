@@ -92,7 +92,9 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function(req, res, ne
 
     var self = this;
 
-    var params = [{ name: 'idPunteoAuxiliarBanco', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT }];
+    var params = [{ name: 'idDatoBusqueda', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT },
+                   {name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
+                   ];
 
     this.model.query('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function(error, result) {
         self.view.expositor(res, {
