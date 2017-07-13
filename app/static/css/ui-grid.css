@@ -13,7 +13,7 @@
   -o-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
-  text-align: center;
+  text-align: left;
 }
 .ui-grid-vertical-bar {
   position: absolute;

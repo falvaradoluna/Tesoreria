@@ -74,9 +74,9 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         { name: 'MOV_CONSPOL', displayName: 'Número de Poliza', width: 150 },
         { name: 'MOV_CONSMOV', displayName: 'Consecutivo', width: 150 },
         { name: 'MOV_MES', displayName: 'Mes del Movimiento', width: 150 },
-        { name: 'MOV_DEBE', displayName: "Cargos", width: 150, cellTemplate: '<div><div>{{row.entity.MOV_DEBE | currency}}</div></div>'},
+        { name: 'MOV_DEBE', displayName: "Cargos", width: 150, cellTemplate: '<div><div class="text-right">{{row.entity.MOV_DEBE | currency}}</div></div>'},
         { name: 'MOV_FECHOPE', displayName: 'Fecha de Operacion', width: 250,  cellFilter: 'date:\'yyyy-MM-dd\''},
-        { name: "MOV_HABER", displayName: "Abonos", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.MOV_HABER | currency}}</div></div>'}
+        { name: "MOV_HABER", displayName: "Abonos", width: 150, cellTemplate: '<div class="text-success text-semibold text-right"><div>{{row.entity.MOV_HABER | currency}}</div></div>'}
     ];
 
 
@@ -102,7 +102,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         { name: 'CONSEPTO', displayName: 'Concepto', width: 150 },
         { name: 'REFERENCIA', displayName: 'Referencia', width: 150 },
         { name: 'REFAMPLIADA', displayName: 'Referencia Ampliada', width: 250 },
-        { name: "IMPORTE", displayName: "Importe", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.IMPORTE | currency}}</div></div>'}
+        { name: "IMPORTE", displayName: "Importe", width: 150, cellTemplate: '<div class="text-success text-semibold text-right"><div>{{row.entity.IMPORTE | currency}}</div></div>'}
     ];
 
 
@@ -128,7 +128,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         { name: 'MOV_MES', displayName: 'Mes del Movimiento', width: 150 },
         { name: 'MOV_HABER', displayName: "Abonos", width: 150, cellTemplate: '<div><div>{{row.entity.MOV_HABER | currency}}</div></div>'},
         { name: 'MOV_FECHOPE', displayName: 'Fecha de Operacion', width: 250,  cellFilter: 'date:\'yyyy-MM-dd\'' },
-        { name: "Cargos", displayName: "Cargos", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.MOV_DEBE | currency}}</div></div>'}
+        { name: "Cargos", displayName: "Cargos", width: 150, cellTemplate: '<div class="text-success text-semibold text-right"><div>{{row.entity.MOV_DEBE | currency}}</div></div>'}
     ];
 
 
@@ -154,7 +154,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         { name: 'CONSEPTO', displayName: 'Concepto', width: 150 },
         { name: 'REFERENCIA', displayName: 'Referencia', width: 150 },
         { name: 'REFAMPLIADA', displayName: 'Referencia Ampliada', width: 250 },
-        { name: "IMPORTE", displayName: "Importe", width: 150, cellTemplate: '<div class="text-success text-semibold"><div>{{row.entity.IMPORTE | currency}}</div></div>'}
+        { name: "IMPORTE", displayName: "Importe", width: 150, cellTemplate: '<div class="text-success text-semibold text-right"><div>{{row.entity.IMPORTE | currency}}</div></div>'}
     ];
 
 

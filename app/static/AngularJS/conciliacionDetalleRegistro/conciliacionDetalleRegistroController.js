@@ -53,8 +53,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         { name: 'banco', displayName: 'Banco', width: 100 },
         { name: 'referencia', displayName: 'Referencia', width: 200 },
         { name: 'concepto', displayName: 'Concepto', width: 300 },
-        { name: 'cargo', displayName: 'Cargo', type: 'number', width: 100, cellTemplate: '<div class="text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
-        { name: 'abono', displayName: 'Abono', type: 'number', width: 100, cellTemplate: '<div class="text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' }
+        { name: 'cargo', displayName: 'Cargo', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
+        { name: 'abono', displayName: 'Abono', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' }
     ];
     $scope.gridDepositosBancos.multiSelect = true;
     //****************************************************************************************************
@@ -392,15 +392,27 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.cargoTotalBanco = 0;
         $scope.abonoTotalAuxiliar = 0;
         $scope.cargoTotalAuxiliar = 0;
-        
+        var ctrl = 0;
         angular.forEach(detallePunteo, function(value, key) {
-              
-            $scope.abonoTotalBanco += value.abonoBanco;
-            $scope.cargoTotalBanco += value.cargoBanco;
-            
+
+            if(opcion == 1){
             $scope.abonoTotalAuxiliar += value.abono;
             $scope.cargoTotalAuxiliar += value.cargo;
-
+            if(ctrl == 0){
+            $scope.abonoTotalBanco = value.abonoBanco;
+            $scope.cargoTotalBanco = value.cargoBanco;
+            ctrl = 1;
+            }
+        }
+        else if(opcion == 2){
+            $scope.abonoTotalBanco += value.abonoBanco;
+            $scope.cargoTotalBanco += value.cargoBanco;
+            if(ctrl == 0){
+                $scope.abonoTotalAuxiliar = value.abono;
+                $scope.cargoTotalAuxiliar = value.cargo;
+                ctrl = 1;
+            }
+        }
         });
     };
     //****************************************************************************************************
