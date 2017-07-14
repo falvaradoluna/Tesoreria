@@ -4,6 +4,31 @@ var controlDepositosURL = global_settings.urlCORS + 'api/controlDepositos/';
 registrationModule.factory('controlDepositosRepository', function($http) {
     return {
 
+        prevSession: {
+            isFirstTime: true,
+            ddlBancoDisabled: null,
+            ddlCuentaDisabled: null,
+            txtFechasDisabled: null,
+            btnBuscarDisabled: null,
+            carteraControlsDisabled: null,
+            selectedValueEmpresaID: null,
+            selectedValueBancoID: null,
+            selectedValueCuentaID: null,
+            selectedValueFechaInicio: null,
+            selectedValueFechaFin: null,
+            btnSwitchIsEnable: null,
+            selectedValueSucursaID: null,
+            selectedValueDepartamentoID: null,
+            selectedValueCarteraFechaInicio: null,
+            selectedValuecarteraFechaFin: null,
+            showUserSearchPanel: null,
+            searchType: null,
+            searchTypeID: null,
+            searchValue: null,
+            searchClienteID: null
+        },
+
+
         createReference: function(objData) {
 
             return $http({
@@ -151,6 +176,8 @@ registrationModule.factory('controlDepositosRepository', function($http) {
             });
         },
 
+
+
         gridDocumentosOptions: function() {
             return {
                 enableColumnResize: true,
@@ -169,17 +196,19 @@ registrationModule.factory('controlDepositosRepository', function($http) {
         },
         gridDocumentosColumns: function(isVisible) {
             return [
-                { name: 'banco', displayName: 'Banco', width: '10%' },
-                { name: 'idBmer', displayName: 'Cons', width: '5%' },
-                { name: 'referencia', displayName: 'Referencia', width: '15%' },
-                { name: 'concepto', displayName: 'Concepto', width: '15%' },
-                { name: 'fechaOperacion', displayName: 'Fecha', width: '10%', type: 'date' },
-                { name: 'cargo', displayName: 'Cargo', width: '10%', cellFilter: 'currency', visible: isVisible },
-                { name: 'abono', displayName: 'Abono', width: '10%', cellFilter: 'currency' }, {
+                { name: 'idBmer', displayName: 'Cons', cellClass: 'gridCellRight', width: 75 },
+                { name: 'banco', displayName: 'Banco', cellClass: 'gridCellLeft', width: 100 },
+                { name: 'referencia', displayName: 'Referencia', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'concepto', displayName: 'Concepto', cellClass: 'gridCellLeft', width: 250 },
+                { name: 'refAmpliada', displayName: 'Referencia Ampliada', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'', cellClass: 'gridCellRight', width: 100 },
+                { name: 'cargo', displayName: 'Cargo', cellFilter: 'currency', visible: isVisible, cellClass: 'gridCellRight', width: 100 },
+                { name: 'abono', displayName: 'Abono', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }, {
                     name: 'observaciones',
                     displayName: 'Observaciones',
-                    width: '25%',
-                    cellEditableCondition: true
+                    cellEditableCondition: true,
+                    cellClass: 'gridCellRight',
+                    width: '*'
                 }
             ];
         },
@@ -202,13 +231,13 @@ registrationModule.factory('controlDepositosRepository', function($http) {
         },
         gridCarteraColumns: function() {
             return [
-                { name: 'nombreSucursal', width: '10%', displayName: 'Sucursal' },
-                { name: 'nombreDepartamento', width: '10%', displayName: 'Departamento' },
-                { name: 'folio', width: '10%', displayName: 'Factura' },
-                { name: 'fecha', width: '10%', displayName: 'fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'' },
-                { name: 'nombreCliente', width: '30%', displayName: 'Cliente' },
-                { name: 'importe', width: '10%', displayName: 'Importe', cellFilter: 'currency' },
-                { name: 'saldo', width: '10%', displayName: 'Saldo', cellFilter: 'currency' },
+                { name: 'folio', displayName: 'Factura', cellClass: 'gridCellLeft', width: 150 },
+                { name: 'nombreSucursal', displayName: 'Sucursal', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'nombreDepartamento', displayName: 'Departamento', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'nombreCliente', displayName: 'Cliente', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'fecha', displayName: 'fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'', cellClass: 'gridCellRight', width: 100 },
+                { name: 'importe', displayName: 'Importe', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 },
+                { name: 'saldo', displayName: 'Saldo', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
             ];
         },
 

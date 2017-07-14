@@ -57,6 +57,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         }
     });
 
+
     $scope.getBancos = function() {
 
         var idEmpresa = $scope.selectedValueEmpresaID;
@@ -138,7 +139,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.changeSwitch = function() {
-        
+
 
         if ($scope.btnSwitchIsEnable === 1) {
             $scope.gridDocumentos.columnDefs =
@@ -265,11 +266,12 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             if (row.isSelected === true) {
                 $scope.carteraTotal = $scope.carteraTotal + parseFloat(row.entity.importe);
                 $scope.selectedRowCartera.push(row.entity);
+
+                /*
                 if ($scope.carteraTotal > $scope.depositoTotal) {
-
                     swal("Aviso", "El saldo de la cartera es mayor que el saldo del deposito.", "warning");
+                }*/
 
-                }
             } else if (row.isSelected === false) {
                 $scope.carteraTotal = $scope.carteraTotal - parseFloat(row.entity.importe);
                 $scope.removeByAttr($scope.selectedRowCartera, 'IDB', row.entity.IDB);
@@ -291,8 +293,11 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.getCarteraVencida = function() {
 
+
+        $scope.setPrevSession();
+
         if ($scope.searchClienteID === 0) {
-            swal("Aviso", "Usuario es requerido.", "warning");
+            swal("Aviso", "Cliente es requerido.", "warning");
         } else {
 
             var clienteID = $scope.searchClienteID;
@@ -301,13 +306,13 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
             var deptoID = $scope.selectedValueDepartamentoID;
             var fIni = $scope.selectedValueCarteraFechaInicio;
             var fFin = $scope.selectedValuecarteraFechaFin;
-        
+
 
             $scope.gridCartera.data = [];
             $('#mdlLoading').modal('show');
             filtrosRepository.getCartera(clienteID, empresa, sucursaID, deptoID, fIni, fFin).then(function(result) {
                 if (result.data.length > 0) {
-                    
+
                     $scope.gridCartera.data = result.data;
                     $('#mdlLoading').modal('hide');
                 } else {
@@ -320,11 +325,13 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
     $scope.creaReferenciaTemporal = function() {
 
-        if ($scope.carteraTotal > $scope.depositoTotal) {
-            swal("Aviso", "El saldo de la cartera debe ser menor que el saldo del deposito.  ", "warning");
+        //if ($scope.carteraTotal > $scope.depositoTotal) {
+        if ($scope.carteraTotal > $scope.depositoTotal && $scope.selectedRowCartera.length > 1) {
+            swal("Aviso", "El pago es menor a la suma de la cartera.  ", "warning");
         } else if ($scope.depositoTotal === 0 || $scope.carteraTotal === 0) {
             swal("Aviso", "Seleccione almenos un deposito  y un documento.", "warning");
         } else {
+
             swal({
                     title: "¿Esta seguro?",
                     text: "Se creara una referencia temporal.",
@@ -531,6 +538,61 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 .substring(1);
         }
         return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
+    }
+
+
+    $scope.setPrevSession = function() {
+        controlDepositosRepository.prevSession.isFirstTime = false;
+        controlDepositosRepository.prevSession.ddlBancoDisabled = $scope.ddlBancoDisabled;
+        controlDepositosRepository.prevSession.ddlCuentaDisabled = $scope.ddlCuentaDisabled;
+        controlDepositosRepository.prevSession.txtFechasDisabled = $scope.txtFechasDisabled;
+        controlDepositosRepository.prevSession.btnBuscarDisabled = $scope.btnBuscarDisabled;
+        controlDepositosRepository.prevSession.carteraControlsDisabled = $scope.carteraControlsDisabled;
+        controlDepositosRepository.prevSession.selectedValueEmpresaID = $scope.selectedValueEmpresaID;
+        controlDepositosRepository.prevSession.selectedValueBancoID = $scope.selectedValueBancoID;
+        controlDepositosRepository.prevSession.selectedValueCuentaID = $scope.selectedValueCuentaID;
+        controlDepositosRepository.prevSession.selectedValueFechaInicio = $scope.selectedValueFechaInicio;
+        controlDepositosRepository.prevSession.selectedValueFechaFin = $scope.selectedValueFechaFin;
+        controlDepositosRepository.prevSession.btnSwitchIsEnable = $scope.btnSwitchIsEnable;
+        controlDepositosRepository.prevSession.selectedValueSucursaID = $scope.selectedValueSucursaID;
+        controlDepositosRepository.prevSession.selectedValueDepartamentoID = $scope.selectedValueDepartamentoID;
+        controlDepositosRepository.prevSession.selectedValueCarteraFechaInicio = $scope.selectedValueCarteraFechaInicio;
+        controlDepositosRepository.prevSession.selectedValuecarteraFechaFin = $scope.selectedValuecarteraFechaFin;
+        controlDepositosRepository.prevSession.showUserSearchPanel = $scope.showUserSearchPanel;
+        controlDepositosRepository.prevSession.searchType = $scope.searchType;
+        controlDepositosRepository.prevSession.searchTypeID = $scope.searchTypeID;
+        controlDepositosRepository.prevSession.searchValue = $scope.searchValue;
+        controlDepositosRepository.prevSession.searchClienteID = $scope.searchClienteID;
+    };
+
+
+    if (controlDepositosRepository.prevSession.isFirstTime === false) {
+
+        $scope.ddlBancoDisabled = controlDepositosRepository.prevSession.ddlBancoDisabled;
+        $scope.ddlCuentaDisabled = controlDepositosRepository.prevSession.ddlCuentaDisabled;
+        $scope.txtFechasDisabled = controlDepositosRepository.prevSession.txtFechasDisabled;
+        $scope.btnBuscarDisabled = controlDepositosRepository.prevSession.btnBuscarDisabled;
+        $scope.carteraControlsDisabled = controlDepositosRepository.prevSession.carteraControlsDisabled;
+        $scope.selectedValueEmpresaID = controlDepositosRepository.prevSession.selectedValueEmpresaID;
+        $scope.selectedValueBancoID = controlDepositosRepository.prevSession.selectedValueBancoID;
+        $scope.selectedValueCuentaID = controlDepositosRepository.prevSession.selectedValueCuentaID;
+        $scope.selectedValueFechaInicio = controlDepositosRepository.prevSession.selectedValueFechaInicio;
+        $scope.selectedValueFechaFin = controlDepositosRepository.prevSession.selectedValueFechaFin;
+        $scope.btnSwitchIsEnable = controlDepositosRepository.prevSession.btnSwitchIsEnable;
+        $scope.selectedValueSucursaID = controlDepositosRepository.prevSession.selectedValueSucursaID;
+        $scope.selectedValueDepartamentoID = controlDepositosRepository.prevSession.selectedValueDepartamentoID;
+        $scope.selectedValueCarteraFechaInicio = controlDepositosRepository.prevSession.selectedValueCarteraFechaInicio;
+        $scope.selectedValuecarteraFechaFin = controlDepositosRepository.prevSession.selectedValuecarteraFechaFin;
+        $scope.showUserSearchPanel = controlDepositosRepository.prevSession.showUserSearchPanel;
+        $scope.searchType = controlDepositosRepository.prevSession.searchType;
+        $scope.searchTypeID = controlDepositosRepository.prevSession.searchTypeID;
+        $scope.searchValue = controlDepositosRepository.prevSession.searchValue;
+        $scope.searchClienteID = controlDepositosRepository.prevSession.searchClienteID;
+
+        $scope.getBancos();
+        $scope.getCuentas();
+        $scope.getSucursales();
+        $scope.getDepartamentos();
     }
 
 

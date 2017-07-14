@@ -117,10 +117,10 @@ registrationModule.factory('interesRepository', function($http) {
         },
         gridComisionesColumns: function() {
             return [
-                { name: 'referencia', displayName: 'Referencia' },
-                { name: 'concepto', displayName: 'Concepto' },
-                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date' },
-                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency' }
+                { name: 'concepto', displayName: 'Concepto' , cellClass:'gridCellLeft', width: '*'},
+                { name: 'referencia', displayName: 'Referencia', cellClass:'gridCellRight' , width: 100},
+                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date' , cellClass:'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100},
+                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency' , cellClass:'gridCellRight', width: 100}
             ];
         },
 
@@ -136,10 +136,10 @@ registrationModule.factory('interesRepository', function($http) {
         },
         gridInteresColumns: function() {
             return [
-                { name: 'referencia', displayName: 'Referencia' },
-                { name: 'concepto', displayName: 'Concepto' },
-                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date' },
-                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency' }
+                { name: 'concepto', displayName: 'Concepto' , cellClass:'gridCellLeft', width: '*'},
+                { name: 'referencia', displayName: 'Referencia', cellClass:'gridCellRight' , width: 100},
+                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date' , cellClass:'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100},
+                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency' , cellClass:'gridCellRight', width: 100}
             ];
         },
 

@@ -1,3 +1,11 @@
+.gridCellLeft {
+    text-align: left;
+}
+
+.gridCellRight {
+    text-align: right;
+}
+
 .headerComision {
     background: #fff;
     border-style: none !important;
