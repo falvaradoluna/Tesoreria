@@ -58,12 +58,13 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
 
             });
         },
-        eliminarPunteo: function(idPunteo) {
+        eliminarPunteo: function(datoBusqueda, opcion) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'eliminarPunteo/',
                 method: "POST",
                 data: {
-                    idPunteoAuxiliarBanco: idPunteo
+                    idDatoBusqueda: datoBusqueda,
+                    opcion: opcion
                 },
                 headers: {
                     'Content-Type': 'application/json'

@@ -352,9 +352,15 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     // INICIA elimina los punteos ya realizados
     //****************************************************************************************************
-    $scope.eliminarPunteo = function(punteo) {
-        conciliacionDetalleRegistroRepository.eliminarPunteo(punteo.idPunteoAuxiliarBanco).then(function(result) {
-            //console.log(result, 'Resultado cuando elimino');
+    $scope.eliminarPunteo = function(punteo, opcion) {
+        var datoBusqueda = '';
+        if(opcion == 1){
+           datoBusqueda = punteo.idDepositoBanco;
+        }else{
+           datoBusqueda = punteo.idAuxiliarContable;
+        }
+        conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,opcion).then(function(result) {
+            console.log(result, 'Resultado cuando elimino');
             $scope.getGridTablas();
         });
     };
@@ -373,8 +379,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         conciliacionDetalleRegistroRepository.detallePunteo($scope.idBusqueda, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
 
-                $scope.detallePunteo = result.data;
-                if($scope.detallePunteo.length > 0){
+                $scope.detallePunteo = result.data[0];
+                if(result.data.length > 0){
                 $scope.calculaTotal($scope.detallePunteo, accionBusqueda);
                 $scope.idBusqueda = '';
             }
@@ -395,24 +401,13 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         var ctrl = 0;
         angular.forEach(detallePunteo, function(value, key) {
 
-            if(opcion == 1){
             $scope.abonoTotalAuxiliar += value.abono;
             $scope.cargoTotalAuxiliar += value.cargo;
-            if(ctrl == 0){
-            $scope.abonoTotalBanco = value.abonoBanco;
-            $scope.cargoTotalBanco = value.cargoBanco;
-            ctrl = 1;
-            }
-        }
-        else if(opcion == 2){
+            
             $scope.abonoTotalBanco += value.abonoBanco;
             $scope.cargoTotalBanco += value.cargoBanco;
-            if(ctrl == 0){
-                $scope.abonoTotalAuxiliar = value.abono;
-                $scope.cargoTotalAuxiliar = value.cargo;
-                ctrl = 1;
-            }
-        }
+            
+       
         });
     };
     //****************************************************************************************************

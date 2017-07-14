@@ -79,7 +79,9 @@ conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function(req, res, n
 
     var self = this;
 
-    var params = [{ name: 'idPunteoAuxiliarBanco', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT }];
+    var params = [{ name: 'idDatoBusqueda', value: req.body.idDatoBusqueda, type: self.model.types.INT },
+                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT }
+                  ];
 
     this.model.query('DEL_PUNTEO_AUXILIAR_DEPOSITO_SP', params, function(error, result) {
         self.view.expositor(res, {
