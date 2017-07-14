@@ -10,12 +10,12 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.auxiliarPadre = '';
     $scope.bancoPadre = '';
     $scope.detallePunteo = '';
+    $scope.detallePunteoBanco = '';
     i18nService.setCurrentLang('es'); //Para seleccionar el idioma  
     $scope.infReporte = '';
     $scope.jsonData = '';
     $scope.ruta = '';
     $scope.clabe = '';
-    $scope.idBusqueda = '';
 
 
     //****************************************************************************************************
@@ -369,20 +369,22 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     $scope.verDetallePunteo = function(detallepunteo,opcion) {
         var accionBusqueda = 0;
+        var datoBusqueda = '';
         if(opcion == 1){
-            $scope.idBusqueda = detallepunteo.idDepositoBanco;
+            datoBusqueda = detallepunteo.idDepositoBanco;
             accionBusqueda = 1;
         } else { 
-           $scope.idBusqueda = detallepunteo.idAuxiliarContable;
+           datoBusqueda = detallepunteo.idAuxiliarContable;
            accionBusqueda = 2;
         }
-        conciliacionDetalleRegistroRepository.detallePunteo($scope.idBusqueda, accionBusqueda).then(function(result) {
+        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
 
                 $scope.detallePunteo = result.data[0];
+                $scope.detallePunteoBanco = result.data[1]; 
                 if(result.data.length > 0){
-                $scope.calculaTotal($scope.detallePunteo, accionBusqueda);
-                $scope.idBusqueda = '';
+                $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
+                datoBusqueda = '';
             }
             else{
                 alertFactory.error('No existen punteos en este detalle')
@@ -393,22 +395,27 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************
-    $scope.calculaTotal = function(detallePunteo, opcion) {
+    $scope.calculaTotal = function(detallePunteo, detallePunteoBanco) {
         $scope.abonoTotalBanco = 0;
         $scope.cargoTotalBanco = 0;
         $scope.abonoTotalAuxiliar = 0;
         $scope.cargoTotalAuxiliar = 0;
-        var ctrl = 0;
+        
         angular.forEach(detallePunteo, function(value, key) {
 
             $scope.abonoTotalAuxiliar += value.abono;
             $scope.cargoTotalAuxiliar += value.cargo;
             
-            $scope.abonoTotalBanco += value.abonoBanco;
-            $scope.cargoTotalBanco += value.cargoBanco;
-            
        
         });
+        angular.forEach(detallePunteoBanco, function(value, key) {
+            
+            $scope.abonoTotalBanco += value.abonoBanco;
+            $scope.cargoTotalBanco += value.cargoBanco;
+       
+        });
+
+
     };
     //****************************************************************************************************
     // INICIA Se genera modal de alerta para que el usuario acepte o rechace generar el punteo definitivo

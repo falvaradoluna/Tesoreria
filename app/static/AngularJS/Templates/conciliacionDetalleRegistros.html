@@ -133,7 +133,7 @@
                                 <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
                                 <td>
-                                    <button class="btn btn-danger btn-xs" ng-click="eliminarPunteo(auxiliar,1)"><i class="demo-pli-cross"></i></button>
+                                    <button class="btn btn-danger btn-xs" ng-click="eliminarPunteo(auxiliar,2)"><i class="demo-pli-cross"></i></button>
                                 </td>
                                 <td>
                                     <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar,2)"><i class="ti-eye"></i></button>
@@ -258,7 +258,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="bancoD in detallePunteo">
+                        <tr ng-repeat="bancoD in detallePunteoBanco">
                             <td>{{bancoD.banco}}</td>
                             <td>{{bancoD.referenciaBanco}}</td>
                             <td>{{bancoD.conceptoBanco}}</td>
