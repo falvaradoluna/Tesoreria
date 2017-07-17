@@ -57,6 +57,24 @@ conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, ne
         });
     });
 };
+
+ conciliacionDetalleRegistro.prototype.get_auxiliarDPI = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING }
+    ];
+
+    this.model.query('SEL_AUXILIARDPI', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
 conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next) {
 
     var self = this;
@@ -75,6 +93,28 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
         });
     });
 };
+
+conciliacionDetalleRegistro.prototype.get_bancoDPI = function(req, res, next) {
+
+    var self = this;
+
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+    ];
+
+    this.model.query('SEL_DEPOSITOSDPI', params, function(error, result) {
+
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
 conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function(req, res, next) {
 
     var self = this;
@@ -251,5 +291,25 @@ conciliacionDetalleRegistro.prototype.post_generaPunteo = function(req, res, nex
         });
     });
 };
+
+
+conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
+   var self = this;
+
+   var params = [ {name: 'tipoMovimiento', value: req.body.tipoMovimiento, type: self.model.types.INT},
+                  {name: 'idDato', value: req.body.idDato, type: self.model.types.INT},
+                  {name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT},
+                  {name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.STRING}
+   ];
+
+   this.model.query('UPD_AUXILIARDEPOSITO_DPI_SP', params, function(error,result){
+    self.view.expositor(res,{
+        error: error,
+        result: result
+        });
+   });
+};
+
+
 
 module.exports = conciliacionDetalleRegistro;

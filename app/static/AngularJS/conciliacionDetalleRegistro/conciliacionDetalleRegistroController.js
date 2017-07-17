@@ -16,6 +16,10 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.jsonData = '';
     $scope.ruta = '';
     $scope.clabe = '';
+    $scope.datosPunteo = '';
+    $scope.accionElimina = 0;
+    $scope.bancoDPI = '';
+    $scope.auxiliarDPI = '';
 
 
     //****************************************************************************************************
@@ -66,6 +70,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.getAuxiliarContable($scope.idEmpresa, $scope.cuenta, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         $scope.getAuxiliarPunteo($scope.idEmpresa, $scope.cuenta);
         $scope.getBancoPunteo($scope.idEmpresa, $scope.cuentaBanco);
+        $scope.getBancoDPI($scope.idEmpresa, $scope.cuentaBanco);
+        $scope.getAuxiliarDPI($scope.idEmpresa, $scope.cuenta);
         $rootScope.mostrarMenu = 1;
         console.log($scope.busqueda);
     };
@@ -241,6 +247,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
     };
     //****************************************************************************************************
+
+
     // INICIA funcion que verifica que la cantidad sea igual o mas menos 1 
     //****************************************************************************************************
     $scope.verificaCantidades = function(tipopunteo) {
@@ -284,6 +292,50 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         });
     };
     //****************************************************************************************************
+
+
+    // INICIA funcion para guardar el punteo
+    //****************************************************************************************************
+    $scope.guardaDPIs = function( ) {
+        
+        $scope.punteoAuxiliar = [];
+        $scope.punteoBanco = [];
+        $scope.gridApiBancos.selection.clearSelectedRows();
+        $scope.gridApiAuxiliar.selection.clearSelectedRows();
+
+        if($scope.punteoBanco.length > 0){
+
+        angular.forEach($scope.punteoBanco, function(value, key) {
+                conciliacionDetalleRegistroRepository.insertDepositosDPI(1,value.idBmer, value.idBanco,value.noCuenta).then(function(result) {
+                    if (result.data[0].length) {
+                        console.log('Respuesta Incorrecta');
+                    } else {
+                        console.log('Respuesta Correcta');
+                        $scope.limpiaVariables();
+                        $scope.getGridTablas();
+                    }
+                })
+            });
+    }      
+       if($scope.punteoAuxiliar.length > 0){
+        angular.forEach($scope.punteoAuxiliar, function(value, key) {
+            conciliacionDetalleRegistroRepository.insertDepositosDPI(2,value.idAuxiliarContable, 0,'').then(function(result) {
+                    if (result.data[0].length) {
+                        console.log('Respuesta Incorrecta');
+                    } else {
+                        console.log('Respuesta Correcta');
+                        $scope.limpiaVariables();
+                        $scope.getGridTablas();
+                    }
+                })
+        });
+    }
+      alertFactory.success('Los registros seleccionados se han modificado correctamente!');
+    };
+
+    //****************************************************************************************************
+
+
     // INICIA funcion que limpia las variables de la suma del abono y cargo
     //****************************************************************************************************
     $scope.limpiaVariables = function() {
@@ -301,6 +353,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.getAuxiliarContable($scope.idEmpresa, $scope.cuenta, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         $scope.getAuxiliarPunteo($scope.idEmpresa, $scope.cuenta);
         $scope.getBancoPunteo($scope.idEmpresa, $scope.cuentaBanco);
+        $scope.getBancoDPI($scope.idEmpresa, $scope.cuentaBanco);
+        $scope.getAuxiliarDPI($scope.idEmpresa, $scope.cuenta);
     };
     //****************************************************************************************************
     // INICIA Obtengo los padres del Auxiliar contable punteado
@@ -314,6 +368,19 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         });
     };
     //****************************************************************************************************
+
+     // INICIA Obtengo los padres del Auxiliar contable no identificado
+    //****************************************************************************************************
+    $scope.getAuxiliarDPI = function(idempresa, cuenta) {
+
+        conciliacionDetalleRegistroRepository.getAuxiliarDPI(idempresa, cuenta).then(function(result) {
+            //console.log(result.data, 'soy el auxilear punteado')
+            $scope.auxiliarDPI = result.data;
+            $scope.tabla('auxiliardpi');
+        });
+    };
+    //****************************************************************************************************
+
     // INICIA Obtengo los padres del Banco punteado
     //****************************************************************************************************
     $scope.getBancoPunteo = function(idempresa, cuentaBanco) {
@@ -325,6 +392,20 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         });
     };
     //****************************************************************************************************
+
+     // INICIA Obtengo los padres del Banco no identificado
+    //****************************************************************************************************
+    $scope.getBancoDPI = function(idempresa, cuentaBanco) {
+
+        conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco).then(function(result) {
+            //console.log(result.data, 'soy el banco punteado')
+            $scope.bancoDPI = result.data;
+            $scope.tabla('bancodpi');
+        });
+    };
+    //****************************************************************************************************
+
+
     // INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************
     $scope.tabla = function(idtabla) {
@@ -361,6 +442,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         }
         conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,opcion).then(function(result) {
             console.log(result, 'Resultado cuando elimino');
+            $scope.datosPunteo = '';
+            $scope.accionElimina = '';
+            $('#alertaEliminacionPunteo').modal('hide');
             $scope.getGridTablas();
         });
     };
@@ -428,6 +512,22 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         }
     };
     //****************************************************************************************************
+
+     ////////Muestra mensaje de alerta para aceptar o rechazar la eliminación de punteos relacionados
+
+    $scope.alertaEliminaPunteos = function (datosPunteo,accionElimina){
+        $scope.datosPunteo = datosPunteo;
+        $scope.accionElimina = accionElimina;
+     $('#alertaEliminacionPunteo').modal('show');
+    };
+
+    $scope.cancelaEliminacionPunteo = function(){
+        $scope.datosPunteo = '';
+        $scope.accionElimina = '';
+      $('#alertaEliminacionPunteo').modal('hide');
+    };
+    //****************************************************************************************************
+
     // INICIA Se guarda el punteo que ya no podra ser modificado
     //****************************************************************************************************
     $scope.generaPunteo = function() {

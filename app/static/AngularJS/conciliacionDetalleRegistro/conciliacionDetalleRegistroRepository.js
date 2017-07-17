@@ -44,6 +44,23 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
 
             });
         },
+
+        getAuxiliarDPI: function(idempresa, cuentaContable) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'auxiliarDPI/',
+                method: "GET",
+                params: {
+                    idEmpresa: idempresa,
+                    cuentaContable: cuentaContable
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
+
         getBancoPunteo: function(idempresa, cuentaBancaria) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
@@ -58,6 +75,23 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
 
             });
         },
+
+         getBancoDPI: function(idempresa, cuentaBancaria) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'bancoDPI/',
+                method: "GET",
+                params: {
+                    idEmpresa: idempresa,
+                    cuentaBancaria: cuentaBancaria
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
+
         eliminarPunteo: function(datoBusqueda, opcion) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'eliminarPunteo/',
@@ -115,6 +149,24 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     'Content-Type': 'application/json'
                 }
             });
+        },
+
+        insertDepositosDPI: function(tipoMovimiento, idDato, idBanco, noCuenta) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'insertDPI/',
+                method: "POST",
+                data: {
+                    tipoMovimiento: tipoMovimiento,
+                    idDato: idDato,
+                    idBanco: idBanco,
+                    noCuenta : noCuenta
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         }
+
+
     };
 });
