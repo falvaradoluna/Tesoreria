@@ -309,8 +309,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         }
 
         if($scope.punteoBanco.length > 0){
-
-        angular.forEach($scope.punteoBanco, function(value, key) {
+         if($scope.cargoBanco == 0)
+            {
+                angular.forEach($scope.punteoBanco, function(value, key) {
                 conciliacionDetalleRegistroRepository.insertDepositosDPI(1,value.idBmer, value.idBanco,value.noCuenta).then(function(result) {
                     if (result.data[0].length) {
                         console.log('Respuesta Incorrecta');
@@ -321,7 +322,13 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                     }
                 })
             });
-        alertFactory.success('Los registros seleccionados se han modificado correctamente!');
+                alertFactory.success('Los registros seleccionados se han modificado correctamente!');
+            }
+                else{
+                        $scope.limpiaVariables();
+                        $scope.getGridTablas();
+                        alertFactory.warning('No es posible enviar cargos bancarios a DPI, por favor verifique su selección'); 
+                    }
     }      
     };
 
@@ -558,7 +565,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     // INICIA Se genera el json para el reporte 
     //****************************************************************************************************
-    $scope.generaInfoReport = function(accion) {
+    $scope.generaInfoReport = function(accion) 
+    {
         variablesLocalStorage();
         conciliacionRepository.getAbonoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable).then(function(result) {
             console.log(result, 'soy el Abono Contable');

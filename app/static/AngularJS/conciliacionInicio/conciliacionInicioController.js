@@ -3,6 +3,7 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
             $scope.nodoPadre = [];
+            $scope.fechaReporte = new Date();
             $scope.fechaCorte = new Date();
             $scope.fechaElaboracion = new Date($scope.fechaCorte.getFullYear(), $scope.fechaCorte.getMonth(), 1);
             //*****Inicio variables para activar o desactivar botones o input 
@@ -202,4 +203,15 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                 format : "yyyy-mm-dd"
                 });
     };
+
+
+     $scope.generaInfoReport = function(){
+          $('#reproteModalPdf').modal('show');
+     };
+
+    $scope.ImprimirReporte = function(){
+       $('#reproteModalPdf').modal('hide'); 
+    window.print();
+     };
+
             });
