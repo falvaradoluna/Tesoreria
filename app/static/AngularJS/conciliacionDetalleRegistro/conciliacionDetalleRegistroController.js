@@ -318,10 +318,10 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                         console.log('Respuesta Correcta');
                         $scope.limpiaVariables();
                         $scope.getGridTablas();
-                        alertFactory.success('Los registros seleccionados se han modificado correctamente!');
                     }
                 })
             });
+        alertFactory.success('Los registros seleccionados se han modificado correctamente!');
     }      
     };
 
