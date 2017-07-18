@@ -241,7 +241,7 @@
 
 
 
-<!--Inicio del segundo Tab Detalle de Registros DPI-->
+<!--Inicio del tercer Tab Detalle de Registros DPI-->
         <div id="DepositosDPI" class="tabcontent">
         <div class="panel col-md-12">
         <div class="col-md-12">
@@ -257,7 +257,6 @@
                                 <th>Cargo</th>
                                 <th>Abono</th>
                                 <th data-sort-ignore="true" class="min-width"></th>
-                                <th data-sort-ignore="true" class="min-width"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -267,55 +266,19 @@
                                 <td>{{banco.concepto}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                                <td>
-                                    <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco,1)"><i class="demo-pli-cross"></i></button>
+                               <td>
+                                    <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco,1)"><i class="demo-pli-cross"></i></button>
                                 </td>
-                                <td>
+                                <!-- <td>
                                     <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco,1)"><i class="ti-eye"></i></button>
-                                </td>
+                                </td>-->
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-12">
-                    <div class="text-main">
-                        <h4>Auxiliar Contable (DPI)</h4>
-                    </div>
-                    <table id="auxiliardpi" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Tipo Póliza</th>
-                                <th># Póliza</th>
-                                <th>Concepto</th>
-                                <th>Cargo</th>
-                                <th>Abono</th>
-                                <th data-sort-ignore="true" class="min-width"></th>
-                                <th data-sort-ignore="true" class="min-width"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="auxiliar in auxiliarDPI">
-                                <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
-                                <td>{{auxiliar.polTipo}}</td>
-                                <td>{{auxiliar.polConsecutivo}}</td>
-                                <td>{{auxiliar.movConcepto}}</td>
-                                <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
-                                <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
-                                <td> 
-                                    <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(auxiliar,2)"><i class="demo-pli-cross"></i></button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar,2)"><i class="ti-eye"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
         </div>
         </div>
-<!--Fin del segundo Tab Detalle de Registros DPI-->
+<!--Fin del tercer Tab Detalle de Registros DPI-->
 
 
 
@@ -445,6 +408,37 @@
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>
                                 <button class="btn btn-success pull-right" ng-click="eliminarPunteo(datosPunteo, accionElimina)"><i class="ti-check"></i> Aceptar</button>
+                            </span>
+                        </span>
+                    </h4>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End para alertar eliminación de registros punteados-->
+
+<!--Modal para alertar eliminación de registros punteados-->
+<!--===================================================-->
+<div class="modal fade" id="alertaEliminacionDPI" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="media-left bg-warning pad-all">
+                <i class="ti-alert icon-5x"></i>
+            </div>
+            <div class="media-body pad-lft">
+                <div class="modal-body">
+                    <br>
+                    <h4 class="text-title">Los datos se habilitarán de nuevo, ¿Desea continuar?
+                        <span>
+                            <span>
+                                <button class="btn btn-danger pull-right" type="button" ng-click="cancelaEliminacionDPI()"><i class="ti-close"></i> Cancelar</button>
+                            </span>
+                            <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span>
+                                <button class="btn btn-success pull-right" ng-click="EliminaDPI()"><i class="ti-check"></i> Aceptar</button>
                             </span>
                         </span>
                     </h4>
