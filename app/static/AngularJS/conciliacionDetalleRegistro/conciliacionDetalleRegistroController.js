@@ -298,7 +298,15 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.guardaDPIs = function( ) {
         
         $scope.punteoBanco = [];
+        $scope.punteoAuxiliar = [];
         $scope.gridApiBancos.selection.clearSelectedRows();
+        $scope.gridApiAuxiliar.selection.clearSelectedRows();
+
+        if($scope.punteoAuxiliar.length > 0){
+            $scope.limpiaVariables();
+            $scope.getGridTablas();
+         alertFactory.warning('Acción incorrecta, no es posible enviar a DPI los Abonos Contables seleccionados');
+        }
 
         if($scope.punteoBanco.length > 0){
 
@@ -310,12 +318,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                         console.log('Respuesta Correcta');
                         $scope.limpiaVariables();
                         $scope.getGridTablas();
+                        alertFactory.success('Los registros seleccionados se han modificado correctamente!');
                     }
                 })
             });
     }      
-
-      alertFactory.success('Los registros seleccionados se han modificado correctamente!');
     };
 
     //****************************************************************************************************
