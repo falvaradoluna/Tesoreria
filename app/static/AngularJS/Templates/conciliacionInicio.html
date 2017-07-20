@@ -122,12 +122,16 @@
                                     <td>Cargos Referenciados en Banco</td>
                                     <td class="text-right">{{ totalesAbonosCargos[0].tCargoRefBanco | currency}}</td>
                                     </tr>
+                                    <tr ng-show='elementState.show'>
+                                    <td>Cargos Contables "Referenciados Manual"</td>
+                                    <td class="text-right">{{ totalesAbonosCargos[0].tCargoRefManualCont | currency}}</td>
+                                    </tr>
                                     <tr>
-                                        <td>Saldo segun Conciliacion</td>
+                                        <td>Saldo según Conciliacion</td>
                                         <td class="text-right">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Saldo segun Contabilidad</td>
+                                        <td>Saldo según Contabilidad</td>
                                         <td class="text-right">{{ totalesAbonosCargos[0].sContabilidad | currency}}</td>
                                     </tr>
                                     <tr>
@@ -270,6 +274,10 @@
                                     <td class="text-center">{{ totalesAbonosCargos[0].tCargoRefBanco | currency}}</td>
                                     </tr>
                                     <tr>
+                                    <td>Cargos Contables "Referenciados Manual"</td>
+                                    <td class="text-center">{{ totalesAbonosCargos[0].tCargoRefManualCont | currency}}</td>
+                                    </tr>
+                                    <tr>
                                         <td>Saldo segun Conciliacion</td>
                                         <td class="text-center">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
                                     </tr>
@@ -369,6 +377,10 @@
                                     <tr>
                                     <td>Cargos Referenciados en Banco</td>
                                     <td class="text-center">{{ totalesAbonosCargos[0].tCargoRefBanco | currency}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Cargos Contables "Referenciados Manual"</td>
+                                    <td class="text-right">{{ totalesAbonosCargos[0].tCargoRefManualCont | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Saldo segun Conciliacion</td>
