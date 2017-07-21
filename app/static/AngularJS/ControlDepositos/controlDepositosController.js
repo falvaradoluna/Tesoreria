@@ -30,10 +30,10 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     $scope.selectedValuecarteraFechaFin = null;
     $scope.showUserSearchPanel = false;
     //init grids
-    $scope.gridDocumentos = controlDepositosRepository.gridDocumentosOptions;
+    $scope.gridDocumentos = controlDepositosRepository.gridDocumentosOptions();
     $scope.gridDocumentos.columnDefs = controlDepositosRepository.gridDocumentosColumns($scope.btnSwitchIsEnable);
     $scope.gridDocumentos.multiSelect = false;
-    $scope.gridCartera = controlDepositosRepository.gridCarteraOptions;
+    $scope.gridCartera = controlDepositosRepository.gridCarteraOptions();
     $scope.gridCartera.columnDefs = controlDepositosRepository.gridCarteraColumns();
     $scope.gridCartera.multiSelect = true;
     //busquedaCliente

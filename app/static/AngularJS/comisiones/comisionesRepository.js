@@ -69,12 +69,24 @@ registrationModule.factory('comisionesRepository', function($http) {
             return $http({
                 url: comisionesURL + 'insCxpComisionesInteres/',
                 method: "GET",
-                params: {},
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
+        selInteresComisionDetalle: function(idcomisionInteres) {
+            return $http({
+                url: comisionesURL + 'selInteresComisionDetalle/',
+                method: "GET",
+                params: { idcomisionInteres: idcomisionInteres },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
+
+
 
         testApi: function(objData) {
 
@@ -117,10 +129,10 @@ registrationModule.factory('comisionesRepository', function($http) {
         },
         gridComisionesColumns: function() {
             return [
-                { name: 'concepto', displayName: 'Concepto' , cellClass:'gridCellLeft', width: '*'},
-                { name: 'referencia', displayName: 'Referencia', cellClass:'gridCellRight' , width: 100},
-                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date' , cellClass:'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100},
-                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency' , cellClass:'gridCellRight', width: 100}
+                { name: 'concepto', displayName: 'Concepto', cellClass: 'gridCellLeft', width: '*' },
+                { name: 'referencia', displayName: 'Referencia', cellClass: 'gridCellRight', width: 100 },
+                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date', cellClass: 'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100 },
+                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
             ];
         },
 
@@ -136,10 +148,11 @@ registrationModule.factory('comisionesRepository', function($http) {
         },
         gridInteresColumns: function() {
             return [
-                { name: 'concepto', displayName: 'Concepto' , cellClass:'gridCellLeft', width: '*'},
-                { name: 'referencia', displayName: 'Referencia' , cellClass:'gridCellRight' , width:100 },
-                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date' , cellClass:'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100},
-                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency' , cellClass:'gridCellRight', width: 100}            ];
+                { name: 'concepto', displayName: 'Concepto', cellClass: 'gridCellLeft', width: '*' },
+                { name: 'referencia', displayName: 'Referencia', cellClass: 'gridCellRight', width: 100 },
+                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date', cellClass: 'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100 },
+                { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
+            ];
         },
 
         getComisionTemplate: function() {
@@ -150,7 +163,7 @@ registrationModule.factory('comisionesRepository', function($http) {
                 descripcion: "Comisiones bancarias",
                 cargo: 0,
                 abono: 0,
-                tipodocumento:'',
+                tipodocumento: '',
                 tipo: 'C',
                 showSub: true
             }, {
@@ -160,7 +173,7 @@ registrationModule.factory('comisionesRepository', function($http) {
                 descripcion: "IVA por Acreditar a/d mxp",
                 cargo: 0,
                 abono: 0,
-                tipodocumento:'FACIVA',
+                tipodocumento: 'FACIVA',
                 tipo: 'A',
                 showSub: false
             }, {
@@ -170,7 +183,7 @@ registrationModule.factory('comisionesRepository', function($http) {
                 descripcion: "Acreedores diversos mxp",
                 cargo: 0,
                 abono: 0,
-                tipodocumento:'FAC',
+                tipodocumento: 'FAC',
                 tipo: 'A',
                 showSub: false
 

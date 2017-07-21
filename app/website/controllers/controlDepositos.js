@@ -354,8 +354,25 @@ controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
     var self = this;
 
     var params = [];
-
+ 
     this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
+
+controlDepositos.prototype.get_selInteresComisionDetalle = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'idcomisionInteres', value: req.query.idcomisionInteres, type: self.model.types.STRING }];
+
+    this.model.query('SEL_INTERESCOMISIONDETALLE_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

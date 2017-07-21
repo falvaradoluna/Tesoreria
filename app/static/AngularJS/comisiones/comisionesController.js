@@ -10,12 +10,12 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.lstEmpresaUsuario = [];
     $scope.lstBanco = [];
+    $scope.lstDetalle = [];
     $scope.lstCuenta = [];
     $scope.lstSucursal = [];
     $scope.lstDepartamento = [];
     $scope.lstTemp = [];
     $scope.lstRegistroContable = [];
-
     //Depositos controles Habilitados
     $scope.ddlBancoDisabled = true;
     $scope.ddlCuentaDisabled = true;
@@ -118,6 +118,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
             if (result.data.length > 0) {
                 $scope.lstDepartamento = result.data;
                 $('#mdlLoading').modal('hide');
+            } else {
+                $('#mdlLoading').modal('hide');
             }
         });
     };
@@ -140,7 +142,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
 
-    $scope.getComisiones = function(obj) {
+    $scope.getComisiones = function() {
 
         $scope.setActiveTab($scope.lstTabs[1]);
 
@@ -173,7 +175,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         comisionesRepository.getcomisionesIva(depositoID).then(function(result) {
             if (result.data.length > 0) {
                 $scope.gridInteres.data = result.data;
-
                 $('#mdlLoading').modal('hide');
             } else {
                 $('#mdlLoading').modal('hide');
@@ -228,6 +229,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
     $scope.tempSave = function() {
+
         var params = {
             interesID: $scope.gridInteresRow.idDepositoBanco,
             comisionID: $scope.gridComisionesRow.idDepositoBanco,
@@ -238,12 +240,10 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
         comisionesRepository.insInteresComision(params).then(function(result) {
             $scope.currentComisionHeaderID = result.data[0].headerID;
-
-            console.log("soy a", result.data);
-            console.log("soy b", result.data[0].headerID);
             comisionesRepository.selInteresComision().then(function(result) {
                 $scope.lstTemp = result.data;
                 $scope.getComisiones();
+                $scope.gridInteres.data = [];
                 $scope.setActiveTab($scope.lstTabs[2]);
             });
         });
@@ -253,7 +253,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.tempSaveDetail = function() {
 
 
-    }
+    };
 
 
     $scope.aplicar = function() {
@@ -292,7 +292,11 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.showDetail = function() {
-        $('#mdlDetail').modal('show');
+        comisionesRepository.selInteresComisionDetalle(1).then(function(result) {
+            $scope.lstDetalle = result.data;
+            $('#mdlDetail').modal('show');
+        });
+
     };
 
 
@@ -308,16 +312,18 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         });
     };
 
+    ///aqui va el detalle
 
-    $scope.validarMontos = function(pnlName) {
+    $scope.validarMontos = function() {
 
         if ($scope.objEdicion.usarMontoUsuario === true && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
             swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
         } else {
-            $scope.gridInteresRow = null;
-            $scope.gridComisionesRow = null;
+            //aqui cabecera
             $scope.setActiveTab($scope.lstTabs[3]);
+            swal("Creado", "Se genero un asiento Contable", "success");
         }
+
     };
 
 
@@ -373,56 +379,81 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.insInteresComisionDetalle = function() {
 
 
-        $scope.lstRegistroContable.forEach(function(row, index) {
-            var params = {
-                cuentacontable: row.cuenta,
-                concepto: row.concepto,
-                cargo: row.cargo,
-                abono: row.abono,
-                documento: 0,
-                idpersona: $scope.idUsuario,
-                idcomisionesintereses: $scope.currentComisionHeaderID,
-                tipodocumento: row.tipodocumento,
-                fechavencimiento: '2017/01/01', //Tampoco sabe que ira aqui 
-                poriva: 16,
-                referencia: '', //Menos este lo hace BPRO?
-                banco: $scope.selectedValueBancoID,
-                referenciabancaria: '12345678901234567891',
-                conpoliza: index + 1
-            };
+        comisionesRepository.insCxpComisionesInteres().then(function(result) {
 
-            comisionesRepository.insInteresComisionDetalle(params).then(function(result) {
-                console.log(result.data, 'Soy la respuesta del store de pipus');
+            console.log("headerID", result.data[0].headerID);
+
+            $scope.rowsToInsert = [];
+
+            $scope.lstRegistroContable.forEach(function(row, index) {
+
+                var params = {};
+
+                params.cuentacontable = row.cuenta;
+                params.concepto = row.concepto;
+                params.cargo = row.cargo;
+                params.abono = row.abono;
+                params.documento = 0;
+                params.idpersona = $scope.idUsuario;
+                params.idcomisionesintereses = $scope.currentComisionHeaderID;
+                params.tipodocumento = row.tipodocumento;
+                params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
+                params.poriva = 16;
+                params.referencia = ''; //Menos este lo hace BPRO?
+                params.banco = $scope.selectedValueBancoID;
+                params.referenciabancaria = '12345678901234567891';
+                params.conpoliza = index + 1;
+
+                $scope.rowsToInsert.push(params);
+            });
+
+
+
+
+            $scope.lstDepartamento.forEach(function(row, index) {
+
+                var params = {};
+
+                params.cuentacontable = row.cuentaContable;
+                params.concepto = row.descripcion.substring(7);
+                params.cargo = (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100;
+                params.abono = 0;
+                params.documento = 0;
+                params.idpersona = $scope.idUsuario;
+                params.idcomisionesintereses = $scope.currentComisionHeaderID;
+                params.tipodocumento = '';
+                params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
+                params.poriva = 16;
+                params.referencia = ''; //Menos este lo hace BPRO?
+                params.banco = $scope.selectedValueBancoID;
+                params.referenciabancaria = '12345678901234567891';
+                params.conpoliza = index + 4;
+
+                $scope.rowsToInsert.push(params);
+            });
+
+
+            $scope.rowsToInsert.forEach(function(row) {
+                comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
+                    console.log(row.conpoliza);
+                });
             });
 
         });
 
 
+        /*
+                
+                        $scope.lstSucursal = [];
+                        $scope.lstRegistroContable = [];
+                        $scope.lstDepartamento = [];
+                        $scope.showSub = false;
+                        $scope.gridInteresRow = [];
+                        $scope.gridComisionesRow = [];
+                        
+        */
 
-
-        $scope.lstDepartamento.forEach(function(row, index) {
-            var params = {
-                cuentacontable: row.cuentaContable,
-                concepto: row.descripcion.substring(7),
-                cargo: (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100,
-                abono: 0,
-                documento: 0,
-                idpersona: $scope.idUsuario,
-                idcomisionesintereses: $scope.currentComisionHeaderID,
-                tipodocumento: '',
-                fechavencimiento: '2017/01/01', //Tampoco sabe que ira aqui 
-                poriva: 16,
-                referencia: '', //Menos este lo hace BPRO?
-                banco: $scope.selectedValueBancoID,
-                referenciabancaria: '12345678901234567891',
-                conpoliza: index + 4
-            };
-
-            comisionesRepository.insInteresComisionDetalle(params).then(function(result) {
-                console.log(result.data, 'Soy la respuesta del store de pipus');
-            });
-
-        });
+        //console.log($scope.rowsToInsert);
 
 
 
