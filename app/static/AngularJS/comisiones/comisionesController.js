@@ -403,31 +403,65 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 params.banco = $scope.selectedValueBancoID;
                 params.referenciabancaria = '12345678901234567891';
                 params.conpoliza = index + 4;
-
-                $scope.rowsToInsert.push(params);
-            });
-
-
-            $scope.rowsToInsert.forEach(function(row, index) {
-                if (index < 16) {
-                    comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
-                        console.log(row.conpoliza);
-                    });
-                } else {
-
-                    //$scope.lstSucursal = [];
-                    $scope.lstRegistroContable = [];
-                    //$scope.lstDepartamento = [];
-                    $scope.showSub = false;
-                    $scope.gridInteresRow = [];
-                    $scope.gridComisionesRow = [];
-
+                if (params.userValue > 0) {
+                    $scope.rowsToInsert.push(params);
                 }
+
             });
+            $scope.contador = 0;
+            ////////////////////////////////////////////////////////////////////////////        
+            $scope.rowsToInsert.reduce(
+                function(sequence, value) {
+                    console.log(sequence);
+                    return sequence.then(function() {
+                        return $scope.insertaInteresComisionDetalle(value);
+                    }).then(function(obj) {
+                        $scope.contador++;
+                    });
+                },
+                Promise.resolve()
+            ).then(function() {
+                console.log('COMPLETED');
+                alertFactory.success($scope.contador + ' Inserts');
+                //$scope.lstSucursal = [];
+                $scope.lstRegistroContable = [];
+                //$scope.lstDepartamento = [];
+                $scope.showSub = false;
+                $scope.gridInteresRow = [];
+                $scope.gridComisionesRow = [];
+
+            });
+            ////////////////////////////////////////////////////////////////////////////////
+
+
+            // $scope.rowsToInsert.forEach(function(row, index) {
+            //     if (index < 16) {
+            //         comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
+            //             console.log(row.conpoliza);
+            //         });
+            //     } else {
+
+            //         //$scope.lstSucursal = [];
+            //         $scope.lstRegistroContable = [];
+            //         //$scope.lstDepartamento = [];
+            //         $scope.showSub = false;
+            //         $scope.gridInteresRow = [];
+            //         $scope.gridComisionesRow = [];
+
+            //     }
+            // });
 
         });
 
     };
+    ////////////////////////////////////////////////////////
+    $scope.insertaInteresComisionDetalle = function(row) {
+        return new comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
+            return result.data;
+        });
+
+    };
+    ////////////////////////////////////////////////////////
 
 
     $scope.deleteReference = function(item) {
