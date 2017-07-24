@@ -297,7 +297,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         } else {
             $scope.insInteresComisionDetalle();
             $scope.setActiveTab($scope.lstTabs[3]);
-            swal("Creado", "Se genero un asiento Contable", "success");
+           
         }
     };
 
@@ -339,10 +339,13 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
     $scope.toggleShowSub = function() {
-        if ($scope.showSub === true)
+        if ($scope.showSub === true) {
             $scope.showSub = false;
-        else
+            $scope.objEdicion.usarMontoUsuario = false;
+        } else {
             $scope.showSub = true;
+            $scope.objEdicion.usarMontoUsuario = true;
+        }
     };
 
 
@@ -403,53 +406,33 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 params.banco = $scope.selectedValueBancoID;
                 params.referenciabancaria = '12345678901234567891';
                 params.conpoliza = index + 4;
-                if (params.userValue > 0) {
+                if ($scope.objEdicion.usarMontoUsuario === false) {
+                    params.userValue = ($scope.gridComisionesRow.abono * row.porcentaje) / 100;
+                }
+                if (row.userValue > 0) {
                     $scope.rowsToInsert.push(params);
                 }
 
             });
-            $scope.contador = 0;
             ////////////////////////////////////////////////////////////////////////////        
             $scope.rowsToInsert.reduce(
                 function(sequence, value) {
-                    console.log(sequence);
                     return sequence.then(function() {
                         return $scope.insertaInteresComisionDetalle(value);
-                    }).then(function(obj) {
-                        $scope.contador++;
-                    });
+                    }).then(function(obj) {});
                 },
                 Promise.resolve()
             ).then(function() {
-                console.log('COMPLETED');
-                alertFactory.success($scope.contador + ' Inserts');
                 //$scope.lstSucursal = [];
                 $scope.lstRegistroContable = [];
                 //$scope.lstDepartamento = [];
                 $scope.showSub = false;
                 $scope.gridInteresRow = [];
                 $scope.gridComisionesRow = [];
-
+                 swal("Creado", "Se genero un asiento Contable", "success");
             });
             ////////////////////////////////////////////////////////////////////////////////
 
-
-            // $scope.rowsToInsert.forEach(function(row, index) {
-            //     if (index < 16) {
-            //         comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
-            //             console.log(row.conpoliza);
-            //         });
-            //     } else {
-
-            //         //$scope.lstSucursal = [];
-            //         $scope.lstRegistroContable = [];
-            //         //$scope.lstDepartamento = [];
-            //         $scope.showSub = false;
-            //         $scope.gridInteresRow = [];
-            //         $scope.gridComisionesRow = [];
-
-            //     }
-            // });
 
         });
 
