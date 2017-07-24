@@ -348,13 +348,46 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
 };
 
 
+controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.INT }];
+
+    this.model.query('UPD_APLICACOMISIONES_SP', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
+controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
+
+    var self = this;
+
+    var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.INT }];
+
+    this.model.query('DEL_INTERESCOMISION_SP', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
 
 controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
 
     var self = this;
 
     var params = [];
- 
+
     this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
@@ -419,7 +452,7 @@ controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, ne
     ];
 
     this.model.query('INS_CXPCOMISIONESINTERESESDET_SP', params, function(error, result) {
-        
+
         self.view.expositor(res, {
             error: error,
             result: result

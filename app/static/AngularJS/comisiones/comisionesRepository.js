@@ -44,6 +44,16 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
+        delInteresComision: function(interesComisionID) {
+            return $http({
+                url: comisionesURL + 'delInteresComision/',
+                method: "GET",
+                params: { interesComisionID: interesComisionID },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
 
         insInteresComision: function(params) {
             return $http({
@@ -79,6 +89,16 @@ registrationModule.factory('comisionesRepository', function($http) {
                 url: comisionesURL + 'selInteresComisionDetalle/',
                 method: "GET",
                 params: { idcomisionInteres: idcomisionInteres },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        updAplicaComisiones: function(interesComisionID ) {
+            return $http({
+                url: comisionesURL + 'updAplicaComisiones/',
+                method: "GET",
+                params: { interesComisionID : interesComisionID  },
                 headers: {
                     'Content-Type': 'application/json'
                 }

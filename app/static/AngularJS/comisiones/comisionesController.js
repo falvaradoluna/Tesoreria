@@ -220,7 +220,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                     confirmButtonText: "Aceptar",
                     closeOnConfirm: true
                 },
-
                 function() {
                     $scope.tempSave();
                 });
@@ -258,45 +257,22 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.aplicar = function() {
 
-
-
-        $scope.insInteresComisionDetalle();
-
-        /*
-                swal({
-                        title: "¿Esta seguro?",
-                        text: "Se aplicarán todas la referencia.",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#21B9BB",
-                        confirmButtonText: "Aceptar",
-                        closeOnConfirm: false
-                    },
-                    function() {
-
-                        comisionesRepository.insCxpComisionesInteres().then(function(result) {
-                            console.log("finalizo");
-                        });
-
-                        comisionesRepository.selInteresComision().then(function(result) {
-                            $scope.lstTemp = result.data;
-                        });
-
-
-                        swal("Aplicado", "Referencia aplicada", "success");
-                    });*/
-
+        comisionesRepository.updAplicaComisiones(0).then(function(result) {
+            swal("Aplicado", "Referencia aplicada", "success");
+            comisionesRepository.selInteresComision().then(function(result2) {
+                $scope.lstTemp = result2.data;
+            });
+        })
     };
 
 
 
 
-    $scope.showDetail = function() {
-        comisionesRepository.selInteresComisionDetalle(1).then(function(result) {
+    $scope.showDetail = function(item) {
+        comisionesRepository.selInteresComisionDetalle(item.interesComisionID).then(function(result) {
             $scope.lstDetalle = result.data;
             $('#mdlDetail').modal('show');
         });
-
     };
 
 
@@ -312,18 +288,17 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         });
     };
 
-    ///aqui va el detalle
+
 
     $scope.validarMontos = function() {
 
         if ($scope.objEdicion.usarMontoUsuario === true && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
             swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
         } else {
-            //aqui cabecera
+            $scope.insInteresComisionDetalle();
             $scope.setActiveTab($scope.lstTabs[3]);
             swal("Creado", "Se genero un asiento Contable", "success");
         }
-
     };
 
 
@@ -433,31 +408,47 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
             });
 
 
-            $scope.rowsToInsert.forEach(function(row) {
-                comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
-                    console.log(row.conpoliza);
-                });
+            $scope.rowsToInsert.forEach(function(row, index) {
+                if (index < 16) {
+                    comisionesRepository.insInteresComisionDetalle(row).then(function(result) {
+                        console.log(row.conpoliza);
+                    });
+                } else {
+
+                    //$scope.lstSucursal = [];
+                    $scope.lstRegistroContable = [];
+                    //$scope.lstDepartamento = [];
+                    $scope.showSub = false;
+                    $scope.gridInteresRow = [];
+                    $scope.gridComisionesRow = [];
+
+                }
             });
 
         });
 
-
-        /*
-                
-                        $scope.lstSucursal = [];
-                        $scope.lstRegistroContable = [];
-                        $scope.lstDepartamento = [];
-                        $scope.showSub = false;
-                        $scope.gridInteresRow = [];
-                        $scope.gridComisionesRow = [];
-                        
-        */
-
-        //console.log($scope.rowsToInsert);
+    };
 
 
+    $scope.deleteReference = function(item) {
 
-
+        swal({
+                title: "¿Esta seguro?",
+                text: "Se eliminará el registro",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: true
+            },
+            function() {
+                comisionesRepository.delInteresComision(item.interesComisionID).then(function(result) {
+                    swal("Eliminado", "Se eliminó el registro", "success");
+                    comisionesRepository.selInteresComision().then(function(result2) {
+                        $scope.lstTemp = result2.data;
+                    });
+                });
+            });
     };
 
 
