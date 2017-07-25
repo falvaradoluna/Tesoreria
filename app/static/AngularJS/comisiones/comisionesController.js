@@ -257,12 +257,15 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.aplicar = function() {
 
-        comisionesRepository.updAplicaComisiones(0).then(function(result) {
-            swal("Aplicado", "Referencia aplicada", "success");
-            comisionesRepository.selInteresComision().then(function(result2) {
-                $scope.lstTemp = result2.data;
+        $scope.lstTemp.forEach(function(row) {
+            comisionesRepository.updAplicaComisiones(row.interesComisionID).then(function(result) {
+                swal("Aplicado", "Referencia aplicada", "success");
+                /*comisionesRepository.selInteresComision().then(function(result2) {
+                    $scope.lstTemp = result2.data;
+                });*/
             });
-        })
+        });
+
     };
 
 
@@ -297,7 +300,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         } else {
             $scope.insInteresComisionDetalle();
             $scope.setActiveTab($scope.lstTabs[3]);
-           
+
         }
     };
 
@@ -429,7 +432,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 $scope.showSub = false;
                 $scope.gridInteresRow = [];
                 $scope.gridComisionesRow = [];
-                 swal("Creado", "Se genero un asiento Contable", "success");
+                swal("Creado", "Se genero un asiento Contable", "success");
             });
             ////////////////////////////////////////////////////////////////////////////////
 
