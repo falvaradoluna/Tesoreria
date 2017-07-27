@@ -417,7 +417,7 @@ controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next
 
     var self = this;
 
-    var params = [];
+    var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.STRING }];
 
     this.model.query('INS_CXPCOMISIONESINTERESES_SP', params, function(error, result) {
         self.view.expositor(res, {

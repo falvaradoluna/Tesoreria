@@ -4,9 +4,12 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.idUsuario = $rootScope.userData.idUsuario;
 
     $scope.objEdicion = {
-        usarMontoUsuario: false,
-        montoAcumuladoUsuario: 0
+        usarMontoCalculado: false,
+        montoAcumuladoUsuario: 0,
+        muestraMontoInicial: true
     };
+
+    $scope.sumaDetalle = { cargo: 0, abono: 0 };
 
     $scope.lstEmpresaUsuario = [];
     $scope.lstBanco = [];
@@ -25,7 +28,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.selectedValueEmpresaID = 0;
     $scope.selectedValueSucursalID = 0;
-    $scope.selectedDepartamentoID = 0;
+    $scope.selectedDepartamento = [];
     $scope.selectedValueBancoID = 0;
     $scope.selectedValueCuentaID = 0;
     $scope.selectedValueFechaInicio = '';
@@ -257,15 +260,24 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.aplicar = function() {
 
-        $scope.lstTemp.forEach(function(row) {
-            comisionesRepository.updAplicaComisiones(row.interesComisionID).then(function(result) {
-                swal("Aplicado", "Referencia aplicada", "success");
-                /*comisionesRepository.selInteresComision().then(function(result2) {
-                    $scope.lstTemp = result2.data;
-                });*/
-            });
-        });
 
+        swal({
+                title: "¿Esta seguro?",
+                text: "Se aplicarán todas las referencias",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: true
+            },
+            function() {
+                $scope.lstTemp.forEach(function(row) {
+                    comisionesRepository.updAplicaComisiones(row.interesComisionID).then(function(result) {
+                        console.log(data);
+                    });
+                });
+                swal("Aplicado", "Referencia aplicada", "success");
+            });
     };
 
 
@@ -274,6 +286,13 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.showDetail = function(item) {
         comisionesRepository.selInteresComisionDetalle(item.interesComisionID).then(function(result) {
             $scope.lstDetalle = result.data;
+            $scope.sumaDetalle.cargo = 0;
+            $scope.sumaDetalle.abono = 0;
+            $scope.lstDetalle.forEach(function(row) {
+                $scope.sumaDetalle.cargo += parseFloat(row.cid_cargo);
+                $scope.sumaDetalle.abono += parseFloat(row.cid_abono);
+            });
+
             $('#mdlDetail').modal('show');
         });
     };
@@ -295,12 +314,11 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.validarMontos = function() {
 
-        if ($scope.objEdicion.usarMontoUsuario === true && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
+        if ($scope.objEdicion.usarMontoCalculado === false && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
             swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
         } else {
             $scope.insInteresComisionDetalle();
             $scope.setActiveTab($scope.lstTabs[3]);
-
         }
     };
 
@@ -325,29 +343,34 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
 
+
     $scope.setCuentaContable = function() {
+
+
+        console.log($scope.selectedDepartamento);
 
         $scope.lstRegistroContable = [];
         $scope.lstRegistroContable = comisionesRepository.getComisionTemplate();
-
-        $scope.lstRegistroContable[0].cuenta = $scope.lstRegistroContable[0].cuenta.replace('A', $scope.selectedValueSucursalID);
-        $scope.lstRegistroContable[0].cuenta = $scope.lstRegistroContable[0].cuenta.replace('B', $scope.selectedValueEmpresaID);
-        $scope.lstRegistroContable[1].cuenta = $scope.lstRegistroContable[1].cuenta.replace('F', $scope.selectedDepartamentoID);
-        $scope.lstRegistroContable[2].cuenta = $scope.lstRegistroContable[2].cuenta.replace('F', $scope.selectedDepartamentoID);
+        $scope.lstRegistroContable[0].cuenta = $scope.selectedDepartamento.cuentaContable;
+        $scope.lstRegistroContable[0].concepto = $scope.selectedDepartamento.descripcion.substring(8);
+        $scope.lstRegistroContable[1].cuenta = $scope.lstRegistroContable[1].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
+        $scope.lstRegistroContable[2].cuenta = $scope.lstRegistroContable[2].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
 
         $scope.lstRegistroContable[0].cargo = $scope.gridComisionesRow.abono;
         $scope.lstRegistroContable[1].cargo = $scope.gridInteresRow.abono;
         $scope.lstRegistroContable[2].abono = $scope.gridComisionesRow.abono + $scope.gridInteresRow.abono;
+        $scope.objEdicion.montoAcumuladoUsuario = $scope.gridComisionesRow.abono;
 
     };
 
     $scope.toggleShowSub = function() {
+        $scope.montoAcumuladoUsuario = 0;
         if ($scope.showSub === true) {
             $scope.showSub = false;
-            $scope.objEdicion.usarMontoUsuario = false;
+            $scope.objEdicion.usarMontoCalculado = false;
         } else {
             $scope.showSub = true;
-            $scope.objEdicion.usarMontoUsuario = true;
+            $scope.objEdicion.usarMontoCalculado = true;
         }
     };
 
@@ -359,36 +382,55 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
     $scope.insInteresComisionDetalle = function() {
 
+        var excludeFirstRow = false;
 
-        comisionesRepository.insCxpComisionesInteres().then(function(result) {
 
-            console.log("headerID", result.data[0].headerID);
 
+        if ($scope.objEdicion.usarMontoCalculado === true) {
+            excludeFirstRow = true;
+        } else {
+            $scope.lstDepartamento.forEach(function(row) {
+                if (row.userValue > 0) {
+                    excludeFirstRow = true;
+                }
+            });
+        }
+
+        var counter = 0;
+
+
+        comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID).then(function(result) {
+
+            var headerID = result.data[0].headerID;
             $scope.rowsToInsert = [];
 
             $scope.lstRegistroContable.forEach(function(row, index) {
 
-                var params = {};
+                if (excludeFirstRow === true && index === 0) {
+                    console.log('OK');
+                } else {
 
-                params.cuentacontable = row.cuenta;
-                params.concepto = row.concepto;
-                params.cargo = row.cargo;
-                params.abono = row.abono;
-                params.documento = 0;
-                params.idpersona = $scope.idUsuario;
-                params.idcomisionesintereses = $scope.currentComisionHeaderID;
-                params.tipodocumento = row.tipodocumento;
-                params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
-                params.poriva = 16;
-                params.referencia = ''; //Menos este lo hace BPRO?
-                params.banco = $scope.selectedValueBancoID;
-                params.referenciabancaria = '12345678901234567891';
-                params.conpoliza = index + 1;
+                    var params = {};
 
-                $scope.rowsToInsert.push(params);
+                    params.cuentacontable = row.cuenta;
+                    params.concepto = row.concepto;
+                    params.cargo = row.cargo;
+                    params.abono = row.abono;
+                    params.documento = 0;
+                    params.idpersona = $scope.idUsuario;
+                    params.idcomisionesintereses = headerID;
+                    params.tipodocumento = row.tipodocumento;
+                    params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
+                    params.poriva = 16;
+                    params.referencia = ''; //Menos este lo hace BPRO?
+                    params.banco = $scope.selectedValueBancoID;
+                    params.referenciabancaria = '12345678901234567891';
+                    params.conpoliza = counter += 1;
+
+                    $scope.rowsToInsert.push(params);
+                }
+
             });
-
-
 
 
             $scope.lstDepartamento.forEach(function(row, index) {
@@ -397,27 +439,38 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
                 params.cuentacontable = row.cuentaContable;
                 params.concepto = row.descripcion.substring(7);
-                params.cargo = (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100;
+                params.cargo = 0; // (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100;
                 params.abono = 0;
                 params.documento = 0;
                 params.idpersona = $scope.idUsuario;
-                params.idcomisionesintereses = $scope.currentComisionHeaderID;
+                params.idcomisionesintereses = headerID;
                 params.tipodocumento = '';
                 params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
                 params.poriva = 16;
                 params.referencia = ''; //Menos este lo hace BPRO?
                 params.banco = $scope.selectedValueBancoID;
                 params.referenciabancaria = '12345678901234567891';
-                params.conpoliza = index + 4;
-                if ($scope.objEdicion.usarMontoUsuario === false) {
-                    params.userValue = ($scope.gridComisionesRow.abono * row.porcentaje) / 100;
-                }
-                if (row.userValue > 0) {
+                params.conpoliza = counter += 1;
+
+                if ($scope.objEdicion.usarMontoCalculado === true) {
+                    //params.userValue = ($scope.gridComisionesRow.abono * row.porcentaje) / 100;
+                    params.cargo = (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100;
                     $scope.rowsToInsert.push(params);
+                } else {
+                    if (row.userValue > 0) {
+                        params.cargo = row.userValue;
+                        $scope.rowsToInsert.push(params);
+                    }
                 }
 
+
+
             });
-            ////////////////////////////////////////////////////////////////////////////        
+
+
+            //console.log($scope.rowsToInsert);
+            ////////////////////////////////////////////////////////////////////////////
+
             $scope.rowsToInsert.reduce(
                 function(sequence, value) {
                     return sequence.then(function() {
@@ -426,12 +479,17 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 },
                 Promise.resolve()
             ).then(function() {
-                //$scope.lstSucursal = [];
+
+                $scope.lstSucursal = { suc_nombre: "", suc_idsucursal: 0 };
+                $scope.selectedValueSucursalID = 0;
+                $scope.selectedDepartamento = { subCuenta: 0 };
+                $scope.lstDepartamento ={sucursalID:0,cuentaContable:0,descripcion:"",subCuenta:0,};
+
                 $scope.lstRegistroContable = [];
-                //$scope.lstDepartamento = [];
                 $scope.showSub = false;
                 $scope.gridInteresRow = [];
                 $scope.gridComisionesRow = [];
+                $scope.objEdicion.montoAcumuladoUsuario = 0;
                 swal("Creado", "Se genero un asiento Contable", "success");
             });
             ////////////////////////////////////////////////////////////////////////////////

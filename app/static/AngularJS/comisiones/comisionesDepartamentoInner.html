@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-4">
-        <h5>Monto {{objEdicion.usarMontoUsuario == true ? 'usuario' : 'automático' }}</h5>
-        <h2>{{objEdicion.usarMontoUsuario == true ? objEdicion.montoAcumuladoUsuario: gridComisionesRow.abono  | currency}}</h2>
+        <h5>Monto {{objEdicion.usarMontoCalculado == true ? 'automático' :  'usuario' }}</h5>
+        <h2>{{objEdicion.usarMontoCalculado == true ? (gridComisionesRow.abono  | currency) : objEdicion.montoAcumuladoUsuario | currency}}</h2>
     </div>
     <div class="col-md-4">
         <h5>Monto Total</h5>
@@ -9,24 +9,24 @@
     </div>
     <div class="col-md-4">
         <h5>Editar</h5>
-        <h2><input type="checkbox" ng-model="objEdicion.usarMontoUsuario"></h2>
+        <h2><input type="checkbox" ng-model="objEdicion.usarMontoCalculado"></h2>
     </div>
 </div>
 <table class="table table-striped table-bordered" cellspacing="0">
     <thead>
         <tr>
             <th>Concepto</th>
-            <th ng-hide="objEdicion.usarMontoUsuario">Porcentaje</th>
-            <th ng-hide="objEdicion.usarMontoUsuario">Monto Sistema</th>
-            <th ng-show="objEdicion.usarMontoUsuario">Monto Usuario</th>
+            <th ng-show="objEdicion.usarMontoCalculado">Porcentaje</th>
+            <th ng-show="objEdicion.usarMontoCalculado">Monto Sistema</th>
+            <th ng-hide="objEdicion.usarMontoCalculado">Monto Usuario</th>
         </tr>
     </thead>
     <tbody>
         <tr ng-repeat="list in lstDepartamento">
             <td>{{list.descripcion}}</td>
-            <td ng-hide="objEdicion.usarMontoUsuario">{{list.porcentaje}} %</td>
-            <td ng-hide="objEdicion.usarMontoUsuario">{{(gridComisionesRow.abono*list.porcentaje)/100 | currency}}</td>
-            <td ng-show="objEdicion.usarMontoUsuario">
+            <td ng-show="objEdicion.usarMontoCalculado">{{list.porcentaje}} %</td>
+            <td ng-show="objEdicion.usarMontoCalculado">{{(gridComisionesRow.abono*list.porcentaje)/100 | currency}}</td>
+            <td ng-hide="objEdicion.usarMontoCalculado">
                 <input class="form-control" type="text" ng-init="list.userValue=0.0" ng-model="list.userValue" ng-blur="sumUserAmount(list.userValue)">
             </td>
         </tr>

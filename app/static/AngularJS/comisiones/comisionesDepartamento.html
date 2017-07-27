@@ -3,8 +3,9 @@
         <h2>Departamento</h2>
     </div>
     <div class="col-md-4">
-        <h5>Monto {{objEdicion.usarMontoUsuario == true ? 'usuario' : 'automático' }}</h5>
-        <h2>{{objEdicion.usarMontoUsuario == true ? objEdicion.montoAcumuladoUsuario : gridComisionesRow.abono  | currency}}</h2>
+        <h5>Monto {{objEdicion.usarMontoCalculado == true ? 'automático' :  'usuario' }}</h5>
+        <h2>{{objEdicion.usarMontoCalculado == true ? (gridComisionesRow.abono  | currency) : objEdicion.montoAcumuladoUsuario | currency}}</h2>
+        <!-- objEdicion.montoAcumuladoUsuario -->
     </div>
     <div class="col-md-4">
         <h5>Monto Total</h5>
@@ -18,7 +19,7 @@
         </select>
     </div>
     <div class="col-md-4">
-        <select class="form-control" ng-model="selectedDepartamentoID" ng-options="itemDepartamento.subCuenta as itemDepartamento.descripcion for itemDepartamento in lstDepartamento" name="txtDepto" ng-change="setCuentaContable()">
+        <select class="form-control" ng-model="selectedDepartamento" ng-options="itemDepartamento.descripcion for itemDepartamento in lstDepartamento track by itemDepartamento.descripcion" name="txtDepto" ng-change="setCuentaContable()">
             <option value="">Seleccioné Departamento</option>
         </select>
     </div>
@@ -64,4 +65,5 @@
         </table>
     </div>
 </div>
+<hr>
 <button class="btn btn-success pull-right" ng-click="validarMontos()">Aceptar</button>
