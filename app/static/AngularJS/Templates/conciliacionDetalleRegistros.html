@@ -255,7 +255,6 @@
                                 <th>Referencia</th>
                                 <th>Concepto</th>
                                 <th>Abono</th>
-                                <th data-sort-ignore="true" class="min-width"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -264,9 +263,6 @@
                                 <td>{{banco.referencia}}</td>
                                 <td>{{banco.concepto}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                               <td>
-                                    <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco,1)"><i class="demo-pli-cross"></i></button>
-                                </td>
                                 <!-- <td>
                                     <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco,1)"><i class="ti-eye"></i></button>
                                 </td>-->

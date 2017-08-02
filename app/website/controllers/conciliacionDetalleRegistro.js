@@ -296,11 +296,10 @@ conciliacionDetalleRegistro.prototype.post_generaPunteo = function(req, res, nex
 conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
    var self = this;
 
-   var params = [ {name: 'tipoMovimiento', value: req.body.tipoMovimiento, type: self.model.types.INT},
-                  {name: 'idDato', value: req.body.idDato, type: self.model.types.INT},
+   var params = [ {name: 'idCargoBanco', value: req.body.idCargoBanco, type: self.model.types.INT},
                   {name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT},
-                  {name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.STRING}
-   ];
+                  {name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT}
+                ];
 
    this.model.query('UPD_AUXILIARDEPOSITO_DPI_SP', params, function(error,result){
     self.view.expositor(res,{

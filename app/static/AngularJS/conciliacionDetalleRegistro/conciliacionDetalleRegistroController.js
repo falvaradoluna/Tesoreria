@@ -301,6 +301,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.punteoAuxiliar = [];
         $scope.gridApiBancos.selection.clearSelectedRows();
         $scope.gridApiAuxiliar.selection.clearSelectedRows();
+        var idUsuario = $rootScope.userData.idUsuario;
 
         if($scope.punteoAuxiliar.length > 0){
             $scope.limpiaVariables();
@@ -312,13 +313,13 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
          if($scope.cargoBanco == 0)
             {
                 angular.forEach($scope.punteoBanco, function(value, key) {
-                conciliacionDetalleRegistroRepository.insertDepositosDPI(1,value.idBmer, value.idBanco,value.noCuenta).then(function(result) {
-                    if (result.data[0].length) {
-                        console.log('Respuesta Incorrecta');
-                    } else {
+                conciliacionDetalleRegistroRepository.insertDepositosDPI(value.idBmer, value.idBanco,idUsuario).then(function(result) {
+                    if (result.data[0].ESTATUS == 2) {
                         console.log('Respuesta Correcta');
                         $scope.limpiaVariables();
                         $scope.getGridTablas();
+                    } else {
+                        console.log('Respuesta Incorrecta');
                     }
                 })
             });

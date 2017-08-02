@@ -151,15 +151,14 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertDepositosDPI: function(tipoMovimiento, idDato, idBanco, noCuenta) {
+        insertDepositosDPI: function(idCargoBanco, idBanco, idUsuario) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertDPI/',
                 method: "POST",
                 data: {
-                    tipoMovimiento: tipoMovimiento,
-                    idDato: idDato,
+                    idCargoBanco: idCargoBanco,
                     idBanco: idBanco,
-                    noCuenta : noCuenta
+                    idUsuario: idUsuario
                 },
                 headers: {
                     'Content-Type': 'application/json'
