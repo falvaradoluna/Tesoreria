@@ -6,7 +6,6 @@ var path = require('path');
 var webPage = require('webpage');
 var request = require('request');
 
-
 var controlDepositos = function(conf) {
     this.conf = conf || {};
 
@@ -20,11 +19,7 @@ var controlDepositos = function(conf) {
     };
 };
 
-
-
-
 controlDepositos.prototype.get_createReference = function(req, res, next) {
-
     var self = this;
 
     var params = [
@@ -50,7 +45,6 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
 };
 
 controlDepositos.prototype.get_createTempReference = function(req, res, next) {
-
     var self = this;
 
     var params = [
@@ -64,8 +58,6 @@ controlDepositos.prototype.get_createTempReference = function(req, res, next) {
 
     ];
 
-
-
     this.model.query('INS_REFERENCIA_TEMP_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
@@ -76,7 +68,6 @@ controlDepositos.prototype.get_createTempReference = function(req, res, next) {
 
 
 controlDepositos.prototype.get_insertReferenceDetails = function(req, res, next) {
-
     var self = this;
 
     var params = [
@@ -91,24 +82,17 @@ controlDepositos.prototype.get_insertReferenceDetails = function(req, res, next)
         { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL }
     ];
 
-
-
     this.model.query('INS_DETALLE_REFERENCIA_LOTE_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
-
 };
 
-
-
 controlDepositos.prototype.get_testApi = function(req, res, next) {
-
     //get utiliza params y lo recibe req.query ---> req.query.val1
     //post utiliza data y lo recibe req.body ---> req.body.val1    
-
     var self = this;
 
     var params = [
@@ -122,13 +106,11 @@ controlDepositos.prototype.get_testApi = function(req, res, next) {
             result: result
         });
     });
-
 };
 
 
 
 controlDepositos.prototype.get_pendingReference = function(req, res, next) {
-
     var self = this;
 
     var params = [];
@@ -139,14 +121,10 @@ controlDepositos.prototype.get_pendingReference = function(req, res, next) {
             result: result
         });
     });
-
 };
 
 
 controlDepositos.prototype.get_pendingReferenceDetails = function(req, res, next) {
-
-
-
     var self = this;
 
     var params = [{ name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT }];
@@ -157,12 +135,10 @@ controlDepositos.prototype.get_pendingReferenceDetails = function(req, res, next
             result: result
         });
     });
-
 };
 
 
 controlDepositos.prototype.get_applyReference = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT }];
@@ -173,14 +149,11 @@ controlDepositos.prototype.get_applyReference = function(req, res, next) {
             result: result
         });
     });
-
 };
 
 
 controlDepositos.prototype.get_setObservation = function(req, res, next) {
-
     var self = this;
-
 
     var params = [
         { name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.INT },
@@ -193,13 +166,11 @@ controlDepositos.prototype.get_setObservation = function(req, res, next) {
             result: result
         });
     });
-
 };
 
 
 
 controlDepositos.prototype.get_setReferencia = function(req, res, next) {
-
     var self = this;
 
     var params = [
@@ -213,12 +184,10 @@ controlDepositos.prototype.get_setReferencia = function(req, res, next) {
             result: result
         });
     });
-
 };
 
 
 controlDepositos.prototype.get_updCarteraVencidaReferencia = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT }];
@@ -229,11 +198,9 @@ controlDepositos.prototype.get_updCarteraVencidaReferencia = function(req, res, 
             result: result
         });
     });
-
 };
 
 controlDepositos.prototype.get_delReferenciaGenerada = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT }];
@@ -244,7 +211,6 @@ controlDepositos.prototype.get_delReferenciaGenerada = function(req, res, next) 
             result: result
         });
     });
-
 };
 
 
@@ -273,7 +239,6 @@ controlDepositos.prototype.get_clientById = function(req, res, next) {
 
 
 controlDepositos.prototype.get_clientByName = function(req, res, next) {
-
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [{
@@ -292,7 +257,6 @@ controlDepositos.prototype.get_clientByName = function(req, res, next) {
 
 
 controlDepositos.prototype.get_comisiones = function(req, res, next) {
-
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [
@@ -312,7 +276,6 @@ controlDepositos.prototype.get_comisiones = function(req, res, next) {
 
 
 controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
-
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
@@ -326,7 +289,6 @@ controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
 };
 
 controlDepositos.prototype.get_interesComision = function(req, res, next) {
-
     var self = this;
 
     var params = [
@@ -335,8 +297,6 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
         { name: 'bancoID', value: req.query.bancoID, type: self.model.types.INT },
         { name: 'userID', value: req.query.userID, type: self.model.types.INT },
         { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
-
-
     ];
 
     this.model.query('[INS_INTERESCOMISION_SP]', params, function(error, result) {
@@ -349,7 +309,6 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
 
 
 controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.INT }];
@@ -366,7 +325,6 @@ controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
 
 
 controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.INT }];
@@ -383,7 +341,6 @@ controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
 
 
 controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
-
     var self = this;
 
     var params = [];
@@ -400,7 +357,6 @@ controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
 
 
 controlDepositos.prototype.get_selInteresComisionDetalle = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'idcomisionInteres', value: req.query.idcomisionInteres, type: self.model.types.STRING }];
@@ -414,7 +370,6 @@ controlDepositos.prototype.get_selInteresComisionDetalle = function(req, res, ne
 };
 
 controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next) {
-
     var self = this;
 
     var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.STRING }];
@@ -429,10 +384,7 @@ controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next
 
 
 controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, next) {
-
     var self = this;
-
-
 
     var params = [
         { name: 'cuentacontable', value: req.query.cuentacontable, type: self.model.types.STRING },
@@ -460,14 +412,7 @@ controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, ne
     });
 };
 
-
-
-
-
-
-
 controlDepositos.prototype.get_insertaRefAntipag = function(req, res, next) {
-
     var self = this;
 
     var params = [
@@ -483,13 +428,8 @@ controlDepositos.prototype.get_insertaRefAntipag = function(req, res, next) {
     });
 };
 
-
-
 controlDepositos.prototype.get_departamentoBpro = function(req, res, next) {
-
     var self = this;
-
-
 
     var params = [
         { name: 'sucursalID', value: req.query.sucursalID, type: self.model.types.INT }
@@ -506,7 +446,6 @@ controlDepositos.prototype.get_departamentoBpro = function(req, res, next) {
 
 
 controlDepositos.prototype.get_interes = function(req, res, next) {
-
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [
@@ -526,7 +465,6 @@ controlDepositos.prototype.get_interes = function(req, res, next) {
 
 
 controlDepositos.prototype.get_interesIva = function(req, res, next) {
-
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
@@ -538,11 +476,5 @@ controlDepositos.prototype.get_interesIva = function(req, res, next) {
         });
     });
 };
-
-
-
-
-
-
 
 module.exports = controlDepositos;
