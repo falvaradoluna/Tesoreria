@@ -221,9 +221,44 @@ Filtros.prototype.get_depositosNoReferenciados = function(req, res, next) {
     });
 };
 
+Filtros.prototype.get_depositosPorIdentificar = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idBanco', value:  req.query.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
+        { name: 'fechaIni', value: req.query.fechaIni, type: self.model.types.STRING },
+        { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING }
+    ];
+
+    this.model.query('SEL_DEPOSITOS_POR_IDENTIFICAR_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+Filtros.prototype.get_depositosAplicados = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idBanco', value:  req.query.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
+        { name: 'fechaIni', value: req.query.fechaIni, type: self.model.types.STRING },
+        { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING }
+    ];
+
+    this.model.query('SEL_DEPOSITOS_APLICADOS_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 Filtros.prototype.get_cartera = function(req, res, next) {
-
-
+    console.log('get_cartera');
     var self = this;
 
     var params = [{ name: 'idCliente', value: req.query.cliente, type: self.model.types.INT },

@@ -1,11 +1,11 @@
-<div style="background-color:white; padding:15px">
+<div style="background-color:white; padding:15px; overflow: hidden;">
     <ctrdep-Banco-Filter> </ctrdep-Banco-Filter>
     <ctrdep-Banco-Table> </ctrdep-Banco-Table>
-    <ctrdep-Cartera-Filter-User> </ctrdep-Cartera-Filter-User>
-    <ctrdep-Cartera-Filter> </ctrdep-Cartera-Filter>
-    <ctrdep-Cartera-Table> </ctrdep-Cartera-Table>
-    <ctrdep-Referencia-Detail> </ctrdep-Referencia-Detail>
-    <ctrdep-Referencia-Table> </ctrdep-Referencia-Table>
+    <ctrdep-Cartera-Filter-User ng-show="tipoDeposito == 1"> </ctrdep-Cartera-Filter-User>
+    <ctrdep-Cartera-Filter ng-show="tipoDeposito == 1"> </ctrdep-Cartera-Filter>
+    <ctrdep-Cartera-Table ng-show="tipoDeposito == 1"> </ctrdep-Cartera-Table>
+    <ctrdep-Referencia-Detail ng-show="tipoDeposito == 1"> </ctrdep-Referencia-Detail>
+    <ctrdep-Referencia-Table ng-show="tipoDeposito == 1"> </ctrdep-Referencia-Table>
 </div>
 <div id="mdlLoading" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -14,4 +14,66 @@
             <div class="cube2"></div>
         </div>
     </div>
+</div>
+
+<div id="modal-anticipo" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title">Control de Depositos</h3>
+      </div>
+      <div class="modal-body">
+        <p>La suma de la cartera seleccionada no alcanza a cubrir lo depositado, debes elegir al registro a quien se le cargara la diferencia.</p>       
+        <div class="row">
+            <div class="col-xs-4" style="text-align: center;"> 
+                <h3>$ {{ formar_number(depositoTotal) }}</h3>
+                <small>Deposito</small>
+            </div>
+            <div class="col-xs-4" style="text-align: center;">
+                <h3>$ {{ formar_number(carteraTotal) }}</h3>
+                <small>Cartera</small>
+            </div>
+            <div class="col-xs-4" style="text-align: center;">
+                <h3>$ {{ formar_number(anticipo) }}</h3>
+                <small>Diferencia</small>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <table class="table">
+            <tr>
+                <th>&nbsp;</th>
+                <th>Factura</th>
+                <th>Sucursal</th>
+                <th>Departamento</th>
+                <th>Cliente</th>
+                <th>Importe</th>
+                <th>Importe Final</th>
+            </tr>
+            <tr ng-repeat="(key, cartera) in selectedRowCartera" style="background-color: {{ model.selectedOccurrence == key ? '#f4f4f4' : 'white' }}">
+                <td>  
+                    <input type="radio" name="anticipo" ng-value="key" ng-model="model.selectedOccurrence" ng-checked="cartera.checked" />
+                </td>
+                <td> {{cartera.folio}} </td>
+                <td> {{cartera.nombreSucursal}}</td>
+                <td> {{cartera.nombreDepartamento}}</td>
+                <td> {{cartera.nombreCliente}}</td>
+                <td style="text-align: right;">$ {{ formar_number(cartera.importe) }}</td>
+                <td style="text-align: right;">
+                $ {{ formar_number(( model.selectedOccurrence == key ) ? cartera.importeFinal : cartera.importe) }}
+                </td>
+            </tr>
+        </table>
+        <br>        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" ng-click="ConfirmaReferencia();">Confirman Referencia</button>
+      </div>
+    </div>
+
+  </div>
 </div>

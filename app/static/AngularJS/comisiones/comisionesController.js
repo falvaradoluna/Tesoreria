@@ -293,6 +293,9 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 $scope.sumaDetalle.abono += parseFloat(row.cid_abono);
             });
 
+            $scope.sumaDetalle.cargo = parseFloat($scope.sumaDetalle.cargo);
+            $scope.sumaDetalle.abono = parseFloat($scope.sumaDetalle.abono);
+
             $('#mdlDetail').modal('show');
         });
     };

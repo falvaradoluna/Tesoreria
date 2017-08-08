@@ -179,6 +179,40 @@ registrationModule.factory('filtrosRepository', function($http) {
             });
         },
 
+        getDepositosPorIdentificar: function(idBanco,noCuenta,fechaIni,fechaFin) {
+            return $http({
+                url: filtrosURL + 'depositosPorIdentificar/',
+                method: "GET",
+                params: {
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    fechaIni: fechaIni,
+                    fechaFin: fechaFin
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
+        getDepositosAplicados: function(idBanco,noCuenta,fechaIni,fechaFin) {
+            return $http({
+                url: filtrosURL + 'depositosAplicados/',
+                method: "GET",
+                params: {
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    fechaIni: fechaIni,
+                    fechaFin: fechaFin
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
         getCartera: function(cliente, empresa, sucursal, departamento, fechaIni, fechaFin) {
             return $http({
                 url: filtrosURL + 'cartera/',

@@ -1,11 +1,18 @@
 <div class="row ">
     <div class="form-group col-md-3">
+        <label class="form-label">Sucursal:</label>
+        <select class="form-control" ng-model="selectedValueSucursaID" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in lstSucursal" name="txtSucursal" ng-change="getDepartamentos()" ng-disabled="carteraControlsDisabled">
+            <option value="">Seleccioné Sucursal</option>
+        </select>
+    </div>
+
+    <div class="form-group col-md-3">
         <label class="form-label">Departamento:</label>
         <select class="form-control" ng-model="selectedValueDepartamentoID" ng-options="departamento.dep_iddepartamento as departamento.dep_nombre for departamento in lstDepartamento" name="txtdepartamento" ng-change="activa_calendariosCartera()" ng-disabled="carteraControlsDisabled">
             <option value="">Seleccioné Departamento</option>
         </select>
     </div>
-    <div class="form-group col-md-3" id="calendar">
+    <div class="form-group col-md-2" id="calendar">
         <label for="fInicioCartera">Fecha Inicio:</label>
         <div class="input-group date">
             <span class="input-group-addon">
@@ -14,14 +21,14 @@
             <input type="text" class="form-control" id="fInicioCartera" ng-model="selectedValueCarteraFechaInicio" placeholder="dd/mm/yyyy" ng-disabled="carteraControlsDisabled" />
         </div>
     </div>
-    <div class="form-group col-md-3" id="calendar">
+    <div class="form-group col-md-2" id="calendar">
         <label for="ffincartera">Fecha Fin:</label>
         <div class="input-group date">
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
             <input type="text" class="form-control" id="ffincartera" ng-model="selectedValuecarteraFechaFin" placeholder="dd/mm/yyyy" ng-disabled="carteraControlsDisabled" />
         </div>
     </div>
-    <div class="form-group col-md-3" style="margin-top: 23px">
+    <div class="form-group col-md-2" style="margin-top: 23px">
         <button class="btn btn-primary" ng-disabled="carteraControlsDisabled" ng-click="getCarteraVencida()"><span class="glyphicon glyphicon-search" aria-hidden="true"></span> Buscar</button>
     </div>
 </div>

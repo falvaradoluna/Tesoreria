@@ -1,3 +1,30 @@
 .text-white{
 	color: white;
 }
+
+.pestania{
+    float: right;
+    width: 150px;
+    height: 50px;
+    background-color: #f4f4f4;
+    cursor: pointer;
+    text-align: center;
+    padding-top: 13px;
+    overflow: hidden;
+    font-size: 14px;
+    z-index: 1024;
+}
+
+.pestania div{
+
+}
+
+.pestania:hover{
+    background-color: #ccc;
+    color: white;
+}
+
+.active{
+    background-color: #2095f3 !important;
+    color: white !important;
+}
