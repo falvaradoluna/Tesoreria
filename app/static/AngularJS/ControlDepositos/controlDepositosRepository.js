@@ -93,6 +93,18 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
+
+        eliminarReferencia: function(idReferencia) {
+            return $http({
+                url: controlDepositosURL + 'eliminarReferencia/',
+                method: "GET",
+                params: { idReferencia: idReferencia },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        
         insApplyReference: function(idReferencia) {
             return $http({
                 url: controlDepositosURL + 'applyReference/',
