@@ -9,12 +9,12 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.calendario();
 
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
-        $scope.idEmpresa = $scope.busqueda.idEmpresa;
-        $scope.cuenta = $scope.busqueda.cuentaContable;
-        $scope.idBanco = $scope.busqueda.idBanco;        
-        $scope.cuentaBanco = $scope.busqueda.cuenta;
-
-
+        /*$scope.idEmpresa = $scope.busqueda.IdEmpresa;
+        $scope.cuenta = $scope.busqueda.CuentaContable;
+        $scope.idBanco = $scope.busqueda.IdBanco;        
+        $scope.cuentaBanco = $scope.busqueda.Cuenta;
+         */
+ 
         $scope.dato = "llllll";
         $scope.dpiSelected = false;
 
@@ -43,10 +43,10 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
     $scope.obtieneCargosAbonos = function() {
 
-        $scope.getAbonoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
-        $scope.getAbonoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
-        $scope.getCargoContable($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
-        $scope.getCargoBancario($scope.busqueda.idEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.idBanco, $scope.busqueda.cuenta,$scope.busqueda.cuentaContable);
+        $scope.getAbonoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
+        $scope.getAbonoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
+        $scope.getCargoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
+        $scope.getCargoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
     }
 
     //****************************************************************************************************

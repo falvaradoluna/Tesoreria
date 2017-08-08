@@ -2,10 +2,10 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
-            $scope.nodoPadre = [];
             $scope.fechaReporte = new Date();
             $scope.fechaCorte = new Date();
             $scope.fechaElaboracion = new Date($scope.fechaCorte.getFullYear(), $scope.fechaCorte.getMonth(), 1);
+
             //*****Inicio variables para activar o desactivar botones o input 
             $scope.activaInputBanco = true;
             $scope.activaInputCuenta = true;
@@ -15,6 +15,8 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
             $scope.bancoActual = '';
             $scope.cuentaActual = '';
             $scope.InfoBusqueda=false;
+            $scope.InmemoryAcount = '';
+            $scope.difMonetaria = 0;
             //***************************************************************
 
             //*****Variables para ocultar Depositos y Pagos referenciados
@@ -29,7 +31,7 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
             $scope.init = function() {
                 
-                $scope.getEmpresa(15);
+                $scope.getEmpresa($rootScope.userData.idUsuario);
                 $scope.calendario();
                 
                 $rootScope.mostrarMenu = 1;
@@ -40,26 +42,33 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
             var variablesLocalStorage = function() {
                 $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
-                console.log($scope.busqueda, 'Soy la busqueda')
                 if ($scope.busqueda  != null) {
+                    $scope.getEmpresa($rootScope.userData.idUsuario);
                     $scope.InfoBusqueda=true;
-                    $scope.empresaActual=$scope.busqueda.Empresa;
+                    $scope.cuentaActual = $scope.busqueda;
+                    $scope.empresaActual = $scope.busqueda.Empresa;
+                    $scope.bancoActual = $scope.bancoEmpresa;
+                    $scope.InmemoryAcount = $scope.busqueda.cuentaContable;
+                    $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
+                    $scope.fechaCorte = $scope.busqueda.fechaCorte;
                     $scope.contadorGerente=[{'NombreGerente':$scope.busqueda.gerente,
                     'NombreContador':$scope.busqueda.contador
                     }];
-                       conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.idBanco, $scope.busqueda.idEmpresa, $scope.busqueda.cuenta, $scope.busqueda.cuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, 1).then(function(result) {
-                        if (result.data.length > 0) {
+
+                    conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, 1).then(function(result) {
+                    if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
                             $scope.activaBotonesReporte = false;
+                            //Habilita botones
+                            $scope.activaBotonBuscar = false;
+                            /////
 
-                        } else {
-                            //console.log('no hay nada')
+                    } else {
                             $scope.totalesAbonosCargos = [];
                         }
                     });      
-                    }
-
+                  }
                 };
 
                 $scope.getEmpresa = function(idUsuario) {
@@ -70,9 +79,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                             $scope.activaBotonesReporte = true;
                             if (result.data.length > 0) {
                                 $scope.empresaUsuario = result.data;
-
-                                //console.log($scope.empresaUsuario)
-
                             }
                         });
                 }
@@ -91,7 +97,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                             if (result.data.length > 0) {
                                 $scope.activaInputBanco = false;
                                 $scope.bancoEmpresa = result.data;
-                                //console.log($scope.bancoEmpresa)
                             } else {
                                 $scope.bancoCuenta = [];
                                 $scope.bancoEmpresa = [];
@@ -100,12 +105,9 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                     }
                 }
 
-                //LQMA 27022017 add obtiene datos para llenar filtro de cuenta
                 $scope.getCuenta = function(idBanco, idEmpresa) {
                     $scope.activaBotonBuscar = true;
                     $scope.activaBotonesReporte = true;
-                    //console.log('sdsdsd')
-                    //console.log(idBanco,idEmpresa)
                     if (idBanco == undefined || idBanco == null || idBanco == '') {
                         alertFactory.warning('Seleccioné un Banco');
                         $scope.activaInputCuenta = true;
@@ -115,8 +117,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                             if (result.data.length > 0) {
                                 $scope.activaInputCuenta = false;
                                 $scope.activaBotonBuscar = false;
-                                //console.log('$scope.bancoCuenta')
-                                //console.log(result.data)
                                 $scope.bancoCuenta = result.data;
                             } else
                                 $scope.bancoCuenta = [];
@@ -146,7 +146,7 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                             $scope.paramBusqueda = [];
 
                             setTimeout(function() {
-                                $scope.paramBusqueda = { "idBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "idEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "cuenta": $scope.cuentaActual.Cuenta, "cuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte};
+                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
                                 console.log($scope.paramBusqueda)
@@ -155,23 +155,13 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
 
                         } else {
-                            //console.log('no hay nada')
                             $scope.totalesAbonosCargos = [];
                         }
                     });
 
-                    /*setTimeout(function() {
-                        $scope.fresh = JSON.parse(localStorage.getItem('paramBusqueda'))
-
-                        console.log($scope.fresh)
-                        //console.log(JSON.parse($scope.fresh))
-                    }, 1000);*/
                     conciliacionInicioRepository.getGerenteContador($rootScope.userData.idUsuario).then(function(result) {
                         if (result.data.length > 0) {
-                            //console.log('entra')                
                             $scope.contadorGerente = result.data;
-                            //console.log('$scope.contadorGerente')
-                            //console.log($scope.contadorGerente[0].NombreGerente)
                         }
                     });
                   }
@@ -179,13 +169,10 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
                 $scope.setCuenta = function(cuenta) {
                     if (cuenta == null) {
-                        console.log('Hola')
                         $scope.activaBotonBuscar = true;
                     } else {
                         $scope.activaBotonBuscar = false;
                     }
-
-                    console.log(cuenta)
                 }
 
                 $scope.cambiarMenu = function(){

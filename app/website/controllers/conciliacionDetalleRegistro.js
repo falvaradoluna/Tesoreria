@@ -310,5 +310,38 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
 };
 
 
+conciliacionDetalleRegistro.prototype.get_bancoReferenciado = function(req, res, next) {
+
+    var self = this;
+
+
+    var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+                  { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING},
+                  { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING}
+                 ];
+
+        this.model.query('SEL_REG_BANCOS_REFERENCIADOS', params, function(error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+conciliacionDetalleRegistro.prototype.get_contableReferenciado = function(req, res,next){
+  var self = this;
+  var params =[{name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING},
+               {name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
+               {name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT}
+              ];
+  this.model.query('SEL_REG_CONTABLES_REF', params, function(error, result){
+       self.view.expositor(res,{
+            error: error,
+            result: result
+       });
+  });
+};
 
 module.exports = conciliacionDetalleRegistro;

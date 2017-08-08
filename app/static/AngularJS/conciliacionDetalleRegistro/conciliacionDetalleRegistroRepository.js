@@ -164,8 +164,39 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     'Content-Type': 'application/json'
                 }
             });
+        },
+
+        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'bancoReferenciado/',
+                method:"GET",
+                params:{
+                    idBanco : idBanco,
+                    noCuenta : noCuenta,
+                    fechaInicio : fechaInicio,
+                    fechaCorte : fechaCorte
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
+        getContablesRef: function(cuentacontable, fechaCorte, idEmpresa){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'contableReferenciado/',
+                method: 'GET',
+                params:{
+                    cuentaContable: cuentacontable,
+                    fechaCorte: fechaCorte,
+                    idEmpresa: idEmpresa
+                },
+                headers:{
+                     'Content-Type': 'application/json'
+                }
+            });
         }
 
-
+//Fin de la llave return
     };
 });
