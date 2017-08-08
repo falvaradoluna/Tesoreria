@@ -525,7 +525,6 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
 
     $scope.aplicarReferencia = function(idReferencia) {
-
         swal({
                 title: "¿Esta seguro?",
                 text: "Se aplicará la referencia.",
@@ -542,6 +541,31 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                     $scope.loadPendingDocs();
                 });
             });
+    };
+
+    $scope.eliminarReferencia = function(idReferencia) {
+        // console.log( idReferencia.idReferencia );
+        swal({
+            title: "¿Esta seguro?",
+            text: "Se eliminara la referencia temporal.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Eliminar",
+            closeOnConfirm: true
+        },
+        function() {
+            controlDepositosRepository.eliminarReferencia(idReferencia.idReferencia).then(function(result) {
+                swal("Aplicado", "Referencia eliminada correctamente", "success");
+                setTimeout( function(){
+                    $scope.getCarteraVencida();
+                    $scope.loadPendingDocs();
+                    $scope.BuscarDepositos();
+                    $('body').removeClass('stop-scrolling');
+                },500 );
+                // $scope.insertaRefAntipag();
+            });
+        });
     };
 
     $scope.aplicarReferenciaTodas = function(data) {

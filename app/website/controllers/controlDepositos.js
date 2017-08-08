@@ -151,6 +151,19 @@ controlDepositos.prototype.get_applyReference = function(req, res, next) {
     });
 };
 
+controlDepositos.prototype.get_eliminarReferencia = function(req, res, next) {
+    var self = this;
+
+    var params = [{ name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT }];
+
+    this.model.query('DEL_REFERENCIA_TEMPORAL_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 
 controlDepositos.prototype.get_setObservation = function(req, res, next) {
     var self = this;
