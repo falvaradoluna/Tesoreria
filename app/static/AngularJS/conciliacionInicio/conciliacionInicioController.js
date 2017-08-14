@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionInicioController', function($filter,$scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
+registrationModule.controller('conciliacionInicioController', function($filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
@@ -198,7 +198,18 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
     $scope.ImprimirReporte = function(){
        $('#reproteModalPdf').modal('hide'); 
-    window.print();
+       window.print();
      };
 
-            });
+
+    $scope.excelExportModal = function(){
+     var modalInstance = $uibModal.open({
+        templateUrl: '../AngularJS/ExportarExcel/Template/ExcelExport.html',
+        controller: 'excelExportController',
+        backdrop: 'static',
+        size: 500
+    });
+
+    };
+
+});

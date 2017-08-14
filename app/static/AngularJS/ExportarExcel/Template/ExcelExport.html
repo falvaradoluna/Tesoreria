@@ -1,0 +1,29 @@
+
+<div class="modal-content" ng-init="init()">
+<div class="modal-header" style="background-color:#1f897f;">
+                <button type="button" class="close" ng-click="Cancel()"><i class="pci-cross pci-circle" style="color:#fff;"></i></button>
+                <h4 class="modal-title text-center" id="myLargeModalLabel" style="color:#fff;">Migrar información a la Base de Datos</h4>
+</div>
+           <div class="modal-body">
+           <div class="row">
+                                        <div class="form-group col-md-10">
+                                            <input type="file" class="form-control" name="file"
+                                            onchange="angular.element(this).scope().leerExcel(this.files)">
+                                            <br>
+                                            <div class="form col-md-3n text-right">
+			                                <button class="btn btn-primary" ng-click="ParseExcelDataAndSave()" ng-disabled ="enableButton"><i class="ti-export"></i> Importar datos</button>
+			                                </div>
+                                        </div>
+           </div>
+           </div>
+</div>
+
+
+<div id="loading" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>

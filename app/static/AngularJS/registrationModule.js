@@ -6,8 +6,8 @@
 // -- Fecha: 
 // -- =============================================
 
-var registrationModule = angular.module("registrationModule", ["ngRoute", "LocalStorageModule", 'ui.grid', 'ui.grid.selection', 'ui.grid.grouping', 'ui.grid.pinning', 'ui.grid.edit','ui.grid.moveColumns'])
-
+var registrationModule = angular.module("registrationModule", ["ngRoute", "LocalStorageModule", 'ui.grid', 'ui.grid.selection', 
+    'ui.grid.grouping', 'ui.grid.pinning', 'ui.grid.edit', 'ui.bootstrap', 'ui.bootstrap.modal'])
     .config(function($routeProvider, $locationProvider) {
 
         /*cheange the routes*/
