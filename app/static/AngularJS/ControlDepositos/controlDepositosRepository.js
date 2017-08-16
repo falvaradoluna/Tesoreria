@@ -25,10 +25,7 @@ registrationModule.factory('controlDepositosRepository', function($http) {
             searchValue: null,
             searchClienteID: null
         },
-
-
         createReference: function(objData) {
-
             return $http({
                 url: controlDepositosURL + 'createReference/',
                 method: "GET",
@@ -39,7 +36,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
             });
         },
         createTempReference: function(objData) {
-
             return $http({
                 url: controlDepositosURL + 'createTempReference/',
                 method: "GET",
@@ -49,7 +45,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         insertReferenceDetails: function(objData) {
             return $http({
                 url: controlDepositosURL + 'insertReferenceDetails/',
@@ -60,8 +55,20 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
-
+        quitarDPI: function( idCargoBanco, idBanco, idUsuario ) {
+            return $http({
+                url: controlDepositosURL + 'quitarDPI/',
+                method: "GET",
+                params: {
+                    idCargoBanco: idCargoBanco,
+                    idBanco: idBanco,
+                    idUsuario: idUsuario
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         insertaRefAntipag: function(bankTableName, currentBase) {
             return $http({
                 url: controlDepositosURL + 'insertaRefAntipag/',
@@ -72,7 +79,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         getPendingReference: function() {
             return $http({
                 url: controlDepositosURL + 'pendingReference/',
@@ -82,7 +88,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         getPendingReferenceDetails: function(idReferencia) {
             return $http({
                 url: controlDepositosURL + 'pendingReferenceDetails/',
@@ -93,7 +98,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         eliminarReferencia: function(idReferencia) {
             return $http({
                 url: controlDepositosURL + 'eliminarReferencia/',
@@ -103,8 +107,7 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                     'Content-Type': 'application/json'
                 }
             });
-        },
-        
+        },        
         insApplyReference: function(idReferencia) {
             return $http({
                 url: controlDepositosURL + 'applyReference/',
@@ -135,7 +138,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         updSetReferencia: function(idDepositoBanco, idReferencia) {
             return $http({
                 url: controlDepositosURL + 'setReferencia/',
@@ -146,7 +148,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         delReferenciaGenerada: function(idReferencia) {
             return $http({
                 url: controlDepositosURL + 'delReferenciaGenerada/',
@@ -157,11 +158,7 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         testApi: function(objData) {
-
-            console.log(objData);
-
             return $http({
                 url: controlDepositosURL + 'testApi/',
                 method: "GET",
@@ -171,7 +168,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
-
         getClientByName: function(clientName) {
             return $http({
                 url: controlDepositosURL + 'clientByName/',
@@ -182,12 +178,8 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 headers: {
                     'Content-Type': 'application/json'
                 }
-
             });
         },
-
-
-
         gridDocumentosOptions: function() {
             return {
                 enableColumnResize: true,
@@ -222,7 +214,35 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             ];
         },
-
+        gridDocumentosColumnsAplicados: function(isVisible) {
+            return [
+                { name: 'idBmer', displayName: 'Cons', cellClass: 'gridCellRight', width: 75 },
+                { name: 'banco', displayName: 'Banco', cellClass: 'gridCellLeft', width: 100 },
+                { name: 'referencia', displayName: 'Referencia', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'concepto', displayName: 'Concepto', cellClass: 'gridCellLeft', width: 250 },
+                { name: 'refAmpliada', displayName: 'Referencia Ampliada', cellClass: 'gridCellLeft', width: 200 },
+                { name: 'fechaOperacion', displayName: 'Fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'', cellClass: 'gridCellRight', width: 100 },
+                { name: 'cargo', displayName: 'Cargo', cellFilter: 'currency', visible: false, cellClass: 'gridCellRight', width: 100 },
+                { name: 'abono', displayName: 'Abono', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }, {
+                    name: 'observaciones',
+                    displayName: 'Observaciones',
+                    cellEditableCondition: true,
+                    visible: false,
+                    cellClass: 'gridCellRight',
+                    width: '*'
+                },
+                {
+                    name: 'verdetalle',
+                    displayName: 'Ver detalle',
+                    cellEditableCondition: true,
+                    visible: true,
+                    enableCellEdit : false,
+                    cellClass: 'gridCellRight',
+                    cellTemplate :'<button class="btn btn-info btn-xs" ng-click="grid.appScope.showReferenceDetails(row.entity.idReferencia)"><i class="ti-eye"></i></button>',
+                    width: '*'
+                }
+            ];
+        },
         gridCarteraOptions: function() {
             return {
                 enableColumnResize: true,
@@ -250,7 +270,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 { name: 'saldo', displayName: 'Saldo', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
             ];
         },
-
         getClientById: function(idBusqueda) {
             return $http({
                 url: controlDepositosURL + 'clientById/',
@@ -262,8 +281,6 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                     'Content-Type': 'application/json'
                 }
             });
-
         }
     };
-
 });

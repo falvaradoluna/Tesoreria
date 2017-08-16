@@ -1,0 +1,57 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel-heading">
+            <h2>Comisiones aplicadas</h2>
+            <hr>
+        </div>
+        <table class="table table-striped table-bordered tabla-punteo" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th colspan="6" style="color:#1690F3;">Comisión</th>
+                    <th colspan="6" style="color:#74A838;">Interés</th>
+                </tr>
+                <tr>
+                    <th class="headerComision">No.</th>
+                    <th class="headerComision">Banco</th>
+                    <th class="headerComision">NoCuenta</th>
+                    <th class="headerComision">Abono</th>
+                    <th class="headerComision">Concepto</th>
+                    <th class="headerComision">Referencia</th>
+                    <th class="headerInteres">Banco</th>
+                    <th class="headerInteres">NoCuenta</th>
+                    <th class="headerInteres">Abono</th>
+                    <th class="headerInteres">Concepto</th>
+                    <th class="headerInteres">Referencia</th>
+                    <th > Detallle / Elimiar </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="list in lstTemp">
+                    <td>#{{$index + 1}}</td>
+                    <td>{{list.comBanco}}</td>
+                    <td>{{list.comNoCuenta}}</td>
+                    <td>{{list.comAbono}}</td>
+                    <td>{{list.comConcepto}}</td>
+                    <td>{{list.comReferencia}}</td>
+                    <td>{{list.intBanco}}</td>
+                    <td>{{list.intNoCuenta}}</td>
+                    <td>{{list.intAbono}}</td>
+                    <td>{{list.intConcepto}}</td>
+                    <td>{{list.intReferencia}}</td>
+                    <td>
+                        <button class="btn btn-default " aria-label="Left Align" ng-click="showDetail(list)">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                        </button>
+                         <button class="btn btn-default " aria-label="Left Align" ng-click="deleteReference(list)">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button>
+                        <!--<button class="btn btn-default " aria-label="Left Align" ng-click="showDetail()">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                        </button> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-success pull-right" ng-click="aplicar()">Aplicar</button>
+    </div>
+</div>

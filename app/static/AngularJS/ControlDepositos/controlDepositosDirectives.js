@@ -23,17 +23,20 @@ registrationModule.directive('ctrdepBancoFilter', function() {
         restrict: 'E',
         templateUrl: ctrDepPath + 'controlDepositosCarteraFilterUser.html'
     };
-}).directive('ctrdepCarteraTable', function() {
+})
+.directive('ctrdepCarteraTable', function() {
     return {
         restrict: 'E',
         templateUrl: ctrDepPath + 'controlDepositosCarteraTable.html'
     };
-}).directive('ctrdepReferenciaDetail', function() {
+})
+.directive('ctrdepReferenciaDetail', function() {
     return {
         restrict: 'E',
         templateUrl: ctrDepPath + 'controlDepositosReferenciaDetail.html'
     };
-}).directive('ctrdepReferenciaTable', function() {
+})
+.directive('ctrdepReferenciaTable', function() {
     return {
         restrict: 'E',
         templateUrl: ctrDepPath + 'controlDepositosReferenciaTable.html'

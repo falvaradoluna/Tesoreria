@@ -55,7 +55,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         { description: "Buscar", stepIsComplete: false, isActive: true, className: activeTab, iconName: "glyphicon glyphicon-search" },
         { description: "Comisiones", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-eye-open" },
         { description: "Deptos", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-briefcase" },
-        { description: "Detalle", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-list" }
+        { description: "Detalle", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-list" },
+        { description: "Aplicados", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-ok" }
     ];
 
     $scope.$watch('lstTabs[1].isActive', function(active, oldActive) {
@@ -259,29 +260,26 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.aplicar = function() {
-
-
         swal({
-                title: "¿Esta seguro?",
-                text: "Se aplicarán todas las referencias",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#21B9BB",
-                confirmButtonText: "Aceptar",
-                closeOnConfirm: true
-            },
-            function() {
-                $scope.lstTemp.forEach(function(row) {
-                    comisionesRepository.updAplicaComisiones(row.interesComisionID).then(function(result) {
-                        console.log(data);
-                    });
+            title: "¿Esta seguro?",
+            text: "Se aplicarán todas las referencias",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aceptar",
+            closeOnConfirm: true
+        },
+        function() {
+            console.log( $scope.lstTemp );
+            $scope.lstTemp.forEach(function(row) {
+                console.log( 'interesComisionID', row.interesComisionID );
+                comisionesRepository.updAplicaComisiones(row.interesComisionID).then(function(result) {
+                    console.log(result);
                 });
-                swal("Aplicado", "Referencia aplicada", "success");
             });
+            swal("Aplicado", "Referencia aplicada", "success");
+        });
     };
-
-
-
 
     $scope.showDetail = function(item) {
         comisionesRepository.selInteresComisionDetalle(item.interesComisionID).then(function(result) {
@@ -533,5 +531,15 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
 
+    $scope.formar_number = function(number, c, d, t){
+        var n = number, 
+            c = isNaN(c = Math.abs(c)) ? 2 : c, 
+            d = d == undefined ? "." : d, 
+            t = t == undefined ? "," : t, 
+            s = n < 0 ? "-" : "", 
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+            j = (j = i.length) > 3 ? j % 3 : 0;
+        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    }
 
 });

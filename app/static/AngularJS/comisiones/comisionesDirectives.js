@@ -20,6 +20,11 @@ registrationModule.directive('comisionesBuscar', function() {
         restrict: 'E',
         templateUrl: comisionesPath + 'comisionesDetalle.html'
     };
+}).directive('comisionesAplicadas', function() {
+    return {
+        restrict: 'E',
+        templateUrl: comisionesPath + 'comisionesAplicadas.html'
+    };
 }).directive('comisionesModals', function() {
     return {
         restrict: 'E',

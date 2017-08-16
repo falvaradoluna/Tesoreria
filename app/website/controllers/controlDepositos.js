@@ -21,7 +21,7 @@ var controlDepositos = function(conf) {
 
 controlDepositos.prototype.get_createReference = function(req, res, next) {
     var self = this;
-
+    console.log( 'importeDocumento',req.query.importeDocumento );
     var params = [
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
@@ -31,10 +31,12 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'folio', value: req.query.folio, type: self.model.types.STRING },
         { name: 'idCliente', value: req.query.idCliente, type: self.model.types.INT },
         { name: 'idAlma', value: req.query.idAlma, type: self.model.types.STRING },
-        { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.INT },
+        { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
         { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING },
         { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT }
     ];
+
+    console.log(params);
 
     this.model.query('SEL_REFERENCIA_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -59,6 +61,24 @@ controlDepositos.prototype.get_createTempReference = function(req, res, next) {
     ];
 
     this.model.query('INS_REFERENCIA_TEMP_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_quitarDPI = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idCargoBanco', value: req.query.idCargoBanco, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+
+    ];
+
+    this.model.query('INS_QUITAR_DPI_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

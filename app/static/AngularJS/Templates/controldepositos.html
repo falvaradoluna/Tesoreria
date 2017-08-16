@@ -1,12 +1,13 @@
 <div style="background-color:white; padding:15px; overflow: hidden;">
     <ctrdep-Banco-Filter> </ctrdep-Banco-Filter>
     <ctrdep-Banco-Table> </ctrdep-Banco-Table>
-    <ctrdep-Cartera-Filter-User ng-show="tipoDeposito == 1"> </ctrdep-Cartera-Filter-User>
-    <ctrdep-Cartera-Filter ng-show="tipoDeposito == 1"> </ctrdep-Cartera-Filter>
-    <ctrdep-Cartera-Table ng-show="tipoDeposito == 1"> </ctrdep-Cartera-Table>
-    <ctrdep-Referencia-Detail ng-show="tipoDeposito == 1"> </ctrdep-Referencia-Detail>
-    <ctrdep-Referencia-Table ng-show="tipoDeposito == 1"> </ctrdep-Referencia-Table>
+    <ctrdep-Cartera-Filter-User ng-show="tipoDepositoAux == 1"> </ctrdep-Cartera-Filter-User>
+    <ctrdep-Cartera-Filter ng-show="tipoDepositoAux == 1"> </ctrdep-Cartera-Filter>
+    <ctrdep-Cartera-Table ng-show="tipoDepositoAux == 1"> </ctrdep-Cartera-Table>
+    <ctrdep-Referencia-Detail ng-show="tipoDepositoAux == 1"> </ctrdep-Referencia-Detail>
+    <ctrdep-Referencia-Table ng-show="tipoDepositoAux == 1"> </ctrdep-Referencia-Table>
 </div>
+
 <div id="mdlLoading" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="spinner">
@@ -16,64 +17,108 @@
     </div>
 </div>
 
-<div id="modal-anticipo" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h3 class="modal-title">Control de Depositos</h3>
-      </div>
-      <div class="modal-body">
-        <p>La suma de la cartera seleccionada no alcanza a cubrir lo depositado, debes elegir al registro a quien se le cargara la diferencia.</p>       
-        <div class="row">
-            <div class="col-xs-4" style="text-align: center;"> 
-                <h3>$ {{ formar_number(depositoTotal) }}</h3>
-                <small>Deposito</small>
+<div class="modal fade" id="mdlReferenciaDetalle" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header label-mint">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle text-white"></i></button>
+                <h4 class="modal-title text-white">Detalle Referencia</h4>
             </div>
-            <div class="col-xs-4" style="text-align: center;">
-                <h3>$ {{ formar_number(carteraTotal) }}</h3>
-                <small>Cartera</small>
-            </div>
-            <div class="col-xs-4" style="text-align: center;">
-                <h3>$ {{ formar_number(anticipo) }}</h3>
-                <small>Diferencia</small>
+            <div class="modal-body">
+                <table class="table table-striped table-bordered tabla-punteo" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>documento</th>
+                            <th>importeDocumento</th>
+                            <th>Departamento</th>
+                            <th>Sucursal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="detalle in tblPendientesDetalle">
+                            <td>{{detalle.documento}}</td>
+                            <td>{{detalle.importeDocumento | currency}}</td>
+                            <td>{{detalle.depto}}</td>
+                            <td>{{detalle.sucursal}}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-
-        <br>
-        <br>
-        <table class="table">
-            <tr>
-                <th>&nbsp;</th>
-                <th>Factura</th>
-                <th>Sucursal</th>
-                <th>Departamento</th>
-                <th>Cliente</th>
-                <th>Importe</th>
-                <th>Importe Final</th>
-            </tr>
-            <tr ng-repeat="(key, cartera) in selectedRowCartera" style="background-color: {{ model.selectedOccurrence == key ? '#f4f4f4' : 'white' }}">
-                <td>  
-                    <input type="radio" name="anticipo" ng-value="key" ng-model="model.selectedOccurrence" ng-checked="cartera.checked" />
-                </td>
-                <td> {{cartera.folio}} </td>
-                <td> {{cartera.nombreSucursal}}</td>
-                <td> {{cartera.nombreDepartamento}}</td>
-                <td> {{cartera.nombreCliente}}</td>
-                <td style="text-align: right;">$ {{ formar_number(cartera.importe) }}</td>
-                <td style="text-align: right;">
-                $ {{ formar_number(( model.selectedOccurrence == key ) ? cartera.importeFinal : cartera.importe) }}
-                </td>
-            </tr>
-        </table>
-        <br>        
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" ng-click="ConfirmaReferencia();">Confirman Referencia</button>
-      </div>
     </div>
+</div>
 
-  </div>
+
+<div id="modal-anticipo" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">Control de Depositos</h3>
+            </div>
+            <div class="modal-body">
+                <p>La suma de la cartera seleccionada no alcanza a cubrir lo depositado, debes elegir al registro a quien se le cargara la diferencia.</p>
+                <div class="row">
+                    <div class="col-xs-4" style="text-align: center;">
+                        <h3>$ {{ formar_number(depositoTotal) }}</h3>
+                        <small>Deposito</small>
+                    </div>
+                    <div class="col-xs-4" style="text-align: center;">
+                        <h3>$ {{ formar_number(carteraTotal) }}</h3>
+                        <small>Cartera</small>
+                    </div>
+                    <div class="col-xs-4" style="text-align: center;">
+                        <h3>$ {{ formar_number(anticipo) }}</h3>
+                        <small>Diferencia</small>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <table class="table" width="100%">
+                    <tr>
+                        <!-- <th ng-hide="true">&nbsp;</th> -->
+                        <th>Factura</th>
+                        <th>Sucursal</th>
+                        <th>Departamento</th>
+                        <th>Cliente</th>
+                        <th>Importe</th>
+                        <th>Importe Final</th>
+                    </tr>
+                    <tr ng-repeat="(key, cartera) in selectedRowCartera" style="background-color: {{ model.selectedOccurrence == key ? 'white' : 'white' }}">
+                        <!-- <td ng-hide="true" >  
+                            <input type="radio" name="anticipo" ng-value="key" ng-model="model.selectedOccurrence" ng-checked="cartera.checked"/>
+                            </td> -->
+                        <td> {{cartera.folio}} </td>
+                        <td> {{cartera.nombreSucursal}}</td>
+                        <td> {{cartera.nombreDepartamento}}</td>
+                        <td> {{cartera.nombreCliente}}</td>
+                        <td style="text-align: right;">$ {{ formar_number(cartera.saldo) }}</td>
+                        <td>
+                            <!-- fondo-success fondo-fail -->
+                            <input  type="text" 
+                                class="fondo-{{ cartera.estilo }}" 
+                                style="text-align: right; width: 100px;" 
+                                ng-disabled="!cartera.enabled"
+                                ng-model="cartera.importeFinal" 
+                                ng-blur="validaAplicacion();";>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <h4 class="pull-right">Total</h4>
+                        </td>
+                        <td>
+                            <h4 class="pull-right">{{ formar_number(sumatoriaAplicada) }}</h4>
+                        </td>
+                    </tr>
+                </table>
+                <br>        
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" ng-click="ConfirmaReferencia();">Confirmar Referencia</button>
+            </div>
+        </div>
+    </div>
 </div>
