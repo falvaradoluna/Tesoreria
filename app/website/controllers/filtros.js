@@ -175,7 +175,7 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
         { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING }
     ];
 
-    this.model.query('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

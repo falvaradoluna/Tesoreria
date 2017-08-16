@@ -9,13 +9,17 @@
     <meta name="author" content="name" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
+ 
+    <!--Librerias necesarias para la función leer archivos xlsx-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/xlsx.full.min.js"></script>
+    <script src="http://oss.sheetjs.com/js-xlsx/jszip.js"></script>
+
     <!--Hojas de estilos-->
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet" />
     <link href="css/toastr.css" rel="stylesheet" />
     <link href="css/spinner/spinner.css" rel="stylesheet">
-    <!--     <link href="/css/datepicker3.css" rel="stylesheet">
-    <script src="js/libs/bootstrap-datepicker.js"></script> -->
     <link href="js/libs/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
+    <link href="js/bootstrap-filestyle.min.js">
     <link href="css/datepicker3.css" rel="stylesheet">
     <link href="css/nifty.min.css" rel="stylesheet">
     <link href="css/tab.css" rel="stylesheet">
@@ -25,9 +29,9 @@
     <link href="plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/themify-icons/themify-icons.min.css">
     <link rel="stylesheet" type="text/css" href="css/tesoreria.css">
-    <!-- <link href="css/datatables.min.css" rel="stylesheet" /> -->
     <link href="plugins/datatables/media/css/dataTables.bootstrap.css" rel="stylesheet">
     <link href="plugins/datatables/extensions/Responsive/css/dataTables.responsive.css" rel="stylesheet">
+
 </head>
 
 <body ng-app="registrationModule" ng-controller="mainController" ng-init="init()">
@@ -201,11 +205,13 @@
     <script src="js/libs/angular/angular-local-storage.min.js"></script>
     <script src="js/angular-filter.js"></script>
     <!--BootstrapJS [ RECOMMENDED ]-->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.js"></script>
     <script src="js/bootstrap-datepicker.js"></script>
     <script src="js/libs/toastr/toastr.min.js"></script>
     <script src="js/demo/ui-panels.js"></script>
     <script src="js/datatables.min.js"></script>
+    <script src="js/ui-bootstrap.js"></script>
+    <script src="js/ui-bootstrap-tpls.js"></script>
     <!--NiftyJS [ RECOMMENDED ]-->
     <script src="js/nifty.min.js"></script>
     <link href="plugins/pace/pace.min.css" rel="stylesheet">
@@ -220,10 +226,12 @@
     <script src="plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
     <script src="js/demo/tables-datatables.js"></script>
     <script src="js/libs/sweetalert/dist/sweetalert.min.js"></script>
+
     <!-- <script src="js/libs/navBar.js"></script>
     <script src="js/libs/jsTree/jstree.min.js"></script>
     <script src="js/libs/dropzone.min.js"></script> -->
     <!--Funciones Comunes-->
+
     <script src="confront.js"></script>
     <script src="helpers.js"></script>
     <!--Librerias de aplicación angular-->
@@ -236,6 +244,8 @@
     <script src="AngularJS/login/loginRepository.js"></script>
     <script src="AngularJS/conciliacionInicio/conciliacionInicioController.js"></script>
     <script src="AngularJS/conciliacionInicio/conciliacionInicioRepository.js"></script>
+    <script src="AngularJS/ExportarExcel/Controller/excelExportController.js"></script>
+    <script src="AngularJS/ExportarExcel/Controller/excelExportRepository.js"></script>
     <script src="AngularJS/Conciliacion/conciliacionController.js"></script>
     <script src="AngularJS/Conciliacion/conciliacionRepository.js"></script>
     <script src="AngularJS/Caja/cajaController.js"></script>
@@ -250,9 +260,13 @@
     <script src="AngularJS/Interes/interesController.js"></script>
     <script src="AngularJS/Interes/interesRepository.js"></script>
     <script src="AngularJS/Interes/interesDirectives.js"></script>
-
+    <!--Controllers for conciliacion Detalle Rgistros-->
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroController.js"></script>
+    <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroGridsController.js"></script>
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroRepository.js"></script>
-</body>
+    <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroSaveGridsController.js"></script>
+    <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroGetGridsController.js"></script>
+    <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroEliminatesRelationShipsController.js"></script>
+</body> 
 
 </html>
