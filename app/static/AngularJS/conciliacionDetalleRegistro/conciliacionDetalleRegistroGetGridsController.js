@@ -1,14 +1,26 @@
 registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
 
+     //Declaracion de variables locales
+     $scope.bancoReferenciados = '';
+     $scope.contableReferenciados= '';
+
+
+
+
+
 $scope.init = function() {
+        localStorage.removeItem('auxiliarPadre');
+        localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
         $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable);
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.bancoReferenciados();
         $scope.contablesReferenciados();
+        //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
+        localStorage.removeItem('totalesGrids');
     };
     
     var variablesLocalStorage = function() {
@@ -21,6 +33,7 @@ $scope.init = function() {
 
         conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta).then(function(result) {
             $scope.auxiliarPadre = result.data;
+            localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
             $scope.tabla('auxiliarPunteo');
         });
     };
@@ -32,6 +45,7 @@ $scope.init = function() {
 
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco).then(function(result) {
             $scope.bancoPadre = result.data;
+            localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             $scope.tabla('bancoPunteo');
         });
     };

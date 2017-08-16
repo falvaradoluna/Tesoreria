@@ -21,9 +21,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.bancoDPI = '';
     $scope.auxiliarDPI = '';
     $scope.difMonetaria = 0;
-    $scope.bancoReferenciados = '';
-    $scope.contableReferenciados= '';
- 
+     
     //**************Variables para paginación**********************************
       $scope.currentPage = 0;
       $scope.pageSize = 10;
@@ -58,9 +56,14 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         if(opcion == 1){
             datoBusqueda = detallepunteo.idDepositoBanco;
             accionBusqueda = 1;
-        } else { 
-           datoBusqueda = detallepunteo.idAuxiliarContable;
-           accionBusqueda = 2;
+        } else {
+            if(detallepunteo.idPAdre == 3){
+                datoBusqueda = detallepunteo.idAuxiliarContable;
+                accionBusqueda = 3;
+                }else if(detallepunteo.idPAdre == 2){
+                datoBusqueda = detallepunteo.idAuxiliarContable;
+                accionBusqueda = 2;
+               }
         }
         conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
@@ -71,7 +74,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
                 datoBusqueda = '';
             }
-            else{
+            else {
                 alertFactory.error('No existen punteos en este detalle')
             }
             
@@ -102,32 +105,5 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
     };
     //****************************************************************************************************
-    // INICIA Se genera modal de alerta para que el usuario acepte o rechace generar el punteo definitivo
-    //****************************************************************************************************
-    $scope.generaAlertaPunteo = function() {
-        if ($scope.bancoPadre.length > 0 || $scope.auxiliarPadre.length > 0) {
-            $('#alertaPunteo').modal('show');
-        } else {
-            alertFactory.error('No existen punteos')
-        }
-    };
-    //****************************************************************************************************
-
-    
-
-    // INICIA Se guarda el punteo que ya no podra ser modificado
-    //****************************************************************************************************
-    $scope.generaPunteo = function() {
-        conciliacionDetalleRegistroRepository.generaPunteo($scope.idEmpresa, $scope.idBanco, $scope.cuenta, $scope.cuentaBanco).then(function(result) {
-            console.log(result.data[0].idEstatus)
-            $('#alertaPunteo').modal('hide');
-            if(result.data[0].idEstatus==1){
-                alertFactory.success(result.data[0].Descripcion)
-            }else if(result.data[0].idEstatus==0){
-                alertFactory.error(result.data[0].Descripcion)
-            }
-            $scope.getGridTablas();
-        });
-    };
 
 });

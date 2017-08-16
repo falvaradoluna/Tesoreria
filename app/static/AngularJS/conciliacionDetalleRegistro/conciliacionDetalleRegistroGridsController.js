@@ -3,6 +3,12 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
       $scope.gridsInfo = [];
       $scope.depositosBancos = '';
 
+            $scope.abonoAuxiliar = 0;
+            $scope.cargoAuxiliar = 0;
+            $scope.abonoBanco = 0;
+            $scope.cargoBanco = 0;
+            $scope.difMonetaria = 0;
+
      $scope.init = function() {
         variablesLocalStorage();
         $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
@@ -12,6 +18,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
 
    var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
+        $scope.difMonetaria = $scope.busqueda.DiferenciaMonetaria;
     };
      
  //****************************************************************************************************
@@ -82,21 +89,15 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
      $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte) {
-        if (idestatus == 1) { 
+
             filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte).then(function(result) {
-                if (result.data.length >= 0) {
-                    $scope.auxiliarContable = result.data;
-                    $scope.gridAuxiliarContable.data = result.data;
+                if (result.data[0].length !=0) {
+                    $scope.auxiliarContable = result.data[0];
+                    $scope.gridAuxiliarContable.data = result.data[0];
+                    localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
                     console.log($scope.gridAuxiliarContable.data, 'Auxiliar Contable')
                 }
             });
-        } else if (idestatus == 2) {
-            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus).then(function(result) {
-                if (result.data.length >= 0) {
-                    $scope.auxiliarContable = result.data;
-                }
-            });
-        }
     };
   
    //**********************************************************************************************
@@ -123,6 +124,9 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
                 $scope.punteoAuxiliar[key] = value.entity;
             });
             localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.punteoAuxiliar));
+            localStorage.setItem('totalesGrids', JSON.stringify(
+                {"abonoAuxiliar": $scope.abonoAuxiliar,"cargoAuxiliar": $scope.cargoAuxiliar, "abonoBanco": $scope.abonoBanco,"cargoBanco": $scope.cargoBanco, "diferenciaMonetaria": $scope.difMonetaria}
+                ));
         });
     };
     //****************************************************************************************************

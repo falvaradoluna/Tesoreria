@@ -1,27 +1,27 @@
-registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShipsController', function($scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory){
-
-
-    $scope.init= function(){
-
-
-    };
-
+registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShipsController', function($window,$scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory){
   
    // INICIA elimina los punteos ya realizados
     //****************************************************************************************************
-    $scope.eliminarPunteo = function(punteo, opcion) {
+    $scope.eliminarPunteo = function() {
+         
+         $scope.datosPunteo = JSON.parse(localStorage.getItem('datosPunteo'));
+
         var datoBusqueda = '';
-        if(opcion == 1){
-           datoBusqueda = punteo.idDepositoBanco;
+        if($scope.datosPunteo.accion == 1){
+           datoBusqueda = $scope.datosPunteo.Datos.idDepositoBanco;
         }else{
-           datoBusqueda = punteo.idAuxiliarContable;
+           if($scope.datosPunteo.idPAdre == 3){
+            $scope.datosPunteo.accion = 3;
+           }
+           datoBusqueda = $scope.datosPunteo.Datos.idAuxiliarContable;
         }
-        conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,opcion).then(function(result) {
+        conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,$scope.datosPunteo.accion).then(function(result) {
             console.log(result, 'Resultado cuando elimino');
             $scope.datosPunteo = '';
             $scope.accionElimina = '';
             $('#alertaEliminacionPunteo').modal('hide');
-            $scope.getGridTablas();
+             localStorage.removeItem('datosPunteo');
+            $scope.refreshGrids();
         });
     };
     //****************************************************************************************************
@@ -30,8 +30,9 @@ registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShip
      ////////Muestra mensaje de alerta para aceptar o rechazar la eliminación de punteos relacionados
 
     $scope.alertaEliminaPunteos = function (datosPunteo,accionElimina){
-        $scope.datosPunteo = datosPunteo;
-        $scope.accionElimina = accionElimina;
+
+      localStorage.setItem('datosPunteo', JSON.stringify({"Datos": datosPunteo, "accion": accionElimina}));
+
      $('#alertaEliminacionPunteo').modal('show');
     };
 
@@ -66,13 +67,17 @@ registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShip
                     } else {
                         console.log('Respuesta Correcta');
                         $scope.limpiaVariables();
-                        $scope.getGridTablas();
+                        $scope.refreshGrids();
                     }
                 });
             $scope.datosPunteo = '';
             $scope.accionElimina = '';
             $('#alertaEliminacionDPI').modal('hide');
-            $scope.getGridTablas();
+            $scope.refreshGrids();
      };
+
+     $scope.refreshGrids = function(){
+      $window.location.reload();
+    };
 
 });

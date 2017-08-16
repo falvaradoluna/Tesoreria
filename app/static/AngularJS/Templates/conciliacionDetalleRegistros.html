@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 </div>
-            <div class="col-md-12" ng-init=" init()">
+            <div class="col-md-12">
             <a class="btn btn-danger pull-right"  ng-click="ShowAlertDPI()"><i class="ti-layout-list-thumb"></i> Envíar  a  DPI</a>
                &nbsp;&nbsp; <a class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()"><i class="ti-control-shuffle">  </i>Punteo</a>
                 <br>
@@ -115,7 +115,7 @@
                                     <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco,1)"><i class="demo-pli-cross"></i></button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco,1)"><i class="ti-eye"></i></button>
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco,1)"><i class="ti-eye"></i></button>
                                 </td>
                             </tr>
                         </tbody>
@@ -159,7 +159,7 @@
                 
             </div>
             <div class="col-md-12">
-                <div class="text-right">
+                <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
                     <a class="btn btn-warning" href="/conciliacionInicio "><i class="ti-back-right"></i> Regresar</a> &nbsp;
                     <button class="btn btn-success" ng-click="generaAlertaPunteo()"><i class="ti-harddrives">  </i>Generar Punteo</button>
                 </div>
@@ -462,7 +462,7 @@
                                 <button class="btn btn-danger pull-right" type="button" data-dismiss="modal"><i class="ti-close"></i> Cancelar</button>
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span>
+                            <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
                                 <button class="btn btn-success pull-right" ng-click="generaPunteo()"><i class="ti-check"></i> Aceptar</button>
                             </span>
                         </span>
@@ -495,7 +495,7 @@
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>
-                                <button class="btn btn-success pull-right" ng-click="eliminarPunteo(datosPunteo, accionElimina)"><i class="ti-check"></i> Aceptar</button>
+                                <button class="btn btn-success pull-right" ng-click="eliminarPunteo()"><i class="ti-check"></i> Aceptar</button>
                             </span>
                         </span>
                     </h4>
@@ -557,7 +557,9 @@
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
+                            
                                 <button class="btn btn-success pull-right" ng-click="GuardarGrid()"><i class="ti-check"></i> Aceptar</button>
+                            
                             </span>
                         </span>
                     </h4>
