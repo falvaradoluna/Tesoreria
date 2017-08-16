@@ -26,7 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="list in lstTemp">
+                <tr ng-repeat="list in lstAplicadas">
                     <td>#{{$index + 1}}</td>
                     <td>{{list.comBanco}}</td>
                     <td>{{list.comNoCuenta}}</td>
@@ -42,9 +42,9 @@
                         <button class="btn btn-default " aria-label="Left Align" ng-click="showDetail(list)">
                             <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
                         </button>
-                         <button class="btn btn-default " aria-label="Left Align" ng-click="deleteReference(list)">
+                        <!-- <button class="btn btn-default " aria-label="Left Align" ng-click="deleteReference(list)">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                        </button>
+                        </button> -->
                         <!--<button class="btn btn-default " aria-label="Left Align" ng-click="showDetail()">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                         </button> -->

@@ -376,7 +376,7 @@ controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
 controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
     var self = this;
 
-    var params = [];
+    var params = [{ name: 'Estatus', value: req.query.Estatus, type: self.model.types.INT }];
 
     this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
         self.view.expositor(res, {

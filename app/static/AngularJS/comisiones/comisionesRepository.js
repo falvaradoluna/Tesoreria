@@ -35,10 +35,13 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        selInteresComision: function() {
+        selInteresComision: function( estatus ) {
             return $http({
                 url: comisionesURL + 'selInteresComision/',
                 method: "GET",
+                params:{
+                    Estatus: estatus
+                },
                 headers: {
                     'Content-Type': 'application/json'
                 }

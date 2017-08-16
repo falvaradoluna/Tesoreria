@@ -76,16 +76,24 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         }
     });
 
-    comisionesRepository.selInteresComision().then(function(result) {
-        $scope.lstTemp = result.data;
-    });
-
     filtrosRepository.getEmpresas($scope.idUsuario).then(function(result) {
         if (result.data.length > 0) {
             $scope.lstEmpresaUsuario = result.data;
             $scope.initCalendarstyle();
         }
     });
+
+    $scope.getComisionesRealizadas = function(){ // Comisiones Temporales y Aplicadas
+        comisionesRepository.selInteresComision( 1 ).then(function(result) {
+            $scope.lstTemp = result.data;
+        });
+
+        comisionesRepository.selInteresComision( 2 ).then(function(result) {
+            $scope.lstAplicadas = result.data;
+        });
+    }
+
+    $scope.getComisionesRealizadas();
 
     $scope.getBancos = function() {
 
@@ -243,7 +251,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
         comisionesRepository.insInteresComision(params).then(function(result) {
             $scope.currentComisionHeaderID = result.data[0].headerID;
-            comisionesRepository.selInteresComision().then(function(result) {
+            $scope.getComisionesRealizadas();
+            comisionesRepository.selInteresComision( 1 ).then(function(result) {
                 $scope.lstTemp = result.data;
                 $scope.getComisiones();
                 $scope.gridInteres.data = [];
@@ -267,17 +276,27 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
             confirmButtonText: "Aceptar",
-            closeOnConfirm: true
+            closeOnConfirm: false
         },
         function() {
-            console.log( $scope.lstTemp );
+            var aux = 0;
             $scope.lstTemp.forEach(function(row) {
-                console.log( 'interesComisionID', row.interesComisionID );
-                comisionesRepository.updAplicaComisiones(row.interesComisionID).then(function(result) {
-                    console.log(result);
-                });
+                comisionesRepository.updAplicaComisiones(row.interesComisionID);
             });
-            swal("Aplicado", "Referencia aplicada", "success");
+
+            swal({
+                title: "Aplicado",
+                text: "Referencias aplicadas correctamente!",
+                type: "success",
+                showCancelButton: false,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Aceptar",
+                closeOnConfirm: true
+            },
+            function(){
+                $scope.getComisionesRealizadas();
+                $scope.setActiveTab($scope.lstTabs[4]);
+            });
         });
     };
 
@@ -526,6 +545,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                     comisionesRepository.selInteresComision().then(function(result2) {
                         $scope.lstTemp = result2.data;
                     });
+
+                    $scope.getComisionesRealizadas();
                 });
             });
     };
