@@ -407,7 +407,8 @@ controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next
 
     var params = [
         { name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.STRING },
-        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.STRING }
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.STRING },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING }
     ];
 
     this.model.query('INS_CXPCOMISIONESINTERESES_SP', params, function(error, result) {

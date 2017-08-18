@@ -424,10 +424,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.setCuentaContable = function() {
-
-
-        console.log($scope.selectedDepartamento);
-
         $scope.lstRegistroContable = [];
         $scope.lstRegistroContable = comisionesRepository.getComisionTemplate();
         $scope.lstRegistroContable[0].cuenta = $scope.selectedDepartamento.cuentaContable;
@@ -439,7 +435,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         $scope.lstRegistroContable[1].cargo = $scope.gridInteresRow.abono;
         $scope.lstRegistroContable[2].abono = $scope.gridComisionesRow.abono + $scope.gridInteresRow.abono;
         $scope.objEdicion.montoAcumuladoUsuario = $scope.gridComisionesRow.abono;
-
     };
 
     $scope.toggleShowSub = function() {
@@ -476,9 +471,9 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
         console.log( '============================' );
         // console.log( $scope.currentComisionHeaderID );
-        console.log( $scope.selectedDepartamento.sucursalID );
+        console.log( 'selectedValueEmpresaID', $scope.selectedValueEmpresaID );
         console.log( '============================' );
-        comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID, $scope.selectedDepartamento.sucursalID).then(function(result) {
+        comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID, $scope.selectedDepartamento.sucursalID, $scope.selectedValueEmpresaID).then(function(result) {
             var headerID = result.data[0].headerID;
             $scope.rowsToInsert = [];
 
@@ -524,8 +519,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
                 params.poriva = 16;
                 params.referencia = ''; //Menos este lo hace BPRO?
-                params.banco = $scope.selectedValueBancoID;
-                params.referenciabancaria = '12345678901234567891';
+                params.banco = '0' + $scope.selectedValueBancoID;
+                params.referenciabancaria = 0;
                 params.conpoliza = counter += 1;
 
                 if ($scope.objEdicion.usarMontoCalculado === true) {
