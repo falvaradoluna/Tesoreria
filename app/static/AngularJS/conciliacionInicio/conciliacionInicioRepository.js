@@ -34,7 +34,23 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
                 }
 
             });
+        },
+
+        getReporteTesoreria: function(myJson) {
+            return $http({
+                url: 'http://localhost:5488/api/report',
+                method: "POST",
+                data: {
+                    template: { name: myJson.template.name },
+                    data: myJson.data
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'arraybuffer'
+            });
         }
 
+//Fin de la llave "return"
     };
 });

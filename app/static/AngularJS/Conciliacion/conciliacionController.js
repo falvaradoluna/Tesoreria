@@ -1,11 +1,11 @@
 registrationModule.controller('conciliacionController', function($scope, $rootScope, $location, localStorageService, alertFactory, conciliacionRepository) {
 
-    // ****************** Se guarda la información del usuario en variable userData
-    $rootScope.userData = localStorageService.get('userData');
-
-    $scope.paramBusqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
 
     $scope.init = function() {
+
+        // ****************** Se guarda la información del usuario en variable userData
+        $rootScope.userData = localStorageService.get('userData');
+
         $scope.calendario();
 
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
@@ -20,10 +20,10 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
         $scope.idTipoAuxiliar = 0;
 
-        $scope.abonosContables = [];
-        $scope.cargosContables = [];
-        $scope.abonosBancarios = [];
-        $scope.cargosBancarios = [];
+        $scope.abonosContables = {};
+        $scope.cargosContables = {};
+        $scope.abonosBancarios = {};
+        $scope.cargosBancarios = {};
 
         $scope.totalAbonoContable = 0;
         $scope.totalAbonoBancario = 0;
@@ -37,11 +37,14 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
     }
 
     $scope.obtieneCargosAbonos = function() {
-
+        localStorage.removeItem('DetalleDiferencias');
         $scope.getAbonoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
         $scope.getAbonoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
         $scope.getCargoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
         $scope.getCargoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
+        setTimeout(function() {localStorage.setItem('DetalleDiferencias', 
+            JSON.stringify({"abonoContable": $scope.abonosContables, "abonoBancario": $scope.abonosBancarios,"cargoContable": $scope.cargosContables, "cargoBancario": $scope.cargosBancarios}));
+        }, 1000);
     }
 
     //****************************************************************************************************
@@ -170,6 +173,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
                 if (opcion == 1) {  
                     $scope.gridAbonosContables.data = result.data;
+                    $scope.abonosContables = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
                         $scope.totalAbonoContable = $scope.totalAbonoContable + result.data[i].MOV_HABER;
@@ -208,6 +212,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
                 if (opcion == 1) {
                     $scope.gridCargosContables.data = result.data;
+                    $scope.cargosContables = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
                         $scope.totalCargoContable = $scope.totalCargoContable + result.data[i].MOV_DEBE;
@@ -228,6 +233,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
                 if (opcion == 1) {
                     $scope.gridCargosBancarios.data = result.data;
+                    $scope.cargosBancarios = result.data;
 
                     for (var i = 0, len = result.data.length; i < len; i++)
                         $scope.totalCargoBancario = $scope.totalCargoBancario + result.data[i].IMPORTE;
@@ -265,4 +271,5 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
             var msg = 'rows changed ' + rows.length;
         });
     };
+
 });

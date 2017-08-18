@@ -31,10 +31,6 @@ Conciliacion.prototype.get_abonoContable = function(req, res, next) {
                   { name: 'opcion', value: req.query.opcion, type: self.model.types.INT },
                   { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }];
-    /*var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },                  
-                  { name: 'fInicial', value: req.query.fInicial, type: self.model.types.STRING },
-                  { name: 'fFinal', value: req.query.fFinal, type: self.model.types.STRING },
-                  { name: 'opcion', value: req.query.opcion, type: self.model.types.INT }];*/
 
     this.model.query('SEL_ABONO_CONTABLE_SP', params, function(error, result) {
         self.view.expositor(res, {

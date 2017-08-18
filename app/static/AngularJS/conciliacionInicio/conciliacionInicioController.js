@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionInicioController', function($filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants) {
+registrationModule.controller('conciliacionInicioController', function($filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
@@ -37,7 +37,6 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                 $rootScope.mostrarMenu = 1;
                 $scope.paramBusqueda = [];
                 variablesLocalStorage();
-
             }
 
             var variablesLocalStorage = function() {
@@ -193,12 +192,80 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
 
      $scope.generaInfoReport = function(){
-          $('#reproteModalPdf').modal('show');
-     };
+         
+         $('#loading').modal('show');
 
-    $scope.ImprimirReporte = function(){
-       $('#reproteModalPdf').modal('hide'); 
-       window.print();
+    setTimeout(function(){
+
+        //Obtengo los datos de detalles/diferencias del local storage
+        var detalleDiferencias =  JSON.parse(localStorage.getItem('DetalleDiferencias'));
+        $('reproteModalPdf').modal('show');
+        //Genero la promesa para enviar la estructura del reporte 
+      new Promise(function(resolve, reject) {
+          var rptDetalleConciliacionBancaria = 
+                                                { 
+                                                        "titulo"    :   "CONCILIACIÓN BANCARIA",
+                                                        "titulo2"   :   "BANCOS",
+                                                        "titulo3"   :   "FA04",
+                                                        "empresa"   :   $scope.busqueda.Empresa,
+                                                        "fechaElaboracion"  :   $scope.fechaReporte,
+                                                        "conciliacionBancaria"  :   $scope.busqueda.Banco,
+                                                        "chequera"  :   $scope.fechaReporte,
+                                                        "bancoCuenta"   :   $scope.busqueda.Cuenta,
+                                                        "clabe"  :   "01218000 195334667",
+                                                        "cuentaContable"  :   $scope.busqueda.CuentaContable,
+                                                        "estadoCuenta" : $scope.totalesAbonosCargos[0].saldoBanco,
+                                                        "aCNB" : $scope.totalesAbonosCargos[0].tAbonoContable,
+                                                        "aBNC" : $scope.totalesAbonosCargos[0].tAbonoBancario,
+                                                        "cCNB" : $scope.totalesAbonosCargos[0].tCargoContable,
+                                                        "cBNC" : $scope.totalesAbonosCargos[0].tCargoBancario,
+                                                        "saldoConciliacion" : $scope.totalesAbonosCargos[0].sConciliacion,
+                                                        "saldoContabilidad" : $scope.totalesAbonosCargos[0].sContabilidad,
+                                                        "diferencia" : $scope.totalesAbonosCargos[0].diferencia,
+                                                        //Detalle de Diferencias
+                                                        "DetalleAbonosContables":[detalleDiferencias.abonoContable][0],
+                                                        "DetalleAbonosBancarios":[detalleDiferencias.abonoBancario][0],
+                                                        "DetalleCargosContables": [detalleDiferencias.cargoContable][0],
+                                                        "DetalleCargoBancario":  [detalleDiferencias.cargoBancario][0],
+
+                                                        "firmas":
+                                                       [
+                                                           {
+                                                               "titulo"   :   "ELABORÓ",
+                                                               "nombre"   :   "CARLA HERNÁNDEZ RODRÍGUEZ",
+                                                               "fecha"   :   ""
+                                                           },
+                                                           {
+                                                               "titulo"   :   "GERENTE ADMINISTRATIVO",
+                                                               "nombre"   :   "GUADALUPE HERNÁNDEZ MEJÍA",
+                                                               "fecha"   :   ""
+                                                           },
+                                                           {
+                                                               "titulo"   :   "CONTADOR",
+                                                               "nombre"   :   "DAVID VÁZQUEZ RICO",
+                                                               "fecha"   :   ""
+                                                           }
+                                                        ]
+                                                    };
+          var jsonData = {
+                            "template": {
+                                "name": "ResumenConciliacion_rpt"
+                            },
+                            "data": rptDetalleConciliacionBancaria 
+                        }
+           resolve(jsonData);
+                }).then(function(jsonData) {
+                    conciliacionInicioRepository.getReporteTesoreria(jsonData).then(function(result){
+                        var file = new Blob([result.data], { type: 'application/pdf' });
+                        var fileURL = URL.createObjectURL(file);
+                        $scope.rptResumenConciliacion = $sce.trustAsResourceUrl(fileURL);
+                         $('#loading').modal('hide');
+                        $('#reproteModalPdf').modal('show'); 
+                    });
+                });
+
+                } ,2000)
+          //console.log(rptDetalleConciliacionBancaria);
      };
 
 
@@ -212,4 +279,5 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
 
     };
 
+    
 });

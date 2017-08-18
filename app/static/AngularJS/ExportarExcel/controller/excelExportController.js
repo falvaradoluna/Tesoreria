@@ -56,7 +56,7 @@ registrationModule.controller('excelExportController', function($scope, $uibModa
  
             reader.readAsBinaryString(file);
         }else{
-        	alertFactory.warning("No has seleccionado nungún archivo!");
+        	alertFactory.warning("No has seleccionado un archivo!");
         }
     };
 

@@ -1,0 +1,112 @@
+2017-08-17T20:57:39.200Z - error: Error when processing render request Error during rendering report: Missing helper: "formatoMoney" Error: Missing helper: "formatoMoney"
+    at Object.<anonymous> (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:26:82)
+    at main (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=2
+2017-08-17T20:57:39.204Z - error: Error during processing request: http://localhost:5488/api/report/ResumenConciliacion_rpt details: Error during rendering report: Missing helper: "formatoMoney" Error: Missing helper: "formatoMoney"
+    at Object.<anonymous> (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\helpers\helper-missing.js:19:13)
+    at Object.eval (eval at createFunctionContext (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:26:82)
+    at main (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2017-08-18T16:10:37.996Z - error: Error when processing render request Error during rendering report: Parse error on line 208:
+...r>        {{#each DetalleAbonosContabl
+----------------------^
+Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID' Error: Parse error on line 208:
+...r>        {{#each DetalleAbonosContabl
+----------------------^
+Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID'
+    at Object.parseError (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:267:19)
+    at Object.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:336:30)
+    at HandlebarsEnvironment.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\base.js:46:43)
+    at compileInput (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:514:19)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:523:18)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=37
+2017-08-18T16:10:37.998Z - error: Error during processing request: http://localhost:5488/api/report details: Error during rendering report: Parse error on line 208:
+...r>        {{#each DetalleAbonosContabl
+----------------------^
+Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID' Error: Parse error on line 208:
+...r>        {{#each DetalleAbonosContabl
+----------------------^
+Expecting 'CLOSE_RAW_BLOCK', 'CLOSE', 'CLOSE_UNESCAPED', 'OPEN_SEXPR', 'CLOSE_SEXPR', 'ID', 'OPEN_BLOCK_PARAMS', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', 'SEP', got 'INVALID'
+    at Object.parseError (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:267:19)
+    at Object.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:336:30)
+    at HandlebarsEnvironment.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\base.js:46:43)
+    at compileInput (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:514:19)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:523:18)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
+2017-08-18T16:57:25.400Z - error: Error when processing render request Error during rendering report: formatoExcel.suctring is not a function TypeError: formatoExcel.suctring is not a function
+    at Object.formatoFecha (evalmachine.<anonymous>:27:23)
+    at eval (eval at createFunctionContext (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:8:82)
+    at prog (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:219:12)
+    at execIteration (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\helpers\each.js:51:19)
+    at Object.<anonymous> (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\helpers\each.js:61:13)
+    at Object.eval (eval at createFunctionContext (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:46:31)
+    at main (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14 requestId=54
+2017-08-18T16:57:25.402Z - error: Error during processing request: http://localhost:5488/api/report details: Error during rendering report: formatoExcel.suctring is not a function TypeError: formatoExcel.suctring is not a function
+    at Object.formatoFecha (evalmachine.<anonymous>:27:23)
+    at eval (eval at createFunctionContext (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:8:82)
+    at prog (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:219:12)
+    at execIteration (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\helpers\each.js:51:19)
+    at Object.<anonymous> (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\helpers\each.js:61:13)
+    at Object.eval (eval at createFunctionContext (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\javascript-compiler.js:254:23), <anonymous>:46:31)
+    at main (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:173:32)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\runtime.js:176:12)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:525:21)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+2017-08-18T17:18:09.113Z - error: Error when processing render request Error during rendering report: Parse error on line 137:
+...class="txtcenter">{{}}</td>        </t
+-----------------------^
+Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE' Error: Parse error on line 137:
+...class="txtcenter">{{}}</td>        </t
+-----------------------^
+Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'
+    at Object.parseError (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:267:19)
+    at Object.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:336:30)
+    at HandlebarsEnvironment.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\base.js:46:43)
+    at compileInput (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:514:19)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:523:18)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38) requestId=66
+2017-08-18T17:18:09.115Z - error: Error during processing request: http://localhost:5488/api/report details: Error during rendering report: Parse error on line 137:
+...class="txtcenter">{{}}</td>        </t
+-----------------------^
+Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE' Error: Parse error on line 137:
+...class="txtcenter">{{}}</td>        </t
+-----------------------^
+Expecting 'ID', 'STRING', 'NUMBER', 'BOOLEAN', 'UNDEFINED', 'NULL', 'DATA', got 'CLOSE'
+    at Object.parseError (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:267:19)
+    at Object.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\parser.js:336:30)
+    at HandlebarsEnvironment.parse (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\base.js:46:43)
+    at compileInput (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:514:19)
+    at ret (C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\handlebars\dist\cjs\handlebars\compiler\compiler.js:523:18)
+    at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\node_modules\jsreport-handlebars\lib\handlebarsEngine.js:25:14
+    at evalmachine.<anonymous>:1:41
+    at ContextifyScript.Script.runInContext (vm.js:35:29)
+    at ContextifyScript.Script.runInNewContext (vm.js:41:15)
+    at Object.runInNewContext (vm.js:93:38)
