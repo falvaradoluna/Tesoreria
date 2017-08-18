@@ -46,18 +46,41 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.gridComisionesRow = null;
     $scope.gridInteresRow = null;
 
+    $scope.interesComisionID = 0;
+    $scope.loadingDetalle = false;
 
     var activeTab = "list-group-item active text-center";
     var notActiveTab = "list-group-item text-center";
 
-
     $scope.lstTabs = [
-        { description: "Buscar", stepIsComplete: false, isActive: true, className: activeTab, iconName: "glyphicon glyphicon-search" },
-        { description: "Comisiones", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-eye-open" },
-        { description: "Deptos", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-briefcase" },
-        { description: "Detalle", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-list" },
-        { description: "Aplicados", stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-ok" }
+        { description: "Buscar", disabled:false, stepIsComplete: false, isActive: true, className: activeTab, iconName: "glyphicon glyphicon-search" },
+        { description: "Comisiones", disabled:true, stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-eye-open" },
+        { description: "Deptos", disabled:true, stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-briefcase" },
+        { description: "Detalle", disabled:false, stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-list" },
+        { description: "Aplicados", disabled:false, stepIsComplete: false, isActive: false, className: notActiveTab, iconName: "glyphicon glyphicon-ok" }
     ];
+
+    $scope.$watch('lstTabs[0].isActive', function(active, oldActive) { // Buscar
+        if( active ){$scope.EliminarComision(); }
+        console.log( 'Eliminar desde Buscar' );
+    });
+
+    $scope.$watch('lstTabs[1].isActive', function(active, oldActive) { // Comision
+        // if( active ){$scope.EliminarComision(); }
+    });
+    $scope.$watch('lstTabs[2].isActive', function(active, oldActive) { // Depositos
+        // if( active ){$scope.EliminarComision(); }
+    });
+    $scope.$watch('lstTabs[3].isActive', function(active, oldActive) { // Detalle
+        // setTimeout(function(){
+            console.log( 'Eliminar desde Detalle' );
+            if( active ){$scope.EliminarComision(); }            
+        // },1000)
+    });
+    $scope.$watch('lstTabs[4].isActive', function(active, oldActive) { // Aplicados
+        console.log( 'Eliminar desde Aplicados' );
+        if( active ){$scope.EliminarComision(); }
+    });
 
     $scope.$watch('lstTabs[1].isActive', function(active, oldActive) {
         if (active && active !== oldActive && $scope.gridApi) {
@@ -69,6 +92,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.$watch('lstTabs[1].isActive', function(active, oldActive) {
+        // console.log("Estoy viendo 2");
         if (active && active !== oldActive && $scope.gridApiInteres) {
             $timeout(function() {
                 $scope.gridApiInteres.grid.handleWindowResize();
@@ -82,6 +106,36 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
             $scope.initCalendarstyle();
         }
     });
+
+    $scope.EliminarComision = function(){
+        if( $scope.interesComisionID != 0 ){
+            comisionesRepository.delInteresComision($scope.interesComisionID).then(function(result) {
+                comisionesRepository.selInteresComision().then(function(result2) {
+                    $scope.interesComisionID = 0;
+                    console.log( 'interesComisionID', $scope.interesComisionID );
+
+                    $scope.lstSucursal = { suc_nombre: "", suc_idsucursal: 0 };
+                    $scope.selectedValueSucursalID = 0;
+                    $scope.selectedDepartamento = { subCuenta: 0 };
+                    $scope.lstDepartamento ={sucursalID:0,cuentaContable:0,descripcion:"",subCuenta:0,};
+
+                    $scope.lstRegistroContable = [];
+                    $scope.showSub = false;
+                    $scope.gridInteresRow = [];
+                    $scope.gridComisionesRow = [];
+                    $scope.objEdicion.montoAcumuladoUsuario = 0;
+
+
+                    $scope.lstTemp = result2.data;
+                    $scope.getComisionesRealizadas();
+                    $scope.loadingDetalle = false;
+                });
+            });
+        }
+        else{
+            $scope.loadingDetalle = false;
+        }
+    }
 
     $scope.getComisionesRealizadas = function(){ // Comisiones Temporales y Aplicadas
         comisionesRepository.selInteresComision( 1 ).then(function(result) {
@@ -155,7 +209,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.getComisiones = function() {
-
+        $scope.EliminarComision();
         $scope.setActiveTab($scope.lstTabs[1]);
 
         var params = {
@@ -257,6 +311,10 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 $scope.getComisiones();
                 $scope.gridInteres.data = [];
                 $scope.setActiveTab($scope.lstTabs[2]);
+                setTimeout( function(){
+                    $scope.interesComisionID = $scope.currentComisionHeaderID;  
+                    $scope.loadingDetalle = true;                  
+                },1000);
             });
         });
 
@@ -338,6 +396,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
             swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
         } else {
             $scope.insInteresComisionDetalle();
+            $scope.interesComisionID = 0;
+            $scope.loadingDetalle = false;
             $scope.setActiveTab($scope.lstTabs[3]);
         }
     };
@@ -351,7 +411,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
     $scope.setActiveTab = function(item) {
-
         $scope.lstTabs.forEach(function(row) {
             row.className = notActiveTab;
             row.isActive = false;
@@ -401,10 +460,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.insInteresComisionDetalle = function() {
-
         var excludeFirstRow = false;
-
-
 
         if ($scope.objEdicion.usarMontoCalculado === true) {
             excludeFirstRow = true;
@@ -418,9 +474,11 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
         var counter = 0;
 
-
-        comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID).then(function(result) {
-
+        console.log( '============================' );
+        // console.log( $scope.currentComisionHeaderID );
+        console.log( $scope.selectedDepartamento.sucursalID );
+        console.log( '============================' );
+        comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID, $scope.selectedDepartamento.sucursalID).then(function(result) {
             var headerID = result.data[0].headerID;
             $scope.rowsToInsert = [];
 
@@ -449,14 +507,12 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
                     $scope.rowsToInsert.push(params);
                 }
-
             });
 
 
             $scope.lstDepartamento.forEach(function(row, index) {
 
                 var params = {};
-
                 params.cuentacontable = row.cuentaContable;
                 params.concepto = row.descripcion.substring(7);
                 params.cargo = 0; // (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100;
@@ -482,9 +538,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                         $scope.rowsToInsert.push(params);
                     }
                 }
-
-
-
             });
 
 
@@ -494,6 +547,7 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
             $scope.rowsToInsert.reduce(
                 function(sequence, value) {
                     return sequence.then(function() {
+                        console.log( value );
                         return $scope.insertaInteresComisionDetalle(value);
                     }).then(function(obj) {});
                 },

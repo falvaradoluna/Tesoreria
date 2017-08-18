@@ -54,4 +54,25 @@
         </table>
         <button class="btn btn-success pull-right" ng-click="aplicar()">Aplicar</button>
     </div>
+
+    <div class="loading-div" ng-show="loadingDetalle">
+        <table width="100%" height="100%">
+            <tr>
+                <td align="center" valign="middle">
+                    <!-- Hola soy el cargador -->
+                    <img src="https://zippy.gfycat.com/ImpoliteLivelyGenet.gif">
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
+
+<style type="text/css">
+    .loading-div{
+        background-color: white;
+        width: 100%;
+        height: 600px;
+        position: absolute;
+        top: 0;
+    }
+</style>

@@ -78,11 +78,11 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        insCxpComisionesInteres: function(interesComisionID) {
+        insCxpComisionesInteres: function(interesComisionID, idSucursal) {
             return $http({
                 url: comisionesURL + 'insCxpComisionesInteres/',
                 method: "GET",
-                params: { interesComisionID: interesComisionID },
+                params: { interesComisionID: interesComisionID, idSucursal: idSucursal },
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -329,9 +329,9 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         if ($scope.searchClienteID === 0) {
             swal("Aviso", "Cliente es requerido.", "warning");
         }
-        else if( $scope.selectedValueSucursaID == 0 || $scope.selectedValueSucursaID === null ){
-            swal("Aviso", "Seleccione una sucursal.", "warning");   
-        }
+        // else if( $scope.selectedValueSucursaID == 0 || $scope.selectedValueSucursaID === null ){
+        //     swal("Aviso", "Seleccione una sucursal.", "warning");   
+        // }
         else {
             var clienteID = $scope.searchClienteID;
             var empresa = $scope.selectedValueEmpresaID;

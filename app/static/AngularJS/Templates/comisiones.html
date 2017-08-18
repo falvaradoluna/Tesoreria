@@ -1,8 +1,9 @@
-<div class="row">
-    <div class="col-md-12 bhoechie-tab-container">
+<div class="row" style="background-color: white; min-height: 600px;">
+    <!-- <div class="col-md-12 bhoechie-tab-container"> -->
+    <div class="col-md-12">
         <div class="col-md-1 bhoechie-tab-menu">
             <div class="list-group" ng-repeat="itemTab in lstTabs">
-                <a ng-class="itemTab.className" ng-click="setActiveTab(itemTab)">
+                <a ng-class="itemTab.className" class="{{ (itemTab.disabled) ? 'disabled' : '' }}" ng-click="setActiveTab(itemTab)">
                     <h4 ng-class="itemTab.iconName"></h4>
                     <br/>{{itemTab.description}}
                 </a>
@@ -28,3 +29,10 @@
     </div>
 </div>
 <comisiones-Modals></comisiones-Modals>
+
+<style type="text/css">
+    .disabled {
+       pointer-events: none;
+       cursor: default;
+    }
+</style>

@@ -405,7 +405,10 @@ controlDepositos.prototype.get_selInteresComisionDetalle = function(req, res, ne
 controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next) {
     var self = this;
 
-    var params = [{ name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.STRING }];
+    var params = [
+        { name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.STRING },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.STRING }
+    ];
 
     this.model.query('INS_CXPCOMISIONESINTERESES_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -501,6 +504,19 @@ controlDepositos.prototype.get_interesIva = function(req, res, next) {
     var self = this;
     //asignación de valores mediante parámetros del request
     var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
+
+    this.model.query('SEL_INTERESES_IVA', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_interesIva = function(req, res, next) {
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [{ name: 'fecha', value: req.query.fecha, type: self.model.types.STRING }];
 
     this.model.query('SEL_INTERESES_IVA', params, function(error, result) {
         self.view.expositor(res, {
