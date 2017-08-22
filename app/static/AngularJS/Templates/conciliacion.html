@@ -19,13 +19,13 @@
                     <div ui-grid="gridAbonosContables" ui-grid-selection ui-grid-pinning class="grid"></div>
                     <div style="padding-left: 84%;">Total: {{totalAbonoContable | currency}} </div>
                     <!--Fin área del grid-->
-                    <div class="row col-md-12" style="text-align: right;">
-                        <div class="col-md-4 col-md-offset-12" style="margin-top: 23px;">
+                     <div class="row col-md-12" style="text-align: right;">
+                    <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
                         <a class="btn btn-warning" href="/conciliacionInicio "><i class="ti-back-right"></i> Regresar</a> &nbsp;
-                            <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
-                        </div>
-                        <br/> &nbsp;
+                        <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
                     </div>
+                    <br/> &nbsp;
+                </div>
                 </div>
             </div>
             <div id="AbonosB" class="tabcontent">
@@ -38,7 +38,6 @@
                 <div class="row col-md-12" style="text-align: right;">
                     <div class="col-md-4 col-md-offset-8" style="margin-top: 23px;">
                         <a class="btn btn-warning" href="/conciliacionInicio "><i class="ti-back-right"></i> Regresar</a> &nbsp;
-                        <button class="btn btn-success" ng-show="dpiSelected" ng-click="getAbonoBancario(0,0,0,2)" data-backdrop="static" data-keyboard="false" data-toggle="modal" data-target="#modalDPI">Enviar a DPI</button>
                         <a class="btn btn-primary" href="/conciliacionDetalleRegistros">Detalle de registros</a>
                     </div>
                     <br/> &nbsp;

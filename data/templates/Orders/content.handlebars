@@ -37,41 +37,7 @@ It requires allowed http module in scripts in the configuration file:
         </tbody>
     </table>
     
-    <script>      
-        var data = {{{toJSON this}}}
-        
-        Chart.defaults.global.legend.display = false;
-        
-        new Chart(orders.getContext("2d"), {
-            type: 'bar',
-            data: {
-                labels: Object.keys(data.accumulatedOrders),
-                datasets: [{
-                    fillColor: 'blue',
-                    label: "Orders in time",
-                    backgroundColor: "rgba(27,161,226,0.2)",
-                    borderColor: "rgba(27,161,226,1)",
-                    borderWidth: 1,
-                    hoverBackgroundColor: "rgba(27,161,226,0.4)",
-                    hoverBorderColor: "rgba(27,161,226,1)",
-                    data: Object.keys(data.accumulatedOrders).map(function (o) {
-                        return data.accumulatedOrders[o].value;
-                    })
-                }]
-                
-            },
-            options: {
-                animation: {
-                    onComplete: function () {
-                        // set the PDF printing trigger when the animation is done
-                        // to have this working, the phantom-pdf menu in the left must
-                        // have the wait for printing trigger option selected
-                        window.JSREPORT_READY_TO_START = true
-                    }
-                }
-            }
-        });
-    </script>    
+   
   </body>
 </html>
 

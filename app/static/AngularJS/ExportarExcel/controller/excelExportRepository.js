@@ -21,9 +21,20 @@ registrationModule.factory('excelExportRepository', function($http){
 		                }
 
              }); 
-          }
+          },
 
+          generateLayout: function() {
+            return $http({
+                url: excelExportURL + 'create/',
+                method: "GET",
+                params: {
 
-          
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+    //Fin de la llave Return  
 	 };
 });

@@ -2,7 +2,7 @@
     "phantom": {
         "waitForJS": true
     },
-    "recipe": "phantom-pdf",
+    "recipe": "html-to-xlsx",
     "engine": "handlebars",
     "scripts": [
         {
@@ -11,7 +11,7 @@
     ],
     "shortid": "HJH11D83ce",
     "modificationDate": {
-        "$$date": 1503002703768
+        "$$date": 1503338543327
     },
     "_id": "oWLNuewxcxcEhWEB"
 }

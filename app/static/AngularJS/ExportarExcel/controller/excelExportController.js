@@ -6,6 +6,10 @@ registrationModule.controller('excelExportController', function($scope, $uibModa
 
     $scope.init = function(){
           $scope.enableButton = false;
+          $scope.bancoLayout=[
+           {"Nombre": "SCOTIABANK", "idBanco": 4},
+           {"Nombre": "BANAMEX", "idBanco": 5}
+          ];
     };
      
    $scope.leerExcel = function(files){
@@ -62,6 +66,17 @@ registrationModule.controller('excelExportController', function($scope, $uibModa
 
     $scope.Cancel = function(){
      $uibModalInstance.dismiss('cancel');
+    };
+    
+    $scope.downloadLayout = function(){
+     
+      excelExportRepository.generateLayout().then(function(result){
+                //var Resultado = result.data;
+                window.open('ExportarExcel/' + Resultado.Name);
+            }, function(error){
+                console.log("Error", error);
+            });
+
     };
 
 });
