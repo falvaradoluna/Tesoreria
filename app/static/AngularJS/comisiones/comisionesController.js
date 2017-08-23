@@ -474,7 +474,27 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
         console.log( 'selectedValueEmpresaID', $scope.selectedValueEmpresaID );
         console.log( '============================' );
         comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID, $scope.selectedDepartamento.sucursalID, $scope.selectedValueEmpresaID).then(function(result) {
-            var headerID = result.data[0].headerID;
+            var headerID       = result.data[0].headerID;
+            var nextRef        = result.data[0].nextRef;
+            var idPersona      = result.data[0].idPersona;
+            var lastReferencia = result.data[0].lastReferencia;
+            var baseReferencia = result.data[0].baseReferencia;
+
+            var DocumentoConsecutivo = '';
+            if( lastReferencia === null || lastReferencia === '' ){
+                DocumentoConsecutivo = baseReferencia + '1';
+            }
+            else{
+                var aux = lastReferencia.split('-');
+                if( aux.length == 4 ){
+                    var aux_actual = parseInt(aux[3]);
+                    DocumentoConsecutivo = baseReferencia + (aux_actual + 1);
+                }
+                else{
+                    DocumentoConsecutivo = baseReferencia + '1';
+                }
+            }
+
             $scope.rowsToInsert = [];
 
             $scope.lstRegistroContable.forEach(function(row, index) {
@@ -489,16 +509,16 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                     params.concepto = row.concepto;
                     params.cargo = row.cargo;
                     params.abono = row.abono;
-                    params.documento = 0;
-                    params.idpersona = $scope.idUsuario;
+                    params.documento = DocumentoConsecutivo;
+                    params.idpersona = idPersona; // $scope.idUsuario;
                     params.idcomisionesintereses = headerID;
                     params.tipodocumento = row.tipodocumento;
                     params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
                     params.poriva = 16;
-                    params.referencia = ''; //Menos este lo hace BPRO?
-                    params.banco = $scope.selectedValueBancoID;
-                    params.referenciabancaria = '12345678901234567891';
-                    params.conpoliza = counter += 1;
+                    params.referencia = DocumentoConsecutivo;//''; //Menos este lo hace BPRO?
+                    params.banco = '0' + $scope.selectedValueBancoID;
+                    params.referenciabancaria = nextRef; //'00000000000000000001';
+                    params.conpoliza = 1;//counter += 1;
 
                     $scope.rowsToInsert.push(params);
                 }
@@ -512,16 +532,16 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
                 params.concepto = row.descripcion.substring(7);
                 params.cargo = 0; // (row.porcentaje * $scope.objEdicion.montoAcumuladoUsuario) / 100;
                 params.abono = 0;
-                params.documento = 0;
-                params.idpersona = $scope.idUsuario;
+                params.documento = DocumentoConsecutivo;
+                params.idpersona = idPersona;// $scope.idUsuario;
                 params.idcomisionesintereses = headerID;
                 params.tipodocumento = '';
                 params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
                 params.poriva = 16;
-                params.referencia = ''; //Menos este lo hace BPRO?
+                params.referencia = DocumentoConsecutivo;// ''; //Menos este lo hace BPRO?
                 params.banco = '0' + $scope.selectedValueBancoID;
-                params.referenciabancaria = 0;
-                params.conpoliza = counter += 1;
+                params.referenciabancaria = nextRef; //0;
+                params.conpoliza = 1;//counter += 1;
 
                 if ($scope.objEdicion.usarMontoCalculado === true) {
                     //params.userValue = ($scope.gridComisionesRow.abono * row.porcentaje) / 100;
@@ -578,26 +598,24 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
 
 
     $scope.deleteReference = function(item) {
-
         swal({
-                title: "¿Esta seguro?",
-                text: "Se eliminará el registro",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#21B9BB",
-                confirmButtonText: "Aceptar",
-                closeOnConfirm: true
-            },
-            function() {
-                comisionesRepository.delInteresComision(item.interesComisionID).then(function(result) {
-                    swal("Eliminado", "Se eliminó el registro", "success");
-                    comisionesRepository.selInteresComision().then(function(result2) {
-                        $scope.lstTemp = result2.data;
-                    });
-
+            title: "¿Esta seguro?",
+            text: "Se eliminará el registro",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aceptar",
+            closeOnConfirm: true
+        },
+        function() {
+            comisionesRepository.delInteresComision(item.interesComisionID).then(function(result) {
+                comisionesRepository.selInteresComision().then(function(result2) {
+                    $scope.lstTemp = result2.data;
                     $scope.getComisionesRealizadas();
+                    swal("Eliminado", "Se eliminó el registro", "success");
                 });
             });
+        });
     };
 
 

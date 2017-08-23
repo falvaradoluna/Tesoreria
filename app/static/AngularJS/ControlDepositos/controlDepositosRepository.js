@@ -267,7 +267,8 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 { name: 'nombreCliente', displayName: 'Cliente', cellClass: 'gridCellLeft', width: 200 },
                 { name: 'fecha', displayName: 'fecha', type: 'date', cellFilter: 'date:\'dd-MM-yyyy\'', cellClass: 'gridCellRight', width: 100 },
                 { name: 'importe', displayName: 'Importe', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 },
-                { name: 'saldo', displayName: 'Saldo', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
+                { name: 'saldo', displayName: 'Saldo', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 },
+                { name: 'color', displayName: 'Color', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100, visible: false }
             ];
         },
         getClientById: function(idBusqueda) {

@@ -32,8 +32,14 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     $scope.gridDocumentos = controlDepositosRepository.gridDocumentosOptions();
     $scope.gridDocumentos.columnDefs = controlDepositosRepository.gridDocumentosColumns($scope.btnSwitchIsEnable);
     $scope.gridDocumentos.multiSelect = false;
+
+    // $scope.miestilo = {'background-color': '#0C0'};
+    $scope.currentColor = '#0C0';
+
     $scope.gridCartera = controlDepositosRepository.gridCarteraOptions();
     $scope.gridCartera.columnDefs = controlDepositosRepository.gridCarteraColumns();
+    // $scope.gridCartera.rowTemplate = '<div> <div ng-style="row.isSelected ? grid.appScope.miestilo : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>';
+    // $scope.gridCartera.rowTemplate = '<div> <div ng-style="row.color != \'\' ? {\'background-color\': row.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>';
     $scope.gridCartera.multiSelect = true;
     //busquedaCliente
     $scope.searchType = "ID cliente";
@@ -44,6 +50,10 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     $scope.depositoTotal = 0;
     $scope.carteraTotal = 0;
     //
+
+    $scope.rojo = function(){
+        $scope.currentColor = '#C00';
+    }
 
     $scope.selectedRowDocuments = {};
     $scope.selectedRowDPI = [];
@@ -303,6 +313,10 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     $scope.gridCartera.onRegisterApi = function(gridApi) {
         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
             var msg = 'row selected ' + row.isSelected;
+            row.entity.color = $scope.currentColor;
+
+            console.log( row );
+            row.color = $scope.currentColor;
             if (row.isSelected === true) {
                 $scope.carteraTotal = $scope.carteraTotal + parseFloat(row.entity.saldo);
                 $scope.selectedRowCartera.push(row.entity);
