@@ -6,7 +6,7 @@
 // -- Fecha: 
 // -- =============================================
 
-var registrationModule = angular.module("registrationModule", ["ngRoute", "LocalStorageModule", 'ui.grid', 'ui.grid.selection', 'ui.grid.grouping', 'ui.grid.pinning', 'ui.grid.edit','ui.grid.moveColumns','angular.filter', 'ui.bootstrap', 'ui.bootstrap.modal'])
+var registrationModule = angular.module("registrationModule", ["ngRoute", "colorpicker.module", "LocalStorageModule", 'ui.grid', 'ui.grid.selection', 'ui.grid.grouping', 'ui.grid.pinning', 'ui.grid.edit','ui.grid.moveColumns','angular.filter', 'ui.bootstrap', 'ui.bootstrap.modal'])
 
     .config(function($routeProvider, $locationProvider) {
 

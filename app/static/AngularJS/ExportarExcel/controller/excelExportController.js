@@ -19,7 +19,8 @@ registrationModule.controller('excelExportController', function($scope, alertFac
           $scope.enableButton = false;
           $scope.bancoLayout=[
            {"Nombre": "SCOTIABANK", "idBanco": 4},
-           {"Nombre": "BANAMEX", "idBanco": 5}
+           {"Nombre": "BANAMEX", "idBanco": 5},
+           {"Nombre": "INBURSA", "idBanco": 6}
           ];
     };
      
@@ -52,14 +53,16 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                 if (excelData.length > 0) {
                     //Save data
                     angular.forEach(excelData, function(value,key){
-                      excelExportRepository.sendExcelData(value.idBmer, value.IDBanco, value.txtOrigen, value.registro,	value.noMovimiento, value.referencia, value.concepto).then(function(result){
+                      excelExportRepository.sendExcelData(value.NoCuenta, value.Fecha, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda1, value.Leyenda2).then(function(result){
+                        alertFactory.success(result);
                       }, function(error){
     						console.log("Error en la migración de datos", error);
+                alertFactory.warning(error);
     						$('#loading').modal('hide');
     					});
                     });
                     alertFactory.success("Base de datos Actualizada	 correctamente!");
-                    $scope.enableButton = false;
+                    //$scope.enableButton = false;
                   }
                 else {
                     $scope.Message = "No data found";
@@ -81,13 +84,18 @@ registrationModule.controller('excelExportController', function($scope, alertFac
      $scope.bancoActual = banco;
      $scope.idBanco = idBanco;
      $scope.createPassword();
+     
       excelExportRepository.generateLayout($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
                 var Resultado = result.data;
                 window.open('AngularJS/ExportarExcel/' + Resultado.Name);
             }, function(error){
                 console.log("Error", error);
             });
-
+      // excelExportRepository.historyLayout($scope.bancoActual, $scope.idBanco, $scope.password).then(function(result){
+ 
+      // }, function(error){
+      //   console.log("Error", error);
+      // });
     };
 
 

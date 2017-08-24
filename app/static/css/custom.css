@@ -100,3 +100,19 @@ div.bhoechie-tab-content {
 div.bhoechie-tab div.bhoechie-tab-content:not(.active) {
     display: none;
 }
+.divContainerGrupoPunteo
+{
+    text-align:left;
+}
+.divGrupoPunteo
+{
+    display:inline;
+    width: 40px; 
+    height: 20px;
+    padding: 7px;
+    border: 2px solid #0920B4;
+    /*color: white;*/
+    border-radius: 7px;
+    font-weight: bold;
+    cursor: pointer;
+}

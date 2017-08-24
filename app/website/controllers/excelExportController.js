@@ -17,19 +17,43 @@ var excelExport = function (conf) {
 
 excelExport.prototype.get_insExcel = function(req,res,next){
 	var self = this;
-
-	var params = [{name: "idBmer", value: req.query.idBmer, type: self.model.types.STRING},
-		         {name: "IdBanco", value: req.query.IdBanco, type: self.model.types.STRING},
-		         {name: "txtOrigen", value: req.query.txtOrigen, type: self.model.types.STRING},
-		         {name: "registro", value: req.query.registro, type: self.model.types.STRING},
-		         {name: "noMovimiento", value: req.query.noMovimiento, type: self.model.types.STRING},
-		         {name: "referencia", value: req.query.referencia, type: self.model.types.STRING},
-		         {name: "concepto", value: req.query.concepto, type: self.model.types.STRING},
-                 {name: "accion", value: 1, type: self.model.types.INT}
+ 
+	var params = [{name: "noCuenta", value: req.query.NoCuenta, type: self.model.types.STRING},
+		         {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
+		         {name: "cargo", value: req.query.Cargo, type: self.model.types.STRING},
+		         {name: "abono", value: req.query.Abono, type: self.model.types.STRING},
+		         {name: "tipo", value: req.query.Tipo, type: self.model.types.STRING},
+		         {name: "transaccion", value: req.query.Transaccion, type: self.model.types.STRING},
+		         {name: "leyenda1", value: req.query.Leyenda1, type: self.model.types.STRING},
+                 {name: "leyenda2", value: req.query.Leyenda2, type: self.model.types.STRING},
+                 {name: "accion", value: 2, type: self.model.types.INT}
 	        ];
 
 
     this.model.query('INS_EXCEL_DATA', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+excelExport.prototype.get_insHistoryLayout = function(req, res, next){
+  var self = this;
+
+    //Petición que ejecuta el SP que registra el layout descargado para llevar un control de los archivos a subir
+
+     //La accion 2 indica que guardará la información del archivo excel que se esta descargando, para su posterior validación
+     //se utiliza el mismo SP que guarda la inforamción del Layout ocupando los campos idBmer "se envía el nombre del banco",
+     //IdBanco "se envía el identificador del banco al que pertenece el layout", txtOrigen "Envío el código"
+
+var params =    [{name: "nombreBanco", value: req.query.NombreBanco, type: self.model.types.STRING},
+                 {name: "idBanco", value: req.query.idBanco, type: self.model.types.STRING},
+                 {name: "claveLayout", value: req.query.codigo, type: self.model.types.STRING}
+
+                ];
+     
+     this.model.query('INS_EXCEL_DATA', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -47,6 +71,10 @@ excelExport.prototype.get_create = function(req, res, next) {
             name: 'Calibri'
         }
     });
+
+    var idBanco = req.query.idBanco;
+    var codigo = req.query.codigo;
+
     var ws = wb.addWorksheet("Información Bancos Layout", {
         margins: {
             left: 0.75,
@@ -154,23 +182,26 @@ excelExport.prototype.get_create = function(req, res, next) {
     
 
     // Se asignan los anchos de las columnas
-    ws.column(1).setWidth(15);
-    ws.column(2).setWidth(28);
-    ws.column(3).setWidth(27);
-    ws.column(4).setWidth(20);
+    ws.column(1).setWidth(28);
+    ws.column(2).setWidth(15);
+    ws.column(3).setWidth(15);
+    ws.column(4).setWidth(15);
     ws.column(5).setWidth(19);
     ws.column(6).setWidth(30);
+    ws.column(7).setWidth(30);
+    ws.column(8).setWidth(30);
 
-    // Insercion de llave
-    ws.cell(2,22 ).string(req.query.codigo).style( sty_white );
+
+    // // Insercion de llave
+    // ws.cell(2,23).string(req.query.codigo).style( sty_white );
    
-    //Insercion del ID Banco
+    // //Insercion del ID Banco
 
-    ws.cell(2,23).string(req.query.idBanco).style(sty_white);
+    // ws.cell(2,22).string(idBanco).style(sty_white);
 
     //Encabezados que contienen los identificadores de la hoja Excel 
-    ws.cell(1, 22).string( 'idBanco' ).style( sty_white );
-    ws.cell(1, 23).string( 'Clave' ).style( sty_white );
+    ws.cell(1, 22).string(req.query.codigo).style( sty_white );
+    ws.cell(1, 23).string( idBanco).style( sty_white );
 
     // Titulo
     // ws.cell(3, 1, 3, 6, true ).string( "Información Registros Bancarios" ).style( sty_title );
@@ -188,15 +219,20 @@ excelExport.prototype.get_create = function(req, res, next) {
     // Fila Inicial
     var row = 1;
      
-if(req.query.idBanco == 5){
-    // Empresa y sucursales
-    ws.cell( row, 1 ).string( 'No' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 2 ).string( 'DESCRIPCIÓN HERRAMIENTA' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 3 ).string( 'CANTIDAD RECIBIDA' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 4 ).string( 'CANTIDAD DAÑADA' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 5, row, 6, true ).string( 'OBSERVACIONES' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    }
-    
+ 
+
+    ws.cell( row, 1 ).string('NoCuenta').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 2 ).string('Fecha').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 3 ).string('Cargo').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 4 ).string('Abono').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 5 ).string('Tipo').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 6 ).string('Transaccion').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 7).string('Leyenda1').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 8).string('Leyenda2').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+
+ 
+
+
     // Se escribe el documento de excel
     var nameLayout = 'Layout_'+ req.query.NombreBanco +'.xlsx';
 
@@ -222,33 +258,9 @@ if(req.query.idBanco == 5){
                    return console.error(err);
                }
             });            
-        }, 2000 );
+        }, 2000);
     });
 // Fin del Proceso que genera el cuerpo del Excel a descargar
-
-     //Petición que ejecuta el SP que registra el layout descargado para llevar un control de los archivos a subir
-
-     //La accion 2 indica que guardará la información del archivo excel que se esta descargando, para su posterior validación
-     //se utiliza el mismo SP que guarda la inforamción del Layout ocupando los campos idBmer "se envía el nombre del banco",
-     //IdBanco "se envía el identificador del banco al que pertenece el layout", txtOrigen "Envío el código"
-
-var params =[{name: "idBmer", value: req.query.NombreBanco, type: self.model.types.STRING},
-                 {name: "IdBanco", value: req.query.idBanco, type: self.model.types.STRING},
-                 {name: "txtOrigen", value: req.query.codigo, type: self.model.types.STRING},
-                 {name: "registro", value: "0", type: self.model.types.STRING},
-                 {name: "noMovimiento", value: "0", type: self.model.types.STRING},
-                 {name: "referencia", value: "0", type: self.model.types.STRING},
-                 {name: "concepto", value: "0", type: self.model.types.STRING},
-                 {name: "accion", value: 2, type: self.model.types.INT}
-                ];
-     
-     this.model.query('INS_EXCEL_DATA', params, function(error, result) {
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-
 };
 
 module.exports = excelExport;
