@@ -24,7 +24,8 @@ excelExport.prototype.get_insExcel = function(req,res,next){
 		         {name: "registro", value: req.query.registro, type: self.model.types.STRING},
 		         {name: "noMovimiento", value: req.query.noMovimiento, type: self.model.types.STRING},
 		         {name: "referencia", value: req.query.referencia, type: self.model.types.STRING},
-		         {name: "concepto", value: req.query.concepto, type: self.model.types.STRING}
+		         {name: "concepto", value: req.query.concepto, type: self.model.types.STRING},
+                 {name: "accion", value: 1, type: self.model.types.INT}
 	        ];
 
 
@@ -151,7 +152,6 @@ excelExport.prototype.get_create = function(req, res, next) {
         font: { color: '#ffffff' }
     });
     
-    //var json = JSON.parse( req.query.jsonData );
 
     // Se asignan los anchos de las columnas
     ws.column(1).setWidth(15);
@@ -162,97 +162,46 @@ excelExport.prototype.get_create = function(req, res, next) {
     ws.column(6).setWidth(30);
 
     // Insercion de llave
-    ws.cell(1,6 ).string( 'RodrigoPrueba' ).style( sty_white );
-    // Titulo
-    ws.cell(3, 1, 3, 6, true ).string( "Inventario de Accesorios" ).style( sty_title );
+    ws.cell(2,22 ).string(req.query.codigo).style( sty_white );
+   
+    //Insercion del ID Banco
 
-    ws.addImage({
-        path: 'FondoAndrade.png',
-        type: 'picture',
-        position: {
-            type: 'absoluteAnchor',
-            x: '0.5in',
-            y: '0.1in'
-        }
-    });
+    ws.cell(2,23).string(req.query.idBanco).style(sty_white);
+
+    //Encabezados que contienen los identificadores de la hoja Excel 
+    ws.cell(1, 22).string( 'idBanco' ).style( sty_white );
+    ws.cell(1, 23).string( 'Clave' ).style( sty_white );
+
+    // Titulo
+    // ws.cell(3, 1, 3, 6, true ).string( "Información Registros Bancarios" ).style( sty_title );
+
+    // ws.addImage({
+    //     path: 'FondoAndrade.png',
+    //     type: 'picture',
+    //     position: {
+    //         type: 'absoluteAnchor',
+    //         x: '0.5in',
+    //         y: '0.1in'
+    //     }
+    // });
 
     // Fila Inicial
-    var row = 7;
-
+    var row = 1;
+     
+if(req.query.idBanco == 5){
     // Empresa y sucursales
-    ws.cell(row, 1).string( "EMPRESA" ).style( sty_litle );
-    ws.cell(row, 5).string( "SUCURSAL" ).style( sty_litle );
-    row++;
-
-    /*ws.cell(row, 1, row, 2, true).string( json.empresa ).style( sty_underline );
-    ws.cell(row, 5, row, 6, true).string( json.sucursal ).style( sty_underline );*/
-    row++;
-    row++;
-
-    // Datos generales del inventario
-    ws.cell(row, 1).string( "VIN" ).style( sty_litle );
-    ws.cell(row, 2,row, 3, true).string( "CATÁLOGO" ).style( sty_litle );
-    ws.cell(row, 4, row, 5, true).string( "DESCRIPCIÓN" ).style( sty_litle );
-    ws.cell(row, 6).string( "AÑO MODELO" ).style( sty_litle );
-    row++;
-
-    /*ws.cell(row, 1).string( '' ).style( sty_bgcolor );
-    ws.cell(row, 2, row, 3, true).string( json.catalogo ).style( sty_bgcolor );
-    ws.cell(row, 4, row, 5, true).string( json.descripcion ).style( sty_bgcolor );
-    ws.cell(row, 6).number( json.anio ).style( sty_bgcolor ).style( sty_left );*/
-    row++;
-    row++;
-
-    // Datos generales del inventario
-    ws.cell(row, 1).string( "FOLIO DE REVISIÓN" ).style( sty_litle );
-    ws.cell(row, 2, row, 3, true).string( "FECHA / HORA DE LEVANTAMIENTO" ).style( sty_litle );
-    ws.cell(row, 6).string( "USUARIO" ).style( sty_litle );
-    row++;
-
-    ws.cell(row, 1).string( '' ).style( sty_bgcolor );
-    ws.cell(row, 2, row, 3, true).string( '' ).style( sty_bgcolor );
-    ws.cell(row, 6).string( '' ).style( sty_bgcolor );
-    row++;
+    ws.cell( row, 1 ).string( 'No' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 2 ).string( 'DESCRIPCIÓN HERRAMIENTA' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 3 ).string( 'CANTIDAD RECIBIDA' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 4 ).string( 'CANTIDAD DAÑADA' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 5, row, 6, true ).string( 'OBSERVACIONES' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    }
     
-    row++;
-    row++;
-    // Se insertan las cabeceras de la tabla
-    ws.cell( row, 1 ).string( 'No' ).style( sty_th ).style( sty_center );
-    ws.cell( row, 2 ).string( 'DESCRIPCIÓN HERRAMIENTA' ).style( sty_th );
-    ws.cell( row, 3 ).string( 'CANTIDAD RECIBIDA' ).style( sty_th );
-    ws.cell( row, 4 ).string( 'CANTIDAD DAÑADA' ).style( sty_th );
-    ws.cell( row, 5, row, 6, true ).string( 'OBSERVACIONES' ).style( sty_th ).style( sty_center );
-    row++;
-
-    // Se registra de forma dinámica cada uno de los accesorios
-    /*var consecutivo = 1;
-    json.accesorios.forEach(function( item, key ){
-        ws.cell( row, 1 ).number( consecutivo ).style( sty_border ).style( sty_center );
-        ws.cell( row, 2 ).string( item.descripcion ).style( sty_border );
-        ws.cell( row, 3 ).string( '' ).style( sty_border ).style( sty_center );
-        ws.cell( row, 4 ).string( '' ).style( sty_border ).style( sty_center );
-        ws.cell( row, 5, row, 6, true ).string( '' ).style( sty_border );
-        ws.row( row ).setHeight(20);
-
-        consecutivo++;
-        row++;
-    });*/
-
-    row++;
-    row++;
-
-    ws.cell( row, 1, row, 2, true ).string( 'OBSERVACIONES GENERALES' ).style( sty_th );
-    ws.cell( row, 3, row, 6, true ).string( '' ).style( sty_fill ).style( sty_bgcolor );
     // Se escribe el documento de excel
-    var nameLayout = 'INV_' + 'excelPrueba' + '_' + '2017';
+    var nameLayout = 'Layout_'+ req.query.NombreBanco +'.xlsx';
 
-    nameLayout.replace(/[^a-zA-Z 0-9.]+/g,'_');
-    nameLayout = nameLayout.replaceAll(" ", "_");
-    nameLayout = nameLayout.replaceAll("/", "_");
-    nameLayout += '.xlsx';
-
-    // var nameLayout =  new Date().getTime() + '.xlsx'
-    wb.write( 'app/static/ExportarExcel/' + nameLayout, function( err, stats ){
+ 
+    wb.write( 'app/static/AngularJS/ExportarExcel/' + nameLayout, function( err, stats ){
         if (err) {
             console.error(err);
             self.view.expositor(res, {
@@ -268,13 +217,38 @@ excelExport.prototype.get_create = function(req, res, next) {
 
         setTimeout( function(){
             var fs = require("fs");
-            fs.unlink('app/static/ExportarExcel/' + nameLayout, function(err) {
+            fs.unlink('app/static/AngularJS/ExportarExcel/' + nameLayout, function(err) {
                if (err) {
                    return console.error(err);
                }
             });            
-        }, 5000 );
+        }, 2000 );
     });
+// Fin del Proceso que genera el cuerpo del Excel a descargar
+
+     //Petición que ejecuta el SP que registra el layout descargado para llevar un control de los archivos a subir
+
+     //La accion 2 indica que guardará la información del archivo excel que se esta descargando, para su posterior validación
+     //se utiliza el mismo SP que guarda la inforamción del Layout ocupando los campos idBmer "se envía el nombre del banco",
+     //IdBanco "se envía el identificador del banco al que pertenece el layout", txtOrigen "Envío el código"
+
+var params =[{name: "idBmer", value: req.query.NombreBanco, type: self.model.types.STRING},
+                 {name: "IdBanco", value: req.query.idBanco, type: self.model.types.STRING},
+                 {name: "txtOrigen", value: req.query.codigo, type: self.model.types.STRING},
+                 {name: "registro", value: "0", type: self.model.types.STRING},
+                 {name: "noMovimiento", value: "0", type: self.model.types.STRING},
+                 {name: "referencia", value: "0", type: self.model.types.STRING},
+                 {name: "concepto", value: "0", type: self.model.types.STRING},
+                 {name: "accion", value: 2, type: self.model.types.INT}
+                ];
+     
+     this.model.query('INS_EXCEL_DATA', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+
 };
 
 module.exports = excelExport;

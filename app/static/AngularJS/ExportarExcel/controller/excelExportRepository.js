@@ -23,13 +23,15 @@ registrationModule.factory('excelExportRepository', function($http){
              }); 
           },
 
-          generateLayout: function() {
+          generateLayout: function(banco, codigo, idBanco) {
             return $http({
                 url: excelExportURL + 'create/',
                 method: "GET",
-                params: {
-
-                },
+                params:{
+                    NombreBanco: banco,
+                    codigo: codigo,
+                    idBanco: idBanco
+                },                
                 headers: {
                     'Content-Type': 'application/json'
                 }

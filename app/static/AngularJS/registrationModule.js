@@ -47,6 +47,11 @@ var registrationModule = angular.module("registrationModule", ["ngRoute", "Local
             templateUrl: 'AngularJS/Templates/controldepositos.html', //FAL 19012017
             controller: 'controlDepositosController'
         });
+
+        $routeProvider.when('/importarDatosExcel', {
+            templateUrl: 'AngularJS/ExportarExcel/Template/ExcelExport.html', //FAL 19012017
+            controller: 'excelExportController'
+        });
         $routeProvider.otherwise({ redirectTo: '/' });
 
         $locationProvider.html5Mode({
