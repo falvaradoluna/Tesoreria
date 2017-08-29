@@ -1,4 +1,4 @@
-registrationModule.controller('comisionesController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, comisionesRepository) {
+﻿registrationModule.controller('comisionesController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, comisionesRepository) {
 
     $rootScope.userData = localStorageService.get('userData');
     $scope.idUsuario = $rootScope.userData.idUsuario;
@@ -150,6 +150,10 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.getComisionesRealizadas();
 
     $scope.getBancos = function() {
+        $scope.lstBanco     = [];
+        $scope.lstCuenta    = [];
+        $scope.selectedValueBancoID     = 0;
+        $scope.selectedValueCuentaID    = 0;
 
         var idEmpresa = $scope.selectedValueEmpresaID;
         $scope.ddlBancoDisabled = false;
@@ -162,6 +166,8 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
     $scope.getCuentas = function() {
+        $scope.lstCuenta    = [];
+        $scope.selectedValueCuentaID    = 0;
 
         var idBanco = $scope.selectedValueBancoID;
         var idEmpresa = $scope.selectedValueEmpresaID;

@@ -171,7 +171,6 @@ registrationModule.controller('interesController', function($scope, $rootScope, 
     };
 
     $scope.getInteresIva = function(depositoID) {
-
         $('#mdlLoading').modal('show');
         $scope.gridInteres.data = [];
         interesRepository.getInteresIva(depositoID).then(function(result) {
@@ -183,8 +182,6 @@ registrationModule.controller('interesController', function($scope, $rootScope, 
                 $('#mdlLoading').modal('hide');
             }
         });
-
-
     };
 
     $scope.gridComisiones.onRegisterApi = function(gridApi) {
