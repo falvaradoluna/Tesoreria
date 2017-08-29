@@ -268,16 +268,16 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
           //console.log(rptDetalleConciliacionBancaria);
      };
 
+    //Cancelación del modal para exportar datos a excel
+    // $scope.excelExportModal = function(){
+    //  var modalInstance = $uibModal.open({
+    //     templateUrl: '../AngularJS/ExportarExcel/Template/ExcelExport.html',
+    //     controller: 'excelExportController',
+    //     backdrop: 'static',
+    //     size: 500
+    // });
 
-    $scope.excelExportModal = function(){
-     var modalInstance = $uibModal.open({
-        templateUrl: '../AngularJS/ExportarExcel/Template/ExcelExport.html',
-        controller: 'excelExportController',
-        backdrop: 'static',
-        size: 500
-    });
-
-    };
+    // };
 
     
 });

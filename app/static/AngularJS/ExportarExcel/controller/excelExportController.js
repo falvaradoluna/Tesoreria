@@ -1,14 +1,26 @@
-registrationModule.controller('excelExportController', function($scope, $uibModalInstance, $uibModal, alertFactory, excelExportRepository){
+registrationModule.controller('excelExportController', function($scope, alertFactory, excelExportRepository){
     
     //Declaración de Variables locales
     $scope.selectedFile = null;
     $scope.enableButton = false;
+    $scope.bancoActual = '';
+    $scope.idBanco = 0;
+    
+
+    //Variables para generar código automático
+    $scope.passwordLength = 12;
+    $scope.addUpper       = true;
+    $scope.addNumbers     = true;
+    $scope.addSymbols        = true;
+    $scope.password = '';
+
 
     $scope.init = function(){
           $scope.enableButton = false;
           $scope.bancoLayout=[
            {"Nombre": "SCOTIABANK", "idBanco": 4},
-           {"Nombre": "BANAMEX", "idBanco": 5}
+           {"Nombre": "BANAMEX", "idBanco": 5},
+           {"Nombre": "INBURSA", "idBanco": 6}
           ];
     };
      
@@ -41,14 +53,16 @@ registrationModule.controller('excelExportController', function($scope, $uibModa
                 if (excelData.length > 0) {
                     //Save data
                     angular.forEach(excelData, function(value,key){
-                      excelExportRepository.sendExcelData(value.idBmer, value.IDBanco, value.txtOrigen, value.registro,	value.noMovimiento, value.referencia, value.concepto).then(function(result){
+                      excelExportRepository.sendExcelData(value.NoCuenta, value.Fecha, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda1, value.Leyenda2).then(function(result){
+                        alertFactory.success(result);
                       }, function(error){
     						console.log("Error en la migración de datos", error);
+                alertFactory.warning(error);
     						$('#loading').modal('hide');
     					});
                     });
                     alertFactory.success("Base de datos Actualizada	 correctamente!");
-                    $scope.enableButton = false;
+                    //$scope.enableButton = false;
                   }
                 else {
                     $scope.Message = "No data found";
@@ -64,19 +78,48 @@ registrationModule.controller('excelExportController', function($scope, $uibModa
         }
     };
 
-    $scope.Cancel = function(){
-     $uibModalInstance.dismiss('cancel');
-    };
     
-    $scope.downloadLayout = function(){
+    //Funcion que descarga los templates en formato xlsx
+    $scope.downloadLayout = function(banco, idBanco){
+     $scope.bancoActual = banco;
+     $scope.idBanco = idBanco;
+     $scope.createPassword();
      
-      excelExportRepository.generateLayout().then(function(result){
-                //var Resultado = result.data;
-                window.open('ExportarExcel/' + Resultado.Name);
+      excelExportRepository.generateLayout($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
+                var Resultado = result.data;
+                window.open('AngularJS/ExportarExcel/' + Resultado.Name);
             }, function(error){
                 console.log("Error", error);
             });
-
+      // excelExportRepository.historyLayout($scope.bancoActual, $scope.idBanco, $scope.password).then(function(result){
+ 
+      // }, function(error){
+      //   console.log("Error", error);
+      // });
     };
+
+
+    //Funcion que genera automaticamente códigos para los archivos de excel
+    $scope.createPassword = function(){
+        var lowerCharacters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+        var upperCharacters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        var numbers = ['0','1','2','3','4','5','6','7','8','9'];
+        var symbols = ['!', '"', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~'];
+        var finalCharacters = lowerCharacters;
+        if($scope.addUpper){
+            finalCharacters = finalCharacters.concat(upperCharacters);
+        }
+        if($scope.addNumbers){
+            finalCharacters = finalCharacters.concat(numbers);
+        }
+        if($scope.addSymbols){
+            finalCharacters = finalCharacters.concat(symbols);
+        }
+        var passwordArray = [];
+        for (var i = 1; i < $scope.passwordLength; i++) {
+            passwordArray.push(finalCharacters[Math.floor(Math.random() * finalCharacters.length)]);
+        };
+        $scope.password = passwordArray.join("");
+    }
 
 });
