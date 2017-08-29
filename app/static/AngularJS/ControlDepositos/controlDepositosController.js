@@ -71,6 +71,11 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     });
 
     $scope.getBancos = function() {
+        $scope.lstBanco     = [];
+        $scope.lstCuenta    = [];
+        $scope.selectedValueBancoID     = 0;
+        $scope.selectedValueCuentaID    = 0;
+
         var idEmpresa = $scope.selectedValueEmpresaID;
         $scope.ddlBancoDisabled = false;
 
@@ -82,6 +87,10 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
     };
 
     $scope.getCuentas = function() {
+        $scope.lstCuenta    = [];
+        $scope.selectedValueCuentaID    = 0;
+
+
         var idBanco = $scope.selectedValueBancoID;
         var idEmpresa = $scope.selectedValueEmpresaID;
         $scope.ddlCuentaDisabled = false;
@@ -117,7 +126,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
         $('#mdlLoading').modal('show');
         $scope.gridDocumentos.data = [];
-        filtrosRepository.getDepositosNoReferenciados(empresaID, cuentaID, fechaInicio, fechaFin).then(function(result) {
+        filtrosRepository.getDepositosNoReferenciados(bancoID, cuentaID, fechaInicio, fechaFin).then(function(result) {
             if (result.data.length > 0) {
                 $scope.gridDocumentos.data = result.data;
                 $('#mdlLoading').modal('hide');
@@ -139,7 +148,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
 
         $('#mdlLoading').modal('show');
         $scope.gridDocumentos.data = [];
-        filtrosRepository.getDepositosPorIdentificar(empresaID, cuentaID, fechaInicio, fechaFin).then(function(result) {
+        filtrosRepository.getDepositosPorIdentificar(bancoID, cuentaID, fechaInicio, fechaFin).then(function(result) {
             if (result.data.length > 0) {
                 $scope.gridDocumentos.data = result.data;
                 
@@ -161,7 +170,7 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         $scope.carteraControlsDisabled = false;
         $('#mdlLoading').modal('show');
         $scope.gridDocumentos.data = [];
-        filtrosRepository.getDepositosAplicados(empresaID, cuentaID, fechaInicio, fechaFin).then(function(result) {
+        filtrosRepository.getDepositosAplicados(bancoID, cuentaID, fechaInicio, fechaFin).then(function(result) {
             if (result.data.length > 0) {
                 $scope.gridDocumentos.data = result.data;
                 $scope.gridDocumentos.data.forEach( function( item, key ){
@@ -327,6 +336,15 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
         });
     };
 
+    $scope.gridCartera.isRowSelectable = function(row) {
+        if( row.entity.saldo < 0 ){
+            return false;
+        }
+        else{
+            return true;
+        }
+    };
+
     $scope.removeByAttr = function(arr, attr, value) {
         var i = arr.length;
         while (i--) {
@@ -360,6 +378,9 @@ registrationModule.controller('controlDepositosController', function($scope, $ro
                 if (result.data.length > 0) {
 
                     $scope.gridCartera.data = result.data;
+
+
+                    console.log( $scope.gridCartera.data );
                     $('#mdlLoading').modal('hide');
                 } else {
                     $('#mdlLoading').modal('hide');
