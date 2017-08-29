@@ -150,10 +150,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     $scope.getComisionesRealizadas();
 
     $scope.getBancos = function() {
-        $scope.lstBanco     = [];
-        $scope.lstCuenta    = [];
-        $scope.selectedValueBancoID     = 0;
-        $scope.selectedValueCuentaID    = 0;
 
         var idEmpresa = $scope.selectedValueEmpresaID;
         $scope.ddlBancoDisabled = false;
@@ -166,8 +162,6 @@ registrationModule.controller('comisionesController', function($scope, $rootScop
     };
 
     $scope.getCuentas = function() {
-        $scope.lstCuenta    = [];
-        $scope.selectedValueCuentaID    = 0;
 
         var idBanco = $scope.selectedValueBancoID;
         var idEmpresa = $scope.selectedValueEmpresaID;
