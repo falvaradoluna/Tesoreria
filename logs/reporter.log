@@ -4478,3 +4478,43 @@ SyntaxError: Unexpected token / in JSON at position 4
 2017-08-22T18:02:41.695Z - warn: Error: Bootstrap's JavaScript requires jQuery timestamp=Tue Aug 22 2017 13:02:37 GMT-0500 (Hora de verano central (México)), requestId=2
 2017-08-22T18:02:41.696Z - warn:    https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js : 6 timestamp=Tue Aug 22 2017 13:02:37 GMT-0500 (Hora de verano central (México)), requestId=2
 2017-08-22T18:02:41.712Z - info: Rendering request 2 finished in 5567 ms requestId=2
+2017-08-25T16:28:21.911Z - info: Initializing jsreport@1.8.1 in development mode using configuration file dev.config.json
+2017-08-25T16:28:21.918Z - info: Setting process based strategy for rendering. Please visit http://jsreport.net/learn/configuration for information how to get more performance.
+2017-08-25T16:28:21.933Z - info: Searching for available extensions in C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\
+2017-08-25T16:28:21.998Z - info: Extensions location cache C:\Users\USUARI~1\AppData\Local\Temp\jsreport-temp\extensions\locations.json contains older information, crawling
+2017-08-25T16:28:25.396Z - info: Found 30 extensions
+2017-08-25T16:28:25.421Z - info: Using extension import-export
+2017-08-25T16:28:25.642Z - info: Using extension tags
+2017-08-25T16:28:25.651Z - info: Using extension templates
+2017-08-25T16:28:25.655Z - info: Using extension jsrender
+2017-08-25T16:28:25.657Z - info: Using extension cli
+2017-08-25T16:28:25.658Z - info: Using extension handlebars
+2017-08-25T16:28:25.660Z - info: Using extension debug
+2017-08-25T16:28:25.663Z - info: Using extension express
+2017-08-25T16:28:25.919Z - info: Using extension fop-pdf
+2017-08-25T16:28:25.950Z - info: Using extension phantom-pdf
+2017-08-25T16:28:26.129Z - info: Using extension fs-store
+2017-08-25T16:28:26.502Z - info: Using extension authorization
+2017-08-25T16:28:26.513Z - info: Using extension images
+2017-08-25T16:28:26.537Z - info: Using extension child-templates
+2017-08-25T16:28:26.543Z - info: Using extension browser-client
+2017-08-25T16:28:26.545Z - info: Using extension licensing
+2017-08-25T16:28:26.599Z - info: Using extension data
+2017-08-25T16:28:26.602Z - info: Using extension text
+2017-08-25T16:28:26.603Z - info: Using extension reports
+2017-08-25T16:28:26.617Z - info: Using extension resources
+2017-08-25T16:28:26.620Z - info: Using extension base
+2017-08-25T16:28:26.621Z - info: Using extension studio
+2017-08-25T16:28:26.728Z - info: Using extension html-to-xlsx
+2017-08-25T16:28:26.986Z - info: Using extension scripts
+2017-08-25T16:28:27.009Z - info: Using extension assets
+2017-08-25T16:28:27.036Z - info: Using extension scheduling
+2017-08-25T16:28:27.230Z - info: Using extension xlsx
+2017-08-25T16:28:27.629Z - info: Using extension sample-template
+2017-08-25T16:28:27.633Z - info: Using extension public-templates
+2017-08-25T16:28:27.651Z - info: Initializing fs storage at C:\Users\USUARIO 15\Documents\GitHub\Tesoreria\data
+2017-08-25T16:28:28.088Z - info: Creating default express app.
+2017-08-25T16:28:28.173Z - info: jsreport server successfully started on http port: 5488
+2017-08-25T16:28:28.225Z - info: Verifying license key free
+2017-08-25T16:28:28.235Z - info: Using free license
+2017-08-25T16:28:28.254Z - info: reporter initialized

@@ -1,4 +1,4 @@
-registrationModule.controller('excelExportController', function($scope, alertFactory, excelExportRepository){
+registrationModule.controller('excelExportController', function($scope, alertFactory, excelExportRepository, $window){
     
     //Declaración de Variables locales
     $scope.selectedFile = null;
@@ -15,7 +15,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
     $scope.password = '';
 
 
-    $scope.init = function(){
+    $scope.init = function() {
           $scope.enableButton = false;
           $scope.bancoLayout=[
            {"Nombre": "SCOTIABANK", "idBanco": 4},
@@ -44,30 +44,78 @@ registrationModule.controller('excelExportController', function($scope, alertFac
         if (file != null) {
         	$scope.enableButton = true;
             var reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = function (e) {//Inicio de la funcion antes de leer el archivo
+
                 var data = e.target.result;
                 //XLSX from js-xlsx library , which I will add in page view page
                 var workbook = XLSX.read(data, { type: 'binary' });
+               
+               //Inicio de la validacion del archivo                                                  
+                                                                                                      //1 es la acción dentro de SP para validar si exste el archivo en curso registrado 
+               excelExportRepository.historyLayout(" ", workbook.Strings[1].h, workbook.Strings[0].h, 1).then(function(result){
+               if (result.data[0].Resultado == 1){      
+               
                 var sheetName = workbook.SheetNames[0];
                 var excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
                 if (excelData.length > 0) {
                     //Save data
-                    angular.forEach(excelData, function(value,key){
-                      excelExportRepository.sendExcelData(value.NoCuenta, value.Fecha, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda1, value.Leyenda2).then(function(result){
-                        alertFactory.success(result);
+                    if(workbook.Strings[1].h == 4){
+                    //Inicio para el registro de datos Scotiabank
+                    angular.forEach(excelData, function(value,key){                                                                                                             //Dato de la clave Layout del documento en curso
+                      excelExportRepository.sendExcelDataScotibank(value.No_Cuenta, value.Fecha, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda_1, value.Leyenda_2, workbook.Strings[0].h).then(function(result){
                       }, function(error){
-    						console.log("Error en la migración de datos", error);
-                alertFactory.warning(error);
-    						$('#loading').modal('hide');
-    					});
+                            alertFactory.warning(error);
+                						$('#loading').modal('hide');
+    					         });
                     });
+                    //Fin para el registro de datos Scotiabank
+                   }
+
+                   if(workbook.Strings[1].h == 5){
+
+                    //Inicio para el registro de datos Banamex
+                    angular.forEach(excelData, function(value,key){                                                                                                                                                                            //Dato de la clave Layout del documento en curso
+                      excelExportRepository.sendExcelDataBanamex(value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, value.Depositos, value.Retiros, workbook.Strings[0].h).then(function(result){
+                        console.log(result);
+                      }, function(error){
+                            alertFactory.warning(error);
+                            $('#loading').modal('hide');
+                       });
+                    });
+                    //Fin para el registro de datos Banamex
+
+                   }
+                   if(workbook.Strings[1].h == 6){
+
+                    //Inicio para el registro de datos Inbursa
+                    angular.forEach(excelData, function(value,key){                                                                                                                                              //Dato de la clave Layout del documento en curso
+                      excelExportRepository.sendExcelDataInbursa(value.No_Cuenta, value.Fecha, value.Referencia, value.Referencia_Leyenda, value.Referencia_Numerica, value.Cargo, value.Abono, value.Ordenante, workbook.Strings[0].h).then(function(result){
+                      }, function(error){
+                            alertFactory.warning(error);
+                            $('#loading').modal('hide');
+                       });
+                    });
+                    //Fin para el registro de datos Inbursa
+
+                   }
+
                     alertFactory.success("Base de datos Actualizada	 correctamente!");
                     //$scope.enableButton = false;
+                    $scope.reload();
                   }
                 else {
                     $scope.Message = "No data found";
                 }
-            }
+
+                }else{
+                    alertFactory.warning("El documento que intenta migrar no esta registrado en el sistema, verifique su seleccion o descargue la plantilla correspondiente.");
+                   }
+              }, function(error){
+                  console.log("Error", error);
+                });
+//Fin de la validacion del archivo
+
+            }//Fin de la función antes de leer el archivo
             reader.onerror = function (ex) {
                 console.log(ex);
             }
@@ -85,17 +133,35 @@ registrationModule.controller('excelExportController', function($scope, alertFac
      $scope.idBanco = idBanco;
      $scope.createPassword();
      
-      excelExportRepository.generateLayout($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
+     if(idBanco == 4){
+      excelExportRepository.generateLayoutScotiabank($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
                 var Resultado = result.data;
                 window.open('AngularJS/ExportarExcel/' + Resultado.Name);
             }, function(error){
                 console.log("Error", error);
             });
-      // excelExportRepository.historyLayout($scope.bancoActual, $scope.idBanco, $scope.password).then(function(result){
+        }
+        if(idBanco == 5){
+      excelExportRepository.generateLayoutBanamex($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
+                var Resultado = result.data;
+                window.open('AngularJS/ExportarExcel/' + Resultado.Name);
+            }, function(error){
+                console.log("Error", error);
+            });
+        }
+        if(idBanco == 6){
+      excelExportRepository.generateLayoutInbursa($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
+                var Resultado = result.data;
+                window.open('AngularJS/ExportarExcel/' + Resultado.Name);
+            }, function(error){
+                console.log("Error", error);
+            });
+        }                                                                //Es la opcion para el SP para insertar registros en la TBL history_layout
+      excelExportRepository.historyLayout(banco, idBanco, $scope.password, 2).then(function(result){
  
-      // }, function(error){
-      //   console.log("Error", error);
-      // });
+      }, function(error){
+        console.log("Error", error);
+      });
     };
 
 
@@ -121,5 +187,10 @@ registrationModule.controller('excelExportController', function($scope, alertFac
         };
         $scope.password = passwordArray.join("");
     }
+
+
+    $scope.reload = function(){
+      $window.location.reload();
+    };
 
 });

@@ -36,13 +36,13 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
      
 
 
-    $scope.GuardarGrid = function(punteoTipo) {
+    $scope.GuardarGrid = function() {
     	$('#alertaGuardarPunteoPrevio').modal('hide');
        //Mando a llamar la función que obtendra la nueva información almacenada
          $scope.init();
 
         //El tipo 3 pertenece al punteo solo de Registros Contables  
-        if($scope.punteoAuxiliar != null && $scope.punteoBanco == null) {
+        if($scope.punteoAuxiliar.length > 0 && $scope.punteoBanco.length == 0){
            if ($scope.punteoAuxiliar.length > 0) {
                 if ($scope.punteoAuxiliar.length >= 2) {
                     if ($scope.cargoAuxiliar != 0 && $scope.abonoAuxiliar != 0){
@@ -76,7 +76,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
     //****************************************************************************************************
     $scope.verificaCantidades = function(tipopunteo) {
 
-    if($scope.abonoAuxiliar != 0 && $scope.cargoAuxiliar != 0 && $scope.punteoBanco == null) {
+    if($scope.abonoAuxiliar != 0 && $scope.cargoAuxiliar != 0 && $scope.punteoBanco.length == 0) {
       
       if ((($scope.cargoAuxiliar - $scope.difMonetaria) <= $scope.abonoAuxiliar && $scope.abonoAuxiliar <= ($scope.cargoAuxiliar + $scope.difMonetaria)) || (($scope.abonoAuxiliar - $scope.difMonetaria) <= $scope.cargoAuxiliar && $scope.cargoAuxiliar <= ($scope.abonoAuxiliar + $scope.difMonetaria)))
       {
@@ -86,7 +86,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
       }
 
     } 
-    else {
+    else{
             if ($scope.cargoBanco != 0 && $scope.abonoAuxiliar != 0) {
                 if ((($scope.cargoBanco - $scope.difMonetaria) <= $scope.abonoAuxiliar && $scope.abonoAuxiliar <= ($scope.cargoBanco + $scope.difMonetaria)) || (($scope.abonoAuxiliar - $scope.difMonetaria) <= $scope.cargoBanco && $scope.cargoBanco <= ($scope.abonoAuxiliar + $scope.difMonetaria))) {
                     $scope.guardaPunteo(tipopunteo);
@@ -132,7 +132,46 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
             angular.forEach($scope.punteoAuxiliar, function(value, key) {
                 var valueAuxiliar = value.idAuxiliarContable;
                 var conceptoPago = value.movConcepto;
-                angular.forEach($scope.punteoBanco, function(value, key) {                                              //Estatusid = 2, indica que el registro ya se encuentra relacionado
+
+                //Se declaran las variables que identificarán a los grupos conciliados, sea por color o un indice númerico asignado previamente a la clasificación
+                var idPrepAuxiliar = undefined;
+                var idPrepBanco = undefined;
+                var idColorAuxiliar = undefined;
+                var idColorBanco = undefined;
+                //Fin de la declaración de variables para identificar grupos conciliados en auxiliar contable
+
+
+                //Validación que verifica si es un registro prepunteado en auxiliar contable   
+                if(value.indexPrePunteo != 99999){
+                   idPrepAuxiliar = value.indexPrePunteo;
+                }
+                //Fin de validación registro prepunteado
+
+                //Validación que verifica el color del grupo de selección a conciliar en auxiliar contable
+                if(value.color != undefined && value.color != '#c9dde1'){
+                 idColorAuxiliar = value.color;
+                }
+                //Fin de validación
+
+                angular.forEach($scope.punteoBanco, function(value, key) {
+
+                //Validación que verifica si es un registro prepunteado en registros Bancarios   
+                if(value.indexPrePunteo != 99999){
+                   idPrepBanco = value.indexPrePunteo;
+                }
+
+                //Validación que verifica el color del grupo de selección a conciliar en Registros Bancarios
+                if(value.color != undefined && value.color != '#c9dde1'){
+                 idColorBanco = value.color;
+                }
+                //Fin de validación
+
+
+                 //Inicio de la inserción que se aplica solo para los registros prepunteados Bancos
+                 if(idPrepAuxiliar != undefined && idPrepBanco != undefined)
+                 {
+                if(idPrepAuxiliar == idPrepBanco){
+                                                                          //Estatusid = 2, indica que el registro ya se encuentra relacionado
                     conciliacionDetalleRegistroRepository.insertPuntoDeposito(value.idBmer, valueAuxiliar, conceptoPago, 2, tipopunteo).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
@@ -143,7 +182,30 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                             console.log('Respuesta Correcta');
                         }
                     })
-                });
+                  }
+                }
+                 //Fin de la funsión que inserta registros prepunteados
+
+                
+                //Inicio de la inserción que se aplica solo para los registros agrupados por color 
+                 if(idColorBanco != undefined && idColorAuxiliar != undefined)
+                 {
+                if(idColorBanco == idColorAuxiliar){
+                                                                          //Estatusid = 2, indica que el registro ya se encuentra relacionado
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(value.idBmer, valueAuxiliar, conceptoPago, 2, tipopunteo).then(function(result) {
+                        if (result.data[0].length) {    
+                            console.log('Respuesta Incorrecta');
+                            $scope.punteoAuxiliar = [];
+                            $scope.punteoBanco = [];
+                        
+                        } else {
+                            console.log('Respuesta Correcta');
+                        }
+                    })
+                  }
+                }
+                 //Fin de la funsión que inserta registros agrupados por color
+              });
             });
             $scope.refreshGrids();
            alertFactory.success('Registros guardados correctamente!!');

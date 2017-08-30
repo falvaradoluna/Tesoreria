@@ -44,7 +44,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.getCargoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
         setTimeout(function() {localStorage.setItem('DetalleDiferencias', 
             JSON.stringify({"abonoContable": $scope.abonosContables, "abonoBancario": $scope.abonosBancarios,"cargoContable": $scope.cargosContables, "cargoBancario": $scope.cargosBancarios}));
-        }, 1000);
+        }, 2000);
     }
 
     //****************************************************************************************************

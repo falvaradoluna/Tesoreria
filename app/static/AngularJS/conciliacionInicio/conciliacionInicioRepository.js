@@ -38,7 +38,7 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
 
         getReporteTesoreria: function(myJson) {
             return $http({
-                url: 'http://localhost:5488/api/report',
+                url: 'http://189.204.141.193:5488/api/report',
                 method: "POST",
                 data: {
                     template: { name: myJson.template.name },

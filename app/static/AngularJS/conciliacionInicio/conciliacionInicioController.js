@@ -264,7 +264,7 @@ registrationModule.controller('conciliacionInicioController', function($filter,$
                     });
                 });
 
-                } ,2000)
+                } ,4000)
           //console.log(rptDetalleConciliacionBancaria);
      };
 

@@ -38,11 +38,25 @@
                           <input colorpicker class="form-control" ng-model="hexPicker.color" type="text" />                  
                         </div>                
                         <div class="col-sm-1">
-                            <div style="background-color: {{hexPicker.color}};  border: 2px solid #0920B4; border-radius: 7px; font-size: 11px; font-weight: bold; height: 30px;">
+                            <div style="background-color: {{hexPicker.color}};  border: 1px solid #0920B4; border-radius: 7px; font-size: 11px; font-weight: bold; height: 30px;">
                                 Grupo Actual
                              </div>
                         </div>
-                        <div class="col-sm-10" id="panelGrupos">                                
+                        <div class="col-sm-4">
+                            <!--a class="btn btn-warning pull-right" ng-click="desSeleccionar()"><i class="ti-layout-list-thumb"></i> Quitar Selección</a-->&nbsp;&nbsp; 
+                            <a class="btn btn-success pull-right" ng-click="mostrarTodos()"><i class="ti-control-shuffle"></i>Todos</a>&nbsp;&nbsp; 
+                            <a class="btn btn-primary pull-right" ng-click="mostrarNoPunteados()"><i class="ti-control-shuffle"></i>No punteados</a>
+                        </div>
+                        <!--div class="col-sm-1">
+                            <button type="button" class="btn btn-primary pull-right" ng-click="desSeleccionar()">Quitar Selección</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-success pull-right" ng-click="mostrarTodos()">Todos</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-warning pull-right" ng-click="mostrarNoPunteados()">No punteados</button>
+                        </div-->
+                        <div class="col-sm-6" id="panelGrupos">                                
                                 <div id="divGrupos" class="divContainerGrupoPunteo">
                                 
                                 </div>
@@ -54,6 +68,9 @@
                 <div class="col-md-6">
                     <div class="text-main" ng-init="init()">
                         <h4>Cargo Bancario</h4>
+                        <label class="divGrupoPunteo"><input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Todo</label>                         
+                        <label class="divGrupoPunteo"><input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Cargo</label>                        
+                        <label class="divGrupoPunteo"><input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
                     </div>
                     <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
                     <div class="media middle pad-all">
@@ -75,6 +92,7 @@
                 <div class="col-md-6">
                     <div class="text-main">
                         <h4>Abono Contable</h4>
+                        <label></label>
                     </div>
                     <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
                     <div class="media middle pad-all">  
@@ -84,11 +102,11 @@
                           </span>
                         </div>
                         <div class="media-body">
-                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : cargoAuxiliar > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria))), 'text-danger text-semibold' : cargoBanco > 0 && cargoAuxiliar > 0}">{{cargoAuxiliar | currency}}</p>
+                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : cargoAuxiliar > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0, 'text-danger text-semibold' : cargoBanco > 0 && cargoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{cargoAuxiliar | currency}}</p>
                             <p class="text-muted mar-no">Cargo</p>
                         </div>
                         <div class="media-body">
-                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoAuxiliar > 0 && (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) || ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria))), 'text-danger text-semibold' : abonoBanco > 0 && abonoAuxiliar > 0}">{{abonoAuxiliar | currency}}</p>
+                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoAuxiliar > 0 && (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) || ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0, 'text-danger text-semibold' : abonoBanco > 0 && abonoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{abonoAuxiliar | currency}}</p>
                             <p class="text-muted mar-no">Abono</p>
                         </div>
                         <div class="media-body">
