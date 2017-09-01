@@ -1,6 +1,6 @@
 registrationModule.controller('conciliacionController', function($scope, $rootScope, $location, localStorageService, alertFactory, conciliacionRepository) {
 
-
+     $scope.variableControl = 0;
     $scope.init = function() {
 
         // ****************** Se guarda la información del usuario en variable userData
@@ -29,9 +29,9 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.totalAbonoBancario = 0;
         $scope.totalCargoContable = 0;
         $scope.totalCargoBancario = 0;
-
+        
         $scope.obtieneCargosAbonos();
-
+        
         $scope.resumenDPI = [];
 
     }
@@ -42,9 +42,9 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.getAbonoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
         $scope.getCargoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
         $scope.getCargoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
-        setTimeout(function() {localStorage.setItem('DetalleDiferencias', 
-            JSON.stringify({"abonoContable": $scope.abonosContables, "abonoBancario": $scope.abonosBancarios,"cargoContable": $scope.cargosContables, "cargoBancario": $scope.cargosBancarios}));
-        }, 2000);
+        setTimeout(function(){
+        localStorage.setItem('DetalleDiferencias', JSON.stringify({"abonoContable": $scope.abonosContables, "abonoBancario": $scope.abonosBancarios,"cargoContable": $scope.cargosContables, "cargoBancario": $scope.cargosBancarios}));
+    }, 1000);
     }
 
     //****************************************************************************************************
@@ -169,6 +169,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
     $scope.getAbonoContable = function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable) {
         conciliacionRepository.getAbonoContable(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable).then(function(result) {
+            console.log(result);
             if (result.data.length > 0) {
 
                 if (opcion == 1) {  

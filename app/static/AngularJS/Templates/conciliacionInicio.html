@@ -40,9 +40,9 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="form-group col-md-2">
-                                <label for="fInicio" class="text-main">Clave:</label>
+                                <label for="fInicio" class="text-main">Clabe:</label>
                                 <div class="input-group date">
-                                    <label>01218000-195334667</label>
+                                    <label>{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : InmemoryAcountBanc}}</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-2">
@@ -90,7 +90,7 @@
                                 <thead>
                                     <tr>
                                         <th>Resumen &nbsp; &nbsp;       
-                                        <i class="fa fa-eye" ng-click="cambiarMenu()"></i></th>
+                                        <!--<i class="fa fa-eye" ng-click="cambiarMenu()"></i></th>-->
                                         <th>Importe</th>
                                     </tr>
                                 </thead>
@@ -115,6 +115,9 @@
                                         <td>Cargos Bancos no considerados en Contabilidad</td>
                                         <td class="text-right">{{ totalesAbonosCargos[0].tCargoBancario | currency}}</td>
                                     </tr>
+
+
+<!--Elementos comentados por requerimientos
                                     <tr ng-show='elementState.show'>
                                     <td>Abonos Referenciados en Contabilidad</td>
                                     <td class="text-right">{{ totalesAbonosCargos[0].tAbonoRefContable | currency}}</td>
@@ -127,6 +130,9 @@
                                     <td>Cargos Contables "Referenciados Manual"</td>
                                     <td class="text-right">{{ totalesAbonosCargos[0].tCargoRefManualCont | currency}}</td>
                                     </tr>
+                                    -->
+
+
                                     <tr>
                                         <td>Saldo según Conciliacion</td>
                                         <td class="text-right">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
@@ -152,7 +158,7 @@
                             <div class="row">
                                 <div class="form-group col-md-2" ng-controller="conciliacionController">
                                 <div ng-mouseover="init()">
-                                    <button class="btn btn-success" ng-click="generaInfoReport()" ng-disabled="activaBotonesReporte"><i class="ti-search"></i> Ver Reporte</button>
+                                    <button class="btn btn-success" ng-click="generaInfoReport()" ng-disabled="enableBottonReport"><i class="ti-search"></i> Ver Reporte</button>
                                 </div>
                                 </div>
                                 </div>
@@ -176,8 +182,8 @@
                                 </div>
                                 <div class="panel-body">
                                  <div class="row">
-                                    <a class="btn btn-primary col-md-4" href="/conciliacionDetalleRegistros" ng-disabled="activaBotonesReporte"><i class="ti-agenda"></i> Detalle Punteo de registros</a>&nbsp;&nbsp;&nbsp;
-                                    <a class="btn btn-danger col-md-4 col-md-offset-1" href="/conciliacion" ng-disabled="activaBotonesReporte"><i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</a>
+                                    <a class="btn btn-primary col-md-4" ng-click="go('/conciliacionDetalleRegistros')" ng-disabled="enableBottonReport"><i class="ti-agenda"></i> Detalle Punteo de registros</a>&nbsp;&nbsp;&nbsp;
+                                    <a class="btn btn-danger col-md-4 col-md-offset-1" ng-click="go('/conciliacion')" ng-disabled="enableBottonReport"><i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</a>
                                 </div>
                                 </div>
                             </form>

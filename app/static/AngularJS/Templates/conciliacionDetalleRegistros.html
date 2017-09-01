@@ -9,6 +9,16 @@
 
 
             <div class="panel col-md-12">
+            <!--Div Fecha Actual-->
+                <div class="media-body">
+                            <div class="text-right">
+                          <p class="text-danger mar-no">Fecha y Hora Actual</p>
+                          <p class="text-1x mar-no text-semibold">&nbsp;{{FechahoraActual}}</p>
+                          <p id="liveclock" class="text-1x mar-no text-semibold"></p>
+                        </div>
+                        </div>
+                <!--Fin Div Fecha Actual-->
+
                 <br>
                 <br>
                 <div class="col-md-12">
@@ -65,6 +75,7 @@
                     </div>
                 </div>
                 <!--LQMA add 24082017 colorpicker y grupos de colores END-->
+
                 <div class="col-md-6">
                     <div class="text-main" ng-init="init()">
                         <h4>Cargo Bancario</h4>
@@ -597,7 +608,7 @@
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
                             
-                                <button class="btn btn-success pull-right" ng-click="GuardarGrid()"><i class="ti-check"></i> Aceptar</button>
+                                <button class="btn btn-success pull-right" ng-click="guardaPunteoPrevio()"><i class="ti-check"></i> Aceptar</button>
                             
                             </span>
                         </span>
@@ -641,3 +652,17 @@
 </div>
 <!--===================================================-->
 <!--End Modal alerta Punteo Previo-->
+
+
+<!--INICIA modal spinner -->
+<!--===================================================-->
+<div id="loading" class="modal fade" tabindex="-1" data-focus-on="input:first">
+    <div class="modal-dialog modal-lg">
+        <div class="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>
+<!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
+<!--===================================================-->
