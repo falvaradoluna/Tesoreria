@@ -19,8 +19,8 @@ registrationModule.controller('excelExportController', function($scope, alertFac
           $scope.enableButton = false;
           $scope.bancoLayout=[
            {"Nombre": "SCOTIABANK", "idBanco": 4},
-           {"Nombre": "BANAMEX", "idBanco": 5},
-           {"Nombre": "INBURSA", "idBanco": 6}
+           {"Nombre": "BANAMEX", "idBanco": 2},
+           {"Nombre": "INBURSA", "idBanco": 5}
           ];
     };
      
@@ -63,6 +63,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                     //Inicio para el registro de datos Scotiabank
                     angular.forEach(excelData, function(value,key){                                                                                                             //Dato de la clave Layout del documento en curso
                       excelExportRepository.sendExcelDataScotibank(value.No_Cuenta, value.Fecha, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda_1, value.Leyenda_2, workbook.Strings[0].h).then(function(result){
+                        console.log(result.data);
                       }, function(error){
                             alertFactory.warning(error);
                 						$('#loading').modal('hide');
@@ -90,6 +91,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                     //Inicio para el registro de datos Inbursa
                     angular.forEach(excelData, function(value,key){                                                                                                                                              //Dato de la clave Layout del documento en curso
                       excelExportRepository.sendExcelDataInbursa(value.No_Cuenta, value.Fecha, value.Referencia, value.Referencia_Leyenda, value.Referencia_Numerica, value.Cargo, value.Abono, value.Ordenante, workbook.Strings[0].h).then(function(result){
+                        console.log(result.data);
                       }, function(error){
                             alertFactory.warning(error);
                             $('#loading').modal('hide');
@@ -104,11 +106,11 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                     $scope.reload();
                   }
                 else {
-                    $scope.Message = "No data found";
+                    alertFactory.error("El archivo que intenta migrar no contiene datos, por favor verifique el contenido del archivo!");
                 }
 
                 }else{
-                    alertFactory.warning("El documento que intenta migrar no esta registrado en el sistema, verifique su seleccion o descargue la plantilla correspondiente.");
+                    alertFactory.error("El documento que intenta migrar no esta registrado en el sistema, verifique su seleccion o descargue la plantilla correspondiente.");
                    }
               }, function(error){
                   console.log("Error", error);

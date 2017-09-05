@@ -15,7 +15,7 @@ var excelExport = function (conf) {
     };
 };
 
-excelExport.prototype.get_insExcel_Scotiabank = function(req,res,next){
+excelExport.prototype.get_insExcelScotiabank = function(req,res,next){
 	var self = this;
  
 	var params = [

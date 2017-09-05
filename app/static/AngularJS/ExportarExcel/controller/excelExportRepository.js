@@ -5,7 +5,7 @@ registrationModule.factory('excelExportRepository', function($http){
 
         sendExcelDataScotibank: function(NoCuenta, Fecha, Cargo, Abono, Tipo, Transaccion, Leyenda1, Leyenda2, claveLayout){
              return $http({
-                        url: excelExportURL + 'insExcel_Scotiabank/',
+                        url: excelExportURL + 'insExcelScotiabank/',
 		                method: "GET",
 		                params: {                    
 		                    NoCuenta: NoCuenta,

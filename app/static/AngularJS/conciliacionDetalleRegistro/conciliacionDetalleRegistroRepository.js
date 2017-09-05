@@ -105,12 +105,15 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        detallePunteo: function(idPunteo,accionBusqueda) {
+        detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detallePunteo/',
                 method: "POST",
                 data: {
                     idPunteoAuxiliarBanco: idPunteo,
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    cuentaContable: cuentaContable,
                     accionBusqueda: accionBusqueda
                 },
                 headers: {

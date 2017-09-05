@@ -66,7 +66,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 accionBusqueda = 2;
                }
         }
-        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, accionBusqueda).then(function(result) {
+        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta,accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
 
                 $scope.detallePunteo = result.data[0];
