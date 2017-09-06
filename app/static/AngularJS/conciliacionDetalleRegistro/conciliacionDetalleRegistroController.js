@@ -21,6 +21,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.bancoDPI = '';
     $scope.auxiliarDPI = '';
     $scope.difMonetaria = 0;
+    $scope.mesActivo = false;
      
     //**************Variables para paginación**********************************
       $scope.currentPage = 0;
@@ -47,6 +48,12 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.nombreBanco = $scope.busqueda.Banco;
         $scope.nombreGerente = $scope.busqueda.gerente;
         $scope.nombreContador = $scope.busqueda.contador;
+        if($scope.busqueda.MesActivo != 1)
+        {
+          $scope.mesActivo = true;
+          alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+        }
+
     };
 
     // INICIA consigue los detalles de los punteos

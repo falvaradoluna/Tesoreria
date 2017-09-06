@@ -18,6 +18,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
             $scope.InmemoryAcount = '';
             $scope.InmemoryAcountBanc = '';
             $scope.difMonetaria = 0;
+            $scope.mesActivo = undefined; 
             //***************************************************************
 
             //*****Variables para ocultar Depositos y Pagos referenciados
@@ -44,22 +45,23 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                 $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
                 if ($scope.busqueda  != null) {
                     $scope.getEmpresa($rootScope.userData.idUsuario);
-                    $scope.InfoBusqueda=true;
-                    $scope.cuentaActual = $scope.busqueda;
+                    $scope.InfoBusqueda = true;
                     $scope.empresaActual = $scope.busqueda.Empresa;
-                    $scope.bancoActual = $scope.bancoEmpresa;
-                    $scope.InmemoryAcount = $scope.busqueda.cuentaContable;
+                    $scope.bancoActual = $scope.busqueda.Banco;
+                    $scope.InmemoryAcount = $scope.busqueda.CuentaContable;
                     $scope.InmemoryAcountBanc = $scope.busqueda.Cuenta;
                     $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
                     $scope.fechaCorte = $scope.busqueda.fechaCorte;
                     $scope.contadorGerente=[{'NombreGerente':$scope.busqueda.gerente,
                     'NombreContador':$scope.busqueda.contador
                     }];
-
+                    //Reemplazo la consulta que retorna el valor del mes activo
+                    $scope.mesActivo = $scope.busqueda.MesActivo;
                     conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, 1).then(function(result) {
                     if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
+                            $scope.mesActivo = result.data.mesActivo;
                             //Habilita botones
                             $scope.activaBotonBuscar = false;
                             $scope.enableBottonReport = false;
@@ -83,16 +85,16 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                         });
                 }
 
-                $scope.getBancos = function(idBanco) {
+                $scope.getBancos = function(idEmpresa) {
                     $scope.activaInputCuenta = true;
                     $scope.activaBotonBuscar = true;
                     $scope.bancoActual = '';
                     $scope.cuentaActual = '';
-                    if (idBanco == undefined || idBanco == null || idBanco == '') {
+                    if (idEmpresa == undefined || idEmpresa == null || idEmpresa == '') {
                         alertFactory.warning('Seleccione una Empresa');
                         $scope.activaInputBanco = true;
                     } else {
-                        filtrosRepository.getBancos(idBanco).then(function(result) {
+                        filtrosRepository.getBancos(idEmpresa).then(function(result) {
                             if (result.data.length > 0) {
                                 $scope.activaInputBanco = false;
                                 $scope.bancoEmpresa = result.data;
@@ -138,12 +140,19 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                         if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
+                            $scope.mesActivo = result.data[0].mesActivo;
                             //console.log($scope.totalesAbonosCargos)
+
+                            //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
+                            
+                            if($scope.mesActivo != 1){
+                                alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                            }
 
                             $scope.paramBusqueda = [];
 
                             setTimeout(function() {
-                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria};
+                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
                                 console.log($scope.paramBusqueda)
@@ -151,6 +160,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                             }, 1000);
 
                              $scope.enableBottonReport = false;
+                             $scope.InfoBusqueda = true;
                         } else {
                             $scope.totalesAbonosCargos = [];
                             $scope.enableBottonReport = true;
