@@ -515,53 +515,6 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
         $scope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         $scope.gridApiBancos.grid.api.grid.queueGridRefresh();
     }
-    //LQMA 28082017
-    // $scope.obtieneRegistrosPorColor = function() {
-
-    //     // $scope.limpiaVariables();
-
-
-    //     // //$scope.rowBancoColor = $filter('filter')($scope.gridApiBancos.grid.options.data, function(value){                         
-    //     // $scope.rowBancoColor = $filter('filter')($scope.depositoBancosOriginal, function(value){    
-    //     //                                     return value.color == $scope.hexPicker.color || (value.color == undefined || value.color == ''); 
-    //     //                                 });
-
-    //     // //$scope.rowAuxiliarColor = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function(value){                         
-    //     // $scope.rowAuxiliarColor = $filter('filter')($scope.auxiliarContableOriginal, function(value){
-    //     //                                     return value.color == $scope.hexPicker.color || (value.color == undefined || value.color == ''); 
-    //     //                                 });
-
-    //     // $scope.gridApiBancos.grid.options.data =  $scope.rowBancoColor;
-    //     // $scope.gridApiAuxiliar.grid.options.data =  $scope.rowAuxiliarColor;
-
-
-    //     // $scope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($scope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
-    //     // $scope.gridApiAuxiliar.grid.api.core.notifyDataChange( uiGridConstants.dataChange.EDIT );
-
-    //     // $scope.gridApiBancos.grid.options.data = $filter('orderBy')($scope.gridApiBancos.grid.options.data, "indexPrePunteo", false)
-    //     // $scope.gridApiBancos.grid.api.core.notifyDataChange( uiGridConstants.dataChange.EDIT ); 
-
-
-    //     //  //Volvemos a calcular los montos de acuerdo a la selección por color
-    //     // angular.forEach($scope.rowBancoColor, function(value, key) {
-
-    //     //     if(value.color != undefined || value.color == $scope.hexPicker.color){
-    //     //     $scope.abonoBanco += value.abono;
-    //     //     $scope.cargoBanco += value.cargo;
-    //     //     }
-       
-    //     // });
-    //     // angular.forEach($scope.rowAuxiliarColor, function(value, key) {
-            
-    //     //     if(value.color != undefined || value.color == $scope.hexPicker.color){
-    //     //     $scope.abonoAuxiliar += value.abono;
-    //     //     $scope.cargoAuxiliar += value.cargo;
-    //     //     }
-    //     // });  
-    //     // //Fin del calculo para los nuevos montos dependiendo el color 
-       
-    // }
-
 
     //LQMA add 28082017 
         $scope.agregaDiv = function(color){

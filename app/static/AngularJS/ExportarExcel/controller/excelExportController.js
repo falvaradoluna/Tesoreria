@@ -1,11 +1,12 @@
-registrationModule.controller('excelExportController', function($scope, alertFactory, excelExportRepository, $window){
+registrationModule.controller('excelExportController', function($scope, alertFactory, $rootScope, localStorageService,excelExportRepository, $window, filtrosRepository, $filter){
     
     //Declaración de Variables locales
     $scope.selectedFile = null;
     $scope.enableButton = false;
     $scope.bancoActual = '';
     $scope.idBanco = 0;
-    
+    $scope.showComboEmpresas = false;
+    $rootScope.userData = localStorageService.get('userData');
 
     //Variables para generar código automático
     $scope.passwordLength = 12;
@@ -15,14 +16,28 @@ registrationModule.controller('excelExportController', function($scope, alertFac
     $scope.password = '';
 
 
+
     $scope.init = function() {
+      $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
           $scope.enableButton = false;
-          $scope.bancoLayout=[
-           {"Nombre": "SCOTIABANK", "idBanco": 4},
-           {"Nombre": "BANAMEX", "idBanco": 2},
-           {"Nombre": "INBURSA", "idBanco": 5}
-          ];
+          if($scope.busqueda == undefined || $scope.busqueda == null){
+            $scope.showComboEmpresas = true;
+          $scope.getEmpresa($rootScope.userData.idUsuario);
+        }else{
+          $scope.getBancos($scope.busqueda.IdEmpresa);
+        }
     };
+
+    $scope.getEmpresa = function(idUsuario) {
+                    filtrosRepository.getEmpresas(idUsuario).then(
+                        function(result) {
+                            $scope.activaInputCuenta = true;
+                            $scope.activaBotonBuscar = true;
+                            if (result.data.length > 0) {
+                                $scope.empresaUsuario = result.data;
+                            }
+                        });
+                }
      
    $scope.leerExcel = function(files){
       $scope.$apply(function () { 
@@ -72,7 +87,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                     //Fin para el registro de datos Scotiabank
                    }
 
-                   if(workbook.Strings[1].h == 5){
+                   if(workbook.Strings[1].h == 2){
 
                     //Inicio para el registro de datos Banamex
                     angular.forEach(excelData, function(value,key){                                                                                                                                                                            //Dato de la clave Layout del documento en curso
@@ -86,7 +101,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                     //Fin para el registro de datos Banamex
 
                    }
-                   if(workbook.Strings[1].h == 6){
+                   if(workbook.Strings[1].h == 5){
 
                     //Inicio para el registro de datos Inbursa
                     angular.forEach(excelData, function(value,key){                                                                                                                                              //Dato de la clave Layout del documento en curso
@@ -135,7 +150,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
      $scope.idBanco = idBanco;
      $scope.createPassword();
      
-     if(idBanco == 4){
+     if(idBanco == 4){ // id correspondiente a Scotiebank
       excelExportRepository.generateLayoutScotiabank($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
                 var Resultado = result.data;
                 window.open('AngularJS/ExportarExcel/' + Resultado.Name);
@@ -143,7 +158,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                 console.log("Error", error);
             });
         }
-        if(idBanco == 5){
+        if(idBanco == 2){ // id Correspondiente a Banamex
       excelExportRepository.generateLayoutBanamex($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
                 var Resultado = result.data;
                 window.open('AngularJS/ExportarExcel/' + Resultado.Name);
@@ -151,7 +166,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                 console.log("Error", error);
             });
         }
-        if(idBanco == 6){
+        if(idBanco == 5){ // id Correspondiente a Inbursa
       excelExportRepository.generateLayoutInbursa($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
                 var Resultado = result.data;
                 window.open('AngularJS/ExportarExcel/' + Resultado.Name);
@@ -189,6 +204,22 @@ registrationModule.controller('excelExportController', function($scope, alertFac
         };
         $scope.password = passwordArray.join("");
     }
+
+    $scope.getBancos = function(idEmpresa) {
+                    
+                    if (idEmpresa == undefined || idEmpresa == null || idEmpresa == '') {
+                        alertFactory.warning('Seleccione una Empresa');
+                    } else {
+                        filtrosRepository.getBancos(idEmpresa).then(function(result) {
+                            if (result.data.length > 0) {
+                                $scope.bancoLayout = $filter('filter')(result.data, function(value){    
+                                                              return value.Layout == 1  });;
+                            } else {
+                                $scope.bancoLayout = [];
+                            }
+                        });
+                    }
+                }
 
 
     $scope.reload = function(){
