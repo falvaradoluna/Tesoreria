@@ -50,8 +50,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.nombreContador = $scope.busqueda.contador;
         if($scope.busqueda.MesActivo != 1)
         {
-          $scope.mesActivo = true;
+          $scope.mesActivo = false;
           alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+        }
+        else{
+            $scope.mesActivo = true;
         }
 
     };

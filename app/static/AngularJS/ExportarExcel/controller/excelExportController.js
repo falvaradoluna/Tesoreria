@@ -1,11 +1,12 @@
-registrationModule.controller('excelExportController', function($scope, alertFactory, excelExportRepository, $window, filtrosRepository, $filter){
+registrationModule.controller('excelExportController', function($scope, alertFactory, $rootScope, localStorageService,excelExportRepository, $window, filtrosRepository, $filter){
     
     //Declaración de Variables locales
     $scope.selectedFile = null;
     $scope.enableButton = false;
     $scope.bancoActual = '';
     $scope.idBanco = 0;
-    
+    $scope.showComboEmpresas = false;
+    $rootScope.userData = localStorageService.get('userData');
 
     //Variables para generar código automático
     $scope.passwordLength = 12;
@@ -15,11 +16,28 @@ registrationModule.controller('excelExportController', function($scope, alertFac
     $scope.password = '';
 
 
+
     $scope.init = function() {
       $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
           $scope.enableButton = false;
+          if($scope.busqueda == undefined || $scope.busqueda == null){
+            $scope.showComboEmpresas = true;
+          $scope.getEmpresa($rootScope.userData.idUsuario);
+        }else{
           $scope.getBancos($scope.busqueda.IdEmpresa);
+        }
     };
+
+    $scope.getEmpresa = function(idUsuario) {
+                    filtrosRepository.getEmpresas(idUsuario).then(
+                        function(result) {
+                            $scope.activaInputCuenta = true;
+                            $scope.activaBotonBuscar = true;
+                            if (result.data.length > 0) {
+                                $scope.empresaUsuario = result.data;
+                            }
+                        });
+                }
      
    $scope.leerExcel = function(files){
       $scope.$apply(function () { 
