@@ -26,6 +26,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
             $scope.fechaActual = '2017-05-07';
 
      $scope.init = function() {
+        
         variablesLocalStorage();
         $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         //LQMA comment 17082017
@@ -56,9 +57,11 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
     $scope.gridAuxiliarContable.columnDefs = [
         { name: 'cargo', displayName: 'Cargo', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abono', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
-        { name: 'movFechaOpe', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.movFechaOpe  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.movFechaOpe | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''
+        { name: 'movFechaOpe', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'', cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.movFechaOpe  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.movFechaOpe | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''
         { name: 'polTipo', displayName: 'Referencia', width: 200 },
         { name: 'movConcepto', displayName: 'Concepto', width: 600 },
+        //LQMA 07092017                  
+        { name: 'referenciaAuxiliar', displayName: 'Referencia', width: 100 },
         //LQMA 21082017
         { name: 'indexPrePunteo', displayName: 'Index', width: 0, show:false }
         ,{ name: 'color', field: 'color', displayName: 'Color', cellClass: 'gridCellRight', enableFiltering: true, width: 100, visible: false
@@ -73,7 +76,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
                                      
                                 }
                               //filter: { term: ($scope.colorXXX.indexOf('') > -1)?term:'ooooooo' } 
-                          }
+                          }        
     ];
     $scope.gridAuxiliarContable.multiSelect = true;
     //****************************************************************************************************
@@ -97,6 +100,8 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
         { name: 'concepto', displayName: 'Concepto', width: 300 },
         { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.fechaOperacion | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''//},
         { name: 'referencia', displayName: 'Referencia', width: 200 },
+        //LQMA 07092017                  
+        { name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
         { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
         //LQMA add
@@ -631,19 +636,24 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
             cargoBanco = value.cargo; 
             abonoBanco = value.abono;
             esCargo = value.esCargo;         
+            //LQMA 07092017
+            referenciaAuxiliar = value.referenciaAuxiliar; 
 
 
              var filtradosBancos = $filter('filter')($scope.gridApiBancos.grid.options.data, function(value){
-                    return value.cargo == cargoBanco && value.fechaOperacion == fechaOperacionBanco && value.abono == abonoBanco; //|| value.assignee.id === 'ak';                    
+                //LQMA 07092017
+                    return value.cargo == cargoBanco && value.fechaOperacion == fechaOperacionBanco && value.abono == abonoBanco && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar); //|| value.assignee.id === 'ak';                    
                 });
 
             if(filtradosBancos.length == 1){
             
                     var filtradosAuxiliar = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function(value){
                         if(esCargo == 0)
-                            return value.cargo == abonoBanco && value.movFechaOpe == fechaOperacionBanco; //|| value.assignee.id === 'ak';
+                            //LQMA 07092017
+                            return value.cargo == abonoBanco && value.movFechaOpe == fechaOperacionBanco && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar); //|| value.assignee.id === 'ak';
                         else 
-                            return value.abono == cargoBanco && value.movFechaOpe == fechaOperacionBanco; //|| value.assignee.id === 'ak';
+                            //LQMA 07092017
+                            return value.abono == cargoBanco && value.movFechaOpe == fechaOperacionBanco && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar); //|| value.assignee.id === 'ak';
                     });
 
                     var indexAuxiliar = 0;
@@ -654,15 +664,15 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
                         angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value, key) {
 
                             if(esCargo == 0)
-                            {
-                                if(value.movFechaOpe == fechaOperacionBanco && abonoBanco == value.cargo)
+                            {   //LQMA 07092017
+                                if(value.movFechaOpe == fechaOperacionBanco && abonoBanco == value.cargo && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar))
                                 {
                                     $scope.gridApiAuxiliar.grid.api.selection.selectRow($scope.gridApiAuxiliar.grid.options.data[indexAuxiliar]);
                                     value.indexPrePunteo = indicePrePunteo;
                                 }
                             }
-                            else
-                                if(value.movFechaOpe == fechaOperacionBanco && cargoBanco == value.abono)
+                            else//LQMA 07092017
+                                if(value.movFechaOpe == fechaOperacionBanco && cargoBanco == value.abono && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar))
                                 {
                                     $scope.gridApiAuxiliar.grid.api.selection.selectRow($scope.gridApiAuxiliar.grid.options.data[indexAuxiliar]);
                                     value.indexPrePunteo = indicePrePunteo;
@@ -694,7 +704,19 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
 
     } 
 
-    //LQMA  05092017 todo
+    //LQMA 07092017
+    /*
+    $scope.$watch('hexPicker.color', function() { 
+
+        if($scope.hexPicker.color == '#c9dde1')
+        {
+            console.log('color-->', $scope.hexPicker.color);
+            $scope.hexPicker.color = '#b9b8f5'
+        }
+        
+     }, true);
+    */
+        //LQMA  05092017 todo
     $scope.filtraBanco = function(filtro)
     {   
 
