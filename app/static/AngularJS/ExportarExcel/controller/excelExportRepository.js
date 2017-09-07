@@ -3,11 +3,12 @@ var excelExportURL =   global_settings.urlCORS + 'api/excelExport/';
 registrationModule.factory('excelExportRepository', function($http){
 	return{
 
-        sendExcelDataScotibank: function(NoCuenta, Fecha, Cargo, Abono, Tipo, Transaccion, Leyenda1, Leyenda2, claveLayout){
+        sendExcelDataScotibank: function(idBanco,NoCuenta, Fecha, Cargo, Abono, Tipo, Transaccion, Leyenda1, Leyenda2, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelScotiabank/',
 		                method: "GET",
-		                params: {                    
+		                params: {
+                        idBanco: idBanco,
 		                    NoCuenta: NoCuenta,
 		                    Fecha: Fecha,
 		                    Cargo: Cargo,
@@ -26,11 +27,12 @@ registrationModule.factory('excelExportRepository', function($http){
           },
 
 
-          sendExcelDataBanamex: function(NoCuenta, Fecha, Descripcion, Sucursal, Referencia_Numerica, Referencia_Alfanumerica, Autorizacion, Depositos, Retiros, claveLayout){
+          sendExcelDataBanamex: function(idBanco,NoCuenta, Fecha, Descripcion, Sucursal, Referencia_Numerica, Referencia_Alfanumerica, Autorizacion, Depositos, Retiros, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelBanamex/',
                     method: "GET",
-                    params: {                    
+                    params: {
+                        idBanco: idBanco,                    
                         NoCuenta: NoCuenta,
                         Fecha: Fecha,
                         Descripcion: Descripcion,
@@ -49,11 +51,12 @@ registrationModule.factory('excelExportRepository', function($http){
              }); 
           },
 
-          sendExcelDataInbursa: function(NoCuenta, Fecha, Referencia, Referencia_Leyenda, Referencia_Numerica, Cargo, Abono, Ordenante, claveLayout){
+          sendExcelDataInbursa: function(idBanco,NoCuenta, Fecha, Referencia, Referencia_Leyenda, Referencia_Numerica, Cargo, Abono, Ordenante, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelInbursa/',
                     method: "GET",
-                    params: {                    
+                    params: {
+                        idBanco: idBanco,                    
                         NoCuenta: NoCuenta,
                         Fecha: Fecha,
                         Referencia: Referencia,

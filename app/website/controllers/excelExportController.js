@@ -19,6 +19,7 @@ excelExport.prototype.get_insExcelScotiabank = function(req,res,next){
 	var self = this;
  
 	var params = [
+                 {name: "idBanco", value: req.query.idBanco, type: self.model.types.INT},
                  {name: "noCuenta", value: req.query.NoCuenta, type: self.model.types.STRING},
 		         {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
 		         {name: "cargo", value: req.query.Cargo, type: self.model.types.STRING},
@@ -43,6 +44,7 @@ excelExport.prototype.get_insExcelBanamex = function(req,res,next){
     var self = this;
  
     var params = [
+                 {name: "idBanco", value: req.query.idBanco, type: self.model.types.INT},
                  {name: "noCuenta", value: req.query.NoCuenta, type: self.model.types.STRING},
                  {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
                  {name: "descipcion", value: req.query.Descripcion, type: self.model.types.STRING},
@@ -69,6 +71,7 @@ excelExport.prototype.get_insExcelInbursa = function(req,res,next){
     var self = this;
  
     var params = [
+                 {name: "idBanco", value: req.query.idBanco, type: self.model.types.INT},
                  {name: "noCuenta", value: req.query.NoCuenta, type: self.model.types.STRING},
                  {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
                  {name: "referencia", value: req.query.Referencia, type: self.model.types.INT},
@@ -98,7 +101,7 @@ excelExport.prototype.get_insHistoryLayout = function(req, res, next){
 
     //Petición que ejecuta el SP que registra el layout descargado para llevar un control de los archivos a subir
 
-var params =    [{name: "nombreBanco", value: req.query.NombreBanco, type: self.model.types.STRING},
+var params =    [{name: "nombreBanco", value: req.query.nombreBanco, type: self.model.types.STRING},
                  {name: "idBanco", value: req.query.idBanco, type: self.model.types.STRING},
                  {name: "clave", value: req.query.claveLayout, type: self.model.types.STRING},
                  {name: "accion", value: req.query.accion, type: self.model.types.INT}
