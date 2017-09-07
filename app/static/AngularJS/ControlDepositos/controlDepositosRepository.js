@@ -25,6 +25,16 @@ registrationModule.factory('controlDepositosRepository', function($http) {
             searchValue: null,
             searchClienteID: null
         },
+        seguridad: function(idUsuario) {
+            return $http({
+                url: controlDepositosURL + 'seguridad/',
+                method: "GET",
+                params: {idUsuario: idUsuario},
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         createReference: function(objData) {
             return $http({
                 url: controlDepositosURL + 'createReference/',
