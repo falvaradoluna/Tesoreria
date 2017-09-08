@@ -116,6 +116,21 @@ registrationModule.controller('excelExportController', function($scope, alertFac
 
                    }
                    
+                   if(workbook.Strings[1].h == 6){
+
+                    //Inicio para el registro de datos Carga Inicial
+                    angular.forEach(excelData, function(value,key){                                                                                                                                                                            //Dato de la clave Layout del documento en curso
+                      excelExportRepository.sendExcelDataCargaInicial(value.No_Cuenta, value.Fecha, value.Concepto, value.Sucursal, value.Referencia, value.Referencia_Ampliada, value.Autorizacion, value.Abonos, value.Cargos, workbook.Strings[0].h).then(function(result){
+                        console.log(result);
+                      }, function(error){
+                            alertFactory.warning(error);
+                            $('#loading').modal('hide');
+                       });
+                    });
+                    //Fin para el registro de datos Carga Inicial
+
+                   }
+
                     alertFactory.success("Base de datos Actualizada	 correctamente!");
                     //$scope.enableButton = false;
                     setTimeout(function() {
@@ -175,7 +190,17 @@ registrationModule.controller('excelExportController', function($scope, alertFac
             }, function(error){
                 console.log("Error", error);
             });
-        }                                                                //Es la opcion para el SP para insertar registros en la TBL history_layout
+        }
+
+        if(idBanco == 6){ // id Correspondiente a CargaInicial
+      excelExportRepository.generateLayoutCargaInicial(banco, $scope.password, idBanco).then(function(result){
+                var Resultado = result.data;
+                window.open('AngularJS/ExportarExcel/' + Resultado.Name);
+            }, function(error){
+                console.log("Error", error);
+            });
+        }
+        //Funsion que inserta el registro del Layout descargado                                                                //Es la opcion para el SP para insertar registros en la TBL history_layout
       excelExportRepository.historyLayout(banco, idBanco, $scope.password, 2).then(function(result){
       
       }, function(error){

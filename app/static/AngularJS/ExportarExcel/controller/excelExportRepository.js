@@ -51,6 +51,29 @@ registrationModule.factory('excelExportRepository', function($http){
              }); 
           },
 
+sendExcelDataCargaInicial: function(NoCuenta, Fecha, Concepto, Sucursal, Referencia, Referencia_Ampliada, Autorizacion, Abonos, Cargos, claveLayout){
+             return $http({
+                        url: excelExportURL + 'insExcelCargaInicial/',
+                    method: "GET",
+                    params: {
+                        NoCuenta: NoCuenta,
+                        Fecha: Fecha,
+                        Concepto: Concepto,
+                        Sucursal: Sucursal,
+                        Referencia: Referencia,
+                        Referencia_Ampliada: Referencia_Ampliada,
+                        Autorizacion: Autorizacion,
+                        Abonos: Abonos,
+                        Cargos: Cargos,
+                        claveLayout: claveLayout
+                    },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+
+             }); 
+          },
+
           sendExcelDataInbursa: function(idBanco,NoCuenta, Fecha, Referencia, Referencia_Leyenda, Referencia_Numerica, Cargo, Abono, Ordenante, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelInbursa/',
@@ -120,6 +143,21 @@ registrationModule.factory('excelExportRepository', function($http){
                     'Content-Type': 'application/json'
                 }
             });
+        },
+
+        generateLayoutCargaInicial: function(banco, codigo, idBanco){
+        return $http({
+            url: excelExportURL + 'createCargaInicial/',
+            method: "GET",
+            params: {
+                NombreBanco: banco,
+                codigo: codigo,
+                idBanco: idBanco
+            },
+            headers:{
+                'Content-Type': 'application/json'
+            }
+        });
         },
 
         historyLayout : function(nombreBanco, idBanco, claveLayout, accion){

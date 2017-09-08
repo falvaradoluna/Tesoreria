@@ -17,6 +17,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
             $scope.InfoBusqueda=false;
             $scope.InmemoryAcount = '';
             $scope.InmemoryAcountBanc = '';
+            $scope.bancoNombre = '';
             $scope.difMonetaria = 0;
             $scope.mesActivo = undefined; 
             //***************************************************************
@@ -48,6 +49,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                     $scope.InfoBusqueda = true;
                     $scope.empresaActual = $scope.busqueda.Empresa;
                     $scope.bancoActual = $scope.busqueda.Banco;
+                    $scope.bancoNombre = $scope.busqueda.Banco;
                     $scope.InmemoryAcount = $scope.busqueda.CuentaContable;
                     $scope.InmemoryAcountBanc = $scope.busqueda.Cuenta;
                     $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
@@ -97,7 +99,10 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                         filtrosRepository.getBancos(idEmpresa).then(function(result) {
                             if (result.data.length > 0) {
                                 $scope.activaInputBanco = false;
-                                $scope.bancoEmpresa = result.data;
+
+                                $scope.bancoEmpresa = $filter('filter')(result.data, function(value){    
+                                                              return value.IdBanco != 6  });;
+
                             } else {
                                 $scope.bancoCuenta = [];
                                 $scope.bancoEmpresa = [];
@@ -116,7 +121,6 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                         filtrosRepository.getCuenta(idBanco, idEmpresa).then(function(result) {
                             if (result.data.length > 0) {
                                 $scope.activaInputCuenta = false;
-                                $scope.activaBotonBuscar = false;
                                 $scope.bancoCuenta = result.data;
                             } else
                                 $scope.bancoCuenta = [];
@@ -175,13 +179,13 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                   }
                 }
 
-                // $scope.setCuenta = function(cuenta) {
-                //     if (cuenta == null) {
-                //         $scope.activaBotonBuscar = true;
-                //     } else {
-                //         $scope.activaBotonBuscar = false;
-                //     }
-                // }
+                $scope.setCuenta = function(cuenta) {
+                    if (cuenta == null) {
+                        $scope.activaBotonBuscar = true;
+                    } else {
+                        $scope.activaBotonBuscar = false;
+                    }
+                }
 
                 $scope.cambiarMenu = function(){
                 $scope.elementState.show = !$scope.elementState.show;   
