@@ -3,7 +3,7 @@ var excelExportURL =   global_settings.urlCORS + 'api/excelExport/';
 registrationModule.factory('excelExportRepository', function($http){
 	return{
 
-        sendExcelDataScotibank: function(idBanco,NoCuenta, Fecha, Cargo, Abono, Tipo, Transaccion, Leyenda1, Leyenda2, claveLayout){
+        sendExcelDataScotibank: function(idBanco, NoCuenta, Fecha, Referencia_Numerica, Cargo, Abono, Tipo, Transaccion, Leyenda1, Leyenda2, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelScotiabank/',
 		                method: "GET",
@@ -11,6 +11,7 @@ registrationModule.factory('excelExportRepository', function($http){
                         idBanco: idBanco,
 		                    NoCuenta: NoCuenta,
 		                    Fecha: Fecha,
+                            Referencia_Numerica: Referencia_Numerica,
 		                    Cargo: Cargo,
 		                    Abono: Abono,
 		                    Tipo: Tipo,

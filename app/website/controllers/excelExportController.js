@@ -22,6 +22,7 @@ excelExport.prototype.get_insExcelScotiabank = function(req,res,next){
                  {name: "idBanco", value: req.query.idBanco, type: self.model.types.INT},
                  {name: "noCuenta", value: req.query.NoCuenta, type: self.model.types.STRING},
 		         {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
+                 {name: "ref_numerica", value: req.query.Referencia_Numerica, type: self.model.types.STRING},
 		         {name: "cargo", value: req.query.Cargo, type: self.model.types.STRING},
 		         {name: "abono", value: req.query.Abono, type: self.model.types.STRING},
 		         {name: "tipo", value: req.query.Tipo, type: self.model.types.STRING},
@@ -266,12 +267,13 @@ excelExport.prototype.get_createScotiabank = function(req, res, next) {
     // Se asignan los anchos de las columnas
     ws.column(1).setWidth(28);
     ws.column(2).setWidth(15);
-    ws.column(3).setWidth(15);
+    ws.column(3).setWidth(28);
     ws.column(4).setWidth(15);
     ws.column(5).setWidth(19);
     ws.column(6).setWidth(30);
     ws.column(7).setWidth(30);
     ws.column(8).setWidth(30);
+    ws.column(9).setWidth(30);
 
 
     // // Insercion de llave
@@ -305,12 +307,13 @@ excelExport.prototype.get_createScotiabank = function(req, res, next) {
 
     ws.cell( row, 1 ).string('No_Cuenta').style( sty_th ).style( sty_center ).style(sty_bgcolor);
     ws.cell( row, 2 ).string('Fecha').style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 3 ).string('Cargo').style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 4 ).string('Abono').style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 5 ).string('Tipo').style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 6 ).string('Transaccion').style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 7).string('Leyenda_1').style( sty_th ).style( sty_center ).style(sty_bgcolor);
-    ws.cell( row, 8).string('Leyenda_2').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 3 ).string('Referencia_Numerica').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 4 ).string('Cargo').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 5 ).string('Abono').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 6 ).string('Tipo').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 7 ).string('Transaccion').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 8).string('Leyenda_1').style( sty_th ).style( sty_center ).style(sty_bgcolor);
+    ws.cell( row, 9).string('Leyenda_2').style( sty_th ).style( sty_center ).style(sty_bgcolor);
 
     
  

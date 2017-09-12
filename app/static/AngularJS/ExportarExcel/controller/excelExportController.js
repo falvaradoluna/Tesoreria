@@ -77,7 +77,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                     if(workbook.Strings[1].h == 4){
                     //Inicio para el registro de datos Scotiabank
                     angular.forEach(excelData, function(value,key){       //idBanco desde layout                                                                                                      //Dato de la clave Layout del documento en curso
-                      excelExportRepository.sendExcelDataScotibank( workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda_1, value.Leyenda_2, workbook.Strings[0].h).then(function(result){
+                      excelExportRepository.sendExcelDataScotibank( workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Referencia_Numerica, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda_1, value.Leyenda_2, workbook.Strings[0].h).then(function(result){
                         console.log(result.data);
                       }, function(error){
                             alertFactory.warning(error);
@@ -167,7 +167,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
      $scope.idBanco = idBanco;
      $scope.createPassword();
      
-     if(idBanco == 4){ // id correspondiente a Scotiebank
+     if(idBanco == 4){ // id correspondiente a Scotiabank
       excelExportRepository.generateLayoutScotiabank($scope.bancoActual, $scope.password, $scope.idBanco).then(function(result){
                 var Resultado = result.data;
                 window.open('AngularJS/ExportarExcel/' + Resultado.Name);
