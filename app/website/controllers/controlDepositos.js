@@ -86,6 +86,18 @@ controlDepositos.prototype.get_quitarDPI = function(req, res, next) {
     });
 };
 
+controlDepositos.prototype.get_seguridad = function(req, res, next) {
+    var self = this;
+
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+
+    this.model.query('SEL_SEGURUDAD_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 controlDepositos.prototype.get_insertReferenceDetails = function(req, res, next) {
     var self = this;

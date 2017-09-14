@@ -62,6 +62,8 @@
     $scope.tipoDeposito = 1;
     $scope.tipoDepositoAux = 1;
 
+    $scope.btnAplicarReferencias = true;
+
 
     filtrosRepository.getEmpresas($scope.idUsuario).then(function(result) {
         if (result.data.length > 0) {
@@ -578,7 +580,6 @@
         });
     };
 
-
     $scope.aplicarReferencia = function(idReferencia) {
         swal({
             title: "¿Esta seguro?",
@@ -832,4 +833,20 @@
             }
         });
     }
+
+    $scope.seguridad = function() {
+        controlDepositosRepository.seguridad( $scope.idUsuario ).then(function(result) {
+            if (result.data.length > 0) {
+                console.log('ok');
+                $scope.btnAplicarReferencias = false;
+            } else {
+                $scope.btnAplicarReferencias = true;
+                console.log('no trajo nada seguridad');
+            }
+        }, function(error) {
+            console.log('Error');
+        });
+    };
+
+    $scope.seguridad();
 });
