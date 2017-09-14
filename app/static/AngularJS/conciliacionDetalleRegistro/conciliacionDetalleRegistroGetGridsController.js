@@ -1,7 +1,8 @@
 registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
 
      //Declaracion de variables locales
-     $scope.bancoReferenciados = '';
+     $scope.bancoReferenciadosAbonos = '';
+     $scope.bancoReferenciadosCargos = '';
      $scope.contableReferenciados= '';
 
 
@@ -66,8 +67,14 @@ $scope.init = function() {
     //****************************************************************************************************
      $scope.bancoReferenciados = function() {
         conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte).then(function(result) {
-        $scope.bancoReferenciados = result.data;
-        $scope.tabla('bancoReferenciado');
+        $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function(value){
+            return value.tipoMovimiento == 0;
+        });
+        $scope.bancoReferenciadosCargos = $filter('filter')(result.data,function(value){
+            return value.tipoMovimiento == 1;
+        });
+        $scope.tabla('bancoReferenciadoAbono');
+        $scope.tabla('bancoReferenciadoCargo');
       });
     };
     //****************************************************************************************************
@@ -80,7 +87,12 @@ $scope.init = function() {
         $scope.tabla('contableRef');
       });
     };
-    //****************************************************************************************************    
+    //****************************************************************************************************
+
+
+    $scope.detalleRegistrosReferenciados = function(){
+
+    };    
 
 // INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************
