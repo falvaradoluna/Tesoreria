@@ -110,7 +110,7 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active) {
     width: 40px; 
     height: 20px;
     padding: 7px;
-    border: 2px solid #0920B4;
+    border: 1px solid #0920B4;
     /*color: white;*/
     border-radius: 7px;
     font-weight: bold;
