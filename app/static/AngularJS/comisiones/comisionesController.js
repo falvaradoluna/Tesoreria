@@ -1,4 +1,4 @@
-﻿registrationModule.controller('comisionesController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, comisionesRepository) {
+﻿registrationModule.controller('comisionesController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, comisionesRepository, filterFilter) {
 
     $rootScope.userData = localStorageService.get('userData');
     $scope.idUsuario = $rootScope.userData.idUsuario;
@@ -38,16 +38,26 @@
     //init grids
     $scope.gridComisiones = comisionesRepository.gridComisionesOptions;
     $scope.gridComisiones.columnDefs = comisionesRepository.gridComisionesColumns();
-    $scope.gridComisiones.multiSelect = false;
+    $scope.gridComisiones.multiSelect = true;
+    $scope.gridComisiones.rowTemplate = '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>';
+
+
     $scope.gridInteres = comisionesRepository.gridInteresOptions;
     $scope.gridInteres.columnDefs = comisionesRepository.gridInteresColumns();
-    $scope.gridInteres.multiSelect = false;
+    $scope.gridInteres.multiSelect = true;
+    $scope.gridInteres.rowTemplate = '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>';
 
-    $scope.gridComisionesRow = null;
+    $scope.gridComisionesRow = [];
     $scope.gridInteresRow = null;
 
     $scope.interesComisionID = 0;
     $scope.loadingDetalle = false;
+
+    $scope.gruposComisionesData = [];
+
+
+    $scope.btn_createcom_text = 'Crear Referencia';
+    $scope.btn_createcom_flag = false;
 
     var activeTab = "list-group-item active text-center";
     var notActiveTab = "list-group-item text-center";
@@ -214,68 +224,7 @@
     };
 
 
-    $scope.getComisiones = function() {
-        $scope.EliminarComision();
-        $scope.setActiveTab($scope.lstTabs[1]);
-
-        var params = {
-            idBanco: $scope.selectedValueBancoID,
-            noCuenta: $scope.selectedValueCuentaID,
-            fechaIni: $scope.selectedValueFechaInicio,
-            fechaFin: $scope.selectedValueFechaFin
-        };
-
-        $scope.carteraControlsDisabled = false;
-
-        $('#mdlLoading').modal('show');
-        $scope.gridComisiones.data = [];
-        comisionesRepository.getcomisiones(params).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.gridComisiones.data = result.data;
-                $scope.getSucursales();
-                $('#mdlLoading').modal('hide');
-            } else {
-                $('#mdlLoading').modal('hide');
-            }
-        });
-    };
-
-    $scope.getComisionesIva = function(depositoID) {
-
-        $('#mdlLoading').modal('show');
-        $scope.gridInteres.data = [];
-        comisionesRepository.getcomisionesIva(depositoID).then(function(result) {
-            if (result.data.length > 0) {
-                $scope.gridInteres.data = result.data;
-                $('#mdlLoading').modal('hide');
-            } else {
-                $('#mdlLoading').modal('hide');
-            }
-        });
-
-
-    };
-
-    $scope.gridComisiones.onRegisterApi = function(gridApi) {
-
-        $scope.gridApi = gridApi;
-
-        gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-            $scope.gridComisionesRow = row.entity;
-            $scope.getComisionesIva(row.entity.idDepositoBanco);
-        });
-    };
-
-
-    $scope.gridInteres.onRegisterApi = function(gridApi) {
-        $scope.gridApiInteres = gridApi;
-
-        gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-            $scope.gridInteresRow = row.entity;
-            $scope.msgTempSave();
-        });
-
-    };
+    
 
     $scope.msgTempSave = function() {
 
@@ -300,31 +249,37 @@
     };
 
     $scope.tempSave = function() {
+        $scope.setActiveTab($scope.lstTabs[2]);
+        $scope.curComIndex = 0;
 
-        var params = {
-            interesID: $scope.gridInteresRow.idDepositoBanco,
-            comisionID: $scope.gridComisionesRow.idDepositoBanco,
-            bancoID: $scope.gridComisionesRow.idBanco,
-            userID: $scope.idUsuario,
-            statusID: 1
-        };
+        // var params = {
+        //     interesID: $scope.gridInteresRow.idDepositoBanco,
+        //     comisionID: $scope.gridComisionesRow.idDepositoBanco,
+        //     bancoID: $scope.gridComisionesRow.idBanco,
+        //     userID: $scope.idUsuario,
+        //     statusID: 1
+        // };
 
-        comisionesRepository.insInteresComision(params).then(function(result) {
-            $scope.currentComisionHeaderID = result.data[0].headerID;
-            $scope.getComisionesRealizadas();
-            comisionesRepository.selInteresComision( 1 ).then(function(result) {
-                $scope.lstTemp = result.data;
-                $scope.getComisiones();
-                $scope.gridInteres.data = [];
-                $scope.setActiveTab($scope.lstTabs[2]);
-                setTimeout( function(){
-                    $scope.interesComisionID = $scope.currentComisionHeaderID;  
-                    $scope.loadingDetalle = true;                  
-                },1000);
-            });
-        });
+        // comisionesRepository.insInteresComision(params).then(function(result) {
+        //     $scope.currentComisionHeaderID = result.data[0].headerID;
+        //     $scope.getComisionesRealizadas();
+        //     comisionesRepository.selInteresComision( 1 ).then(function(result) {
+        //         $scope.lstTemp = result.data;
+        //         $scope.getComisiones();
+        //         $scope.gridInteres.data = [];
+        //         $scope.setActiveTab($scope.lstTabs[2]);
+        //         setTimeout( function(){
+        //             $scope.interesComisionID = $scope.currentComisionHeaderID;  
+        //             $scope.loadingDetalle = true;                  
+        //         },1000);
+        //     });
+        // });
 
     };
+
+    $scope.back_to_comisiones = function(){
+        $scope.setActiveTab($scope.lstTabs[1]);
+    }
 
     $scope.tempSaveDetail = function() {
 
@@ -394,21 +349,6 @@
         });
     };
 
-
-
-    $scope.validarMontos = function() {
-
-        if ($scope.objEdicion.usarMontoCalculado === false && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
-            swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
-        } else {
-            $scope.insInteresComisionDetalle();
-            $scope.interesComisionID = 0;
-            $scope.loadingDetalle = false;
-            $scope.setActiveTab($scope.lstTabs[3]);
-        }
-    };
-
-
     $scope.sumUserAmount = function() {
         $scope.objEdicion.montoAcumuladoUsuario = 0;
         $scope.lstDepartamento.forEach(function(row) {
@@ -425,22 +365,6 @@
         item.className = activeTab;
         item.isActive = true;
 
-    };
-
-
-
-    $scope.setCuentaContable = function() {
-        $scope.lstRegistroContable = [];
-        $scope.lstRegistroContable = comisionesRepository.getComisionTemplate();
-        $scope.lstRegistroContable[0].cuenta = $scope.selectedDepartamento.cuentaContable;
-        $scope.lstRegistroContable[0].concepto = $scope.selectedDepartamento.descripcion.substring(8);
-        $scope.lstRegistroContable[1].cuenta = $scope.lstRegistroContable[1].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
-        $scope.lstRegistroContable[2].cuenta = $scope.lstRegistroContable[2].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
-
-        $scope.lstRegistroContable[0].cargo = $scope.gridComisionesRow.abono;
-        $scope.lstRegistroContable[1].cargo = $scope.gridInteresRow.abono;
-        $scope.lstRegistroContable[2].abono = $scope.gridComisionesRow.abono + $scope.gridInteresRow.abono;
-        $scope.objEdicion.montoAcumuladoUsuario = $scope.gridComisionesRow.abono;
     };
 
     $scope.toggleShowSub = function() {
@@ -635,5 +559,266 @@
             j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     }
+
+    $scope.gruposComisiones = [];
+    $scope.currentColor = '#c9dde1';
+    $scope.currentGrupo = 0;
+
+    $scope.NewGroup = function(){ // c9dde1
+        // var name =  $scope.gruposComisiones.length + 1;
+        $scope.currentGrupo = $scope.currentGrupo + 1;
+        $scope.gruposComisiones.push({ name: $scope.currentGrupo, color: $scope.currentColor, status:1 });
+        $("#panelTest").scrollTop(500000);
+    }
+
+    $scope.getNewColor = function(){ 
+        hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F") 
+        color_aleatorio = "#"; 
+        for ( i = 0; i < 6; i++ ){ 
+            posarray = $scope.aleatorio(0,hexadecimal.length)
+            // console.log( posarray );
+            color_aleatorio += hexadecimal[posarray] 
+        } 
+        // console.log( color_aleatorio );
+        return color_aleatorio;
+    }
+
+    $scope.aleatorio = function(inferior,superior){ 
+        numPosibilidades = superior - inferior 
+        aleat = Math.random() * numPosibilidades 
+        aleat = Math.floor(aleat) 
+        return parseInt(inferior) + aleat 
+    }
+
+    $scope.temporalRow = {};
+    $scope.gridComisiones.onRegisterApi = function(gridApi) {
+        $scope.gridApi = gridApi;
+
+        gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+            if( row.isSelected ){
+                console.log('seleccioando');
+                $scope.NewGroup();
+                row.entity.color = $scope.currentColor;
+                $scope.gridComisionesRow = row.entity;
+
+                var current = filterFilter($scope.gruposComisiones, {color: $scope.currentColor});
+                var idGrupo = current[0].name;
+                $scope.temporalRow = row.entity;
+
+                $scope.getComisionesIva(row.entity.idDepositoBanco);
+            }
+            else{
+                console.log('deseleccionar');
+                var current = filterFilter($scope.gruposComisiones, {color: row.entity.color});
+                var idGrupo = current[0].name;
+
+                var tempArrayAux = [];
+                $scope.gruposComisionesData.forEach( function( item, key ){
+                    if( item.grupo != idGrupo ){
+                        tempArrayAux.push( item );
+                    }
+                });
+                $scope.gruposComisionesData = tempArrayAux;
+
+                tempArrayAux = [];
+                $scope.gridInteres.data.forEach( function( item, key ){
+                    if( item.color != row.entity.color ){
+                        tempArrayAux.push( item );   
+                    }
+                });
+                $scope.gridInteres.data = tempArrayAux;
+
+                tempArrayAux = [];
+                $scope.gruposComisiones.forEach( function( item, key ){
+                    // console.log( "Coloralex", item.color );
+                    if( item.color != row.entity.color ){
+                        tempArrayAux.push( item );   
+                    } 
+                });
+                $scope.gruposComisiones = tempArrayAux;
+
+                // console.log( $scope.gruposComisionesData );
+                row.entity.color = "";
+            }
+
+            if( $scope.gruposComisiones.length == 0 ){
+                $scope.btn_createcom_flag = false;
+                // $scope.btn_createcom_text = 'Este boton deberia ocultarse o al menos deshabilitarse';
+            }
+            else if( $scope.gruposComisiones.length == 1 ){
+                $scope.btn_createcom_flag = true;
+                $scope.btn_createcom_text = 'Crear Referencia';
+            }
+            else{
+                $scope.btn_createcom_flag = true;
+                $scope.btn_createcom_text = 'Crear Referencia Grupal';
+            }
+            console.log( 'Cantidad de referencias', $scope.gruposComisiones.length );
+        });
+    };
+
+
+    $scope.gridInteres.onRegisterApi = function(gridApi) {
+        $scope.gridApiInteres = gridApi;
+
+        gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+            $scope.gridInteresRow = row.entity;
+            $scope.msgTempSave();
+        });
+
+    };
+
+    $scope.gridInteres.isRowSelectable = function(row) {
+        return false;
+    };
+
+    $scope.getComisiones = function() {
+        $scope.gruposComisiones     = [];
+        $scope.currentColor         = '#c9dde1';
+        $scope.currentGrupo         = 0;
+        $scope.gridInteres.data     = [];
+        $scope.gruposComisionesData = [];
+        $scope.btn_createcom_flag   = false;
+
+        $scope.EliminarComision();
+        $scope.setActiveTab($scope.lstTabs[1]);
+
+        var params = {
+            idBanco: $scope.selectedValueBancoID,
+            noCuenta: $scope.selectedValueCuentaID,
+            fechaIni: $scope.selectedValueFechaInicio,
+            fechaFin: $scope.selectedValueFechaFin
+        };
+
+        $scope.carteraControlsDisabled = false;
+
+        $('#mdlLoading').modal('show');
+        $scope.gridComisiones.data = [];
+        comisionesRepository.getcomisiones(params).then(function(result) {
+            if (result.data.length > 0) {
+                $scope.gridComisiones.data = result.data;
+                $scope.getSucursales();
+                $('#mdlLoading').modal('hide');
+            } else {
+                $('#mdlLoading').modal('hide');
+            }
+        });
+    };
+
+    
+    $scope.getComisionesIva = function(depositoID) {
+
+        $('#mdlLoading').modal('show');
+        // $scope.gridInteres.data = [];
+        comisionesRepository.getcomisionesIva(depositoID).then(function(result) {
+            if (result.data.length > 0) {
+                result.data[0].color = $scope.currentColor;
+                $scope.gridInteres.data.push(result.data[0]);
+
+                // console.log( $scope.gruposComisiones );
+                var current = filterFilter($scope.gruposComisiones, {color: $scope.currentColor});
+                var idGrupo = current[0].name; 
+                $scope.gruposComisionesData.push({grupo: idGrupo, data:[$scope.temporalRow,result.data[0]]}); 
+
+                $('#mdlLoading').modal('hide');
+
+                // Se deja preparado un nuevo color para pintarse en el grid.
+                $scope.currentColor = $scope.getNewColor();
+
+                console.log($scope.gruposComisionesData);
+            } else {
+                $('#mdlLoading').modal('hide');
+            }
+        });
+    };
+
+    setTimeout( function(){
+        $scope.setActiveTab($scope.lstTabs[2]);
+    }, 1000);
+
+    $scope.conIva = ['$0.00', '$0.00'];
+    $scope.curComIndex = 0;
+
+    $scope.setCuentaContable = function() {
+        $scope.gruposComisionesData[ $scope.curComIndex ].data.splice(2,2);
+
+        console.log( $scope.selectedDepartamento );
+        if( $scope.selectedValueSucursalID == 0 || $scope.selectedValueSucursalID === undefined || $scope.selectedValueSucursalID === null ){
+            console.log('No se ha seleccionado la sucursal');
+        }
+        else if ( $scope.selectedDepartamento === null ){
+            console.log('No se ha seleccionado el departamento');
+        }
+        else if( $scope.selectedDepartamento.length == 0 ){
+            console.log('No se ha seleccionado el departamento');
+        }
+        else{
+            var Departamento = [];
+            Departamento.push( $scope.selectedValueSucursalID );
+            Departamento.push( $scope.selectedDepartamento );
+            $scope.gruposComisionesData[ $scope.curComIndex ].data.push( Departamento );
+
+            $scope.lstRegistroContable = [];
+            $scope.lstRegistroContable = comisionesRepository.getComisionTemplate();
+            $scope.lstRegistroContable[0].cuenta = $scope.selectedDepartamento.cuentaContable;
+            $scope.lstRegistroContable[0].concepto = $scope.selectedDepartamento.descripcion.substring(8);
+            $scope.lstRegistroContable[1].cuenta = $scope.lstRegistroContable[1].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
+            $scope.lstRegistroContable[2].cuenta = $scope.lstRegistroContable[2].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
+
+            var currentComision = $scope.gruposComisionesData[ $scope.curComIndex ].data[0];
+            var currentInteres  = $scope.gruposComisionesData[ $scope.curComIndex ].data[1];
+
+            $scope.lstRegistroContable[0].cargo = currentComision.abono; // Ok mas o menos
+            $scope.lstRegistroContable[1].cargo = currentInteres.abono;
+            $scope.lstRegistroContable[2].abono = currentComision.abono + currentInteres.abono;
+            $scope.objEdicion.montoAcumuladoUsuario = currentComision.abono;
+
+            $scope.conIva[0] = $scope.lstRegistroContable[2].abono;
+            $scope.conIva[1] = $scope.lstRegistroContable[2].abono;
+
+            console.log( 'RegistroContable', $scope.lstRegistroContable );
+            $scope.gruposComisionesData[ $scope.curComIndex ].data.push( $scope.lstRegistroContable );
+            console.log( $scope.gruposComisionesData );
+        }
+
+
+    };
+
+    $scope.nextRegistro = function(){
+        if( $scope.curComIndex < ($scope.gruposComisionesData.length - 1) )
+            $scope.curComIndex++;
+    }
+
+    $scope.prevRegistro = function(){
+        if( $scope.curComIndex > 0 )
+            $scope.curComIndex--;
+    }
+
+    $scope.validarMontos = function() {
+        console.log( 'Sucursal', $scope.selectedDepartamento );
+        // if( $scope.selectedValueSucursalID == 0 || $scope.selectedValueSucursalID === undefined || $scope.selectedValueSucursalID === null ){
+        //     console.log('No se ha seleccionado la sucursal');
+        // }
+        // else if( $scope.selectedDepartamento.length == 0 ){
+        //     console.log('No se ha seleccionado el departamento');
+        // }
+        // else{
+        //     var Departamento = [];
+        //     Departamento.push( $scope.selectedValueSucursalID );
+        //     Departamento.push( $scope.selectedDepartamento );
+        //     $scope.gruposComisionesData[ $scope.curComIndex ].data.push( Departamento );
+
+        //     console.log( $scope.gruposComisionesData );
+        // }
+
+        // if ($scope.objEdicion.usarMontoCalculado === false && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
+            // swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
+        // } else {
+            // $scope.insInteresComisionDetalle();
+            // $scope.interesComisionID = 0;
+            // $scope.loadingDetalle = false;
+            // $scope.setActiveTab($scope.lstTabs[3]);
+        // }
+    };
 
 });
