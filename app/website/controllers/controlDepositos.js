@@ -33,7 +33,8 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'idAlma', value: req.query.idAlma, type: self.model.types.STRING },
         { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
         { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING },
-        { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT }
+        { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT},
+        { name: 'idBanco', value: req.query.IDBanco, type: self.model.types.INT }
     ];
 
     console.log(params);
