@@ -198,6 +198,22 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                      'Content-Type': 'application/json'
                 }
             });
+        },
+
+
+        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
+                method: 'GET',
+                params: {
+                    ReferenciaAmpliada: refampliada,
+                    TipoRegistro: tipoRegistro,
+                    idEmpresa: idEmpresa
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
         }
 
 //Fin de la llave return

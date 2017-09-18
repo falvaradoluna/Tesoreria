@@ -425,11 +425,6 @@
 
 
 
-
-
-
-
-
             <!--Inicio del quinto Tab / Registros Contables Referenciados-->
             <div id="ContablesReferenciados" class="tabcontent">
                 <div class="panel col-md-12">
@@ -470,6 +465,91 @@
             </div>
             </div>
             <!--Fin del quinto Tab / Registros Contables Referenciados-->
+
+<!--=====================Modal Detalle de Registros Bancarios Referenciaados (Cargos)==============================-->
+<div class="modal fade" id="DetalleRelacionCargos" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header label-mint">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle text-white"></i></button>
+                <h4 class="modal-title text-white">Detalle Registros Bancarios Referenciados (Cargos)</h4>
+
+            </div>
+            <div class="modal-body">
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Poliza</th>
+                            <th>Número de Cuenta</th>
+                            <th>Concepto</th>
+                            <th>Numero Consecutivo</th>
+                            <th>Nombre del Usuario</th>
+                            <th>Fecha de Operacion</th>
+                            <th>Cargo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat = "bancoCargos in BancoReferenciadoCargos">
+                            <td>{{bancoCargos.tipoPoliza}}</td>
+                            <td>{{bancoCargos.numeroCuenta}}</td>
+                            <td>{{bancoCargos.concepto}}</td>
+                            <td>{{bancoCargos.consecutivoNumero}}</td>
+                            <td>{{bancoCargos.nombreUsuario}}</td>
+                            <td>{{bancoCargos.fechaOperacion | date:'yyyy/MM/dd'}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : bancoCargos.cargo > 0}">{{bancoCargos.cargo | currency}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right"><span ng-if="cargoTotal> 0">{{cargoTotal | currency}}</span></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Banco</th>
+                            <th>Referencia</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{datoBancarioActual.banco}}</td>
+                            <td>{{datoBancarioActual.refAmpliada}}</td>
+                            <td>{{datoBancarioActual.concepto}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : datoBancarioActual.cargo > 0}">{{datoBancarioActual.cargo | currency}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right"><span ng-if="cargoActual > 0">{{cargoActual | currency}}</span></td>                            
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--===============================Fin Modal Detalle de Registros Bancarios Referenciaados (Cargos)====================-->
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 <!--Modal para colocar el numero del punteo-->
 <!--===================================================-->
@@ -543,6 +623,7 @@
 </div>
 <!--===================================================-->
 <!--End Modal para colocar el numero del punteo-->
+
 <!--Modal para colocar el numero del punteo-->
 <!--===================================================-->
 <div class="modal fade" id="alertaPunteo" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
