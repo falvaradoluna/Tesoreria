@@ -1,12 +1,12 @@
 registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
 
      //Declaracion de variables locales
-     $scope.bancoReferenciados = '';
+     $scope.bancoReferenciadosAbonos = '';
+     $scope.bancoReferenciadosCargos = '';
      $scope.contableReferenciados= '';
-
-
-
-
+     $scope.BancoReferenciadoCargos = '';
+     $scope.cargoTotal = 0;
+     $scope.cargoActual = 0;
 
 $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
@@ -66,36 +66,69 @@ $scope.init = function() {
     //****************************************************************************************************
      $scope.bancoReferenciados = function() {
         conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte).then(function(result) {
-        $scope.bancoReferenciados = result.data;
-        $scope.tabla('bancoReferenciado');
+        $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function(value){
+            return value.tipoMovimiento == 0;
+        });
+        $scope.bancoReferenciadosCargos = $filter('filter')(result.data,function(value){
+            return value.tipoMovimiento == 1;
+        });
+        $scope.tabla('bancoReferenciadoAbono');
+        $scope.tabla('bancoReferenciadoCargo');
       });
     };
     //****************************************************************************************************
     
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-     $scope.contablesReferenciados = function() {
+     $scope.contablesReferenciados = function(){
         conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function(result) {
         $scope.contableReferenciados = result.data;
         $scope.tabla('contableRef');
       });
     };
-    //****************************************************************************************************    
-
-// INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************
-    $scope.tabla = function(idtabla) {
-        $('#' + idtabla).DataTable().destroy();
-        setTimeout(function() {
-            $('#' + idtabla).DataTable({
-                destroy: true,
-                "responsive": true,
-                searching: false,
-                paging: true,
-                autoFill: true
+
+    //Función que obtiene los registros Bancarios Referenciados
+    //****************************************************************************************************
+    $scope.detalleRegistrosReferenciados = function(registroConciliado, tipoRegistro){         //Indica: 1 es cargo, 0 es Abono
+      conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa).then(function(result){
+            $scope.datoBancarioActual = registroConciliado;
+            $scope.cargoActual = $scope.datoBancarioActual.cargo;
+            $scope.cargoTotal = 0;
+            if(tipoRegistro == 1)
+            {
+               $scope.BancoReferenciadoCargos = result.data;
+               
+            angular.forEach($scope.BancoReferenciadoCargos, function(value, key) {
+            $scope.cargoTotal += value.cargo;
             });
-        }, 1000);
-    };
+
+               $('#DetalleRelacionCargos').modal('show');
+            }
+            else if(tipoRegistro == 0)
+            {
+
+                alertFactory.error('Función no disponible');
+            }
+
+      });
+    };    
+    //****************************************************************************************************
+
+    // INICIA inicio la tabla para los distintos casos
+        //****************************************************************************************************
+        $scope.tabla = function(idtabla) {
+            $('#' + idtabla).DataTable().destroy();
+            setTimeout(function() {
+                $('#' + idtabla).DataTable({
+                    destroy: true,
+                    "responsive": true,
+                    searching: false,
+                    paging: true,
+                    autoFill: true
+                });
+            }, 1000);
+        };
     //****************************************************************************************************
 
 });
