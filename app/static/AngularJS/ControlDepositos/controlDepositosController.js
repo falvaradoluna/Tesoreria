@@ -560,6 +560,7 @@
             params.importeDocumento = objCartera.saldo;
             params.idTipoReferencia = 3;
             params.depositoID = depositoID;
+            params.IDBanco = $scope.selectedValueBancoID;
 
             return params;
         }
