@@ -486,7 +486,7 @@
                             <th>Numero Consecutivo</th>
                             <th>Nombre del Usuario</th>
                             <th>Fecha de Operacion</th>
-                            <th>Cargo</th>
+                            <th>Abono</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -497,13 +497,13 @@
                             <td>{{bancoCargos.consecutivoNumero}}</td>
                             <td>{{bancoCargos.nombreUsuario}}</td>
                             <td>{{bancoCargos.fechaOperacion | date:'yyyy/MM/dd'}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : bancoCargos.cargo > 0}">{{bancoCargos.cargo | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : bancoCargos.abono > 0}">{{bancoCargos.abono | currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td colspan="6" class="text-bold text-right text-info">Total</td>
-                            <td class="text-info text-semibold text-right"><span ng-if="cargoTotal> 0">{{cargoTotal | currency}}</span></td>
+                            <td class="text-info text-semibold text-right"><span ng-if="abonoTotal> 0">{{abonoTotal | currency}}</span></td>
                         </tr>
                     </tfoot>
                 </table>
