@@ -352,7 +352,8 @@ var self = this;
 var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,type: self.model.types.STRING},
             {name: 'tipoDato', value: req.query.TipoRegistro ,type: self.model.types.STRING},
             {name: 'idEmpresa', value: req.query.idEmpresa ,type: self.model.types.INT},
-            {name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING}
+            {name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING},
+            {name: 'fecha', value: req.query.fecha, type: self.model.types.STRING}
             ];
     this.model.query('SEL_RELACION_REG_BANCOS_REF_SP', params, function(error, result){
      self.view.expositor(res,{
