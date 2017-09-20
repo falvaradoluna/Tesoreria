@@ -201,14 +201,15 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
         },
 
 
-        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa){
+        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa, cuentaContable){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
                 method: 'GET',
                 params: {
                     ReferenciaAmpliada: refampliada,
                     TipoRegistro: tipoRegistro,
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    cuentaContable: cuentaContable
                 },
                 headers: {
                     'Content-Type' : 'application/json'

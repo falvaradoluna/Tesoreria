@@ -94,13 +94,13 @@ $scope.init = function() {
       conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa).then(function(result){
             $scope.datoBancarioActual = registroConciliado;
             $scope.cargoActual = $scope.datoBancarioActual.cargo;
-            $scope.cargoTotal = 0;
+            $scope.abonoTotal = 0;
             if(tipoRegistro == 1)
             {
                $scope.BancoReferenciadoCargos = result.data;
                
             angular.forEach($scope.BancoReferenciadoCargos, function(value, key) {
-            $scope.cargoTotal += value.cargo;
+            $scope.abonoTotal += value.abono;
             });
 
                $('#DetalleRelacionCargos').modal('show');
