@@ -31,9 +31,10 @@
         <div class="row">
             <div class="col-md-12">
                 <h2>Departamento</h2>
+                <!-- <small>{{ gruposComisionesData[ curComIndex ].data[2][1] }}</small> <br> -->
+                <!-- <small>{{ selectedDepartamento }}</small> -->
             </div>
             <div class="col-md-6">
-
                 <select class="form-control" ng-model="selectedValueSucursalID" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in lstSucursal" name="txtSucursal" ng-change="getDepartamentosBpro(selectedValueSucursalID)">
                     <option value="">Seleccioné Sucursal</option>
                 </select>
@@ -57,8 +58,15 @@
         <div class="texttos">{{ gruposComisionesData[ curComIndex ].data[0].referencia }}</div>
     </div>
     <div class="col-md-2">
-        <div><small> <b> Monto {{objEdicion.usarMontoCalculado == true ? 'automático' :  'usuario' }} </b> </small> </div>
-        <div class="montos">{{objEdicion.usarMontoCalculado == true ? (gruposComisionesData[ curComIndex ].data[0]  | currency) : objEdicion.montoAcumuladoUsuario | currency}}</div>
+        <div>
+            <small> 
+                <b> Monto {{objEdicion.usarMontoCalculado == true ? 'automático' :  'usuario' }} </b> 
+            </small>
+        </div>
+        <div class="montos"> <!-- gruposComisionesData[ curComIndex ].data[3] -->
+            <!-- {{objEdicion.usarMontoCalculado == true ? (gruposComisionesData[ curComIndex ].data[3][0].cargo  | currency) : objEdicion.montoAcumuladoUsuario | currency}} -->
+            {{ gruposComisionesData[ curComIndex ].data[3][0].cargo === undefined ? '$0.00' : (gruposComisionesData[ curComIndex ].data[3][0].cargo | currency) }}
+        </div>
         <!-- objEdicion.montoAcumuladoUsuario -->
     </div>
     <div class="col-md-2">
@@ -97,13 +105,14 @@
                 </tr>
             </thead>
             <tbody ng-repeat="registro in lstRegistroContable">
+            <tbody ng-repeat="registro in gruposComisionesData[ curComIndex ].data[3]">
                 <tr>
                     <td>{{registro.consecutivo}}</td>
                     <td>{{registro.cuenta}}</td>
                     <td>{{registro.concepto}}</td>
                     <td>{{registro.descripcion}}</td>
-                    <td>{{registro.cargo}}</td>
-                    <td>{{registro.abono}}</td>
+                    <td>{{ formar_number( registro.cargo ) }}</td>
+                    <td>{{ formar_number( registro.abono ) }}</td>
                     <td>
                         <button class="btn btn-success" ng-click="toggleShowSub()" ng-show="registro.showSub">
                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
@@ -119,8 +128,12 @@
             <tfoot>
                 <tr>
                     <td colspan="4"> <b class="pull-right">Totales:</b> </td>
-                    <td><b>{{ conIva[0] }}</b></td>
-                    <td><b>{{ conIva[1] }}</b></td>
+                    <td>
+                        <b>
+                            {{ formar_number( gruposComisionesData[ curComIndex ].data[3][0].cargo + gruposComisionesData[ curComIndex ].data[3][1].cargo ) }}
+                        </b>
+                    </td>
+                    <td><b>{{ formar_number( gruposComisionesData[ curComIndex ].data[3][2].abono ) }}</b></td>
                     <td></td>
                 </tr>
             </tfoot>
