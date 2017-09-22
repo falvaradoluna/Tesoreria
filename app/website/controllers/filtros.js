@@ -172,7 +172,8 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
         { name: 'noCuenta', value: req.query.numero_cuenta, type: self.model.types.STRING },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING }
+        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
+        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING }
     ];
 
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
