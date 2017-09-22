@@ -337,6 +337,7 @@ conciliacionDetalleRegistro.prototype.get_contableReferenciado = function(req, r
   var self = this;
   var params =[{name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING},
                {name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
+               {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
                {name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT}
               ];
   this.model.query('SEL_REG_CONTABLES_REF', params, function(error, result){
@@ -353,7 +354,8 @@ var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,t
             {name: 'tipoDato', value: req.query.TipoRegistro ,type: self.model.types.STRING},
             {name: 'idEmpresa', value: req.query.idEmpresa ,type: self.model.types.INT},
             {name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING},
-            {name: 'fecha', value: req.query.fecha, type: self.model.types.STRING}
+            {name: 'fecha', value: req.query.fecha, type: self.model.types.STRING},
+            {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING}
             ];
     this.model.query('SEL_RELACION_REG_BANCOS_REF_SP', params, function(error, result){
      self.view.expositor(res,{
