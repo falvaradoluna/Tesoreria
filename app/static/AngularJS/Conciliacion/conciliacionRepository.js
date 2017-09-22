@@ -2,7 +2,7 @@ var conciliacionURL = global_settings.urlCORS + 'api/conciliacion/';
 
 registrationModule.factory('conciliacionRepository', function($http) {
     return {
-        getAbonoContable: function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable) {
+        getAbonoContable: function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable,polizaPago) {
             return $http({
                 url: conciliacionURL + 'abonoContable/',
                 method: "GET",
@@ -13,6 +13,7 @@ registrationModule.factory('conciliacionRepository', function($http) {
                     cuentaContable: cuentaContable,
                     opcion: opcion,
                     fechaElaboracion: fInicial,
+                    polizaPago: polizaPago,
                     fechaCorte: fFinal
                 },
                 headers: {
