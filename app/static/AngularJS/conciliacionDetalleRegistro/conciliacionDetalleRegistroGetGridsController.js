@@ -16,7 +16,7 @@ $scope.init = function() {
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.bancoReferenciados();
-        $scope.contablesReferenciados();
+        $scope.contablesReferenciados($scope.polizaPago);
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
@@ -25,6 +25,7 @@ $scope.init = function() {
     
     var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
+        $scope.polizaPago = $scope.busqueda.PolizaPago;
     };
 
      // INICIA Obtengo los padres del Auxiliar contable punteado
@@ -80,8 +81,8 @@ $scope.init = function() {
     
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-     $scope.contablesReferenciados = function(){
-        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function(result) {
+     $scope.contablesReferenciados = function(polizaPago){
+        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa).then(function(result) {
         $scope.contableReferenciados = result.data;
         $scope.tabla('contableRef');
       });
@@ -91,7 +92,7 @@ $scope.init = function() {
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.detalleRegistrosReferenciados = function(registroConciliado, tipoRegistro){         //Indica: 1 es cargo, 0 es Abono
-      conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion).then(function(result){
+      conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago).then(function(result){
             $scope.datoBancarioActual = registroConciliado;
             $scope.cargoActual = $scope.datoBancarioActual.cargo;
             $scope.abonoTotal = 0;
