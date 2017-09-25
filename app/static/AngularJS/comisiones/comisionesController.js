@@ -269,11 +269,23 @@
                 $scope.selectedDepartamento = {};
 
                 $scope.btn_dep_sig_flag   = false;
-                // $scope.btn_dep_sig_show   = true;
+
+                if( $scope.gruposComisionesData.length == 1 ){
+                    $scope.btn_dep_sig_show   = false;
+                }
+                else{
+                    $scope.btn_dep_sig_show   = true;
+                }
             }
             else if( TamanioPrimerNodo == 4 ){
                 $scope.btn_dep_sig_flag   = true;
-                // $scope.btn_dep_sig_show = true;
+                if( $scope.gruposComisionesData.length == 1 ){
+                    $scope.btn_dep_sig_show   = false;
+                }
+                else{
+                    $scope.btn_dep_sig_show   = true;
+                }
+
                 var auxEmp = $scope.gruposComisionesData[ $scope.curComIndex ].data[2][0];
 
                 if( $scope.gruposComisionesData[ sucursalPrev ].data.length == 2 ){
@@ -971,30 +983,44 @@
     }
 
     $scope.validarMontos = function() {
-        //console.log( 'Sucursal', $scope.selectedDepartamento );
-        // if( $scope.selectedValueSucursalID == 0 || $scope.selectedValueSucursalID === undefined || $scope.selectedValueSucursalID === null ){
-        //     console.log('No se ha seleccionado la sucursal');
-        // }
-        // else if( $scope.selectedDepartamento.length == 0 ){
-        //     console.log('No se ha seleccionado el departamento');
-        // }
-        // else{
-        //     var Departamento = [];
-        //     Departamento.push( $scope.selectedValueSucursalID );
-        //     Departamento.push( $scope.selectedDepartamento );
-        //     $scope.gruposComisionesData[ $scope.curComIndex ].data.push( Departamento );
+        swal({
+            title: "Comisiones",
+            text: "¿Esta seguro de guardar los registros de comisiones?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Aceptar",
+            closeOnConfirm: true
+        },
+        function() {
+            
+            $scope.gruposComisionesData.forEach( function( item, key ){
+                var comision = item.data[0];
+                var interes  = item.data[1];
+                var depto    = item.data[2];
+                var egistro  = item.data[3];
 
-        //     console.log( $scope.gruposComisionesData );
-        // }
+                // Se guarda en tabla InteresComision
+                var parametros = {
+                    comisionID:  comision.idBmer,
+                    interesID:   interes.idBmer,
+                    bancoID:     comision.idBanco,
+                    userID:      '',
+                    statusID:    ''
+                };
 
-        // if ($scope.objEdicion.usarMontoCalculado === false && ($scope.objEdicion.montoAcumuladoUsuario != $scope.gridComisionesRow.abono)) {
-            // swal("Aviso", "La suma de los montos deben ser iguales.", "warning");
-        // } else {
-            // $scope.insInteresComisionDetalle();
-            // $scope.interesComisionID = 0;
-            // $scope.loadingDetalle = false;
-            // $scope.setActiveTab($scope.lstTabs[3]);
-        // }
+                // { name: 'interesID', value: req.query.interesID, type: self.model.types.INT },
+                // { name: 'comisionID', value: req.query.comisionID, type: self.model.types.INT },
+                // { name: 'bancoID', value: req.query.bancoID, type: self.model.types.INT },
+                // { name: 'userID', value: req.query.userID, type: self.model.types.INT },
+                // { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
+                comisionesRepository.insInteresComision(parametros).then(function(result) {
+                    console.log( result );
+                });                
+            });
+
+        });
+
     };
 
 });
