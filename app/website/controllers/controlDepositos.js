@@ -342,10 +342,27 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
         { name: 'comisionID', value: req.query.comisionID, type: self.model.types.INT },
         { name: 'bancoID', value: req.query.bancoID, type: self.model.types.INT },
         { name: 'userID', value: req.query.userID, type: self.model.types.INT },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'agrupador', value: req.query.agrupador, type: self.model.types.INT },
         { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
     ];
 
     this.model.query('[INS_INTERESCOMISION_SP]', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_agrupadorComision = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+    ];
+
+    this.model.query('SEL_AGRUPADORCOMISIONES_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
