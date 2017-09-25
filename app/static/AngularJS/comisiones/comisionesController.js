@@ -1005,8 +1005,8 @@
                     comisionID:  comision.idBmer,
                     interesID:   interes.idBmer,
                     bancoID:     comision.idBanco,
-                    userID:      '',
-                    statusID:    ''
+                    userID:      $scope.idUsuario,
+                    statusID:    1
                 };
 
                 // { name: 'interesID', value: req.query.interesID, type: self.model.types.INT },
@@ -1015,6 +1015,7 @@
                 // { name: 'userID', value: req.query.userID, type: self.model.types.INT },
                 // { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
                 comisionesRepository.insInteresComision(parametros).then(function(result) {
+                    console.log('''''''''''''''''''''''''''''''''''''''''''''''''''''''''');
                     console.log( result );
                 });                
             });
