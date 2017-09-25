@@ -420,7 +420,7 @@
     };
 
 
-    $scope.insInteresComisionDetalle = function() {
+    $scope.insInteresComisionDetalle = function( currentComisionHeaderID ) {
         var excludeFirstRow = false;
 
         if ($scope.objEdicion.usarMontoCalculado === true) {
@@ -435,7 +435,7 @@
 
         var counter = 0;
 
-        comisionesRepository.insCxpComisionesInteres($scope.currentComisionHeaderID, $scope.selectedDepartamento.sucursalID, $scope.selectedValueEmpresaID).then(function(result) {
+        comisionesRepository.insCxpComisionesInteres( currentComisionHeaderID , $scope.selectedDepartamento.sucursalID, $scope.selectedValueEmpresaID).then(function(result) {
             var headerID       = result.data[0].headerID;
             var nextRef        = result.data[0].nextRef;
             var idPersona      = result.data[0].idPersona;
@@ -993,35 +993,99 @@
             closeOnConfirm: true
         },
         function() {
-            
-            $scope.gruposComisionesData.forEach( function( item, key ){
-                var comision = item.data[0];
-                var interes  = item.data[1];
-                var depto    = item.data[2];
-                var egistro  = item.data[3];
+            console.log( 'Colleccion', $scope.gruposComisionesData );
+            comisionesRepository.agrupadorComision($scope.selectedValueEmpresaID).then(function(result) { // Obtenemos el grupo al que pertenecera
+                lastRow     = $scope.gruposComisionesData.length * 3;
+                currentRow  = 0;
 
-                // Se guarda en tabla InteresComision
-                var parametros = {
-                    comisionID:  comision.idBmer,
-                    interesID:   interes.idBmer,
-                    bancoID:     comision.idBanco,
-                    userID:      $scope.idUsuario,
-                    statusID:    1
-                };
+                $scope.gruposComisionesData.forEach( function( item, key ){
+                    var comision = item.data[0];
+                    var interes  = item.data[1];
+                    var depto    = item.data[2];
+                    var registro = item.data[3];
 
-                // { name: 'interesID', value: req.query.interesID, type: self.model.types.INT },
-                // { name: 'comisionID', value: req.query.comisionID, type: self.model.types.INT },
-                // { name: 'bancoID', value: req.query.bancoID, type: self.model.types.INT },
-                // { name: 'userID', value: req.query.userID, type: self.model.types.INT },
-                // { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
-                comisionesRepository.insInteresComision(parametros).then(function(result) {
-                    console.log('''''''''''''''''''''''''''''''''''''''''''''''''''''''''');
-                    console.log( result );
-                });                
-            });
+                    // Se guarda en tabla InteresComision
+                    var parametros = {
+                        comisionID   : comision.idBmer,
+                        interesID    : interes.idBmer,
+                        bancoID      : comision.idBanco,
+                        userID       : $scope.idUsuario,
+                        idEmpresa    : $scope.selectedValueEmpresaID,
+                        agrupador    : result.data[0].Agrupador,
+                        statusID     : 1
+                    };
+
+                    comisionesRepository.insInteresComision(parametros).then(function(resComisionIva) { // Guardamos en InteresesComision
+                        console.log( 'resulst Comision Iva', resComisionIva );
+                        var opt_cxp = {
+                            headerID : resComisionIva.data[0].headerID,
+                            Empresa  : $scope.selectedValueEmpresaID,
+                            Sucursal : depto[0]
+                        };
+
+                        comisionesRepository.insCxpComisionesInteres( opt_cxp.headerID, opt_cxp.Sucursal, opt_cxp.Empresa).then(function(resCXP) { // Guardamos en cxp_comisionesintereses
+                            console.log( 'resulst CXP', resCXP );
+
+                            var headerID       = resCXP.data[0].headerID;
+                            var nextRef        = resCXP.data[0].nextRef;
+                            var idPersona      = resCXP.data[0].idPersona;
+                            var lastReferencia = resCXP.data[0].lastReferencia;
+                            var baseReferencia = resCXP.data[0].baseReferencia;
+
+                            // Identificador en el campo de documento "AU-PED-Comision-1"
+                            var DocumentoConsecutivo = '';
+                            if( lastReferencia === null || lastReferencia === '' ){
+                                DocumentoConsecutivo = baseReferencia + '1';
+                            }
+                            else{
+                                var aux = lastReferencia.split('-');
+                                if( aux.length == 4 ){
+                                    var aux_actual = parseInt(aux[3]);
+                                    DocumentoConsecutivo = baseReferencia + (aux_actual + 1);
+                                }
+                                else{
+                                    DocumentoConsecutivo = baseReferencia + '1';
+                                }
+                            }
+
+                            // Validacion y obtencion de los datos a guardar
+                            $scope.rowsToInsert = [];
+                            registro.forEach(function(row, index) {
+                                var params = {};
+                                    params.cuentacontable = row.cuenta;
+                                    params.concepto = row.concepto;
+                                    params.cargo = row.cargo;
+                                    params.abono = row.abono;
+                                    params.documento = DocumentoConsecutivo;
+                                    params.idpersona = idPersona; 
+                                    params.idcomisionesintereses = headerID;
+                                    params.tipodocumento = row.tipodocumento;
+                                    params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
+                                    params.poriva = 16;
+                                    params.referencia = DocumentoConsecutivo;
+                                    params.banco = '0' + $scope.selectedValueBancoID;
+                                    params.referenciabancaria = nextRef;
+                                    params.conpoliza = key + 1;
+
+                                comisionesRepository.insInteresComisionDetalle( params ).then(function(resCXPDet) {
+                                    console.log( 'resulst CXPDet', resCXPDet );
+                                    if( resCXPDet.length != 0 ){
+                                        currentRow++;
+                                        console.log( currentRow, lastRow );
+                                        if( currentRow == lastRow ){
+
+                                            $scope.getComisionesRealizadas();
+                                            $scope.setActiveTab($scope.lstTabs[3]);
+                                            swal("Comisiones", "Se ha guardado correctamente", "success");
+                                        }
+                                    }
+                                });
+                            });
+                        });
+                    });
+                });
+            }); 
 
         });
-
     };
-
 });

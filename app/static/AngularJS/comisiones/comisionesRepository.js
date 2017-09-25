@@ -68,6 +68,18 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
+        agrupadorComision: function(idEmpresa) {
+            return $http({
+                url: comisionesURL + 'agrupadorComision/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         insInteresComisionDetalle: function(params) {
             return $http({
                 url: comisionesURL + 'insInteresComisionDetalle/',
