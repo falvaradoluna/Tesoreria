@@ -558,6 +558,7 @@
             params.idCliente = objCartera.idCliente;
             params.idAlma = 0;
             params.importeDocumento = objCartera.saldo;
+            params.importeAplicar   = objCartera.saldo;
             params.idTipoReferencia = 3;
             params.depositoID = depositoID;
             params.IDBanco = $scope.selectedValueBancoID;
@@ -566,6 +567,54 @@
         }
         catch(e){
             console.log(e);
+        }
+    };
+
+    $scope.TestReferencia = function() {
+        try{
+            $scope.RowCartera = $scope.selectedRowCartera;
+
+            $scope.TotalDocumentos   = 0;
+            $scope.selectedRowCartera.forEach( function( item, key ){
+                $scope.TotalDocumentos += parseFloat($scope.selectedRowCartera[key].importe);
+            });
+
+            console.log( 'Cartera seleccionada', $scope.RowCartera.length );
+            console.log( 'depositoTotal', $scope.depositoTotal );
+            console.log( 'TotalDocumentos', $scope.TotalDocumentos );
+            if( $scope.RowCartera.length == 1 ){
+
+            }
+            // if( $scope.aplicacionSuccess ){
+                // $scope.RowCartera.forEach( function( item, key ){
+                //     if( $scope.RowCartera[key].importeFinal != 0 ){
+                //         $scope.RowCartera[ key ].saldo = $scope.RowCartera[ key ].importeFinal;
+                //     }
+                //     else{
+                //         delete $scope.RowCartera[ key ];
+                //     }
+                // });
+
+                setTimeout(function() {
+                    var params = $scope.setReferenceParams($scope.RowCartera[0], 0, $scope.selectedRowDocuments.idDepositoBanco);
+                    console.log( params );
+                    // if ($scope.RowCartera.length > 1) params.idTipoReferencia = 4;
+                    // $scope.createReference(params);
+                }, 1000);
+
+                // setTimeout( function(){
+                    // $scope.RowCartera = [];
+                    // $scope.selectedRowCartera = [];
+                // },2000 );
+
+                $("#modal-anticipo").modal('hide');
+            // }
+            // else{
+                // swal("Control de depositos",$scope.aplicacionMensaje,"warning");
+            // }
+        }
+        catch( e ){
+            console.log( e );
         }
     };
 
