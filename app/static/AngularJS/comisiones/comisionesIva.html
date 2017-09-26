@@ -1,14 +1,78 @@
 <div class="row">
     <div class=" col-md-6">
         <h2>Comisiones</h2>
-        <br/>        
+        <br/>
         <div ui-grid="gridComisiones" ui-grid-selection class="grid"></div>
         <br/>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-1" id="panelTest">
+        <div class="bloqueColor" ng-repeat="(key, item) in gruposComisiones" style="background-color: {{ item.color }};">
+            <div>{{ item.name }}</div>
+        </div>
+    </div>
+    <div class="col-md-5">
         <h2>IVA	</h2>
         <br/>
         <div ui-grid="gridInteres" ui-grid-selection class="grid"></div>
         <br/>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-12"> 
+        <button class="btn btn-success pull-right" ng-disabled="!btn_createcom_flag" ng-click="tempSave();">
+            {{ btn_createcom_text }}
+        </button> 
+    </div>
+</div>
+
+<style type="text/css">
+    #panelTest{
+        text-align: center;
+        overflow-y: auto;
+        height: 402px;
+        margin-top: 78px;
+    }
+
+    .bloqueColor{
+        width: 50px;
+        height: 35px;
+        background-color: #999;
+        margin-top: 0 auto;
+        margin-bottom: 5px;
+        padding-top: 5px;
+        margin-left: calc( 50% - 25px );
+        cursor: pointer;
+    }
+
+    .bloqueColor div{
+        width: 40px;
+        height:25px;
+        background-color: rgba(0,0,0,0.1);
+        color: white;
+        font-weight: bold;
+        margin-left: 5px;
+        padding-top: 2px;
+    }
+
+    #panelTest::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    #panelTest::-webkit-scrollbar-track {
+      background-color: white;
+    } 
+    
+    #panelTest::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 30px; 
+    } 
+
+    #panelTest::-webkit-scrollbar-button {
+      /*background-color: navy;*/
+    }
+
+    #panelTest::-webkit-scrollbar-corner {
+      /*background-color: black;*/
+    }
+</style>

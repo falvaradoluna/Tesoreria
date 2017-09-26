@@ -37,6 +37,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
    var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
         $scope.difMonetaria = $scope.busqueda.DiferenciaMonetaria;
+        $scope.polizaPago = $scope.busqueda.PolizaPago;
     };
      
  //****************************************************************************************************
@@ -134,7 +135,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
                     $scope.gridDepositosBancos.data = result.data;
                     console.log($scope.gridDepositosBancos.data, 'Desposito Bancario');
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago);
                 }
             });
         } else if (idestatus == 2) {
@@ -149,9 +150,9 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
 
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
-     $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte) {
+     $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago) {
 
-            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte).then(function(result) {
+            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago).then(function(result) {
                 if (result.data[0].length !=0) {
                     $scope.auxiliarContable = result.data[0];
                     $scope.gridAuxiliarContable.data = result.data[0];

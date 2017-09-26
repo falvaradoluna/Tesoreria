@@ -126,7 +126,7 @@ registrationModule.factory('filtrosRepository', function($http) {
 
             });
         },
-        getAuxiliar: function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte) {
+        getAuxiliar: function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago) {
             return $http({
                 url: filtrosURL + 'auxiliarContable/',
                 method: "GET",
@@ -135,7 +135,8 @@ registrationModule.factory('filtrosRepository', function($http) {
                     numero_cuenta: numero_cuenta,
                     idEstatus: idestatus,
                     fElaboracion: fElaboracion,
-                    fCorte: fCorte
+                    fCorte: fCorte,
+                    polizaPago: polizaPago
                 },
                 headers: {
                     'Content-Type': 'application/json'

@@ -33,7 +33,8 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'idAlma', value: req.query.idAlma, type: self.model.types.STRING },
         { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
         { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING },
-        { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT }
+        { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT},
+        { name: 'idBanco', value: req.query.IDBanco, type: self.model.types.INT }
     ];
 
     console.log(params);
@@ -341,10 +342,27 @@ controlDepositos.prototype.get_interesComision = function(req, res, next) {
         { name: 'comisionID', value: req.query.comisionID, type: self.model.types.INT },
         { name: 'bancoID', value: req.query.bancoID, type: self.model.types.INT },
         { name: 'userID', value: req.query.userID, type: self.model.types.INT },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'agrupador', value: req.query.agrupador, type: self.model.types.INT },
         { name: 'statusID', value: req.query.statusID, type: self.model.types.INT }
     ];
 
     this.model.query('[INS_INTERESCOMISION_SP]', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_agrupadorComision = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+    ];
+
+    this.model.query('SEL_AGRUPADORCOMISIONES_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -367,8 +385,6 @@ controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
     });
 };
 
-
-
 controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
     var self = this;
 
@@ -383,7 +399,19 @@ controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
     });
 };
 
+controlDepositos.prototype.get_delInteresComisionGrupo = function(req, res, next) {
+    var self = this;
 
+    var params = [{ name: 'agrupador', value: req.query.agrupador, type: self.model.types.INT }];
+
+    this.model.query('DEL_INTERESCOMISION_GRUPO_SP', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
     var self = this;

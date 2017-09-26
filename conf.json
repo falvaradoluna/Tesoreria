@@ -4,6 +4,5 @@
     "SQL_password": "S0p0rt3",
     "SQL_server": "192.168.20.9",
     "SQL_database": "Tesoreria",
-    "SQL_connectionTimeout": 60000
-    
-} 
+    "SQL_connectionTimeout": 60000   
+}

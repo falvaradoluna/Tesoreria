@@ -58,11 +58,34 @@ registrationModule.factory('comisionesRepository', function($http) {
             });
         },
 
+        delInteresComisionGrupo: function(agrupador) {
+            return $http({
+                url: comisionesURL + 'delInteresComisionGrupo/',
+                method: "GET",
+                params: { agrupador: agrupador },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
         insInteresComision: function(params) {
             return $http({
                 url: comisionesURL + 'interesComision/',
                 method: "GET",
                 params: params,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        agrupadorComision: function(idEmpresa) {
+            return $http({
+                url: comisionesURL + 'agrupadorComision/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa
+                },
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -147,12 +170,12 @@ registrationModule.factory('comisionesRepository', function($http) {
         gridComisionesOptions: function() {
             return {
                 enableRowSelection: true,
+                enableRowHeaderSelection: false,
                 enableSelectAll: false,
                 selectionRowHeaderWidth: 35,
                 rowHeight: 35,
                 showGridFooter: true,
                 enableFiltering: true
-
             };
         },
         gridComisionesColumns: function() {
