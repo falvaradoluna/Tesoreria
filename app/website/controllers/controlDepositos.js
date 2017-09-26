@@ -384,8 +384,6 @@ controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
     });
 };
 
-
-
 controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
     var self = this;
 
@@ -400,7 +398,19 @@ controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
     });
 };
 
+controlDepositos.prototype.get_delInteresComisionGrupo = function(req, res, next) {
+    var self = this;
 
+    var params = [{ name: 'agrupador', value: req.query.agrupador, type: self.model.types.INT }];
+
+    this.model.query('DEL_INTERESCOMISION_GRUPO_SP', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
     var self = this;

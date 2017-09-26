@@ -36,13 +36,32 @@
     $scope.currentComisionHeaderID = 0;
     $scope.showSub = false;
     //init grids
-    $scope.gridComisiones = comisionesRepository.gridComisionesOptions;
+    // $scope.gridComisiones = comisionesRepository.gridComisionesOptions;
+    $scope.gridComisiones = {
+        enableRowSelection: true,
+        // enableRowHeaderSelection: false,
+        enableSelectAll: false,
+        selectionRowHeaderWidth: 35,
+        rowHeight: 35,
+        showGridFooter: true,
+        enableFiltering: true
+    };
+
     $scope.gridComisiones.columnDefs = comisionesRepository.gridComisionesColumns();
     $scope.gridComisiones.multiSelect = true;
+
     $scope.gridComisiones.rowTemplate = '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>';
 
 
-    $scope.gridInteres = comisionesRepository.gridInteresOptions;
+    $scope.gridInteres = {
+                enableRowSelection: true,
+                enableRowHeaderSelection: false,
+                enableSelectAll: false,
+                selectionRowHeaderWidth: 35,
+                rowHeight: 35,
+                showGridFooter: true,
+                enableFiltering: true
+            };
     $scope.gridInteres.columnDefs = comisionesRepository.gridInteresColumns();
     $scope.gridInteres.multiSelect = true;
     $scope.gridInteres.rowTemplate = '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>';
@@ -141,7 +160,6 @@
                     $scope.gridComisionesRow = [];
                     $scope.objEdicion.montoAcumuladoUsuario = 0;
 
-
                     $scope.lstTemp = result2.data;
                     $scope.getComisionesRealizadas();
                     $scope.loadingDetalle = false;
@@ -156,6 +174,7 @@
     $scope.getComisionesRealizadas = function(){ // Comisiones Temporales y Aplicadas
         comisionesRepository.selInteresComision( 1 ).then(function(result) {
             $scope.lstTemp = result.data;
+            console.log( 'Registros Temporales', $scope.lstTemp );
         });
 
         comisionesRepository.selInteresComision( 2 ).then(function(result) {
@@ -559,8 +578,8 @@
 
     $scope.deleteReference = function(item) {
         swal({
-            title: "¿Esta seguro?",
-            text: "Se eliminará el registro",
+            title: "¿Esta seguro de eliminar?",
+            text: "Al eliminar, se borrara todos los registros del grupo con el que esté relacionado.",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#21B9BB",
@@ -568,7 +587,15 @@
             closeOnConfirm: true
         },
         function() {
-            comisionesRepository.delInteresComision(item.interesComisionID).then(function(result) {
+            // comisionesRepository.delInteresComision(item.interesComisionID).then(function(result) {
+            //     comisionesRepository.selInteresComision().then(function(result2) {
+            //         $scope.lstTemp = result2.data;
+            //         $scope.getComisionesRealizadas();
+            //         swal("Eliminado", "Se eliminó el registro", "success");
+            //     });
+            // });
+
+            comisionesRepository.delInteresComisionGrupo(item.agrupador).then(function(result) {
                 comisionesRepository.selInteresComision().then(function(result2) {
                     $scope.lstTemp = result2.data;
                     $scope.getComisionesRealizadas();
