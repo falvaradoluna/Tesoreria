@@ -159,7 +159,7 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
          minutes="0"+minutes
          if (seconds<=9)
          seconds="0"+seconds
-        //change font size here to your desire
+        
         myclock= hours+":"+minutes+":"+seconds+" "+dn ;
         if (document.layers){
         document.layers.liveclock.document.write(myclock)
@@ -168,9 +168,6 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
         else if (document.getElementById)
         document.getElementById("liveclock").innerHTML=myclock
         setTimeout($scope.DameLaFechaHora,1000);
-
-
-
 } 
 
 

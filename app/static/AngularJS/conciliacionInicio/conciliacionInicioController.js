@@ -47,7 +47,8 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                 if ($scope.busqueda  != null) {
                     $scope.getEmpresa($rootScope.userData.idUsuario);
                     $scope.InfoBusqueda = true;
-                    $scope.empresaActual = $scope.busqueda.Empresa;
+                    //$scope.empresaActual = $scope.busqueda.Empresa;
+                    $scope.empresaActual = JSON.parse(localStorage.getItem('empresaActualInMemory'));
                     $scope.polizaPago = $scope.busqueda.PolizaPago;
                     $scope.bancoActual = $scope.busqueda.Banco;
                     $scope.bancoNombre = $scope.busqueda.Banco;
@@ -58,6 +59,9 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                     $scope.contadorGerente=[{'NombreGerente':$scope.busqueda.gerente,
                     'NombreContador':$scope.busqueda.contador
                     }];
+
+                    $scope.cuentaActual = JSON.parse(localStorage.getItem('cuentaActualInMemory'));
+
                     //Reemplazo la consulta que retorna el valor del mes activo
                     $scope.mesActivo = $scope.busqueda.MesActivo;
                     conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, $scope.polizaPago,1).then(function(result) {
@@ -136,8 +140,14 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                       alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
                     }
                     else{
-                    console.log('$scope.cuentaActual')
-                    console.log($scope.cuentaActual)
+
+
+
+                    console.log($scope.cuentaActual);
+                    localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
+                    
+                    localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
+
 
                       $('#actualizarBD').modal('show');
                     conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, $scope.empresaActual.polizaPago, 2).then(function(result) {

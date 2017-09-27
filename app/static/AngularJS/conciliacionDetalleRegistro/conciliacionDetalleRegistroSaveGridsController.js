@@ -42,7 +42,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
 
 //*********************************************************Función que inserta el grupo de registros de Contabilidad cargos- abonos
-    if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos- abonos
+    if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos - abonos
            $scope.newId = JSON.parse(localStorage.getItem('idRelationOfContableRows'));
             if($scope.newId.length == 0){
                $scope.newId = 0;
