@@ -35,12 +35,13 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        selInteresComision: function( estatus ) {
+        selInteresComision: function( estatus, idEmpresa ) {
             return $http({
                 url: comisionesURL + 'selInteresComision/',
                 method: "GET",
                 params:{
-                    Estatus: estatus
+                    Estatus: estatus,
+                    idEmpresa: idEmpresa
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -58,11 +59,11 @@ registrationModule.factory('comisionesRepository', function($http) {
             });
         },
 
-        delInteresComisionGrupo: function(agrupador) {
+        delInteresComisionGrupo: function(agrupador, idEmpresa) {
             return $http({
                 url: comisionesURL + 'delInteresComisionGrupo/',
                 method: "GET",
-                params: { agrupador: agrupador },
+                params: { agrupador: agrupador, idEmpresa: idEmpresa },
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -125,11 +126,14 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        updAplicaComisiones: function(interesComisionID) {
+        updAplicaComisiones: function(interesComisionID, idEmpresa) {
             return $http({
                 url: comisionesURL + 'updAplicaComisiones/',
                 method: "GET",
-                params: { interesComisionID: interesComisionID },
+                params: { 
+                    interesComisionID: interesComisionID,
+                    idEmpresa: idEmpresa
+                },
                 headers: {
                     'Content-Type': 'application/json'
                 }
