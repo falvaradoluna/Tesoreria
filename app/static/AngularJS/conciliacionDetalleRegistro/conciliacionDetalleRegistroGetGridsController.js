@@ -92,7 +92,7 @@ $scope.init = function() {
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.detalleRegistrosReferenciados = function(registroConciliado, tipoRegistro){         //Indica: 1 es cargo, 0 es Abono
-      conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago).then(function(result){
+      conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago, $scope.busqueda.cuentaBanco, $scope.busqueda.idBanco).then(function(result){
             $scope.datoBancarioActual = registroConciliado;
             $scope.cargoActual = $scope.datoBancarioActual.cargo;
             $scope.abonoTotal = 0;
