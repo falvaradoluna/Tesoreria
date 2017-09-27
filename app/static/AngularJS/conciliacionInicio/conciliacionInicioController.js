@@ -145,6 +145,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
 
                     console.log($scope.cuentaActual);
                     localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
+                    
                     localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
 
 
