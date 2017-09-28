@@ -139,10 +139,18 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-
-
-
-
+        updAplicaComisionesGrupo: function(idEmpresa) {
+            return $http({
+                url: comisionesURL + 'updAplicaComisionesGrupo/',
+                method: "GET",
+                params: { 
+                    idEmpresa: idEmpresa
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         testApi: function(objData) {
 
             console.log(objData);

@@ -385,6 +385,22 @@ controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
     });
 };
 
+controlDepositos.prototype.get_updAplicaComisionesGrupo = function(req, res, next) {
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }];
+
+    this.model.query('UPD_APLICACOMISIONESGRUPO_SP', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
+
 controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
     var self = this;
 
