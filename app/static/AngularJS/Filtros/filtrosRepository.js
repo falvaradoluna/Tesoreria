@@ -144,7 +144,7 @@ registrationModule.factory('filtrosRepository', function($http) {
 
             });
         },
-        getDepositos: function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte) {
+        getDepositos: function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, idEmpresa) {
             return $http({
                 url: filtrosURL + 'depositos/',
                 method: "GET",
@@ -153,7 +153,8 @@ registrationModule.factory('filtrosRepository', function($http) {
                     idEstatus: idestatus,
                     cuentaBancaria: cuentaBancaria,
                     fElaboracion: fElaboracion,
-                    fCorte: fCorte
+                    fCorte: fCorte,
+                    idEmpresa: idEmpresa
                 },
                 headers: {
                     'Content-Type': 'application/json'

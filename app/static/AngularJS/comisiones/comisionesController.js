@@ -322,7 +322,7 @@
                         $scope.getDepartamentosBpro($scope.selectedValueSucursalID);
                     }
                 }
-
+              
                 var auxDep = $scope.gruposComisionesData[ $scope.curComIndex ].data[2][1];
                 $scope.selectedDepartamento = auxDep;
             }

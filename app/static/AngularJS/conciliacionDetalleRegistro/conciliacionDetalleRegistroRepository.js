@@ -169,7 +169,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte){
+        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoReferenciado/',
                 method:"GET",
@@ -177,7 +177,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idBanco : idBanco,
                     noCuenta : noCuenta,
                     fechaInicio : fechaInicio,
-                    fechaCorte : fechaCorte
+                    fechaCorte : fechaCorte,
+                    idEmpresa: idEmpresa
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -202,7 +203,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
         },
 
 
-        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago){
+        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
                 method: 'GET',
@@ -212,7 +213,9 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idEmpresa: idEmpresa,
                     cuentaContable: cuentaContable,
                     fecha: fecha,
-                    polizaPago: polizaPago
+                    polizaPago: polizaPago,
+                    cuentaBanco: cuentaBanco,
+                    idRegistroBancario: idRegistroBancario
                 },
                 headers: {
                     'Content-Type' : 'application/json'
