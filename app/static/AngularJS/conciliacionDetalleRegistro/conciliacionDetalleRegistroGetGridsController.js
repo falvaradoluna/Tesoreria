@@ -3,7 +3,8 @@ registrationModule.controller('conciliacionDetalleRegistroGetGridsController',fu
      //Declaracion de variables locales
      $scope.bancoReferenciadosAbonos = '';
      $scope.bancoReferenciadosCargos = '';
-     $scope.contableReferenciados= '';
+     $scope.contableReferenciadosAbonos = '';
+     $scope.contableReferenciadosCargos = '';
      $scope.BancoReferenciadoCargos = '';
      $scope.BancoReferenciadoAbonos = '';
      $scope.cargoActual = 0;
@@ -84,15 +85,22 @@ $scope.init = function() {
     //****************************************************************************************************
      $scope.contablesReferenciados = function(polizaPago){
         conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa).then(function(result) {
-        $scope.contableReferenciados = result.data;
-        $scope.tabla('contableRef');
+        $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
+         return value.tipoMovimiento == 0;
+        });
+        $scope.contableReferenciadosCargos = $filter('filter')(result.data, function(value){
+         return value.tipoMovimiento == 1;
+        });
+        $scope.tabla('contableRefAbonos');
+        $scope.tabla('contableRefCargos');
       });
     };
     //****************************************************************************************************
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-    $scope.detalleRegistrosReferenciados = function(registroConciliado){
+    $scope.detalleRegistrosReferenciadosBancos = function(registroConciliado){
+        $('#loading').modal('show');
              
                                                                                                     /*  Números identificadores para el tipo de referencia de cada registro Bancario "ABONOS - CARGOS"
                                                                                                         1 Corresponde a depositos Bancarios (Abonos) referenciados (Directos)
@@ -106,7 +114,7 @@ $scope.init = function() {
             if(registroConciliado.tipoReferencia >= 3)
             {
                 if(result.data.length > 0){
-
+                $('#loading').modal('hide');
                $scope.cargoActual = $scope.datoBancarioActual.cargo;
                $scope.BancoReferenciadoCargos = result.data;
                
@@ -123,7 +131,7 @@ $scope.init = function() {
             else if(registroConciliado.tipoReferencia < 3)
             {
                 if(result.data.length > 0){
-
+                $('#loading').modal('hide');
                 $scope.abonoActual = $scope.datoBancarioActual.abono;
                 $scope.BancoReferenciadoAbonos = result.data;
                 
@@ -141,6 +149,13 @@ $scope.init = function() {
       });
     };    
     //****************************************************************************************************
+
+    $scope.detalleRegistrosReferenciadosContables = function(registroConciliado){
+     
+     alertFactory.warning('Función en desarrollo...');
+
+    };
+
 
     // INICIA inicio la tabla para los distintos casos
         //****************************************************************************************************
