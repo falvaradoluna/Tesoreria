@@ -102,7 +102,8 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
         { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.fechaOperacion | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''//},
         { name: 'referencia', displayName: 'Referencia', width: 200 },
         //LQMA 07092017                  
-        { name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
+        //{ name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
+        { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
         { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
         //LQMA add
