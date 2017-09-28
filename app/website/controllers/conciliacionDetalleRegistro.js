@@ -321,7 +321,8 @@ conciliacionDetalleRegistro.prototype.get_bancoReferenciado = function(req, res,
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING},
                   { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
-                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING}
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
+                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT}
                  ];
 
         this.model.query('SEL_REG_BANCOS_REFERENCIADOS', params, function(error, result) {

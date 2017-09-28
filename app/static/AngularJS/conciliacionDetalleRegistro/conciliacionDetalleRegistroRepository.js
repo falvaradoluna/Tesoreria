@@ -169,7 +169,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte){
+        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoReferenciado/',
                 method:"GET",
@@ -177,7 +177,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idBanco : idBanco,
                     noCuenta : noCuenta,
                     fechaInicio : fechaInicio,
-                    fechaCorte : fechaCorte
+                    fechaCorte : fechaCorte,
+                    idEmpresa: idEmpresa
                 },
                 headers: {
                     'Content-Type': 'application/json'
