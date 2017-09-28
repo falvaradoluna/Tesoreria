@@ -356,9 +356,10 @@
         },
         function() {
             var aux = 0;
-            $scope.lstTemp.forEach(function(row) {
-                comisionesRepository.updAplicaComisiones(row.interesComisionID, $scope.selectedValueEmpresaID);
-            });
+            comisionesRepository.updAplicaComisionesGrupo( $scope.selectedValueEmpresaID );
+            // $scope.lstTemp.forEach(function(row) {
+            //     comisionesRepository.updAplicaComisiones(row.interesComisionID, $scope.selectedValueEmpresaID);
+            // });
 
             swal({
                 title: "Aplicado",
