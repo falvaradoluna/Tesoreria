@@ -171,18 +171,19 @@
         }
     }
 
+
     $scope.getComisionesRealizadas = function(){ // Comisiones Temporales y Aplicadas
-        comisionesRepository.selInteresComision( 1 ).then(function(result) {
+        comisionesRepository.selInteresComision( 1, $scope.selectedValueEmpresaID ).then(function(result) {
             $scope.lstTemp = result.data;
             console.log( 'Registros Temporales', $scope.lstTemp );
         });
 
-        comisionesRepository.selInteresComision( 2 ).then(function(result) {
+        comisionesRepository.selInteresComision( 2, $scope.selectedValueEmpresaID ).then(function(result) {
             $scope.lstAplicadas = result.data;
         });
     }
 
-    $scope.getComisionesRealizadas();
+    // $scope.getComisionesRealizadas();
 
     $scope.getBancos = function() {
         $scope.lstBanco     = [];
@@ -196,6 +197,7 @@
         filtrosRepository.getBancos(idEmpresa).then(function(result) {
             if (result.data.length > 0) {
                 $scope.lstBanco = result.data;
+                $scope.getComisionesRealizadas();
             }
         });
     };
@@ -320,7 +322,7 @@
                         $scope.getDepartamentosBpro($scope.selectedValueSucursalID);
                     }
                 }
-
+              
                 var auxDep = $scope.gruposComisionesData[ $scope.curComIndex ].data[2][1];
                 $scope.selectedDepartamento = auxDep;
             }
@@ -354,9 +356,10 @@
         },
         function() {
             var aux = 0;
-            $scope.lstTemp.forEach(function(row) {
-                comisionesRepository.updAplicaComisiones(row.interesComisionID);
-            });
+            comisionesRepository.updAplicaComisionesGrupo( $scope.selectedValueEmpresaID );
+            // $scope.lstTemp.forEach(function(row) {
+            //     comisionesRepository.updAplicaComisiones(row.interesComisionID, $scope.selectedValueEmpresaID);
+            // });
 
             swal({
                 title: "Aplicado",
@@ -595,7 +598,7 @@
             //     });
             // });
 
-            comisionesRepository.delInteresComisionGrupo(item.agrupador).then(function(result) {
+            comisionesRepository.delInteresComisionGrupo(item.agrupador, $scope.selectedValueEmpresaID).then(function(result) {
                 comisionesRepository.selInteresComision().then(function(result2) {
                     $scope.lstTemp = result2.data;
                     $scope.getComisionesRealizadas();

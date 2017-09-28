@@ -366,15 +366,13 @@
                                             <td>{{banco.concepto}}</td>
                                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciados(banco,0)"><i class="ti-eye"></i></button>
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosBancos(banco)"><i class="ti-eye"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                       
                       </div>
-
-
 
 
                       <div class="col-md-12">
@@ -400,7 +398,7 @@
                                             <td>{{banco.concepto}}</td>
                                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciados(banco,1)"><i class="ti-eye"></i></button>
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosBancos(banco)"><i class="ti-eye"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -425,14 +423,48 @@
 
 
 
+
+
+
+
             <!--Inicio del quinto Tab / Registros Contables Referenciados-->
             <div id="ContablesReferenciados" class="tabcontent">
                 <div class="panel col-md-12">
                     <div class="col-md-12">
                                 <div class="text-main">
-                                    <h4>Registros Contables</h4>
+                                    <h4>Registros Contables (Abonos)</h4>
                                 </div>
-                                <table id="contableRef" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <table id="contableRefAbonos" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Tipo de Póliza</th>
+                                            <th># de Póliza</th>
+                                            <th>Concepto</th>
+                                            <th>Abono</th>
+                                            <th data-sort-ignore="true" class="min-width">Detalle</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="contableAbono in contableReferenciadosAbonos">
+                                            <td>{{contableAbono.fecha | date:'yyyy-MM-dd'}}</td>
+                                            <td>{{contableAbono.tipopol}}</td>
+                                            <td>{{contableAbono.numPol}}</td>
+                                            <td>{{contableAbono.concepto }}</td>
+                                            <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(registroContable)"><i class="ti-eye"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                      </div>
+
+                       <div class="col-md-12">
+                                <div class="text-main">
+                                    <h4>Registros Contables (Cargos)</h4>
+                                </div>
+                                <table id="contableRefCargos" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
                                             <th>Fecha</th>
@@ -440,21 +472,26 @@
                                             <th># de Póliza</th>
                                             <th>Concepto</th>
                                             <th>Cargo</th>
-                                            <th>Abono</th>
+                                            <th data-sort-ignore="true" class="min-width">Detalle</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="contable in contableReferenciados">
-                                            <td>{{contable.fecha | date:'yyyy-MM-dd'}}</td>
-                                            <td>{{contable.tipopol}}</td>
-                                            <td>{{contable.numPol}}</td>
-                                            <td>{{contable.concepto }}</td>
-                                            <td class="text-right" ng-class="{'text-success text-semibold' : contable.cargo > 0}">{{contable.cargo | currency}}</td>
-                                            <td class="text-right" ng-class="{'text-success text-semibold' : contable.abono > 0}">{{contable.abono | currency}}</td>
+                                        <tr ng-repeat="contableCargo in contableReferenciadosCargos">
+                                            <td>{{contableCargo.fecha | date:'yyyy-MM-dd'}}</td>
+                                            <td>{{contableCargo.tipopol}}</td>
+                                            <td>{{contableCargo.numPol}}</td>
+                                            <td>{{contableCargo.concepto }}</td>
+                                            <td class="text-right" ng-class="{'text-success text-semibold' : contableCargo.cargo > 0}">{{contableCargo.cargo | currency}}</td>
+                                            <td class="text-center">
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(registroContable)"><i class="ti-eye"></i></button>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                       </div>
+
+
+
                       <div class="col-md-12">
                             <div class="text-right">
                                 <a class="btn btn-warning" href="/conciliacionInicio "><i class="ti-back-right"></i> Regresar</a> &nbsp;
@@ -465,6 +502,12 @@
             </div>
             </div>
             <!--Fin del quinto Tab / Registros Contables Referenciados-->
+
+
+
+
+
+
 
 <!--=====================Modal Detalle de Registros Bancarios Referenciaados (Cargos)==============================-->
 <div class="modal fade" id="DetalleRelacionCargos" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
@@ -538,6 +581,79 @@
     </div>
 </div>
 <!--===============================Fin Modal Detalle de Registros Bancarios Referenciaados (Cargos)====================-->
+
+<!--=====================Modal Detalle de Registros Bancarios Referenciaados (Abonos)==============================-->
+<div class="modal fade" id="DetalleRelacionAbonos" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header label-mint">
+                <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle text-white"></i></button>
+                <h4 class="modal-title text-white">Detalle Registros Bancarios Referenciados (Abonos)</h4>
+
+            </div>
+            <div class="modal-body">
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Poliza</th>
+                            <th>Número de Cuenta</th>
+                            <th>Concepto</th>
+                            <th>Numero Consecutivo</th>
+                            <th>Nombre del Usuario</th>
+                            <th>Fecha de Operacion</th>
+                            <th>Cargo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat = "bancoAbonos in BancoReferenciadoAbonos">
+                            <td>{{bancoAbonos.tipoPoliza}}</td>
+                            <td>{{bancoAbonos.numeroCuenta}}</td>
+                            <td>{{bancoAbonos.concepto}}</td>
+                            <td>{{bancoAbonos.consecutivoNumero}}</td>
+                            <td>{{bancoAbonos.nombreUsuario}}</td>
+                            <td>{{bancoAbonos.fechaOperacion | date:'yyyy/MM/dd'}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : bancoAbonos.cargo > 0}">{{bancoAbonos.cargo | currency}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right"><span ng-if="cargoTotal> 0">{{cargoTotal | currency}}</span></td>
+                        </tr>
+                    </tfoot>
+                </table>
+                
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Banco</th>
+                            <th>Referencia</th>
+                            <th>Concepto</th>
+                            <th>Abono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{datoBancarioActual.banco}}</td>
+                            <td>{{datoBancarioActual.refAmpliada}}</td>
+                            <td>{{datoBancarioActual.concepto}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : datoBancarioActual.abono > 0}">{{datoBancarioActual.abono | currency}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right"><span ng-if="abonoActual > 0">{{abonoActual | currency}}</span></td>                            
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--===============================Fin Modal Detalle de Registros Bancarios Referenciaados (Abonos)====================-->
 
 
 

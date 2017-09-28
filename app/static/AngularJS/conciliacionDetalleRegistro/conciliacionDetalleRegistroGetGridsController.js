@@ -3,10 +3,12 @@ registrationModule.controller('conciliacionDetalleRegistroGetGridsController',fu
      //Declaracion de variables locales
      $scope.bancoReferenciadosAbonos = '';
      $scope.bancoReferenciadosCargos = '';
-     $scope.contableReferenciados= '';
+     $scope.contableReferenciadosAbonos = '';
+     $scope.contableReferenciadosCargos = '';
      $scope.BancoReferenciadoCargos = '';
-     $scope.cargoTotal = 0;
+     $scope.BancoReferenciadoAbonos = '';
      $scope.cargoActual = 0;
+     $scope.abonoActual = 0;
 
 $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
@@ -66,7 +68,7 @@ $scope.init = function() {
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
      $scope.bancoReferenciados = function() {
-        conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte).then(function(result) {
+        conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function(result) {
         $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function(value){
             return value.tipoMovimiento == 0;
         });
@@ -83,38 +85,77 @@ $scope.init = function() {
     //****************************************************************************************************
      $scope.contablesReferenciados = function(polizaPago){
         conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa).then(function(result) {
-        $scope.contableReferenciados = result.data;
-        $scope.tabla('contableRef');
+        $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
+         return value.tipoMovimiento == 0;
+        });
+        $scope.contableReferenciadosCargos = $filter('filter')(result.data, function(value){
+         return value.tipoMovimiento == 1;
+        });
+        $scope.tabla('contableRefAbonos');
+        $scope.tabla('contableRefCargos');
       });
     };
     //****************************************************************************************************
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-    $scope.detalleRegistrosReferenciados = function(registroConciliado, tipoRegistro){         //Indica: 1 es cargo, 0 es Abono
-      conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, tipoRegistro, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago, $scope.busqueda.cuentaBanco, $scope.busqueda.idBanco).then(function(result){
+    $scope.detalleRegistrosReferenciadosBancos = function(registroConciliado){
+        $('#loading').modal('show');
+             
+                                                                                                    /*  Números identificadores para el tipo de referencia de cada registro Bancario "ABONOS - CARGOS"
+                                                                                                        1 Corresponde a depositos Bancarios (Abonos) referenciados (Directos)
+                                                                                                        2 Corresponde a depositos BANCARIOS (Abonos) referenciados (Control de depositos)
+                                                                                                        3 Corresponde a depositos Bancarios (Cargos) referenciados*/
+            conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, registroConciliado.tipoReferencia, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago, $scope.busqueda.Cuenta, registroConciliado.idBmer).then(function(result){
             $scope.datoBancarioActual = registroConciliado;
-            $scope.cargoActual = $scope.datoBancarioActual.cargo;
+            
             $scope.abonoTotal = 0;
-            if(tipoRegistro == 1)
+            $scope.cargoTotal = 0;
+            if(registroConciliado.tipoReferencia >= 3)
             {
+                if(result.data.length > 0){
+                $('#loading').modal('hide');
+               $scope.cargoActual = $scope.datoBancarioActual.cargo;
                $scope.BancoReferenciadoCargos = result.data;
                
-            angular.forEach($scope.BancoReferenciadoCargos, function(value, key) {
-            $scope.abonoTotal += value.abono;
-            });
+                angular.forEach($scope.BancoReferenciadoCargos, function(value, key) {
+                $scope.abonoTotal += value.abono;
+                });
 
-               $('#DetalleRelacionCargos').modal('show');
+                   $('#DetalleRelacionCargos').modal('show');
+                   }
+            else{
+                alertFactory.warning('No existe relación para este registro');
             }
-            else if(tipoRegistro == 0)
+            }
+            else if(registroConciliado.tipoReferencia < 3)
             {
+                if(result.data.length > 0){
+                $('#loading').modal('hide');
+                $scope.abonoActual = $scope.datoBancarioActual.abono;
+                $scope.BancoReferenciadoAbonos = result.data;
+                
+                angular.forEach($scope.BancoReferenciadoAbonos, function(value, key) {
+                $scope.cargoTotal += value.cargo;
+                });
 
-                alertFactory.error('Función no disponible');
+                $('#DetalleRelacionAbonos').modal('show');
+            }
+            else{
+                alertFactory.warning('No existe relación para este registro');
+            }
             }
 
       });
     };    
     //****************************************************************************************************
+
+    $scope.detalleRegistrosReferenciadosContables = function(registroConciliado){
+     
+     alertFactory.warning('Función en desarrollo...');
+
+    };
+
 
     // INICIA inicio la tabla para los distintos casos
         //****************************************************************************************************
