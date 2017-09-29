@@ -186,7 +186,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getContablesRef: function(cuentacontable, fechaCorte, polizaPago, idEmpresa){
+        getContablesRef: function(cuentacontable, fechaCorte, polizaPago, idEmpresa, idBanco){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'contableReferenciado/',
                 method: 'GET',
@@ -194,7 +194,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     cuentaContable: cuentacontable,
                     fechaCorte: fechaCorte,
                     polizaPago: polizaPago,
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    idBanco : idBanco
                 },
                 headers:{
                      'Content-Type': 'application/json'
@@ -204,6 +205,26 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
 
 
         getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
+                method: 'GET',
+                params: {
+                    ReferenciaAmpliada: refampliada,
+                    TipoRegistro: tipoRegistro,
+                    idEmpresa: idEmpresa,
+                    cuentaContable: cuentaContable,
+                    fecha: fecha,
+                    polizaPago: polizaPago,
+                    cuentaBanco: cuentaBanco,
+                    idRegistroBancario: idRegistroBancario
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
+
+        getDetalleRelacionContables: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
                 method: 'GET',
