@@ -84,7 +84,7 @@ $scope.init = function() {
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
      $scope.contablesReferenciados = function(polizaPago){
-        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa).then(function(result) {
+        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
         $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
          return value.tipoMovimiento == 0;
         });
