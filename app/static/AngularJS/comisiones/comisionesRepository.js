@@ -80,12 +80,14 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        agrupadorComision: function(idEmpresa) {
+        agrupadorComision: function(idEmpresa, esGrupo, idSucursal) {
             return $http({
                 url: comisionesURL + 'agrupadorComision/',
                 method: "GET",
                 params: {
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    esGrupo: esGrupo,
+                    idSucursal: idSucursal
                 },
                 headers: {
                     'Content-Type': 'application/json'
