@@ -358,7 +358,9 @@ controlDepositos.prototype.get_agrupadorComision = function(req, res, next) {
     var self = this;
 
     var params = [
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'esGrupo', value: req.query.esGrupo, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT }
     ];
 
     this.model.query('SEL_AGRUPADORCOMISIONES_SP', params, function(error, result) {
@@ -496,7 +498,9 @@ controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, ne
         { name: 'referencia', value: req.query.referencia, type: self.model.types.STRING },
         { name: 'banco', value: req.query.banco, type: self.model.types.STRING },
         { name: 'referenciabancaria', value: req.query.referenciabancaria, type: self.model.types.STRING },
-        { name: 'conpoliza', value: req.query.conpoliza, type: self.model.types.STRING }
+        { name: 'conpoliza', value: req.query.conpoliza, type: self.model.types.STRING },
+        { name: 'consecutivo', value: req.query.lastConsecutivo, type: self.model.types.STRING },
+        { name: 'idSucursalAplica', value: req.query.idSucursalAplica, type: self.model.types.STRING }
     ];
 
     this.model.query('INS_CXPCOMISIONESINTERESESDET_SP', params, function(error, result) {

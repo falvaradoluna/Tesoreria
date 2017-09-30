@@ -1023,20 +1023,30 @@
             closeOnConfirm: true
         },
         function() {
-            console.log( 'Colleccion', $scope.gruposComisionesData );            
-            comisionesRepository.agrupadorComision($scope.selectedValueEmpresaID).then(function(result) { // Obtenemos el grupo al que pertenecera
+            var esGrupo = $scope.gruposComisionesData.length == 1 ? 0 : 1;
+            var idSucursal = $scope.gruposComisionesData[0].data[2][0];
+            
+            // console.log( 'idEmpresa:', $scope.selectedValueEmpresaID );
+            // console.log( 'Es Grupo:', esGrupo );
+            // console.log( 'idSucursal:', idSucursal );
+
+            comisionesRepository.agrupadorComision($scope.selectedValueEmpresaID, esGrupo, idSucursal).then(function(result) { // Obtenemos el grupo al que pertenecera
                 if( result.data.length > 0 ){
                     lastRow     = $scope.gruposComisionesData.length * 3;
                     currentRow  = 0;
-
-                    var esGrupo = $scope.gruposComisionesData.length == 1 ? 0 : 1;
-                    console.log( 'Es Grupo:', esGrupo, $scope.gruposComisionesData.length );
-                    var esGrupoPlus = 1;
+                    var lastConsecutivo  = parseInt(result.data[0].Consecutivo);
+                    var idSucursalAplica = parseInt(result.data[0].idSucursalAplica);
+                    console.log( 'agrupadorComision', result );
+                    console.log( 'lastConsecutivo', lastConsecutivo );
+                    
                     $scope.gruposComisionesData.forEach( function( item, key ){
                         var comision = item.data[0];
                         var interes  = item.data[1];
                         var depto    = item.data[2];
                         var registro = item.data[3];
+
+                        // Incrementamos el Cconsecutivo
+                        
 
                         // Se guarda en tabla InteresComision
                         var parametros = {
@@ -1059,44 +1069,16 @@
                                 
                                 comisionesRepository.insCxpComisionesInteres( opt_cxp.headerID, opt_cxp.Sucursal, opt_cxp.Empresa, esGrupo).then(function(resCXP) { // Guardamos en cxp_comisionesintereses
                                     if( resCXP.data.length > 0 ){
-                                        
-                                        console.log( 'resulst CXP', resCXP.data );
-
                                         var headerID       = resCXP.data[0].headerID;
                                         var nextRef        = resCXP.data[0].nextRef;
                                         var idPersona      = resCXP.data[0].idPersona;
                                         var lastReferencia = resCXP.data[0].lastReferencia;
                                         var baseReferencia = resCXP.data[0].baseReferencia;
 
-                                        // Identificador en el campo de documento "AU-PED-Comision-1"
-                                        var DocumentoConsecutivo = '';
-                                        if( lastReferencia === null || lastReferencia === '' ){
-                                            DocumentoConsecutivo = baseReferencia + '1';
-                                        }
-                                        else{
-                                            var aux = lastReferencia.split('-');
-                                            if( aux.length == 4 ){
-                                                var aux_actual = parseInt(aux[3]);
-                                                console.log('aux_actual', aux_actual)
-                                                if( esGrupo == 1 ){
-                                                    // if( firstFlag = true ){
-                                                    //     firstFlag = false;
-                                                    //     inicConsecu = aux_actual;
-                                                    // }
-
-                                                    // inicConsecu++;
-                                                    var consecutivo = aux_actual + key + 1;
-                                                    DocumentoConsecutivo = baseReferencia + consecutivo;
-                                                }
-                                                else{
-                                                    DocumentoConsecutivo = baseReferencia + (aux_actual + 1);
-                                                }
-                                                
-                                            }
-                                            else{
-                                                DocumentoConsecutivo = baseReferencia + '1';
-                                            }
-                                        }
+                                        lastConsecutivo++;
+                                        DocumentoConsecutivo = baseReferencia + lastConsecutivo;
+                                        console.log( 'lastConsecutivo +1', lastConsecutivo );
+                                        console.log( 'DocumentoConsecutivo', DocumentoConsecutivo );
 
                                         // Validacion y obtencion de los datos a guardar
                                         $scope.rowsToInsert = [];
@@ -1116,12 +1098,16 @@
                                                 params.banco = '0' + $scope.selectedValueBancoID;
                                                 params.referenciabancaria = nextRef;
                                                 params.conpoliza = key + 1;
+                                                params.lastConsecutivo  = lastConsecutivo
+                                                params.idSucursalAplica = idSucursalAplica;
+
+                                                
 
                                             comisionesRepository.insInteresComisionDetalle( params ).then(function(resCXPDet) {
-                                                console.log( 'resulst CXPDet', resCXPDet );
+                                                // console.log( 'resulst CXPDet', resCXPDet );
                                                 if( resCXPDet.length != 0 ){
                                                     currentRow++;
-                                                    console.log( currentRow, lastRow );
+                                                    // console.log( currentRow, lastRow );
                                                     if( currentRow == lastRow ){
 
                                                         $scope.getComisionesRealizadas();
