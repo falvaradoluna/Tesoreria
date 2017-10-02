@@ -25,23 +25,24 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        getcomisionesIva: function(idDepositoBanco) {
+        getcomisionesIva: function(idDepositoBanco, idBanco) {
             return $http({
                 url: comisionesURL + 'comisionesIva/',
                 method: "GET",
-                params: { idDepositoBanco: idDepositoBanco },
+                params: { idDepositoBanco: idDepositoBanco, idBanco:idBanco },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
-        selInteresComision: function( estatus, idEmpresa ) {
+        selInteresComision: function( estatus, idEmpresa, idBanco ) {
             return $http({
                 url: comisionesURL + 'selInteresComision/',
                 method: "GET",
                 params:{
                     Estatus: estatus,
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -142,12 +143,13 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        updAplicaComisionesGrupo: function(idEmpresa) {
+        updAplicaComisionesGrupo: function(idEmpresa, idBanco) {
             return $http({
                 url: comisionesURL + 'updAplicaComisionesGrupo/',
                 method: "GET",
                 params: { 
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
