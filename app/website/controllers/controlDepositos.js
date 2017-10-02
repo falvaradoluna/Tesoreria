@@ -324,7 +324,10 @@ controlDepositos.prototype.get_comisiones = function(req, res, next) {
 controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
     var self = this;
     //asignación de valores mediante parámetros del request
-    var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
+    var params = [
+        { name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }
+    ];
 
     this.model.query('SEL_COMISIONES_IVA', params, function(error, result) {
         self.view.expositor(res, {
@@ -391,7 +394,8 @@ controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
 controlDepositos.prototype.get_updAplicaComisionesGrupo = function(req, res, next) {
     var self = this;
 
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }];
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }];
 
     this.model.query('UPD_APLICACOMISIONESGRUPO_SP', params, function(error, result) {
         
@@ -437,7 +441,8 @@ controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'Estatus', value: req.query.Estatus, type: self.model.types.INT },
-                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }];
+                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }];
 
     this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
         self.view.expositor(res, {

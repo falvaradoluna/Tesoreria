@@ -173,12 +173,12 @@
 
 
     $scope.getComisionesRealizadas = function(){ // Comisiones Temporales y Aplicadas
-        comisionesRepository.selInteresComision( 1, $scope.selectedValueEmpresaID ).then(function(result) {
+        comisionesRepository.selInteresComision( 1, $scope.selectedValueEmpresaID, $scope.selectedValueBancoID ).then(function(result) {
             $scope.lstTemp = result.data;
             console.log( 'Registros Temporales', $scope.lstTemp );
         });
 
-        comisionesRepository.selInteresComision( 2, $scope.selectedValueEmpresaID ).then(function(result) {
+        comisionesRepository.selInteresComision( 2, $scope.selectedValueEmpresaID, $scope.selectedValueBancoID ).then(function(result) {
             $scope.lstAplicadas = result.data;
         });
     }
@@ -196,8 +196,7 @@
 
         filtrosRepository.getBancos(idEmpresa).then(function(result) {
             if (result.data.length > 0) {
-                $scope.lstBanco = result.data;
-                $scope.getComisionesRealizadas();
+                $scope.lstBanco = result.data;                
             }
         });
     };
@@ -214,6 +213,7 @@
         filtrosRepository.getCuenta(idBanco, idEmpresa).then(function(result) {
             if (result.data.length > 0) {
                 $scope.lstCuenta = result.data;
+                $scope.getComisionesRealizadas();
             }
         });
     };
@@ -356,7 +356,7 @@
         },
         function() {
             var aux = 0;
-            comisionesRepository.updAplicaComisionesGrupo( $scope.selectedValueEmpresaID );
+            comisionesRepository.updAplicaComisionesGrupo( $scope.selectedValueEmpresaID, $scope.selectedValueBancoID );
             // $scope.lstTemp.forEach(function(row) {
             //     comisionesRepository.updAplicaComisiones(row.interesComisionID, $scope.selectedValueEmpresaID);
             // });
@@ -599,11 +599,11 @@
             // });
 
             comisionesRepository.delInteresComisionGrupo(item.agrupador, $scope.selectedValueEmpresaID).then(function(result) {
-                comisionesRepository.selInteresComision().then(function(result2) {
-                    $scope.lstTemp = result2.data;
                     $scope.getComisionesRealizadas();
                     swal("Eliminado", "Se eliminó el registro", "success");
-                });
+                // comisionesRepository.selInteresComision().then(function(result2) {
+                //     $scope.lstTemp = result2.data;
+                // });
             });
         });
     };
@@ -660,7 +660,7 @@
 
                 $('#mdlLoading').modal('show');
                 // $scope.gridInteres.data = [];
-                comisionesRepository.getcomisionesIva(row.entity.idDepositoBanco).then(function(result) {
+                comisionesRepository.getcomisionesIva(row.entity.idDepositoBanco, $scope.selectedValueBancoID).then(function(result) {
                     if (result.data.length > 0) {
                         $scope.NewGroup();
                         row.entity.color = $scope.currentColor;
@@ -758,11 +758,11 @@
         }
     }
 
-    $scope.getComisionesIva = function(depositoID, callback) {
+    $scope.getComisionesIva = function(depositoID, idBanco) {
 
         $('#mdlLoading').modal('show');
         // $scope.gridInteres.data = [];
-        comisionesRepository.getcomisionesIva(depositoID).then(function(result) {
+        comisionesRepository.getcomisionesIva(depositoID, idBanco).then(function(result) {
             if (result.data.length > 0) {
                 result.data[0].color = $scope.currentColor;
                 $scope.gridInteres.data.push(result.data[0]);
@@ -865,6 +865,7 @@
 
             $scope.lstRegistroContable = [];
             $scope.lstRegistroContable = comisionesRepository.getComisionTemplate();
+            console.log( 'lstRegistroContable', $scope.lstRegistroContable );
             $scope.lstRegistroContable[0].cuenta = $scope.selectedDepartamento.cuentaContable;
             $scope.lstRegistroContable[0].concepto = $scope.selectedDepartamento.descripcion.substring(8);
             $scope.lstRegistroContable[1].cuenta = $scope.lstRegistroContable[1].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
@@ -873,9 +874,9 @@
             var currentComision = $scope.gruposComisionesData[ $scope.curComIndex ].data[0];
             var currentInteres  = $scope.gruposComisionesData[ $scope.curComIndex ].data[1];
 
-            $scope.lstRegistroContable[0].cargo = currentComision.abono; // Ok mas o menos
-            $scope.lstRegistroContable[1].cargo = currentInteres.abono;
-            $scope.lstRegistroContable[2].abono = currentComision.abono + currentInteres.abono;
+            $scope.lstRegistroContable[0].cargo = parseInt(currentComision.abono); // Ok mas o menos
+            $scope.lstRegistroContable[1].cargo = parseInt(currentInteres.abono);
+            $scope.lstRegistroContable[2].abono = parseInt(currentComision.abono) + parseInt(currentInteres.abono);
             $scope.objEdicion.montoAcumuladoUsuario = currentComision.abono;
 
             // console.log( 'RegistroContable', $scope.lstRegistroContable );
