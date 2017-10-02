@@ -91,7 +91,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
 
                     //Inicio para el registro de datos Banamex
                     angular.forEach(excelData, function(value,key){   //idBanco desde layout                                                                                                                                                                         //Dato de la clave Layout del documento en curso
-                      excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, value.Depositos, value.Retiros, workbook.Strings[0].h).then(function(result){
+                      excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Tipo_Transaccion,value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, value.Depositos, value.Retiros, workbook.Strings[0].h).then(function(result){
                         console.log(result);
                       }, function(error){
                             alertFactory.warning(error);

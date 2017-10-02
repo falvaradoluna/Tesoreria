@@ -28,7 +28,7 @@ registrationModule.factory('excelExportRepository', function($http){
           },
 
 
-          sendExcelDataBanamex: function(idBanco,NoCuenta, Fecha, Descripcion, Sucursal, Referencia_Numerica, Referencia_Alfanumerica, Autorizacion, Depositos, Retiros, claveLayout){
+          sendExcelDataBanamex: function(idBanco,NoCuenta, Fecha, Descripcion, Sucursal, Tipo_Transaccion,Referencia_Numerica, Referencia_Alfanumerica, Autorizacion, Depositos, Retiros, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelBanamex/',
                     method: "GET",
@@ -38,6 +38,7 @@ registrationModule.factory('excelExportRepository', function($http){
                         Fecha: Fecha,
                         Descripcion: Descripcion,
                         Sucursal: Sucursal,
+                        Tipo_Transaccion: Tipo_Transaccion,
                         Referencia_Numerica: Referencia_Numerica,
                         Referencia_Alfanumerica: Referencia_Alfanumerica,
                         Autorizacion: Autorizacion,
