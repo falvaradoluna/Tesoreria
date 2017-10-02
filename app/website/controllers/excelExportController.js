@@ -50,7 +50,6 @@ excelExport.prototype.get_insExcelBanamex = function(req,res,next){
                  {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
                  {name: "descipcion", value: req.query.Descripcion, type: self.model.types.STRING},
                  {name: "sucursal", value: req.query.Sucursal, type: self.model.types.INT},
-                 {name: "tipoTransaccion", value: req.query.Tipo_Transaccion, type: self.model.types.STRING},
                  {name: "refNumerica", value: req.query.Referencia_Numerica, type: self.model.types.INT},
                  {name: "refAlfanumerica", value: req.query.Referencia_Alfanumerica, type: self.model.types.STRING},
                  {name: "autorizacion", value: req.query.Autorizacion, type: self.model.types.INT},
@@ -477,7 +476,6 @@ excelExport.prototype.get_createBanamex = function(req, res, next) {
     ws.column(2).setWidth(15);
     ws.column(3).setWidth(30);
     ws.column(4).setWidth(15);
-    ws.column(4).setWidth(15);
     ws.column(5).setWidth(30);
     ws.column(6).setWidth(30);
     ws.column(7).setWidth(19);
@@ -518,7 +516,6 @@ excelExport.prototype.get_createBanamex = function(req, res, next) {
         ws.cell(row, 2).string( 'Fecha' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
         ws.cell(row, 3).string( 'Descripcion' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
         ws.cell(row, 4).string( 'Sucursal' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
-        ws.cell(row, 4).string( 'Tipo_Transaccion' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
         ws.cell(row, 5).string( 'Referencia_Numerica' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
         ws.cell(row, 6).string( 'Referencia_Alfanumerica' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
         ws.cell(row, 7).string( 'Autorizacion' ).style( sty_th ).style( sty_center ).style(sty_bgcolor);
