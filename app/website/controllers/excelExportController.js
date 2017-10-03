@@ -23,8 +23,8 @@ excelExport.prototype.get_insExcelScotiabank = function(req,res,next){
                  {name: "noCuenta", value: req.query.NoCuenta, type: self.model.types.STRING},
 		         {name: "fecha", value: req.query.Fecha, type: self.model.types.STRING},
                  {name: "ref_numerica", value: req.query.Referencia_Numerica, type: self.model.types.STRING},
-		         {name: "cargo", value: req.query.Cargo, type: self.model.types.STRING},
-		         {name: "abono", value: req.query.Abono, type: self.model.types.STRING},
+		         {name: "cargo", value: req.query.Cargo, type: self.model.types.DECIMAL},
+		         {name: "abono", value: req.query.Abono, type: self.model.types.DECIMAL},
 		         {name: "tipo", value: req.query.Tipo, type: self.model.types.STRING},
 		         {name: "transaccion", value: req.query.Transaccion, type: self.model.types.STRING},
 		         {name: "leyenda1", value: req.query.Leyenda1, type: self.model.types.STRING},
@@ -54,8 +54,8 @@ excelExport.prototype.get_insExcelBanamex = function(req,res,next){
                  {name: "refNumerica", value: req.query.Referencia_Numerica, type: self.model.types.INT},
                  {name: "refAlfanumerica", value: req.query.Referencia_Alfanumerica, type: self.model.types.STRING},
                  {name: "autorizacion", value: req.query.Autorizacion, type: self.model.types.INT},
-                 {name: "depositos", value: req.query.Depositos, type: self.model.types.INT},
-                 {name: "retiros", value: req.query.Retiros, type: self.model.types.INT},
+                 {name: "depositos", value: req.query.Depositos, type: self.model.types.DECIMAL},
+                 {name: "retiros", value: req.query.Retiros, type: self.model.types.DECIMAL},
                  {name: "clveLayout", value: req.query.claveLayout, type: self.model.types.STRING}
                  ];
 
@@ -79,8 +79,8 @@ excelExport.prototype.get_insExcelInbursa = function(req,res,next){
                  {name: "referencia", value: req.query.Referencia, type: self.model.types.INT},
                  {name: "refLeyenda", value: req.query.Referencia_Leyenda, type: self.model.types.STRING},
                  {name: "refNumerica", value: req.query.Referencia_Numerica, type: self.model.types.STRING},
-                 {name: "cargo", value: req.query.Cargo, type: self.model.types.STRING},
-                 {name: "abono", value: req.query.Abono, type: self.model.types.STRING},
+                 {name: "cargo", value: req.query.Cargo, type: self.model.types.DECIMAL},
+                 {name: "abono", value: req.query.Abono, type: self.model.types.DECIMAL},
                  {name: "ordenante", value: req.query.Ordenante, type: self.model.types.STRING},                 
                  {name: "clveLayout", value: req.query.claveLayout, type: self.model.types.STRING}
                  ];
@@ -107,8 +107,8 @@ excelExport.prototype.get_insExcelCargaInicial = function(req,res,next){
                  {name: "referencia", value: req.query.Referencia, type: self.model.types.INT},
                  {name: "refAmpliada", value: req.query.Referencia_Ampliada, type: self.model.types.STRING},
                  {name: "autorizacion", value: req.query.Autorizacion, type: self.model.types.INT},
-                 {name: "abonos", value: req.query.Abonos, type: self.model.types.INT},
-                 {name: "cargos", value: req.query.Cargos, type: self.model.types.INT},
+                 {name: "abonos", value: req.query.Abonos, type: self.model.types.DECIMAL},
+                 {name: "cargos", value: req.query.Cargos, type: self.model.types.DECIMAL},
                  {name: "clveLayout", value: req.query.claveLayout, type: self.model.types.STRING}
                  ];
 
