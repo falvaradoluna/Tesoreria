@@ -199,6 +199,7 @@ registrationModule.factory('comisionesRepository', function($http) {
             return [
                 { name: 'concepto', displayName: 'Concepto', cellClass: 'gridCellLeft', width: '*' },
                 { name: 'referencia', displayName: 'Referencia', cellClass: 'gridCellRight', width: 100 },
+                { name: 'refAmpliada', displayName: 'Referencia Ampliada', cellClass: 'gridCellLeft', width: '*' },
                 { name: 'fechaOperacion', displayName: 'Fecha', type: 'date', cellClass: 'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100 },
                 { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
             ];
