@@ -1129,4 +1129,28 @@
 
         });
     };
+
+    $scope.cancelarComision = function( agrupador ){
+        swal({
+            title: "¿Cancelar comisión?",
+            text: "Al cancelar esta comisión se cancelaran las demas del mismo grupo",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Si, cancelar",
+            closeOnConfirm: true
+        },
+        function() {
+            comisionesRepository.cancelaComisionAplicada( $scope.selectedValueEmpresaID, agrupador ).then(function(resDelComisiones) {
+                if( resDelComisiones.length != 0 ){
+                    if( currentRow == lastRow ){
+                        $scope.getComisionesRealizadas();
+                        // $scope.setActiveTab($scope.lstTabs[3]);
+                        swal("Comisiones", "Se ha cancelado correctamente la comision del grupo " + agrupador, "success");
+                    }
+                }
+            });
+        });
+    }
 });

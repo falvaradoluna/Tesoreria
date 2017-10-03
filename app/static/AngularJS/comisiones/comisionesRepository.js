@@ -143,6 +143,19 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
+        cancelaComisionAplicada: function(idEmpresa, Agrupador) {
+            return $http({
+                url: comisionesURL + 'cancelaComisionAplicada/',
+                method: "GET",
+                params: { 
+                    idEmpresa: idEmpresa,
+                    Agrupador: Agrupador
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         updAplicaComisionesGrupo: function(idEmpresa, idBanco) {
             return $http({
                 url: comisionesURL + 'updAplicaComisionesGrupo/',
@@ -157,9 +170,6 @@ registrationModule.factory('comisionesRepository', function($http) {
             });
         },
         testApi: function(objData) {
-
-            console.log(objData);
-
             return $http({
                 url: comisionesURL + 'testApi/',
                 method: "GET",

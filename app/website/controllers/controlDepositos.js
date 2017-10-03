@@ -569,6 +569,22 @@ controlDepositos.prototype.get_interes = function(req, res, next) {
     });
 };
 
+controlDepositos.prototype.get_cancelaComisionAplicada = function(req, res, next) {
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'Agrupador', value: req.query.Agrupador, type: self.model.types.INT }
+    ];
+
+    this.model.query('DEL_COMISIONAPLICADA_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 
 controlDepositos.prototype.get_interesIva = function(req, res, next) {
     var self = this;
