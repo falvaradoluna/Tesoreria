@@ -874,9 +874,9 @@
             var currentComision = $scope.gruposComisionesData[ $scope.curComIndex ].data[0];
             var currentInteres  = $scope.gruposComisionesData[ $scope.curComIndex ].data[1];
 
-            $scope.lstRegistroContable[0].cargo = parseInt(currentComision.abono); // Ok mas o menos
-            $scope.lstRegistroContable[1].cargo = parseInt(currentInteres.abono);
-            $scope.lstRegistroContable[2].abono = parseInt(currentComision.abono) + parseInt(currentInteres.abono);
+            $scope.lstRegistroContable[0].cargo = parseFloat(currentComision.abono); // Ok mas o menos
+            $scope.lstRegistroContable[1].cargo = parseFloat(currentInteres.abono);
+            $scope.lstRegistroContable[2].abono = parseFloat(currentComision.abono) + parseFloat(currentInteres.abono);
             $scope.objEdicion.montoAcumuladoUsuario = currentComision.abono;
 
             // console.log( 'RegistroContable', $scope.lstRegistroContable );
