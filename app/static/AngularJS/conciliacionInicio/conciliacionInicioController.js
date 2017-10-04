@@ -217,7 +217,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
 
 
      $scope.generaInfoReport = function(){
-         
+         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
          $('#loading').modal('show');
 
     setTimeout(function(){
