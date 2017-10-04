@@ -23,12 +23,13 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
 
             });
         },
-        getGerenteContador: function(idUsuario) {
+        getGerenteContador: function(idUsuario, idEmpresa) {
             return $http({
                 url: conciliacionInicioURL + 'gerenteContador/',
                 method: "GET",
                 params: {                    
-                    idUsuario: idUsuario
+                    idUsuario: idUsuario,
+                    idEmpresa: idEmpresa
                 },
                 headers: {
                     'Content-Type': 'application/json'
