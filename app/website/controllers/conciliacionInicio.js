@@ -71,7 +71,9 @@ conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+                  { name: 'idEmpresa', value: req.query.idUsuario, type: self.model.types.INT }
+                 ];
 
     this.model.query('SEL_GERENTE_CONTADOR_SP', params, function(error, result) {
         self.view.expositor(res, {
