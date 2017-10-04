@@ -30,21 +30,23 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.totalCargoContable = 0;
         $scope.totalCargoBancario = 0;
         
-        $scope.obtieneCargosAbonos();
+        $scope.obtieneCargosAbonos($scope.busqueda);
         
         $scope.resumenDPI = [];
 
     }
 
-    $scope.obtieneCargosAbonos = function() {
+    $scope.obtieneCargosAbonos = function(busqueda) {
         localStorage.removeItem('DetalleDiferencias');
-        $scope.getAbonoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable, $scope.busqueda.PolizaPago);
-        $scope.getAbonoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
-        $scope.getCargoContable($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
-        $scope.getCargoBancario($scope.busqueda.IdEmpresa,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte,1,$scope.busqueda.IdBanco, $scope.busqueda.Cuenta,$scope.busqueda.CuentaContable);
+        
+        $scope.getAbonoContable(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable, busqueda.PolizaPago);
+        $scope.getAbonoBancario(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable);
+        $scope.getCargoContable(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable);
+        $scope.getCargoBancario(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable);
+        
         setTimeout(function(){
         localStorage.setItem('DetalleDiferencias', JSON.stringify({"abonoContable": $scope.abonosContables, "abonoBancario": $scope.abonosBancarios,"cargoContable": $scope.cargosContables, "cargoBancario": $scope.cargosBancarios}));
-    }, 1000);
+        } ,2000)
     }
 
     //****************************************************************************************************

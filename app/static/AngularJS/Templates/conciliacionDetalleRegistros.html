@@ -453,7 +453,7 @@
                                             <td>{{contableAbono.concepto }}</td>
                                             <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(registroContable)"><i class="ti-eye"></i></button>
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(contableAbono)"><i class="ti-eye"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -483,7 +483,7 @@
                                             <td>{{contableCargo.concepto }}</td>
                                             <td class="text-right" ng-class="{'text-success text-semibold' : contableCargo.cargo > 0}">{{contableCargo.cargo | currency}}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(registroContable)"><i class="ti-eye"></i></button>
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(contableCargo)"><i class="ti-eye"></i></button>
                                             </td>
                                         </tr>
                                     </tbody>

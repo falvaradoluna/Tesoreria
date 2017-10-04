@@ -56,9 +56,10 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                     $scope.InmemoryAcountBanc = $scope.busqueda.Cuenta;
                     $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
                     $scope.fechaCorte = $scope.busqueda.fechaCorte;
-                    $scope.contadorGerente=[{'NombreGerente':$scope.busqueda.gerente,
-                    'NombreContador':$scope.busqueda.contador
-                    }];
+                    $scope.contadorGerente=[{'NombreUsuario':$scope.busqueda.usuario,
+                                             'NombreGerente':$scope.busqueda.gerente,
+                                             'NombreContador':$scope.busqueda.contador
+                                            }];
 
                     $scope.cuentaActual = JSON.parse(localStorage.getItem('cuentaActualInMemory'));
 
@@ -167,7 +168,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                             $scope.paramBusqueda = [];
 
                             setTimeout(function() {
-                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago};
+                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"usuario": $scope.contadorGerente[0].Usuario,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
                                 console.log($scope.paramBusqueda)
@@ -182,7 +183,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                         }
                     });
 
-                    conciliacionInicioRepository.getGerenteContador($rootScope.userData.idUsuario).then(function(result) {
+                    conciliacionInicioRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.cuentaActual.IdEmpresa).then(function(result) {
                         if (result.data.length > 0) {
                             $scope.contadorGerente = result.data;
                         }
@@ -242,7 +243,7 @@ else {
                                                         "conciliacionBancaria"  :   $scope.busqueda.Banco,
                                                         "chequera"  :   $scope.fechaReporte,
                                                         "bancoCuenta"   :   $scope.busqueda.Cuenta,
-                                                        "clabe"  :   "01218000 195334667",
+                                                        "clabe"  :   $scope.busqueda.Cuenta,
                                                         "cuentaContable"  :   $scope.busqueda.CuentaContable,
                                                         "estadoCuenta" : $scope.totalesAbonosCargos[0].saldoBanco,
                                                         "aCNB" : $scope.totalesAbonosCargos[0].tAbonoContable,
@@ -262,17 +263,17 @@ else {
                                                        [
                                                            {
                                                                "titulo"   :   "ELABORÓ",
-                                                               "nombre"   :   "CARLA HERNÁNDEZ RODRÍGUEZ",
+                                                               "nombre"   :    $scope.contadorGerente[0].NombreUsuario,
                                                                "fecha"   :   ""
                                                            },
                                                            {
                                                                "titulo"   :   "GERENTE ADMINISTRATIVO",
-                                                               "nombre"   :   "GUADALUPE HERNÁNDEZ MEJÍA",
+                                                               "nombre"   :   $scope.contadorGerente[0].NombreGerente,
                                                                "fecha"   :   ""
                                                            },
                                                            {
                                                                "titulo"   :   "CONTADOR",
-                                                               "nombre"   :   "DAVID VÁZQUEZ RICO",
+                                                               "nombre"   :   $scope.contadorGerente[0].NombreContador,
                                                                "fecha"   :   ""
                                                            }
                                                         ]
