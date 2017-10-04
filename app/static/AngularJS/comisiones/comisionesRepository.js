@@ -143,6 +143,7 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
+
         cancelaComisionAplicada: function(idEmpresa, Agrupador) {
             return $http({
                 url: comisionesURL + 'cancelaComisionAplicada/',
@@ -156,6 +157,7 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
+
         updAplicaComisionesGrupo: function(idEmpresa, idBanco) {
             return $http({
                 url: comisionesURL + 'updAplicaComisionesGrupo/',
