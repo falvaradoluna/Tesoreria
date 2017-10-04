@@ -217,12 +217,9 @@ registrationModule.controller('conciliacionInicioController', function($window, 
 
 
      $scope.generaInfoReport = function(){
-<<<<<<< HEAD
-         
-=======
         
          $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
->>>>>>> 576a78d964aef6beb8a1d879fa454b611157b491
+
          $('#loading').modal('show');
 
     setTimeout(function(){
@@ -268,7 +265,7 @@ else {
                                                        [
                                                            {
                                                                "titulo"   :   "ELABORÓ",
-                                                               "nombre"   :    $scope.contadorGerente[0].NombreUsuario,
+                                                               "nombre"   :    $scope.contadorGerente[0].Usuario,
                                                                "fecha"   :   ""
                                                            },
                                                            {
