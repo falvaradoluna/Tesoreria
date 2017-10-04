@@ -263,7 +263,7 @@ else {
                                                        [
                                                            {
                                                                "titulo"   :   "ELABORÓ",
-                                                               "nombre"   :    $scope.contadorGerente[0].NombreUsuario,
+                                                               "nombre"   :    $scope.contadorGerente[0].Usuario,
                                                                "fecha"   :   ""
                                                            },
                                                            {
