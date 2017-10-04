@@ -217,7 +217,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
 
 
      $scope.generaInfoReport = function(){
-         
+         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
          $('#loading').modal('show');
 
     setTimeout(function(){
@@ -295,7 +295,7 @@ else {
                     });
                 });
 }
-                } ,4000)
+                } ,2000)
      };
 
      $scope.go = function ( path ) {
