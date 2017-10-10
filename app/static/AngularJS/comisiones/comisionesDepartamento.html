@@ -1,18 +1,81 @@
 <div class="row">
-    <div class="col-md-4">
-        <h2>Departamento</h2>
+    <div class="col-md-4 pull-right">
+        <div class="col-grupos">
+            <button class="btn btn-circle-left pull-left" ng-click="prevRegistro();">
+                <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </button>
+
+            <div class="panel-grupos">
+                <div class="elem" style="background-color: {{ gruposComisiones[ ( curComIndex - 1 ) ].color  }}; 
+                                         width: {{ gruposComisiones[ ( curComIndex - 1 ) ].name == undefined ? '10' : '40' }}px;
+                                         margin-left: {{ gruposComisiones[ ( curComIndex - 1 ) ].name == undefined ? '30' : '0' }}px;">
+                    <div> {{ gruposComisiones[ ( curComIndex - 1 ) ].name }} </div>
+                </div>
+
+                <div class="elem-active" style="background-color: {{ gruposComisiones[ curComIndex ].color  }}">
+                    <div> {{ gruposComisiones[ curComIndex ].name }} </div>
+                </div>
+
+                <div class="elem" style="background-color: {{ gruposComisiones[ ( curComIndex + 1 ) ].color  }}; 
+                                         width: {{ gruposComisiones[ ( curComIndex + 1 ) ].name == undefined ? '10' : '40' }}px;">
+                    <div> {{ gruposComisiones[ ( curComIndex + 1 ) ].name }} </div>
+                </div>
+            </div>
+
+            <button class="btn btn-circle" ng-click="nextRegistro();">
+                <i class="fa fa-angle-right" aria-hidden="true"></i>
+            </button>            
+        </div>
     </div>
-    <div class="col-md-4">
-        <h5>Monto {{objEdicion.usarMontoCalculado == true ? 'automático' :  'usuario' }}</h5>
-        <h2>{{objEdicion.usarMontoCalculado == true ? (gridComisionesRow.abono  | currency) : objEdicion.montoAcumuladoUsuario | currency}}</h2>
-        <!-- objEdicion.montoAcumuladoUsuario -->
-    </div>
-    <div class="col-md-4">
-        <h5>Monto Total</h5>
-        <h2>{{gridComisionesRow.abono | currency}}</h2>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Departamento</h2>
+                <!-- <small>{{ gruposComisionesData[ curComIndex ].data[2][1] }}</small> <br> -->
+                <!-- <small>{{ selectedDepartamento }}</small> -->
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" ng-model="selectedValueSucursalID" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in lstSucursal" name="txtSucursal" ng-change="getDepartamentosBpro(selectedValueSucursalID)">
+                    <option value="">Seleccioné Sucursal</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" ng-model="selectedDepartamento" ng-options="itemDepartamento.descripcion for itemDepartamento in lstDepartamento track by itemDepartamento.descripcion" name="txtDepto" ng-change="setCuentaContable()">
+                    <option value="">Seleccioné Departamento</option>
+                </select>
+            </div>
+        </div>
     </div>
 </div>
-<div class="row">
+
+<div class="row" style="margin-top: 15px; border-top: solid 5px {{ gruposComisiones[ curComIndex ].color  }};">
+    <div class="col-md-5">
+        <div><small> <b> Concepto </b> </small> </div>
+        <div class="texttos">{{ gruposComisionesData[ curComIndex ].data[0].concepto }}</div>
+    </div>
+    <div class="col-md-3">
+        <div><small> <b> Referencia </b> </small> </div>
+        <div class="texttos">{{ gruposComisionesData[ curComIndex ].data[0].referencia }}</div>
+    </div>
+    <div class="col-md-2">
+        <div>
+            <small> 
+                <b> Monto {{objEdicion.usarMontoCalculado == true ? 'automático' :  'usuario' }} </b> 
+            </small>
+        </div>
+        <div class="montos"> <!-- gruposComisionesData[ curComIndex ].data[3] -->
+            <!-- {{objEdicion.usarMontoCalculado == true ? (gruposComisionesData[ curComIndex ].data[3][0].cargo  | currency) : objEdicion.montoAcumuladoUsuario | currency}} -->
+            {{ gruposComisionesData[ curComIndex ].data[3][0].cargo === undefined ? '$0.00' : (gruposComisionesData[ curComIndex ].data[3][0].cargo | currency) }}
+        </div>
+        <!-- objEdicion.montoAcumuladoUsuario -->
+    </div>
+    <div class="col-md-2">
+        <div><small> <b>Monto Total</b> </small> </div>
+        <div class="montos">{{gruposComisionesData[ curComIndex ].data[0].abono | currency}}{{ gridComisionesRow.length == 0 ? '$0.00' : '' }}</div>
+    </div>
+</div>
+
+<div class="row hidden">
     <div class="col-md-4">
         <select class="form-control" ng-model="selectedValueSucursalID" ng-options="sucursalesUsuario.suc_idsucursal as sucursalesUsuario.suc_nombre for sucursalesUsuario in lstSucursal" name="txtSucursal" ng-change="getDepartamentosBpro(selectedValueSucursalID)">
             <option value="">Seleccioné Sucursal</option>
@@ -26,7 +89,6 @@
     <div class="col-md-4">
     </div>
 </div>
-<hr>
 <div class="row">
     <div class="col-md-12">
         <h3>Registro Contable</h3>
@@ -43,17 +105,18 @@
                 </tr>
             </thead>
             <tbody ng-repeat="registro in lstRegistroContable">
+            <tbody ng-repeat="registro in gruposComisionesData[ curComIndex ].data[3]">
                 <tr>
                     <td>{{registro.consecutivo}}</td>
                     <td>{{registro.cuenta}}</td>
                     <td>{{registro.concepto}}</td>
                     <td>{{registro.descripcion}}</td>
-                    <td>{{registro.cargo}}</td>
-                    <td>{{registro.abono}}</td>
+                    <td>{{ formar_number( registro.cargo ) }}</td>
+                    <td>{{ formar_number( registro.abono ) }}</td>
                     <td>
-                        <button class="btn btn-success" ng-click="toggleShowSub()" ng-show="registro.showSub">
+                        <!-- <button class="btn btn-success" ng-click="toggleShowSub()" ng-show="registro.showSub">
                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-                        </button>
+                        </button> -->
                     </td>
                 </tr>
                 <tr ng-show="showSub" style="padding:70px">
@@ -62,8 +125,30 @@
                     </td>
                 </tr>
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4"> <b class="pull-right">Totales:</b> </td>
+                    <td>
+                        <b>
+                            {{ formar_number( gruposComisionesData[ curComIndex ].data[3][2].abono ) }}
+                        </b>
+                    </td>
+                    <td><b>{{ formar_number( gruposComisionesData[ curComIndex ].data[3][2].abono ) }}</b></td>
+                    <td></td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>
 <hr>
-<button class="btn btn-success pull-right" ng-click="validarMontos()">Aceptar</button>
+<button class="btn btn-default pull-laft" ng-click="back_to_comisiones()">
+    <i class="fa fa-chevron-left" aria-hidden="true"></i> Regresar
+</button>
+<!-- validarMontos() -->
+<button class="btn btn-success pull-right" ng-click="nextRegistro()" ng-show="btn_dep_sig_show" ng-disabled="!btn_dep_sig_flag">
+    Aceptar <i class="fa fa-chevron-right" aria-hidden="true"></i>
+</button>
+
+<button class="btn btn-info pull-right" ng-click="validarMontos()" ng-disabled="!btn_dep_oki_flag" style="margin: 0 10px 0 10px;">
+    <i class="fa fa-check" aria-hidden="true"></i> Crear Referencia
+</button>

@@ -45,7 +45,9 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
                   { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING},
                   { name: 'fechaElaboracion', value: req.body.fechaElaboracion, type: self.model.types.STRING},
                   { name: 'fechaCorte', value: req.body.fechaCorte, type: self.model.types.STRING},
-                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT}];
+                  { name: 'polizaPago', value: req.body.polizaPago, type: self.model.types.STRING},
+                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT}
+                  ];
     
     this.model.query('SEL_TOTAL_ABONOCARGO_SP', params, function(error, result) {
          
@@ -69,7 +71,9 @@ conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
+    var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT },
+                  { name: 'idEmpresa', value: req.query.idUsuario, type: self.model.types.INT }
+                 ];
 
     this.model.query('SEL_GERENTE_CONTADOR_SP', params, function(error, result) {
         self.view.expositor(res, {

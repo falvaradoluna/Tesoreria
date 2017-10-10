@@ -14,6 +14,7 @@ registrationModule.controller('excelExportController', function($scope, alertFac
     $scope.addNumbers     = true;
     $scope.addSymbols        = true;
     $scope.password = '';
+    $scope.bandera = 0;
 
 
 
@@ -69,20 +70,32 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                                                                                                       //1 es la acción dentro de SP para validar si exste el archivo en curso registrado 
                excelExportRepository.historyLayout(" ", workbook.Strings[1].h, workbook.Strings[0].h, 1).then(function(result){
                if (result.data[0].Resultado == 1){      
-               
+               $scope.bandera = 0;
                 var sheetName = workbook.SheetNames[0];
                 var excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
                 if (excelData.length > 0) {
                     //Save data
                     if(workbook.Strings[1].h == 4){
                     //Inicio para el registro de datos Scotiabank
-                    angular.forEach(excelData, function(value,key){       //idBanco desde layout                                                                                                      //Dato de la clave Layout del documento en curso
+                    angular.forEach(excelData, function(value,key){       //idBanco desde layout
+
+                    if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
+                         if ($scope.bandera == 0){
+                         $scope.bandera = 1;
+                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         setTimeout(function() {
+                            
+                            }, 2000);
+                         }
+                       }
+                       else if(value.Fecha.length == 10 || value.Fecha.indexOf('/') != 0) {                                                                                                      //Dato de la clave Layout del documento en curso
                       excelExportRepository.sendExcelDataScotibank( workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Referencia_Numerica, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda_1, value.Leyenda_2, workbook.Strings[0].h).then(function(result){
                         console.log(result.data);
                       }, function(error){
                             alertFactory.warning(error);
                 						$('#loading').modal('hide');
     					         });
+                      }
                     });
                     //Fin para el registro de datos Scotiabank
                    }
@@ -91,12 +104,25 @@ registrationModule.controller('excelExportController', function($scope, alertFac
 
                     //Inicio para el registro de datos Banamex
                     angular.forEach(excelData, function(value,key){   //idBanco desde layout                                                                                                                                                                         //Dato de la clave Layout del documento en curso
-                      excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, value.Depositos, value.Retiros, workbook.Strings[0].h).then(function(result){
+                       
+                       if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
+                         if ($scope.bandera == 0){
+                         $scope.bandera = 1;
+                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         setTimeout(function() {
+                            
+                            }, 2000);
+                         }
+                       }
+                       else if(value.Fecha.length == 10 || value.Fecha.indexOf('/') != 0) {
+                      excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Tipo_Transaccion,value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, value.Depositos, value.Retiros, workbook.Strings[0].h).then(function(result){
                         console.log(result);
                       }, function(error){
                             alertFactory.warning(error);
                             $('#loading').modal('hide');
                        });
+                      }
+
                     });
                     //Fin para el registro de datos Banamex
 
@@ -104,13 +130,25 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                    if(workbook.Strings[1].h == 5){
 
                     //Inicio para el registro de datos Inbursa
-                    angular.forEach(excelData, function(value,key){    //idBanco desde layout                                                                                                                                          //Dato de la clave Layout del documento en curso
+                    angular.forEach(excelData, function(value,key){    //idBanco desde layout
+
+                      if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
+                         if ($scope.bandera == 0){
+                         $scope.bandera = 1;
+                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         setTimeout(function() {
+                            
+                            }, 2000);
+                         }
+                       }
+                       else if(value.Fecha.length == 10 || value.Fecha.indexOf('/') != 0) {                                                                                                                                          //Dato de la clave Layout del documento en curso
                       excelExportRepository.sendExcelDataInbursa(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Referencia, value.Referencia_Leyenda, value.Referencia_Numerica, value.Cargo, value.Abono, value.Ordenante, workbook.Strings[0].h).then(function(result){
                         console.log(result.data);
                       }, function(error){
                             alertFactory.warning(error);
                             $('#loading').modal('hide');
                        });
+                      }
                     });
                     //Fin para el registro de datos Inbursa
 
@@ -119,30 +157,42 @@ registrationModule.controller('excelExportController', function($scope, alertFac
                    if(workbook.Strings[1].h == 6){
 
                     //Inicio para el registro de datos Carga Inicial
-                    angular.forEach(excelData, function(value,key){                                                                                                                                                                            //Dato de la clave Layout del documento en curso
+                    angular.forEach(excelData, function(value,key){  
+                      if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
+                         if ($scope.bandera == 0){
+                         $scope.bandera = 1;
+                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         setTimeout(function() {
+                            
+                            }, 2000);
+                         }
+                       }
+                       else if(value.Fecha.length == 10 || value.Fecha.indexOf('/') != 0) {                                                                                                                                                                          //Dato de la clave Layout del documento en curso
                       excelExportRepository.sendExcelDataCargaInicial(value.No_Cuenta, value.Fecha, value.Concepto, value.Sucursal, value.Referencia, value.Referencia_Ampliada, value.Autorizacion, value.Abonos, value.Cargos, workbook.Strings[0].h).then(function(result){
                         console.log(result);
                       }, function(error){
                             alertFactory.warning(error);
                             $('#loading').modal('hide');
                        });
+                      } 
                     });
                     //Fin para el registro de datos Carga Inicial
 
                    }
-
+                     if($scope.bandera == 0){
                     alertFactory.success("Base de datos Actualizada	 correctamente!");
                     //$scope.enableButton = false;
                     setTimeout(function() {
                     $scope.reload();
                     }, 2000);
                   }
+                  }
                 else {
                     alertFactory.error("El archivo que intenta migrar no contiene datos, por favor verifique el contenido del archivo!");
                 }
 
                 }else{
-                    alertFactory.error("El documento que intenta migrar no esta registrado en el sistema, verifique su seleccion o descargue la plantilla correspondiente.");
+                    alertFactory.error("El documento que intenta migrar no esta registrado en el sistema, verifique su selección o descargue la plantilla correspondiente.");
                    }
               }, function(error){
                   console.log("Error", error);

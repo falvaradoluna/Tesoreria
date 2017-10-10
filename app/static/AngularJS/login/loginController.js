@@ -20,7 +20,7 @@ console.log($rootScope.currentEmployee)
                     $rootScope.currentEmployee = getParameterByName('employee');
                     //location.href = '/conciliacionInicio';
                 } else {
-                    alert('Inicie sesión desde panel de aplicaciones o desde el login.');
+                    alertFactory.infoTopFull('Inicie sesión desde panel de aplicaciones o desde el login.');
                 }
 
             }

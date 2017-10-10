@@ -28,7 +28,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
      $scope.init = function() {
         
         variablesLocalStorage();
-        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
         //LQMA comment 17082017
         //$scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
     };
@@ -37,6 +37,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
    var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
         $scope.difMonetaria = $scope.busqueda.DiferenciaMonetaria;
+        $scope.polizaPago = $scope.busqueda.PolizaPago;
     };
      
  //****************************************************************************************************
@@ -101,7 +102,8 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
         { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.fechaOperacion | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''//},
         { name: 'referencia', displayName: 'Referencia', width: 200 },
         //LQMA 07092017                  
-        { name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
+        //{ name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
+        { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
         { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
         //LQMA add
@@ -126,15 +128,15 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
 
 
     //******************Función para llenar el grid Depositos Bancos********************************
-    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte) {
+    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
         if (idestatus == 1) { 
-            filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte).then(function(result) {
+            filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data;
                     $scope.gridDepositosBancos.data = result.data;
                     console.log($scope.gridDepositosBancos.data, 'Desposito Bancario');
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago);
                 }
             });
         } else if (idestatus == 2) {
@@ -149,9 +151,9 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
 
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
-     $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte) {
+     $scope.getAuxiliarContable = function(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago) {
 
-            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte).then(function(result) {
+            filtrosRepository.getAuxiliar(idEmpresa, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago).then(function(result) {
                 if (result.data[0].length !=0) {
                     $scope.auxiliarContable = result.data[0];
                     $scope.gridAuxiliarContable.data = result.data[0];

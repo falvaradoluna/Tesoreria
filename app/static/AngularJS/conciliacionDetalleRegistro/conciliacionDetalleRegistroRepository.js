@@ -169,7 +169,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte){
+        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoReferenciado/',
                 method:"GET",
@@ -177,7 +177,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idBanco : idBanco,
                     noCuenta : noCuenta,
                     fechaInicio : fechaInicio,
-                    fechaCorte : fechaCorte
+                    fechaCorte : fechaCorte,
+                    idEmpresa: idEmpresa
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -185,17 +186,60 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getContablesRef: function(cuentacontable, fechaCorte, idEmpresa){
+        getContablesRef: function(cuentacontable, fechaCorte, polizaPago, idEmpresa, idBanco){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'contableReferenciado/',
                 method: 'GET',
                 params:{
                     cuentaContable: cuentacontable,
                     fechaCorte: fechaCorte,
-                    idEmpresa: idEmpresa
+                    polizaPago: polizaPago,
+                    idEmpresa: idEmpresa,
+                    idBanco : idBanco
                 },
                 headers:{
                      'Content-Type': 'application/json'
+                }
+            });
+        },
+
+
+        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
+                method: 'GET',
+                params: {
+                    ReferenciaAmpliada: refampliada,
+                    TipoRegistro: tipoRegistro,
+                    idEmpresa: idEmpresa,
+                    cuentaContable: cuentaContable,
+                    fecha: fecha,
+                    polizaPago: polizaPago,
+                    cuentaBanco: cuentaBanco,
+                    idRegistroBancario: idRegistroBancario
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
+
+        getDetalleRelacionContables: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
+                method: 'GET',
+                params: {
+                    ReferenciaAmpliada: refampliada,
+                    TipoRegistro: tipoRegistro,
+                    idEmpresa: idEmpresa,
+                    cuentaContable: cuentaContable,
+                    fecha: fecha,
+                    polizaPago: polizaPago,
+                    cuentaBanco: cuentaBanco,
+                    idRegistroBancario: idRegistroBancario
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
                 }
             });
         }

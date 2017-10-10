@@ -321,7 +321,8 @@ conciliacionDetalleRegistro.prototype.get_bancoReferenciado = function(req, res,
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING},
                   { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
-                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING}
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
+                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT}
                  ];
 
         this.model.query('SEL_REG_BANCOS_REFERENCIADOS', params, function(error, result) {
@@ -337,7 +338,9 @@ conciliacionDetalleRegistro.prototype.get_contableReferenciado = function(req, r
   var self = this;
   var params =[{name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING},
                {name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
-               {name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT}
+               {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
+               {name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT},
+               {name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT}
               ];
   this.model.query('SEL_REG_CONTABLES_REF', params, function(error, result){
        self.view.expositor(res,{
@@ -345,6 +348,25 @@ conciliacionDetalleRegistro.prototype.get_contableReferenciado = function(req, r
             result: result
        });
   });
+};
+
+conciliacionDetalleRegistro.prototype.get_detalleRelacionBancos = function(req, res, next){
+var self = this;
+var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,type: self.model.types.STRING},
+            {name: 'tipoDato', value: req.query.TipoRegistro ,type: self.model.types.STRING},
+            {name: 'idEmpresa', value: req.query.idEmpresa ,type: self.model.types.INT},
+            {name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING},
+            {name: 'fecha', value: req.query.fecha, type: self.model.types.STRING},
+            {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
+            {name: 'noCuenta', value: req.query.cuentaBanco, type: self.model.types.STRING},
+            {name: 'idRegistroBanco', value: req.query.idRegistroBancario, type: self.model.types.INT}
+            ];
+    this.model.query('SEL_RELACION_REG_BANCOS_REF_SP', params, function(error, result){
+     self.view.expositor(res,{
+         error: error,
+         result: result
+       });
+    });
 };
 
 module.exports = conciliacionDetalleRegistro;
