@@ -61,15 +61,15 @@
                 <p>La suma de la cartera seleccionada no alcanza a cubrir lo depositado, debes elegir al registro a quien se le cargara la diferencia.</p>
                 <div class="row">
                     <div class="col-xs-4" style="text-align: center;">
-                        <h3>$ {{ formar_number(depositoTotal) }}</h3>
+                        <h3>{{ depositoTotal | currency }}</h3>
                         <small>Deposito</small>
                     </div>
                     <div class="col-xs-4" style="text-align: center;">
-                        <h3>$ {{ formar_number(carteraTotal) }}</h3>
+                        <h3>{{ carteraTotal | currency }}</h3>
                         <small>Cartera</small>
                     </div>
                     <div class="col-xs-4" style="text-align: center;">
-                        <h3>$ {{ formar_number(anticipo) }}</h3>
+                        <h3>{{ anticipo | currency }}</h3>
                         <small>Diferencia</small>
                     </div>
                 </div>
@@ -82,8 +82,9 @@
                         <th>Sucursal</th>
                         <th>Departamento</th>
                         <th>Cliente</th>
-                        <th>Importe</th>
-                        <th>Importe Final</th>
+                        <th>Importe DOC</th>
+                        <th align="right">Importe Aplicar</th>
+                        <!-- <th>Importe BPRO</th> -->
                     </tr>
                     <tr ng-repeat="(key, cartera) in selectedRowCartera" style="background-color: {{ model.selectedOccurrence == key ? 'white' : 'white' }}">
                         <!-- <td ng-hide="true" >  
@@ -93,32 +94,43 @@
                         <td> {{cartera.nombreSucursal}}</td>
                         <td> {{cartera.nombreDepartamento}}</td>
                         <td> {{cartera.nombreCliente}}</td>
-                        <td style="text-align: right;">$ {{ formar_number(cartera.saldo) }}</td>
-                        <td>
-                            <!-- fondo-success fondo-fail -->
-                            <input  type="text" 
-                                class="fondo-{{ cartera.estilo }}" 
+                        <td style="text-align: right;">{{ cartera.saldo | currency }}</td>
+                        <td class="fondo-{{ cartera.estilo }}" width="200" align="right">
+                            <button ng-click="setImporteDocumento( key )">
+                                <i class="fa fa-money" aria-hidden="true"></i>
+                                <i class="fa fa-angle-right" aria-hidden="true"></i>
+                            </button><input  type="text" 
+                                
                                 style="text-align: right; width: 100px;" 
                                 ng-disabled="!cartera.enabled"
                                 ng-model="cartera.importeFinal" 
-                                ng-blur="validaAplicacion();";>
+                                ng-blur="validaAplicacion();">
                         </td>
+                        <!-- <td style="text-align: right;">{{ cartera.importeBPRO | currency }}</td> -->
                     </tr>
                     <tr>
                         <td colspan="5">
-                            <h4 class="pull-right">Total</h4>
+                            <h4 class="pull-right">Aplicado <br> Anticipo </h4>
                         </td>
                         <td>
-                            <h4 class="pull-right">{{ formar_number(sumatoriaAplicada) }}</h4>
+                            <h4 class="pull-right">{{ sumatoriaAplicada | currency }} <br> {{ depositoTotal - sumatoriaAplicada | currency }}</h4>
                         </td>
                     </tr>
+                    <!-- <tr>
+                        <td colspan="5">
+                            <h4 class="pull-right">Anticipo</h4>
+                        </td>
+                        <td>
+                            <h4 class="pull-right">{{ depositoTotal - sumatoriaAplicada | currency }}</h4>
+                        </td>
+                    </tr> -->
                 </table>
                 <br>        
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success" ng-click="ConfirmaReferencia();">Confirmar Referencia</button>
-                <button type="button" class="btn btn-success" ng-click="TestReferencia();">Test Referencia</button>
+                <!-- <button type="button" class="btn btn-success" ng-click="ConfirmaReferencia();">Confirmar Referencia</button> -->
+                <button type="button" class="btn btn-success" ng-click="TestReferencia();">Confirmar Referencia</button>
             </div>
         </div>
     </div>
