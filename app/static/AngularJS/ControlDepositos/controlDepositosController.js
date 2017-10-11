@@ -115,7 +115,11 @@
             case 2: $scope.getDepositosPorIdentificar(); break;
             case 3: $scope.getDepositosAplicados(); break;
             default: $scope.getDepositosBancosNoReferenciados(); break;
-        }        
+        }
+
+        $("html, body").delay(2000).animate({
+            scrollTop: $('.por-aplicar').offset().top 
+        }, 1000);
     }
 
     $scope.getDepositosBancosNoReferenciados = function() {
@@ -240,6 +244,10 @@
         if ($scope.searchTypeID == 2) {
             $scope.getClientByName($scope.searchValue);
         }
+
+        $("html, body").delay(500).animate({
+            scrollTop: $('#cliente').offset().top 
+        }, 1000);
     };
 
     $scope.SetClienteID = function(cliente) {
@@ -326,7 +334,7 @@
             var msg = 'row selected ' + row.isSelected;
             row.entity.color = $scope.currentColor;
 
-            console.log( row );
+            // console.log( row );
             row.color = $scope.currentColor;
             if (row.isSelected === true) {
                 $scope.carteraTotal = $scope.carteraTotal + parseFloat(row.entity.saldo);
@@ -386,6 +394,10 @@
                 }
             });
         }
+
+        $("html, body").delay(500).animate({
+            scrollTop: $('#CarteraTable').offset().top 
+        }, 1000);
     };
 
     $scope.creaReferenciaTemporal = function() {
@@ -399,31 +411,40 @@
             $scope.Aplicacion = $scope.depositoTotal;
 
             $scope.selectedRowCartera.forEach( function( item, key ){
-                $scope.selectedRowCartera[key].checked = false;
-                $scope.selectedRowCartera[key].estilo      = 'success';
-                $scope.selectedRowCartera[key].enabled      = ( $scope.selectedRowCartera.length == 1 ) ? false : true;
+                $scope.selectedRowCartera[key].checked  = false;
+                $scope.selectedRowCartera[key].estilo   = 'success';
+                $scope.selectedRowCartera[key].enabled  = true;//( $scope.selectedRowCartera.length == 1 ) ? false : true;
                 
                 if( $scope.depositoTotal >= $scope.carteraTotal ){
-                    $scope.selectedRowCartera[key].saldo           = parseFloat($scope.formar_number($scope.selectedRowCartera[key].saldo, 2, '.',''));
+                    // console.log('A');
+                    $scope.selectedRowCartera[key].saldo             = parseFloat($scope.formar_number($scope.selectedRowCartera[key].saldo, 2, '.',''));
 
                     $scope.selectedRowCartera[key].importeDiferencia = parseFloat($scope.selectedRowCartera[key].saldo) + parseFloat($scope.anticipo);
                     $scope.selectedRowCartera[key].importeDiferencia = parseFloat($scope.formar_number($scope.selectedRowCartera[key].importeDiferencia, 2, '.',''));
                     
-                    $scope.selectedRowCartera[key].importeFinal      = ( key == ($scope.selectedRowCartera.length) - 1 ) ? $scope.selectedRowCartera[key].importeDiferencia : $scope.selectedRowCartera[key].saldo;
+
+                    $scope.selectedRowCartera[key].importeFinal      = $scope.selectedRowCartera[key].saldo;
+                    $scope.selectedRowCartera[key].importeBPRO       = ( key == ($scope.selectedRowCartera.length) - 1 ) ? $scope.selectedRowCartera[key].importeDiferencia : $scope.selectedRowCartera[key].saldo;
                 }
                 else{
+                    // console.log('B');
                     if( $scope.selectedRowCartera[key].saldo <= $scope.Aplicacion ){ // Es menor
+                        // console.log('B-1');
                         $scope.selectedRowCartera[key].importeFinal = $scope.selectedRowCartera[key].saldo;
+                        $scope.selectedRowCartera[key].importeBPRO = $scope.selectedRowCartera[key].saldo;
 
                         $scope.Aplicacion = $scope.Aplicacion - parseFloat( $scope.selectedRowCartera[key].saldo );
                     }
                     else{
+                        // console.log('B-2');
                         $scope.selectedRowCartera[key].importeFinal = $scope.Aplicacion;
+                        $scope.selectedRowCartera[key].importeBPRO = $scope.Aplicacion;
                         $scope.Aplicacion = 0;                       
                     }
                 }
 
                 $scope.selectedRowCartera[key].importeFinal = $scope.formar_number($scope.selectedRowCartera[key].importeFinal, 2, '.','')
+                $scope.selectedRowCartera[key].importeBPRO = $scope.formar_number($scope.selectedRowCartera[key].importeBPRO, 2, '.','')
                 
             });
 
@@ -433,69 +454,126 @@
             $scope.model.selectedOccurrence = $scope.selectedRowCartera.length - 1;
 
             $scope.selectedRowCartera[ $scope.selectedRowCartera.length - 1 ].checked = true;
+
+            $scope.validaAplicacion();
         }
     };
 
     $scope.aplicacionSuccess = true;    
 
     $scope.validaAplicacion = function(){
-        console.log('-------------------------------------------');
+        // console.log('-------------------------------------------');
         $scope.sumatoriaAplicada = 0;
         $scope.selectedRowCartera.forEach( function( item, key ){
-            console.log( $scope.selectedRowCartera[key].importeFinal );
-            if( parseFloat($scope.selectedRowCartera[key].importeFinal) > parseFloat($scope.selectedRowCartera[key].saldo) ){
+            var importeFinal = $scope.selectedRowCartera[key].importeFinal;
+            if( importeFinal == '' ){
+                importeFinal = 0.00;
+                $scope.selectedRowCartera[key].importeFinal = $scope.formar_number(importeFinal, 2, '.','');
+                $scope.selectedRowCartera[key].estilo      = 'warning';
+            }
+            else if( isNaN( importeFinal ) ){
+                importeFinal = 0.00;
+                $scope.selectedRowCartera[key].importeFinal = $scope.formar_number(importeFinal, 2, '.','');
                 $scope.selectedRowCartera[key].estilo      = 'warning';
             }
             else{
-                $scope.selectedRowCartera[key].estilo      = 'success';
+                $scope.selectedRowCartera[key].importeFinal = $scope.formar_number(importeFinal, 2, '.','');
+                if( parseFloat($scope.selectedRowCartera[key].importeFinal) <= 0 ){
+                    $scope.selectedRowCartera[key].estilo      = 'warning';
+                }             
+                else if( parseFloat($scope.selectedRowCartera[key].importeFinal) > parseFloat($scope.selectedRowCartera[key].saldo) ){
+                    $scope.selectedRowCartera[key].estilo      = 'warning';
+                }
+                else if( parseFloat($scope.selectedRowCartera[key].importeFinal) == parseFloat($scope.selectedRowCartera[key].saldo) ){
+                    $scope.selectedRowCartera[key].estilo      = 'info';
+                }
+                else{
+                    $scope.selectedRowCartera[key].estilo      = 'success';
+                }
             }
-
+            
+            $scope.selectedRowCartera[key].importeBPRO = $scope.formar_number(importeFinal, 2, '.','');
             $scope.sumatoriaAplicada += parseFloat($scope.selectedRowCartera[key].importeFinal);
         });
 
-        if( $scope.sumatoriaAplicada < ( $scope.depositoTotal -1 ) ){
-            $scope.aplicacionSuccess = false;
-            $scope.aplicacionMensaje = "Aun no se ha aplicado todo el monto del depósito, asegurate de aplicarlo.";
+        // Asignamos el resto al ultimo registro
+        var anticipo = parseFloat( $scope.depositoTotal ) - parseFloat( $scope.formar_number($scope.sumatoriaAplicada,5, '.','') );
+        // var anticipo = $scope.depositoTotal - $scope.sumatoriaAplicada;
+        if( anticipo > 0 ){
+            var lastId = $scope.selectedRowCartera.length - 1;
+            var sumAux = parseFloat($scope.selectedRowCartera[ lastId ].importeBPRO) + parseFloat(anticipo);
+            $scope.selectedRowCartera[ lastId ].importeBPRO = $scope.formar_number(sumAux, 2, '.','');
         }
-        else if( $scope.sumatoriaAplicada > $scope.depositoTotal ){
-            $scope.aplicacionSuccess = false;
-            $scope.aplicacionMensaje = "Se esta aplicando un monto mayor que el depósito, asegurate de no pasarte del monto.";
+
+        if( parseFloat($scope.sumatoriaAplicada) == 0 ){
+            $scope.selectedRowCartera.forEach( function( item, key ){
+                $scope.selectedRowCartera[key].estilo      = 'danger';
+            });
+        }
+
+        // var anticipo = $scope.depositoTotal - $scope.sumatoriaAplicada;
+        // console.log( 'Difefencia de aplicado', difefencia );
+        if( parseFloat( anticipo ) < 0 ){
+            $scope.selectedRowCartera.forEach( function( item, key ){
+                $scope.selectedRowCartera[key].estilo      = 'danger';
+            });
+        }
+            
+
+        // if( $scope.sumatoriaAplicada < ( $scope.depositoTotal -1 ) ){
+        //     $scope.aplicacionSuccess = false;
+        //     $scope.aplicacionMensaje = "Aun no se ha aplicado todo el monto del depósito, asegurate de aplicarlo.";
+        // }
+        // else if( $scope.sumatoriaAplicada > $scope.depositoTotal ){
+        //     $scope.aplicacionSuccess = false;
+        //     $scope.aplicacionMensaje = "Se esta aplicando un monto mayor que el depósito, asegurate de no pasarte del monto.";
+        // }
+        // else{
+        // }
+    }
+
+    $scope.setImporteDocumento = function( index ){
+        var saldoAplicar    = parseFloat( $scope.depositoTotal - $scope.sumatoriaAplicada );
+        var importeAplicado = parseFloat( $scope.selectedRowCartera[ index ].importeFinal );
+        var saldo           = parseFloat( $scope.selectedRowCartera[ index ].saldo );
+
+        if( saldoAplicar < saldo ){
+            var aplicar = importeAplicado + saldoAplicar;
+            if( aplicar > saldo ){
+                $scope.selectedRowCartera[ index ].importeFinal = $scope.formar_number(saldo, 2, '.','');
+            }
+            else{
+                if( aplicar < 0 ){
+                    $scope.selectedRowCartera[ index ].importeFinal = $scope.formar_number(0, 2, '.','');
+                }
+                else{
+                    $scope.selectedRowCartera[ index ].importeFinal = $scope.formar_number(aplicar, 2, '.','');                    
+                }
+
+            }
         }
         else{
-            $scope.aplicacionSuccess = true;
+            $scope.selectedRowCartera[ index ].importeFinal = $scope.formar_number(saldo, 2, '.','');
         }
+
+        $scope.validaAplicacion();
     }
 
     $scope.ConfirmaReferencia = function(){
         try{
             $scope.RowCartera = $scope.selectedRowCartera;
 
-            if( $scope.aplicacionSuccess ){
-                $scope.RowCartera.forEach( function( item, key ){
-                    if( $scope.RowCartera[key].importeFinal != 0 ){
-                        $scope.RowCartera[ key ].saldo = $scope.RowCartera[ key ].importeFinal;
-                    }
-                    else{
-                        delete $scope.RowCartera[ key ];
-                    }
-                });
+            var params = $scope.setReferenceParams($scope.RowCartera[0], 0, $scope.selectedRowDocuments.idDepositoBanco);
+            console.log( params );
+            if ($scope.RowCartera.length > 1) params.idTipoReferencia = 4;
+            $scope.createReference(params);
 
-                setTimeout(function() {
-                    var params = $scope.setReferenceParams($scope.RowCartera[0], 0, $scope.selectedRowDocuments.idDepositoBanco);
-                    if ($scope.RowCartera.length > 1) params.idTipoReferencia = 4;
-                    $scope.createReference(params);
-                }, 1000);
+            // setTimeout( function(){
+            //     $scope.RowCartera = [];
+            //     $scope.selectedRowCartera = [];
+            // },2000 );
 
-                setTimeout( function(){
-                    $scope.RowCartera = [];
-                    $scope.selectedRowCartera = [];
-                },2000 );
-
-                $("#modal-anticipo").modal('hide');
-            }
-            else{
-                swal("Control de depositos",$scope.aplicacionMensaje,"warning");
-            }
+            $("#modal-anticipo").modal('hide');
         }
         catch( e ){
             console.log( e );
@@ -519,17 +597,17 @@
                     var idRef = result.data[0].idReferencia;
 
                     for (var i = 0; i < $scope.RowCartera.length; i++) {
-                        console.log( $scope.RowCartera[i] );
+                        // console.log( $scope.RowCartera[i] );
                         var params = $scope.setReferenceParams($scope.RowCartera[i], idRef, $scope.selectedRowDocuments.idDepositoBanco);                        
                         $scope.insertReferenceDetails(params);
                     }
 
                     $scope.reloadGrids();
                 } else {
-                    console.log('createReference empty');
+                    // console.log('createReference empty');
                 }
             }, function(error) {
-                console.log('Error');
+                // console.log('Error');
             });
         }
         catch(e){
@@ -557,7 +635,9 @@
             params.folio = objCartera.idDocumento;
             params.idCliente = objCartera.idCliente;
             params.idAlma = 0;
-            params.importeDocumento = objCartera.saldo;
+            params.importeDocumento = parseFloat( objCartera.saldo );
+            params.importeAplicar   = parseFloat( objCartera.importeFinal );
+            params.importeBPRO      = parseFloat( objCartera.importeBPRO );
             params.idTipoReferencia = 3;
             params.depositoID = depositoID;
             params.IDBanco = $scope.selectedValueBancoID;
@@ -566,6 +646,49 @@
         }
         catch(e){
             console.log(e);
+        }
+    };
+
+    $scope.TestReferencia = function() {
+        var estatus = { info: 0, success: 0, warning: 0, danger:0 }
+        $scope.selectedRowCartera.forEach( function( item, key ){
+            switch( item.estilo ){
+                case 'info':
+                    estatus.info = estatus.info + 1;
+                    break;
+                case 'success':
+                    estatus.success = estatus.success + 1;
+                    break;
+                case 'warning':
+                    estatus.warning = estatus.warning + 1;
+                    break;
+                case 'danger':
+                    estatus.danger = estatus.danger + 1;
+                    break;
+            }
+        });
+
+        var anticipo = parseFloat( $scope.depositoTotal ) - parseFloat( $scope.formar_number($scope.sumatoriaAplicada,5, '.','') );
+        console.log( "depositoTotal", $scope.depositoTotal );
+        console.log( "sumatoriaAplicada", $scope.formar_number($scope.sumatoriaAplicada,5, '.','') );
+        console.log( "anticipo", anticipo );
+        if( estatus.danger > 0 ){
+            if( $scope.sumatoriaAplicada <= 0 ){
+                swal( "Control de Depósitos", "No se ha aplicado ningun monto, favor de revisar." );
+            }
+            else if( anticipo < 0 ){
+                swal( "Control de Depósitos", "Se ha aplicado un monto superior al depósito, favor de revisar." );
+            }
+            else{
+                swal( "Control de Depósitos", "Favor de revisar los montos a aplicar." );
+            }
+        }
+        else if( estatus.warning > 0 ){
+            swal( "Control de Depósitos", "Algunos importes se han aplicado de forma incorrecta, asegurate de que existan montos a aplicar y que estos no excedan al monto del documento." );
+        }
+        else{
+            swal( "Control de Depósitos", "Aplicando los montos proporcionado." );
+            $scope.ConfirmaReferencia();
         }
     };
 
@@ -659,7 +782,7 @@
             if (result.data.length > 0) {
                 $scope.tblPendientes = result.data;
             } else {
-                console.log('no trajo nada loadPendingDocs');
+                // console.log('no trajo nada loadPendingDocs');
             }
         }, function(error) {
             console.log('Error');
@@ -673,7 +796,7 @@
         }
 
         $scope.tblPendientesDetalle = [];
-        console.log( idReferencia );
+        // console.log( idReferencia );
         $scope.loadPendingDocsDetails(idReferencia);
         $('#mdlReferenciaDetalle').modal('show');
     };
@@ -685,10 +808,10 @@
             if (result.data.length > 0) {
                 $scope.tblPendientesDetalle = result.data;
             } else {
-                console.log('loadPendingDocsDetails no result');
+                // console.log('loadPendingDocsDetails no result');
             }
         }, function(error) {
-            console.log('Error');
+            // console.log('Error');
         });
 
     };
@@ -707,12 +830,12 @@
         $scope.promise = controlDepositosRepository.updSetObservation(idDepositoBanco, observacion).then(function(result) {
 
             if (result.data.length > 0) {
-                console.log('OK');
+                // console.log('OK');
             } else {
-                console.log('no trajo nada updateObservation');
+                // console.log('no trajo nada updateObservation');
             }
         }, function(error) {
-            console.log('Error');
+            // console.log('Error');
         });
     };
 
@@ -819,7 +942,7 @@
         var n = number, 
             c = isNaN(c = Math.abs(c)) ? 2 : c, 
             d = d == undefined ? "." : d, 
-            t = t == undefined ? "," : t, 
+            t = t == undefined ? "" : t, 
             s = n < 0 ? "-" : "", 
             i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
             j = (j = i.length) > 3 ? j % 3 : 0;
@@ -838,16 +961,21 @@
     $scope.seguridad = function() {
         controlDepositosRepository.seguridad( $scope.idUsuario ).then(function(result) {
             if (result.data.length > 0) {
-                console.log('ok');
+                // console.log('ok');
                 $scope.btnAplicarReferencias = false;
             } else {
                 $scope.btnAplicarReferencias = true;
-                console.log('no trajo nada seguridad');
+                // console.log('no trajo nada seguridad');
             }
         }, function(error) {
-            console.log('Error');
+            // console.log('Error');
         });
     };
 
     $scope.seguridad();
+    setTimeout( function(){
+        $("html, body").delay(500).animate({
+            scrollTop: 0 
+        }, 1000);
+    },1000 );
 });

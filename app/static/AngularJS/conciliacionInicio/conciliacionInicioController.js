@@ -263,17 +263,17 @@ else {
                                                        [
                                                            {
                                                                "titulo"   :   "ELABORÓ",
-                                                               "nombre"   :    $scope.contadorGerente[0].Usuario,
+                                                               "nombre"   :    $scope.busqueda.usuario,
                                                                "fecha"   :   ""
                                                            },
                                                            {
                                                                "titulo"   :   "GERENTE ADMINISTRATIVO",
-                                                               "nombre"   :   $scope.contadorGerente[0].NombreGerente,
+                                                               "nombre"   :   $scope.busqueda.gerente,
                                                                "fecha"   :   ""
                                                            },
                                                            {
                                                                "titulo"   :   "CONTADOR",
-                                                               "nombre"   :   $scope.contadorGerente[0].NombreContador,
+                                                               "nombre"   :   $scope.busqueda.contador,
                                                                "fecha"   :   ""
                                                            }
                                                         ]

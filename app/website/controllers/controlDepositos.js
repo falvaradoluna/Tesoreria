@@ -34,7 +34,9 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
         { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING },
         { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT},
-        { name: 'idBanco', value: req.query.IDBanco, type: self.model.types.INT }
+        { name: 'idBanco', value: req.query.IDBanco, type: self.model.types.INT },
+        { name: 'importeAplica', value: req.query.importeAplicar, type: self.model.types.DECIMAL },
+        { name: 'importeBPRO', value: req.query.importeBPRO, type: self.model.types.DECIMAL }
     ];
 
     console.log(params);
@@ -112,7 +114,9 @@ controlDepositos.prototype.get_insertReferenceDetails = function(req, res, next)
         { name: 'folio', value: req.query.folio, type: self.model.types.STRING },
         { name: 'idCliente', value: req.query.idCliente, type: self.model.types.INT },
         { name: 'idAlma', value: req.query.idAlma, type: self.model.types.STRING },
-        { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL }
+        { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
+        { name: 'importeAplica', value: req.query.importeAplicar, type: self.model.types.DECIMAL },
+        { name: 'importeBPRO', value: req.query.importeBPRO, type: self.model.types.DECIMAL }
     ];
 
     this.model.query('INS_DETALLE_REFERENCIA_LOTE_SP', params, function(error, result) {
