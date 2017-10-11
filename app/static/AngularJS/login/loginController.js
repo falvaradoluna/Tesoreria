@@ -31,10 +31,10 @@ console.log($rootScope.currentEmployee)
     }
 
     // *************************** Función para logueo de portal *****************
-    $scope.permisos = function(usuario) {
+    $scope.permisos = function(usuario , contrasena) {
         loginRepository.getPermisos(usuario).then(function(result) {
             console.log(result)
-            if (result.data.length > 0) {
+            if (result.data.length > 0 && contrasena != undefined) {
                 $scope.login = result.data[0];
                 $scope.getEmpleado(usuario);
                 if ($scope.login.idPerfil == 4) {
