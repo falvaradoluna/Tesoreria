@@ -28,7 +28,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
       $scope.pageSize = 10;
       $scope.pages = [];
     //*************************************************************************
-
     // INICIA 
     //****************************************************************************************************
     $scope.init = function() {
