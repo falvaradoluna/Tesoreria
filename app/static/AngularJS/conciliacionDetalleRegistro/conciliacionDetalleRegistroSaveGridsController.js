@@ -39,8 +39,8 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
     $('#alertaGuardarPunteoPrevio').modal('hide');
        //Mando a llamar la función que obtendra la nueva información almacenada
          $scope.init();
-
-
+  $('#loading').modal('show');
+ setTimeout(function() {
 //*********************************************************Función que inserta el grupo de registros de Contabilidad cargos- abonos
     if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos - abonos
            $scope.newId = JSON.parse(localStorage.getItem('idRelationOfContableRows'));
@@ -164,10 +164,16 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
            });
 
             });
-            $scope.refreshGrids();
-           alertFactory.success('Registros guardados correctamente!!');
        }
 
+       setTimeout(function() {
+        $scope.refreshGrids();
+            $('#loading').modal('hide');
+            alertFactory.success('Registros guardados correctamente!!');
+          },1000);
+
+       }, 3000);
+       
     };
     //****************************************************************************************************
 
