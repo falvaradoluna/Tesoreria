@@ -196,7 +196,7 @@ Filtros.prototype.get_depositos = function(req, res, next) {
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
-    this.model.query('SEL_DEPOSITOS_REFERENCIADOS_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

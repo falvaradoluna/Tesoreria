@@ -7,6 +7,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
         $scope.punteoAuxiliar = JSON.parse(localStorage.getItem('infoGridAuxiliar'));
         $scope.punteoBanco = JSON.parse(localStorage.getItem('infoGridBanco'));
         $scope.abonoCargoAuxiliar = JSON.parse(localStorage.getItem('infoGridAbonoCargoAuxiliar'));
+        $scope.abonoCargoBanco = JSON.parse(localStorage.getItem('infoGridAbonoCargoBanco'));
 
 
         $scope.bancoPadre = JSON.parse(localStorage.getItem('bancoPadre'));
@@ -52,7 +53,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
               }
                 
                 var currentArray = undefined;
-               angular.forEach($scope.abonoCargoAuxiliar, function(value, key1){
+                angular.forEach($scope.abonoCargoAuxiliar, function(value, key1){
                  
                  if(key1 != currentArray){
                    $scope.newId = $scope.newId + 1
@@ -62,7 +63,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
                 currentArray = key1;
                                                                           //Estatusid = 2, indica que el registro ya se encuentra relacionado
-               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3).then(function(result){
+               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1).then(function(result){
                
                var resultado = result.data;  
 
@@ -74,6 +75,36 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
            alertFactory.success('Registros Contables guardados correctamente!!');
           }
 //*********************************************************Fin de la función que inserta el grupo de registros de Contabilidad cargos- abonos
+      if($scope.abonoCargoBanco.length > 0){
+       
+       $scope.newId = JSON.parse(localStorage.getItem('idRelationOfBancoRows'));
+            if($scope.newId.length == 0){
+               $scope.newId = 0;
+            }      
+           else{
+               $scope.newId = $scope.newId[0].idRelationOfBancoRows;
+              }
+
+       var currentArray = undefined;
+       angular.forEach($scope.abonoCargoBanco, function(value, key1){
+
+        if(key1 != currentArray){
+          $scope.newId = $scope.newId + 1
+        }
+
+        angular.forEach(value, function(value2, key2){
+            currentArray = key1;                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario
+            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2).then(function(result){
+             var resultado = result.data;
+             });
+
+          });
+
+       });
+
+       $scope.refreshGrids();
+           alertFactory.success('Registros Bancarios guardados correctamente!!');
+      }
 
 
     if($scope.punteoBanco.length >= 1 &&  $scope.punteoAuxiliar.length >= 1) {
@@ -166,14 +197,15 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
             });
        }
 
-       setTimeout(function() {
+       }, 3000);
+
+        setTimeout(function(){
         $scope.refreshGrids();
             $('#loading').modal('hide');
             alertFactory.success('Registros guardados correctamente!!');
-          },1000);
+          },10000);
 
-       }, 3000);
-       
+       ///*********************QUEDA PENDIENTE PARA OBJETOS MAYORES A 150 ITEMS RO 2017-10-24
     };
     //****************************************************************************************************
 

@@ -168,7 +168,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                             $scope.paramBusqueda = [];
 
                             setTimeout(function() {
-                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"usuario": $scope.contadorGerente[0].Usuario,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago};
+                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreContador, "gerente": $scope.contadorGerente[0].NombreGerente,"usuario": $scope.contadorGerente[0].Usuario,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
                                 console.log($scope.paramBusqueda)
@@ -263,7 +263,7 @@ else {
                                                        [
                                                            {
                                                                "titulo"   :   "ELABORÓ",
-                                                               "nombre"   :    $scope.contadorGerente[0].NombreUsuario,
+                                                               "nombre"   :    $scope.contadorGerente[0].Usuario,
                                                                "fecha"   :   ""
                                                            },
                                                            {

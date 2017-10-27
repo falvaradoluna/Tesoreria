@@ -91,11 +91,35 @@
                           </span>
                         </div>
                         <div class="media-body">
-                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : cargoBanco > 0 && (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) || ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria))), 'text-danger text-semibold' : (cargoBanco > 0 && cargoAuxiliar > 0)}">{{cargoBanco | currency}}</p>
+                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : 
+                                                                   cargoBanco > 0 
+                                                                   && 
+                                                                   (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) 
+                                                                   || 
+                                                                   ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria)))
+                                                                   ||
+                                                                   abonoBanco == cargoBanco && abonoBanco > 0 && cargoBanco > 0
+                                                                   ,'text-danger text-semibold' : 
+                                                                   (cargoBanco > 0 && cargoAuxiliar > 0
+                                                                   ||
+                                                                   cargoBanco < abonoBanco && abonoBanco > 0 && cargoBanco > 0
+                                                                   ||
+                                                                   cargoBanco > abonoBanco && abonoBanco > 0 && cargoBanco > 0
+                                                                   )}">{{cargoBanco | currency}}</p>
                             <p class="text-muted mar-no">Cargo</p>
                         </div>
                         <div class="media-body">
-                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoBanco > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria))), 'text-danger text-semibold' : (abonoBanco > 0 && abonoAuxiliar > 0)}">{{abonoBanco | currency}}</p>
+                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoBanco > 0 
+                                                                 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) 
+                                                                 || 
+                                                                 ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria)))
+                                                                 ||
+                                                                 abonoBanco == cargoBanco && abonoBanco > 0 && cargoBanco > 0
+                                                                 ,'text-danger text-semibold' : 
+                                                                 (abonoBanco > 0 && abonoAuxiliar > 0
+                                                                 || abonoBanco < cargoBanco && abonoBanco > 0 && cargoBanco > 0
+                                                                 || abonoBanco > cargoBanco && abonoBanco > 0 && cargoBanco > 0
+                                                                 )}">{{abonoBanco | currency}}</p>
                             <p class="text-muted mar-no">Abono</p>
                         </div><br>
                     </div>
@@ -155,7 +179,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="banco in bancoPadre | filter:{idEstatus:2}">
+                            <tr ng-repeat="banco in bancoPadre">
                                 <td>{{banco.banco}}</td>
                                 <td>{{banco.referencia}}</td>
                                 <td>{{banco.concepto}}</td>

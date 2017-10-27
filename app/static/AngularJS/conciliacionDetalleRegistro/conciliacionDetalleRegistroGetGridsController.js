@@ -14,8 +14,8 @@ $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
-        $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable);
-        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+        $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.bancoReferenciados();
         $scope.contablesReferenciados($scope.polizaPago);
@@ -44,9 +44,9 @@ $scope.init = function() {
 
     // INICIA Obtengo los padres del Banco punteado
     //****************************************************************************************************
-    $scope.getBancoPunteo = function(idempresa, cuentaBanco) {
+    $scope.getBancoPunteo = function(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte) {
 
-        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco).then(function(result) {
+        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             $scope.tabla('bancoPunteo');
@@ -56,9 +56,9 @@ $scope.init = function() {
 
      // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************
-    $scope.getBancoDPI = function(idempresa, cuentaBanco) {
+    $scope.getBancoDPI = function(idempresa, cuentaBanco, fechaElaboracion, fechaCorte) {
 
-        conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco).then(function(result) {
+        conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.bancoDPI = result.data;
             $scope.tabla('bancodpi');
         });

@@ -32,7 +32,8 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         { name: 'idAuxiliarContable', value: req.body.idAuxiliarContable, type: self.model.types.INT },
         { name: 'descripcion', value: req.body.descripcion, type: self.model.types.STRING },
         { name: 'idEstatus', value: req.body.idEstatus, type: self.model.types.INT },
-        { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT }
+        { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT },
+        { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT }
     ];
 
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
@@ -42,12 +43,35 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         });
     });
 };
+
+conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, res, next) {
+ var self = this;
+
+ var params = [ { name: 'idDepositoBanco', value: req.body.idDepositoBanco, type: self.model.types.INT },
+                { name: 'idAuxiliarContable', value: req.body.idAuxiliarContable, type: self.model.types.INT },
+                { name: 'descripcion', value: req.body.descripcion, type: self.model.types.STRING },
+                { name: 'idEstatus', value: req.body.idEstatus, type: self.model.types.INT },
+                { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT },
+                { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT}
+              ];
+
+       this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result){
+       self.view.expositor(res,{
+           error: error,
+           result: result  
+       });
+     });
+};
+
+
 conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, next) {
 
     var self = this;
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING }
+                  { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
+                  { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP', params, function(error, result) {
@@ -81,7 +105,10 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
 
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+                  { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
+                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+                  { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
 
     this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP', params, function(error, result) {

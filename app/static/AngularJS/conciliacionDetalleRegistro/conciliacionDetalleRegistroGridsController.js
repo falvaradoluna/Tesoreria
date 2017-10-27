@@ -131,9 +131,10 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
         if (idestatus == 1) { 
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
-                if (result.data.length >= 0) {
-                    $scope.depositosBancos = result.data;
-                    $scope.gridDepositosBancos.data = result.data;
+                if (result.data[0].length >= 0) {
+                    $scope.depositosBancos = result.data[0];
+                    $scope.gridDepositosBancos.data = result.data[0];
+                    localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                     console.log($scope.gridDepositosBancos.data, 'Desposito Bancario');
                      //LQMA 17082017 add
                     $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago);
@@ -142,7 +143,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
         } else if (idestatus == 2) {
             filtrosRepository.getDepositos(idBanco, idestatus).then(function(result) {
                 if (result.data.length > 0) {
-                    $scope.depositosBancos = result.data;
+                    $scope.depositosBancos = result.data[0];
                 }
             });
         }
@@ -765,6 +766,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
           localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.agrupadosAuxiliar));
           localStorage.setItem('infoGridBanco', JSON.stringify($scope.agrupadosBancos));
           localStorage.setItem('infoGridAbonoCargoAuxiliar', JSON.stringify($scope.agrupadosAuxiliarCargoAbono));
+          localStorage.setItem('infoGridAbonoCargoBanco', JSON.stringify($scope.agrupadosBancosCargoAbono));
 
 
 if($scope.control != undefined){
@@ -776,10 +778,10 @@ if($scope.control != undefined){
         $scope.limpiaVariables();
     }
     else{
-        if($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar){
+        if(($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)){
         alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
         }
-      else if($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar) {
+      else if($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
        $('#alertaGuardarPunteoPrevio').modal('show');
         $scope.punteoAuxiliar = [];
         $scope.punteoBanco = [];
@@ -793,12 +795,17 @@ if($scope.control != undefined){
 
 
 $scope.crearArrayGrupos = function(deSel, auSel){
-var colorActual = deSel[0].color;
-        var coloresUsados = [];        
-        var filtradosColors = deSel;
-         $scope.agrupadosBancos = []; 
-         $scope.agrupadosAuxiliar = [];
 
+        var coloresUsados = [];        
+        $scope.agrupadosBancos = []; 
+        $scope.agrupadosAuxiliar = [];
+        $scope.agrupadosAuxiliarCargoAbono = [];
+        $scope.agrupadosBancosCargoAbono = [];
+///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
+        if(deSel.length > 0 && auSel.length > 0){
+        var colorActual = deSel[0].color;
+        var filtradosColors = deSel;
+         
         while(filtradosColors.length > 0)
         {
             colorActual = filtradosColors[0].color;
@@ -824,14 +831,18 @@ var colorActual = deSel[0].color;
 
             //console.log('grupos restantes: ',filtradosColors);
         }
+    }
+///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
 
+///Inicia la funcion que guarda cargos - abonos Contables
+else if(deSel.length == 0 && auSel.length > 0){
         var gruposAuxiliarSolo = $filter('filter')(auSel, function(value){
                                             //console.log(value);
                                             return (coloresUsados.indexOf(value.color) == -1)?value.color==value.color:value.color =='.........';  
                                         });
 
         //console.log('complemento de auxiliares:',gruposAuxiliarSolo);
-        $scope.agrupadosAuxiliarCargoAbono = [];
+        
 
         while(gruposAuxiliarSolo.length > 0)
         {
@@ -849,14 +860,42 @@ var colorActual = deSel[0].color;
                                             return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;  
                                         });
         }
+    }
+
+
+    else if(deSel.length > 0 && auSel.length == 0){
+     var gruposBancoSolo = $filter('filter')(deSel,function(value){
+                           return (coloresUsados.indexOf(value.Color) == -1)?value.color:value.color =='.........';
+         });
+     
+
+     while(gruposBancoSolo.length > 0)
+             {
+                colorActual = gruposBancoSolo[0].color;
+
+                coloresUsados.push(colorActual);
+
+                var grupoActualContable = $filter('filter')(gruposBancoSolo, function(value){
+                        return value.color == colorActual;
+                });
+
+                $scope.agrupadosBancosCargoAbono.push(grupoActualContable);
+
+                gruposBancoSolo = $filter('filter')(gruposBancoSolo, function(value){
+                                  return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;
+                });
+
+             }
+
+    }
+///Finaliza la funcion que guarda cargos - abonos Contables
+
 
         // console.log('agrupados Bancos: ', $scope.agrupadosBancos)
         // console.log('agrupados Auxiliar: ', $scope.agrupadosAuxiliar)
         // console.log('agrupados Auxiliar- Cargo - abono: ', $scope.agrupadosAuxiliarCargoAbono)
 
 };
-
-
 
 
 

@@ -9,6 +9,9 @@ registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShip
         var datoBusqueda = '';
         if($scope.datosPunteo.accion == 1){
            datoBusqueda = $scope.datosPunteo.Datos.idDepositoBanco;
+           if($scope.datosPunteo.idPAdre == 4){
+             $scope.datoBusqueda.accion = 4;
+           }
         }else{
            if($scope.datosPunteo.idPAdre == 3){
             $scope.datosPunteo.accion = 3;

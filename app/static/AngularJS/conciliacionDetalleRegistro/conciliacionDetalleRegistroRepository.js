@@ -14,7 +14,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre) {
+
+        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
                 method: "POST",
@@ -23,20 +24,43 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idAuxiliarContable: auxiliar,
                     descripcion: descripcion,
                     idEstatus: estatus,
-                    idPadre: idpadre
+                    idPadre: idpadre,
+                    idOpcion : idOpcion
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
-        getAuxiliarPunteo: function(idempresa, cuentaContable) {
+
+        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion){
+          return $http ({
+            url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
+            method: "POST",
+            data: {
+                idDepositoBanco: banco,
+                idAuxiliarContable: auxiliar,
+                descripcion: descripcion,
+                idEstatus: estatus,
+                idPadre: idPadre,
+                idOpcion : idOpcion
+            },
+            headers:{
+                'Content-Type': 'application/json'
+            }
+
+          });
+        },
+
+        getAuxiliarPunteo: function(idempresa, cuentaContable, fechaInicio, fechaCorte) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'auxiliarPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
-                    cuentaContable: cuentaContable
+                    cuentaContable: cuentaContable,
+                    fechaInicio: fechaInicio,
+                    fechaCorte: fechaCorte
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -61,13 +85,16 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
         },
 
 
-        getBancoPunteo: function(idempresa, cuentaBancaria) {
+        getBancoPunteo: function(idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
-                    cuentaBancaria: cuentaBancaria
+                    cuentaBancaria: cuentaBancaria,
+                    idBanco: idBanco,
+                    fechaInicio: fechaInicio,
+                    fechaCorte: fechaCorte
                 },
                 headers: {
                     'Content-Type': 'application/json'

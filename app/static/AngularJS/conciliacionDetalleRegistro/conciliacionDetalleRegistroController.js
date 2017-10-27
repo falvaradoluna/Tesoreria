@@ -8,7 +8,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.abonoBanco = 0;
     $scope.cargoBanco = 0;
     $scope.auxiliarPadre = '';
-    $scope.bancoPadre = '';
     $scope.detallePunteo = '';
     $scope.detallePunteoBanco = '';
     i18nService.setCurrentLang('es'); //Para seleccionar el idioma  
@@ -64,8 +63,17 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         var accionBusqueda = 0;
         var datoBusqueda = '';
         if(opcion == 1){
+
+              if(detallepunteo.idPAdre == 4){
+                datoBusqueda = detallepunteo.idDepositoBanco;
+                accionBusqueda = 4;
+              }
+              else if(detallepunteo.idPAdre == 2){
+
             datoBusqueda = detallepunteo.idDepositoBanco;
             accionBusqueda = 1;
+        }
+        
         } else {
             if(detallepunteo.idPAdre == 3){
                 datoBusqueda = detallepunteo.idAuxiliarContable;
@@ -74,8 +82,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 datoBusqueda = detallepunteo.idAuxiliarContable;
                 accionBusqueda = 2;
                }
+
         }
-        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta,accionBusqueda).then(function(result) {
+        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
 
                 $scope.detallePunteo = result.data[0];
