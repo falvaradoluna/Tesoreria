@@ -32,9 +32,9 @@ $scope.init = function() {
 
      // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
-    $scope.getAuxiliarPunteo = function(idempresa, cuenta) {
+    $scope.getAuxiliarPunteo = function(idempresa, cuenta, fechaElaboracion, fechaCorte) {
 
-        conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta).then(function(result) {
+        conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.auxiliarPadre = result.data;
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
             $scope.tabla('auxiliarPunteo');
