@@ -164,7 +164,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                      if(idColorAuxiliar == idColorBanco && idColorAuxiliar != undefined && idColorBanco != undefined && currentColorBanc != '#c9dde1' && currentColorAux != '#c9dde1'){
                       controlPunteoGrupos = 1;
                                                                                                                              //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];
@@ -177,7 +177,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                   }
                   else if(idPrepAuxiliar == idPrepBanco && controlPunteoGrupos == undefined && currentColorBanc == '#c9dde1' && currentColorAux == '#c9dde1') { 
                                                                                                                                 //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];
