@@ -25,23 +25,24 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        getcomisionesIva: function(idDepositoBanco) {
+        getcomisionesIva: function(idDepositoBanco, idBanco) {
             return $http({
                 url: comisionesURL + 'comisionesIva/',
                 method: "GET",
-                params: { idDepositoBanco: idDepositoBanco },
+                params: { idDepositoBanco: idDepositoBanco, idBanco:idBanco },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
-        selInteresComision: function( estatus, idEmpresa ) {
+        selInteresComision: function( estatus, idEmpresa, idBanco ) {
             return $http({
                 url: comisionesURL + 'selInteresComision/',
                 method: "GET",
                 params:{
                     Estatus: estatus,
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,12 +81,14 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        agrupadorComision: function(idEmpresa) {
+        agrupadorComision: function(idEmpresa, esGrupo, idSucursal) {
             return $http({
                 url: comisionesURL + 'agrupadorComision/',
                 method: "GET",
                 params: {
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    esGrupo: esGrupo,
+                    idSucursal: idSucursal
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -102,14 +105,15 @@ registrationModule.factory('comisionesRepository', function($http) {
                 }
             });
         },
-        insCxpComisionesInteres: function(interesComisionID, idSucursal, idEmpresa) {
+        insCxpComisionesInteres: function(interesComisionID, idSucursal, idEmpresa, esGrupo) {
             return $http({
                 url: comisionesURL + 'insCxpComisionesInteres/',
                 method: "GET",
                 params: { 
                     interesComisionID: interesComisionID, 
                     idSucursal: idSucursal, 
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    esGrupo: esGrupo
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -140,13 +144,34 @@ registrationModule.factory('comisionesRepository', function($http) {
             });
         },
 
+        cancelaComisionAplicada: function(idEmpresa, Agrupador) {
+            return $http({
+                url: comisionesURL + 'cancelaComisionAplicada/',
+                method: "GET",
+                params: { 
+                    idEmpresa: idEmpresa,
+                    Agrupador: Agrupador
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
 
-
-
+        updAplicaComisionesGrupo: function(idEmpresa, idBanco) {
+            return $http({
+                url: comisionesURL + 'updAplicaComisionesGrupo/',
+                method: "GET",
+                params: { 
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         testApi: function(objData) {
-
-            console.log(objData);
-
             return $http({
                 url: comisionesURL + 'testApi/',
                 method: "GET",
@@ -186,6 +211,7 @@ registrationModule.factory('comisionesRepository', function($http) {
             return [
                 { name: 'concepto', displayName: 'Concepto', cellClass: 'gridCellLeft', width: '*' },
                 { name: 'referencia', displayName: 'Referencia', cellClass: 'gridCellRight', width: 100 },
+                { name: 'refAmpliada', displayName: 'Referencia Ampliada', cellClass: 'gridCellLeft', width: '*' },
                 { name: 'fechaOperacion', displayName: 'Fecha', type: 'date', cellClass: 'gridCellRight', cellFilter: 'date:\'yyyy-MM-dd\'', width: 100 },
                 { name: 'abono', displayName: 'Abono', type: 'number', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100 }
             ];

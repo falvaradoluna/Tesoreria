@@ -34,7 +34,9 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
         { name: 'idTipoReferencia', value: req.query.idTipoReferencia, type: self.model.types.STRING },
         { name: 'depositoID', value: req.query.depositoID, type: self.model.types.INT},
-        { name: 'idBanco', value: req.query.IDBanco, type: self.model.types.INT }
+        { name: 'idBanco', value: req.query.IDBanco, type: self.model.types.INT },
+        { name: 'importeAplica', value: req.query.importeAplicar, type: self.model.types.DECIMAL },
+        { name: 'importeBPRO', value: req.query.importeBPRO, type: self.model.types.DECIMAL }
     ];
 
     console.log(params);
@@ -112,7 +114,9 @@ controlDepositos.prototype.get_insertReferenceDetails = function(req, res, next)
         { name: 'folio', value: req.query.folio, type: self.model.types.STRING },
         { name: 'idCliente', value: req.query.idCliente, type: self.model.types.INT },
         { name: 'idAlma', value: req.query.idAlma, type: self.model.types.STRING },
-        { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL }
+        { name: 'importeDocumento', value: req.query.importeDocumento, type: self.model.types.DECIMAL },
+        { name: 'importeAplica', value: req.query.importeAplicar, type: self.model.types.DECIMAL },
+        { name: 'importeBPRO', value: req.query.importeBPRO, type: self.model.types.DECIMAL }
     ];
 
     this.model.query('INS_DETALLE_REFERENCIA_LOTE_SP', params, function(error, result) {
@@ -324,7 +328,10 @@ controlDepositos.prototype.get_comisiones = function(req, res, next) {
 controlDepositos.prototype.get_comisionesIva = function(req, res, next) {
     var self = this;
     //asignación de valores mediante parámetros del request
-    var params = [{ name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING }];
+    var params = [
+        { name: 'idDepositoBanco', value: req.query.idDepositoBanco, type: self.model.types.STRING },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }
+    ];
 
     this.model.query('SEL_COMISIONES_IVA', params, function(error, result) {
         self.view.expositor(res, {
@@ -359,7 +366,9 @@ controlDepositos.prototype.get_agrupadorComision = function(req, res, next) {
     var self = this;
 
     var params = [
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'esGrupo', value: req.query.esGrupo, type: self.model.types.INT },
+        { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT }
     ];
 
     this.model.query('SEL_AGRUPADORCOMISIONES_SP', params, function(error, result) {
@@ -385,6 +394,23 @@ controlDepositos.prototype.get_updAplicaComisiones = function(req, res, next) {
         });
     });
 };
+
+controlDepositos.prototype.get_updAplicaComisionesGrupo = function(req, res, next) {
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }];
+
+    this.model.query('UPD_APLICACOMISIONESGRUPO_SP', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+
 
 controlDepositos.prototype.get_delInteresComision = function(req, res, next) {
     var self = this;
@@ -419,7 +445,8 @@ controlDepositos.prototype.get_selInteresComision = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'Estatus', value: req.query.Estatus, type: self.model.types.INT },
-                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }];
+                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }];
 
     this.model.query('SEL_INTERESCOMISION_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -451,7 +478,8 @@ controlDepositos.prototype.get_insCxpComisionesInteres = function(req, res, next
     var params = [
         { name: 'interesComisionID', value: req.query.interesComisionID, type: self.model.types.STRING },
         { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.STRING },
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.STRING },
+        { name: 'esGrupo', value: req.query.esGrupo, type: self.model.types.INT }
     ];
 
     this.model.query('INS_CXPCOMISIONESINTERESES_SP', params, function(error, result) {
@@ -480,7 +508,9 @@ controlDepositos.prototype.get_insInteresComisionDetalle = function(req, res, ne
         { name: 'referencia', value: req.query.referencia, type: self.model.types.STRING },
         { name: 'banco', value: req.query.banco, type: self.model.types.STRING },
         { name: 'referenciabancaria', value: req.query.referenciabancaria, type: self.model.types.STRING },
-        { name: 'conpoliza', value: req.query.conpoliza, type: self.model.types.STRING }
+        { name: 'conpoliza', value: req.query.conpoliza, type: self.model.types.STRING },
+        { name: 'consecutivo', value: req.query.lastConsecutivo, type: self.model.types.STRING },
+        { name: 'idSucursalAplica', value: req.query.idSucursalAplica, type: self.model.types.STRING }
     ];
 
     this.model.query('INS_CXPCOMISIONESINTERESESDET_SP', params, function(error, result) {
@@ -536,6 +566,22 @@ controlDepositos.prototype.get_interes = function(req, res, next) {
     ];
 
     this.model.query('SEL_INTERESES', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_cancelaComisionAplicada = function(req, res, next) {
+    var self = this;
+    //asignación de valores mediante parámetros del request
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'Agrupador', value: req.query.Agrupador, type: self.model.types.INT }
+    ];
+
+    this.model.query('DEL_COMISIONAPLICADA_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

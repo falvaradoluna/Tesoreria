@@ -173,12 +173,12 @@
 
 
     $scope.getComisionesRealizadas = function(){ // Comisiones Temporales y Aplicadas
-        comisionesRepository.selInteresComision( 1, $scope.selectedValueEmpresaID ).then(function(result) {
+        comisionesRepository.selInteresComision( 1, $scope.selectedValueEmpresaID, $scope.selectedValueBancoID ).then(function(result) {
             $scope.lstTemp = result.data;
             console.log( 'Registros Temporales', $scope.lstTemp );
         });
 
-        comisionesRepository.selInteresComision( 2, $scope.selectedValueEmpresaID ).then(function(result) {
+        comisionesRepository.selInteresComision( 2, $scope.selectedValueEmpresaID, $scope.selectedValueBancoID ).then(function(result) {
             $scope.lstAplicadas = result.data;
         });
     }
@@ -196,8 +196,7 @@
 
         filtrosRepository.getBancos(idEmpresa).then(function(result) {
             if (result.data.length > 0) {
-                $scope.lstBanco = result.data;
-                $scope.getComisionesRealizadas();
+                $scope.lstBanco = result.data;                
             }
         });
     };
@@ -214,6 +213,7 @@
         filtrosRepository.getCuenta(idBanco, idEmpresa).then(function(result) {
             if (result.data.length > 0) {
                 $scope.lstCuenta = result.data;
+                $scope.getComisionesRealizadas();
             }
         });
     };
@@ -356,9 +356,10 @@
         },
         function() {
             var aux = 0;
-            $scope.lstTemp.forEach(function(row) {
-                comisionesRepository.updAplicaComisiones(row.interesComisionID, $scope.selectedValueEmpresaID);
-            });
+            comisionesRepository.updAplicaComisionesGrupo( $scope.selectedValueEmpresaID, $scope.selectedValueBancoID );
+            // $scope.lstTemp.forEach(function(row) {
+            //     comisionesRepository.updAplicaComisiones(row.interesComisionID, $scope.selectedValueEmpresaID);
+            // });
 
             swal({
                 title: "Aplicado",
@@ -598,11 +599,11 @@
             // });
 
             comisionesRepository.delInteresComisionGrupo(item.agrupador, $scope.selectedValueEmpresaID).then(function(result) {
-                comisionesRepository.selInteresComision().then(function(result2) {
-                    $scope.lstTemp = result2.data;
                     $scope.getComisionesRealizadas();
                     swal("Eliminado", "Se eliminó el registro", "success");
-                });
+                // comisionesRepository.selInteresComision().then(function(result2) {
+                //     $scope.lstTemp = result2.data;
+                // });
             });
         });
     };
@@ -659,7 +660,7 @@
 
                 $('#mdlLoading').modal('show');
                 // $scope.gridInteres.data = [];
-                comisionesRepository.getcomisionesIva(row.entity.idDepositoBanco).then(function(result) {
+                comisionesRepository.getcomisionesIva(row.entity.idDepositoBanco, $scope.selectedValueBancoID).then(function(result) {
                     if (result.data.length > 0) {
                         $scope.NewGroup();
                         row.entity.color = $scope.currentColor;
@@ -757,11 +758,11 @@
         }
     }
 
-    $scope.getComisionesIva = function(depositoID, callback) {
+    $scope.getComisionesIva = function(depositoID, idBanco) {
 
         $('#mdlLoading').modal('show');
         // $scope.gridInteres.data = [];
-        comisionesRepository.getcomisionesIva(depositoID).then(function(result) {
+        comisionesRepository.getcomisionesIva(depositoID, idBanco).then(function(result) {
             if (result.data.length > 0) {
                 result.data[0].color = $scope.currentColor;
                 $scope.gridInteres.data.push(result.data[0]);
@@ -864,6 +865,7 @@
 
             $scope.lstRegistroContable = [];
             $scope.lstRegistroContable = comisionesRepository.getComisionTemplate();
+            console.log( 'lstRegistroContable', $scope.lstRegistroContable );
             $scope.lstRegistroContable[0].cuenta = $scope.selectedDepartamento.cuentaContable;
             $scope.lstRegistroContable[0].concepto = $scope.selectedDepartamento.descripcion.substring(8);
             $scope.lstRegistroContable[1].cuenta = $scope.lstRegistroContable[1].cuenta.replace('F', $scope.selectedDepartamento.subCuenta);
@@ -872,9 +874,9 @@
             var currentComision = $scope.gruposComisionesData[ $scope.curComIndex ].data[0];
             var currentInteres  = $scope.gruposComisionesData[ $scope.curComIndex ].data[1];
 
-            $scope.lstRegistroContable[0].cargo = currentComision.abono; // Ok mas o menos
-            $scope.lstRegistroContable[1].cargo = currentInteres.abono;
-            $scope.lstRegistroContable[2].abono = currentComision.abono + currentInteres.abono;
+            $scope.lstRegistroContable[0].cargo = parseFloat(currentComision.abono); // Ok mas o menos
+            $scope.lstRegistroContable[1].cargo = parseFloat(currentInteres.abono);
+            $scope.lstRegistroContable[2].abono = parseFloat(currentComision.abono) + parseFloat(currentInteres.abono);
             $scope.objEdicion.montoAcumuladoUsuario = currentComision.abono;
 
             // console.log( 'RegistroContable', $scope.lstRegistroContable );
@@ -1022,99 +1024,133 @@
             closeOnConfirm: true
         },
         function() {
-            console.log( 'Colleccion', $scope.gruposComisionesData );
-            comisionesRepository.agrupadorComision($scope.selectedValueEmpresaID).then(function(result) { // Obtenemos el grupo al que pertenecera
-                lastRow     = $scope.gruposComisionesData.length * 3;
-                currentRow  = 0;
+            var esGrupo = $scope.gruposComisionesData.length == 1 ? 0 : 1;
+            var idSucursal = $scope.gruposComisionesData[0].data[2][0];
+            
+            // console.log( 'idEmpresa:', $scope.selectedValueEmpresaID );
+            // console.log( 'Es Grupo:', esGrupo );
+            // console.log( 'idSucursal:', idSucursal );
 
-                $scope.gruposComisionesData.forEach( function( item, key ){
-                    var comision = item.data[0];
-                    var interes  = item.data[1];
-                    var depto    = item.data[2];
-                    var registro = item.data[3];
+            comisionesRepository.agrupadorComision($scope.selectedValueEmpresaID, esGrupo, idSucursal).then(function(result) { // Obtenemos el grupo al que pertenecera
+                if( result.data.length > 0 ){
+                    lastRow     = $scope.gruposComisionesData.length * 3;
+                    currentRow  = 0;
+                    var lastConsecutivo  = parseInt(result.data[0].Consecutivo);
+                    var idSucursalAplica = parseInt(result.data[0].idSucursalAplica);
+                    console.log( 'agrupadorComision', result );
+                    console.log( 'lastConsecutivo', lastConsecutivo );
+                    
+                    $scope.gruposComisionesData.forEach( function( item, key ){
+                        var comision = item.data[0];
+                        var interes  = item.data[1];
+                        var depto    = item.data[2];
+                        var registro = item.data[3];
 
-                    // Se guarda en tabla InteresComision
-                    var parametros = {
-                        comisionID   : comision.idBmer,
-                        interesID    : interes.idBmer,
-                        bancoID      : comision.idBanco,
-                        userID       : $scope.idUsuario,
-                        idEmpresa    : $scope.selectedValueEmpresaID,
-                        agrupador    : result.data[0].Agrupador,
-                        statusID     : 1
-                    };
+                        // Incrementamos el Cconsecutivo
+                        
 
-                    comisionesRepository.insInteresComision(parametros).then(function(resComisionIva) { // Guardamos en InteresesComision
-                        console.log( 'resulst Comision Iva', resComisionIva );
-                        var opt_cxp = {
-                            headerID : resComisionIva.data[0].headerID,
-                            Empresa  : $scope.selectedValueEmpresaID,
-                            Sucursal : depto[0]
+                        // Se guarda en tabla InteresComision
+                        var parametros = {
+                            comisionID   : comision.idBmer,
+                            interesID    : interes.idBmer,
+                            bancoID      : comision.idBanco,
+                            userID       : $scope.idUsuario,
+                            idEmpresa    : $scope.selectedValueEmpresaID,
+                            agrupador    : result.data[0].Agrupador,
+                            statusID     : 1
                         };
 
-                        comisionesRepository.insCxpComisionesInteres( opt_cxp.headerID, opt_cxp.Sucursal, opt_cxp.Empresa).then(function(resCXP) { // Guardamos en cxp_comisionesintereses
-                            console.log( 'resulst CXP', resCXP );
+                        comisionesRepository.insInteresComision(parametros).then(function(resComisionIva) { // Guardamos en InteresesComision
+                            if( resComisionIva.data.length > 0 ){
+                                var opt_cxp = {
+                                    headerID : resComisionIva.data[0].headerID,
+                                    Empresa  : $scope.selectedValueEmpresaID,
+                                    Sucursal : depto[0]
+                                };
+                                
+                                comisionesRepository.insCxpComisionesInteres( opt_cxp.headerID, opt_cxp.Sucursal, opt_cxp.Empresa, esGrupo).then(function(resCXP) { // Guardamos en cxp_comisionesintereses
+                                    if( resCXP.data.length > 0 ){
+                                        var headerID       = resCXP.data[0].headerID;
+                                        var nextRef        = resCXP.data[0].nextRef;
+                                        var idPersona      = resCXP.data[0].idPersona;
+                                        var lastReferencia = resCXP.data[0].lastReferencia;
+                                        var baseReferencia = resCXP.data[0].baseReferencia;
 
-                            var headerID       = resCXP.data[0].headerID;
-                            var nextRef        = resCXP.data[0].nextRef;
-                            var idPersona      = resCXP.data[0].idPersona;
-                            var lastReferencia = resCXP.data[0].lastReferencia;
-                            var baseReferencia = resCXP.data[0].baseReferencia;
+                                        lastConsecutivo++;
+                                        DocumentoConsecutivo = baseReferencia + lastConsecutivo;
+                                        console.log( 'lastConsecutivo +1', lastConsecutivo );
+                                        console.log( 'DocumentoConsecutivo', DocumentoConsecutivo );
 
-                            // Identificador en el campo de documento "AU-PED-Comision-1"
-                            var DocumentoConsecutivo = '';
-                            if( lastReferencia === null || lastReferencia === '' ){
-                                DocumentoConsecutivo = baseReferencia + '1';
-                            }
-                            else{
-                                var aux = lastReferencia.split('-');
-                                if( aux.length == 4 ){
-                                    var aux_actual = parseInt(aux[3]);
-                                    DocumentoConsecutivo = baseReferencia + (aux_actual + 1);
-                                }
-                                else{
-                                    DocumentoConsecutivo = baseReferencia + '1';
-                                }
-                            }
+                                        // Validacion y obtencion de los datos a guardar
+                                        $scope.rowsToInsert = [];
+                                        registro.forEach(function(row, index) {
+                                            var params = {};
+                                                params.cuentacontable = row.cuenta;
+                                                params.concepto = row.concepto;
+                                                params.cargo = row.cargo;
+                                                params.abono = row.abono;
+                                                params.documento = DocumentoConsecutivo;
+                                                params.idpersona = idPersona; 
+                                                params.idcomisionesintereses = headerID;
+                                                params.tipodocumento = row.tipodocumento;
+                                                params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
+                                                params.poriva = 16;
+                                                params.referencia = DocumentoConsecutivo;
+                                                params.banco = '0' + $scope.selectedValueBancoID;
+                                                params.referenciabancaria = nextRef;
+                                                params.conpoliza = key + 1;
+                                                params.lastConsecutivo  = lastConsecutivo
+                                                params.idSucursalAplica = idSucursalAplica;
 
-                            // Validacion y obtencion de los datos a guardar
-                            $scope.rowsToInsert = [];
-                            registro.forEach(function(row, index) {
-                                var params = {};
-                                    params.cuentacontable = row.cuenta;
-                                    params.concepto = row.concepto;
-                                    params.cargo = row.cargo;
-                                    params.abono = row.abono;
-                                    params.documento = DocumentoConsecutivo;
-                                    params.idpersona = idPersona; 
-                                    params.idcomisionesintereses = headerID;
-                                    params.tipodocumento = row.tipodocumento;
-                                    params.fechavencimiento = '2017/01/01'; //Tampoco sabe que ira aqui 
-                                    params.poriva = 16;
-                                    params.referencia = DocumentoConsecutivo;
-                                    params.banco = '0' + $scope.selectedValueBancoID;
-                                    params.referenciabancaria = nextRef;
-                                    params.conpoliza = key + 1;
+                                                
 
-                                comisionesRepository.insInteresComisionDetalle( params ).then(function(resCXPDet) {
-                                    console.log( 'resulst CXPDet', resCXPDet );
-                                    if( resCXPDet.length != 0 ){
-                                        currentRow++;
-                                        console.log( currentRow, lastRow );
-                                        if( currentRow == lastRow ){
+                                            comisionesRepository.insInteresComisionDetalle( params ).then(function(resCXPDet) {
+                                                // console.log( 'resulst CXPDet', resCXPDet );
+                                                if( resCXPDet.length != 0 ){
+                                                    currentRow++;
+                                                    // console.log( currentRow, lastRow );
+                                                    if( currentRow == lastRow ){
 
-                                            $scope.getComisionesRealizadas();
-                                            $scope.setActiveTab($scope.lstTabs[3]);
-                                            swal("Comisiones", "Se ha guardado correctamente", "success");
-                                        }
-                                    }
+                                                        $scope.getComisionesRealizadas();
+                                                        $scope.setActiveTab($scope.lstTabs[3]);
+                                                        swal("Comisiones", "Se ha guardado correctamente", "success");
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    } // Fin de insCxpComisionesInteres
+                                    
                                 });
-                            });
+                            } // Fin insInteresComision                        
                         });
                     });
-                });
+                }                
             }); 
 
         });
     };
+
+    $scope.cancelarComision = function( agrupador ){
+        swal({
+            title: "¿Cancelar comisión?",
+            text: "Al cancelar esta comisión se cancelaran las demas del mismo grupo",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: "No",
+            confirmButtonColor: "#21B9BB",
+            confirmButtonText: "Si, cancelar",
+            closeOnConfirm: true
+        },
+        function() {
+            comisionesRepository.cancelaComisionAplicada( $scope.selectedValueEmpresaID, agrupador ).then(function(resDelComisiones) {
+                if( resDelComisiones.length != 0 ){
+                    if( currentRow == lastRow ){
+                        $scope.getComisionesRealizadas();
+                        // $scope.setActiveTab($scope.lstTabs[3]);
+                        swal("Comisiones", "Se ha cancelado correctamente la comision del grupo " + agrupador, "success");
+                    }
+                }
+            });
+        });
+    }
 });
