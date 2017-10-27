@@ -157,7 +157,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
                             $scope.mesActivo = result.data[0].mesActivo;
-                            //console.log($scope.totalesAbonosCargos)
+                            
 
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
                             
