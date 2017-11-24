@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionInicioController', function($window, $filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
+registrationModule.controller('conciliacionInicioController', function($window, $filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce, conciliacionDetalleRegistroRepository) {
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
@@ -56,7 +56,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                     $scope.InmemoryAcountBanc = $scope.busqueda.Cuenta;
                     $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
                     $scope.fechaCorte = $scope.busqueda.fechaCorte;
-                    $scope.contadorGerente=[{'NombreUsuario':$scope.busqueda.usuario,
+                    $scope.contadorGerente=[{'Usuario':$scope.busqueda.usuario,
                                              'NombreGerente':$scope.busqueda.gerente,
                                              'NombreContador':$scope.busqueda.contador
                                             }];
@@ -264,7 +264,7 @@ else {
                                                            {
                                                                "titulo"   :   "ELABORÓ",
                                                              
-                                                               "nombre"   :    $scope.contadorGerente[0].Usuario,
+                                                               "nombre"   :    $scope.busqueda.usuario,
 
                                                                "fecha"   :   ""
                                                            },
@@ -289,9 +289,11 @@ else {
            resolve(jsonData);
                 }).then(function(jsonData) {
                     conciliacionInicioRepository.getReporteTesoreria(jsonData).then(function(result){
-                        var file = new Blob([result.data], { type: 'application/pdf' });
-                        var fileURL = URL.createObjectURL(file);
-                        $scope.rptResumenConciliacion = $sce.trustAsResourceUrl(fileURL);
+                         $scope.file = new Blob([result.data], { type: 'application/pdf' });
+                         $scope.fileURL = URL.createObjectURL($scope.file);
+                         
+
+                        $scope.rptResumenConciliacion = $sce.trustAsResourceUrl($scope.fileURL);
                          $('#loading').modal('hide');
                         $('#reproteModalPdf').modal('show'); 
                     });
@@ -306,16 +308,12 @@ else {
           }
             };
 
-    //Cancelación del modal para exportar datos a excel
-    // $scope.excelExportModal = function(){
-    //  var modalInstance = $uibModal.open({
-    //     templateUrl: '../AngularJS/ExportarExcel/Template/ExcelExport.html',
-    //     controller: 'excelExportController',
-    //     backdrop: 'static',
-    //     size: 500
-    // });
+    $scope.sendReportBymail = function(){
+       conciliacionDetalleRegistroRepository.sendMail('Reporte_Prueba', $scope.file, $scope.fileURL,$scope.busqueda.CuentaContable, $scope.busqueda.Empresa, $scope.busqueda.Cuenta, $scope.busqueda.Banco, $scope.busqueda.usuario).then(function(result){
+        alertFactory.warning(result.data);
+       }, function(error){
+          alertFactory.error(error);
+       });
+    };
 
-    // };
-
-    
 });

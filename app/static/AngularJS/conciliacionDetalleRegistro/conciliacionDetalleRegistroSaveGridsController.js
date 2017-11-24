@@ -63,7 +63,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
                 currentArray = key1;
                                                                           //Estatusid = 2, indica que el registro ya se encuentra relacionado
-               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1).then(function(result){
+               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result){
                
                var resultado = result.data;  
 
@@ -94,7 +94,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
         angular.forEach(value, function(value2, key2){
             currentArray = key1;                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario
-            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2).then(function(result){
+            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result){
              var resultado = result.data;
              });
 
@@ -164,7 +164,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                      if(idColorAuxiliar == idColorBanco && idColorAuxiliar != undefined && idColorBanco != undefined && currentColorBanc != '#c9dde1' && currentColorAux != '#c9dde1'){
                       controlPunteoGrupos = 1;
                                                                                                                              //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];
@@ -177,7 +177,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                   }
                   else if(idPrepAuxiliar == idPrepBanco && controlPunteoGrupos == undefined && currentColorBanc == '#c9dde1' && currentColorAux == '#c9dde1') { 
                                                                                                                                 //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];

@@ -208,12 +208,15 @@
                 <button type="button" class="close" data-dismiss="modal"><i class="pci-cross pci-circle" style="color:#fff;"></i></button>
                 <h4 class="modal-title text-center" id="myLargeModalLabel" style="color:#fff;">Conciliación</h4>
             </div>
-            <div  id="htmlReporteConciliacion" class="modal-body text-center">
+            <br>
+            <!-- <button class="btn btn-success col-md-offset-9" style="margin-right : -2px" ng-click="sendReportBymail()"><i class="glyphicon glyphicon-send"></i>  Envíar por correo
+            </button> -->
+            <div id="htmlReporteConciliacion" class="modal-body text-center">
                
                 <embed ng-src="{{rptResumenConciliacion}}" style="width:800px;height:800px;"></embed>
-                        
+             
             </div>
-            </div>
+        </div>
         </div>
     </div>
 </div>
@@ -233,7 +236,7 @@
 
 <!--Modal Actualizar BD-->
 <!--===================================================-->
-<div class="modal fade" id="actualizarBD" role="dialog" tabindex="-1" data-focus-on="input:first" data-backdrop="static" aria-labelledby="          demo-default-modal" aria-hidden="true">
+<div class="modal fade" id="actualizarBD" role="dialog" tabindex="-1" data-focus-on="input:first" data-backdrop="static" aria-labelledby="demo-default-modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="media-left bg-warning pad-all">

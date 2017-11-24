@@ -15,7 +15,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion) {
+        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
                 method: "POST",
@@ -25,7 +25,9 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     descripcion: descripcion,
                     idEstatus: estatus,
                     idPadre: idpadre,
-                    idOpcion : idOpcion
+                    idOpcion : idOpcion,
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -33,7 +35,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion){
+        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco){
           return $http ({
             url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
             method: "POST",
@@ -43,7 +45,9 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 descripcion: descripcion,
                 idEstatus: estatus,
                 idPadre: idPadre,
-                idOpcion : idOpcion
+                idOpcion : idOpcion,
+                idEmpresa: idEmpresa,
+                idBanco: idBanco
             },
             headers:{
                 'Content-Type': 'application/json'
@@ -119,13 +123,15 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
         },
 
 
-        eliminarPunteo: function(datoBusqueda, opcion) {
+        eliminarPunteo: function(datoBusqueda, opcion, idEmpresa, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'eliminarPunteo/',
                 method: "POST",
                 data: {
                     idDatoBusqueda: datoBusqueda,
-                    opcion: opcion
+                    opcion: opcion,
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -148,7 +154,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        sendMail: function(filename, cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
+        sendMail: function(filename, file, fileUrl,cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'sendMail/',
                 method: "POST",
@@ -158,7 +164,9 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     nombreEmpresa: nombreEmpresa,
                     cuentaBancaria: cuentaBancaria,
                     nombreBanco: nombreBanco,
-                    responsable: responsable
+                    responsable: responsable,
+                    file: file,
+                    fileUrl: fileUrl
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -213,12 +221,14 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getContablesRef: function(cuentacontable, fechaCorte, polizaPago, idEmpresa, idBanco){
+        getContablesRef: function(cuentacontable, cuentaBanco, fechaInicio, fechaCorte, polizaPago, idEmpresa, idBanco){
             return $http({
                 url: conciliacionDetalleRegistroURL + 'contableReferenciado/',
                 method: 'GET',
                 params:{
                     cuentaContable: cuentacontable,
+                    cuentaBanco: cuentaBanco,
+                    fechaInicio: fechaInicio,
                     fechaCorte: fechaCorte,
                     polizaPago: polizaPago,
                     idEmpresa: idEmpresa,
