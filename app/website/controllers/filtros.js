@@ -169,11 +169,13 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
     var self = this;
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.numero_cuenta, type: self.model.types.STRING },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
         { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
-        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING }
+        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
+        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
     ];
 
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
@@ -196,7 +198,7 @@ Filtros.prototype.get_depositos = function(req, res, next) {
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
-    this.model.query('SEL_DEPOSITOS_REFERENCIADOS_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

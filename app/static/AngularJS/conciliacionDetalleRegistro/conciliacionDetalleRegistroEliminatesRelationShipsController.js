@@ -4,18 +4,22 @@ registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShip
     //****************************************************************************************************
     $scope.eliminarPunteo = function() {
          
-         $scope.datosPunteo = JSON.parse(localStorage.getItem('datosPunteo'));
+        $scope.datosPunteo = JSON.parse(localStorage.getItem('datosPunteo'));
+        $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
 
         var datoBusqueda = '';
         if($scope.datosPunteo.accion == 1){
            datoBusqueda = $scope.datosPunteo.Datos.idDepositoBanco;
+           if($scope.datosPunteo.idPAdre == 4){
+             $scope.datoBusqueda.accion = 4;
+           }
         }else{
            if($scope.datosPunteo.idPAdre == 3){
             $scope.datosPunteo.accion = 3;
            }
            datoBusqueda = $scope.datosPunteo.Datos.idAuxiliarContable;
         }
-        conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,$scope.datosPunteo.accion).then(function(result) {
+        conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,$scope.datosPunteo.accion, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
             console.log(result, 'Resultado cuando elimino');
             $scope.datosPunteo = '';
             $scope.accionElimina = '';

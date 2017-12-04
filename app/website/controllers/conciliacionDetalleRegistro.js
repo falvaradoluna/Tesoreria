@@ -32,7 +32,10 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         { name: 'idAuxiliarContable', value: req.body.idAuxiliarContable, type: self.model.types.INT },
         { name: 'descripcion', value: req.body.descripcion, type: self.model.types.STRING },
         { name: 'idEstatus', value: req.body.idEstatus, type: self.model.types.INT },
-        { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT }
+        { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT },
+        { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT },
+        { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
+        { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT }
     ];
 
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
@@ -42,12 +45,37 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         });
     });
 };
+
+conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, res, next) {
+ var self = this;
+
+ var params = [ { name: 'idDepositoBanco', value: req.body.idDepositoBanco, type: self.model.types.INT },
+                { name: 'idAuxiliarContable', value: req.body.idAuxiliarContable, type: self.model.types.INT },
+                { name: 'descripcion', value: req.body.descripcion, type: self.model.types.STRING },
+                { name: 'idEstatus', value: req.body.idEstatus, type: self.model.types.INT },
+                { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT },
+                { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT},
+                { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
+                { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT }
+              ];
+
+       this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result){
+       self.view.expositor(res,{
+           error: error,
+           result: result  
+       });
+     });
+};
+
+
 conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, next) {
 
     var self = this;
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING }
+                  { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
+                  { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP', params, function(error, result) {
@@ -81,7 +109,10 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
 
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+                  { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
+                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+                  { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
+                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
 
     this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP', params, function(error, result) {
@@ -120,7 +151,10 @@ conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function(req, res, n
     var self = this;
 
     var params = [{ name: 'idDatoBusqueda', value: req.body.idDatoBusqueda, type: self.model.types.INT },
-                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT }
+                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT },
+                  { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
+                  { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT }
+
                   ];
 
     this.model.query('DEL_PUNTEO_AUXILIAR_DEPOSITO_SP', params, function(error, result) {
@@ -213,17 +247,14 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function(req, res, next) {
         console.log(result[0].valor, 'result de ENVIOMAIL')
         console.log(error, 'error de ENVIOMAIL')
 
-        // self.view.expositor(res, {
-        //     error: error,
-        //     result: result
-        // });
-        //req.body.nombreArchivo    
-        var  nombreArchivo = req.body.nombreArchivo;
+           
+        var nombreArchivo = req.body.nombreArchivo;
         var cuentaContable = req.body.cuentaContable;
         var nombreEmpresa = req.body.nombreEmpresa;
         var cuentaBancaria = req.body.cuentaBancaria;
         var nombreBanco = req.body.nombreBanco;
         var responsable = req.body.responsable;
+        var urlFile = req.body.fileUrl;
         var object = {};   //Objeto que envía los parámetros
         var params = [];   //Referencia a la clase para callback    
         var files = [];
@@ -233,23 +264,23 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function(req, res, next) {
         var nodemailer = require('nodemailer');
         var smtpTransport = require('nodemailer-smtp-transport');
         var transporter = nodemailer.createTransport(smtpTransport({
-            host: '192.168.20.1',
+            host: '192.168.20.17',
             port: 25,
             secure: false,
             auth: {
-                user: 'sistemas',
-                pass: 's1st3m4s'
+                user: 'noreply',
+                pass: 'P4n4m4!'
             },
             tls: { rejectUnauthorized: false }
         }));
         var mailOptions = {
             from: '<grupoandrade.reportes@grupoandrade.com.mx>', // sender address 
-            to: result[2].valor, // list of receivers 
-            subject: result[0].valor, // Subject line 
+            to: 'rolivares@bism.com.mx', // list of receivers 
+            subject: 'Prueba si envia subject', // Subject line 
             text: result[1].valor, // plaintext body 
             html: '<b>' + result[1].valor + '</b><br/><br/><br/><b>Empresa: </b>' + nombreEmpresa + '<br/><b>Cuenta contable: </b>' + cuentaContable + '<br/><b>Banco: </b>'+ nombreBanco + '<br/><b>Cuenta bancaria: </b>'+ cuentaBancaria + '<br/><br/><b>Realizó: </b>' + responsable, // html body 
             attachments: [{ // file on disk as an attachment
-                filename: req.body.nombreArchivo + '.pdf',
+                filename: nombreArchivo + '.pdf',
                 path: ruta // stream this file
             }]
         };
@@ -337,6 +368,8 @@ conciliacionDetalleRegistro.prototype.get_bancoReferenciado = function(req, res,
 conciliacionDetalleRegistro.prototype.get_contableReferenciado = function(req, res,next){
   var self = this;
   var params =[{name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING},
+               {name: 'cuentaBancaria', value: req.query.cuentaBanco, type: self.model.types.STRING},
+               {name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
                {name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
                {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
                {name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT},
@@ -353,13 +386,13 @@ conciliacionDetalleRegistro.prototype.get_contableReferenciado = function(req, r
 conciliacionDetalleRegistro.prototype.get_detalleRelacionBancos = function(req, res, next){
 var self = this;
 var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,type: self.model.types.STRING},
-            {name: 'tipoDato', value: req.query.TipoRegistro ,type: self.model.types.STRING},
-            {name: 'idEmpresa', value: req.query.idEmpresa ,type: self.model.types.INT},
-            {name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING},
-            {name: 'fecha', value: req.query.fecha, type: self.model.types.STRING},
-            {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
-            {name: 'noCuenta', value: req.query.cuentaBanco, type: self.model.types.STRING},
-            {name: 'idRegistroBanco', value: req.query.idRegistroBancario, type: self.model.types.INT}
+             {name: 'tipoDato', value: req.query.TipoRegistro ,type: self.model.types.STRING},
+             {name: 'idEmpresa', value: req.query.idEmpresa ,type: self.model.types.INT},
+             {name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING},
+             {name: 'fecha', value: req.query.fecha, type: self.model.types.STRING},
+             {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
+             {name: 'noCuenta', value: req.query.cuentaBanco, type: self.model.types.STRING},
+             {name: 'idRegistroBanco', value: req.query.idRegistroBancario, type: self.model.types.INT}
             ];
     this.model.query('SEL_RELACION_REG_BANCOS_REF_SP', params, function(error, result){
      self.view.expositor(res,{

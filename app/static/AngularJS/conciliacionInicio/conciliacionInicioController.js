@@ -56,7 +56,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                     $scope.InmemoryAcountBanc = $scope.busqueda.Cuenta;
                     $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
                     $scope.fechaCorte = $scope.busqueda.fechaCorte;
-                    $scope.contadorGerente=[{'NombreUsuario':$scope.busqueda.usuario,
+                    $scope.contadorGerente=[{'Usuario':$scope.busqueda.usuario,
                                              'NombreGerente':$scope.busqueda.gerente,
                                              'NombreContador':$scope.busqueda.contador
                                             }];

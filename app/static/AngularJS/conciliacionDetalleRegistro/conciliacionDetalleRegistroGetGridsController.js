@@ -10,15 +10,25 @@ registrationModule.controller('conciliacionDetalleRegistroGetGridsController',fu
      $scope.cargoActual = 0;
      $scope.abonoActual = 0;
 
+     //Variables para los resultados totales de cada Grid
+     $scope.bancoReferenciadosAbonosTotales = 0;
+     $scope.bancoReferenciadosCargosTotales = 0;
+     $scope.contableReferenciadosAbonosTotales = 0;
+     $scope.contableReferenciadosCargosTotales = 0;
+     $scope.BancoReferenciadoCargosTotales = 0;
+     $scope.BancoReferenciadoAbonosTotales = 0;
+
+
+
 $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
-        $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable);
-        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+        $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.bancoReferenciados();
-        $scope.contablesReferenciados($scope.polizaPago);
+        $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
@@ -32,9 +42,9 @@ $scope.init = function() {
 
      // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
-    $scope.getAuxiliarPunteo = function(idempresa, cuenta) {
+   $scope.getAuxiliarPunteo = function(idempresa, cuenta, fechaElaboracion, fechaCorte) {
 
-        conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta).then(function(result) {
+        conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.auxiliarPadre = result.data;
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
             $scope.tabla('auxiliarPunteo');
@@ -44,9 +54,9 @@ $scope.init = function() {
 
     // INICIA Obtengo los padres del Banco punteado
     //****************************************************************************************************
-    $scope.getBancoPunteo = function(idempresa, cuentaBanco) {
+     $scope.getBancoPunteo = function(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte) {
 
-        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco).then(function(result) {
+        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             $scope.tabla('bancoPunteo');
@@ -69,6 +79,7 @@ $scope.init = function() {
     //****************************************************************************************************
      $scope.bancoReferenciados = function() {
         conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function(result) {
+
         $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function(value){
             return value.tipoMovimiento == 0;
         });
@@ -77,14 +88,25 @@ $scope.init = function() {
         });
         $scope.tabla('bancoReferenciadoAbono');
         $scope.tabla('bancoReferenciadoCargo');
+
+        //Obtener la uma total de los registros
+             angular.forEach($scope.bancoReferenciadosAbonos, function(value, key) {
+                    $scope.bancoReferenciadosAbonosTotales += value.abono;
+                    });
+             
+             angular.forEach($scope.bancoReferenciadosCargos, function(value, key) {
+                    $scope.bancoReferenciadosCargosTotales += value.cargo;
+                    });
+
       });
     };
     //****************************************************************************************************
     
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-     $scope.contablesReferenciados = function(polizaPago){
-        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
+     $scope.contablesReferenciados = function(polizaPago, cuentaBanco){
+        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
+
         $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
          return value.tipoMovimiento == 0;
         });
@@ -93,6 +115,15 @@ $scope.init = function() {
         });
         $scope.tabla('contableRefAbonos');
         $scope.tabla('contableRefCargos');
+
+        //Obtener la uma total de los registros
+             angular.forEach($scope.contableReferenciadosAbonos, function(value, key) {
+                    $scope.contableReferenciadosAbonosTotales += value.abono;
+                    });
+             
+             angular.forEach($scope.contableReferenciadosCargos, function(value, key) {
+                    $scope.contableReferenciadosCargosTotales += value.cargo;
+                    });  
       });
     };
     //****************************************************************************************************
@@ -164,6 +195,9 @@ $scope.init = function() {
      alertFactory.warning('Función en desarrollo...');
 
     };
+     
+
+
 
 
     // INICIA inicio la tabla para los distintos casos

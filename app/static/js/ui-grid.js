@@ -12137,7 +12137,7 @@ module.filter('px', function() {
           placeholder: 'Buscar...',
           showingItems: 'Artículos Mostrados:',
           selectedItems: 'Artículos Seleccionados:',
-          totalItems: 'Artículos Totales:',
+          totalItems: 'Registros Totales:',
           size: 'Tamaño de Página:',
           first: 'Primera Página',
           next: 'Página Siguiente',
