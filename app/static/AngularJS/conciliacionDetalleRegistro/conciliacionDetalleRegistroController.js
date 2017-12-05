@@ -62,19 +62,28 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
     $scope.verDetallePunteo = function(detallepunteo,opcion) {
+       ///Tipo de punteo 1 = (Abonos o cargos Bancarios) - (Abonos o cargos Contables)
+       ///Tipo de punteo 2 = Punteos Bancarios (conciliación entre los mismos tipos de datos)
+       ///Tipo de punteo 3 = Punteo Contable (conciliación entre los mismos tipos de datos)
+
         var accionBusqueda = 0;
         var datoBusqueda = '';
-        if(opcion == 1){
-            datoBusqueda = detallepunteo.idDepositoBanco;
+        if(opcion == 1){ //Detalle de registros Bancarios
+            if(detallepunteo.tipoPunteo == 2){ //Opcion para consultar registros Bancarios conciliados entre si
+            accionBusqueda = 4;
+            }
+            else if(detallepunteo.tipoPunteo == 1){//Opción para consultar registros Bancarios - Contables
             accionBusqueda = 1;
-        } else {
-            if(detallepunteo.idPAdre == 3){
-                datoBusqueda = detallepunteo.idAuxiliarContable;
+             }
+             datoBusqueda = detallepunteo.idDepositoBanco; //Asigno el idBancario a consultar
+        } else { //Detalle de registros Contables
+            if(detallepunteo.tipoPunteo == 3){//Opción para consultar registros Contables conciliados entre si
                 accionBusqueda = 3;
-                }else if(detallepunteo.idPAdre == 2){
-                datoBusqueda = detallepunteo.idAuxiliarContable;
+                }else if(detallepunteo.tipoPunteo == 1){//Opcion para consultar registros Contables - Bancarios
+                
                 accionBusqueda = 2;
                }
+               datoBusqueda = detallepunteo.idAuxiliarContable;
         }
         conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta,accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');

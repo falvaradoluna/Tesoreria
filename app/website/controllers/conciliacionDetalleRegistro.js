@@ -35,7 +35,8 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT },
         { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT },
         { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
-        { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT }
+        { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
+        { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT}
     ];
 
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
@@ -56,7 +57,8 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, r
                 { name: 'idPadre', value: req.body.idPadre, type: self.model.types.INT },
                 { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT},
                 { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
-                { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT }
+                { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
+                { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT}
               ];
 
        this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result){

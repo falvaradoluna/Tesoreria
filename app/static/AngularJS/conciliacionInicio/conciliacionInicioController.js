@@ -159,7 +159,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                             $scope.mesActivo = result.data[0].mesActivo;
                             //console.log($scope.totalesAbonosCargos)
 
-                            //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
+                            //Mensaje de alerta que corrobora la disponibilidad para conciliar registros del mes consultado
                             
                             if($scope.mesActivo != 1){
                                 alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");

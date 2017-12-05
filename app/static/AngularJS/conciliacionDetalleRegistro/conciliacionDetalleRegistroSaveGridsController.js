@@ -1,6 +1,7 @@
 registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',function($window ,$scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory){
     
-  
+      $scope.tipoPunteo = 0;
+
      $scope.init = function(){
         //Obtengo la información almacenada, se genera en conciliacionRegistroGridsController
         
@@ -37,6 +38,10 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
     // INICIA funcion para guardar el punteoPrevio
     //****************************************************************************************************
     $scope.guardaPunteoPrevio = function() {
+      ///Tipo de punteo 1 = (Abonos o cargos Bancarios) - (Abonos o cargos Contables)
+      ///Tipo de punteo 2 = Punteos Bancarios (conciliación entre los mismos tipos de datos)
+      ///Tipo de punteo 3 = Punteo Contable (conciliación entre los mismos tipos de datos)
+      
     $('#alertaGuardarPunteoPrevio').modal('hide');
        //Mando a llamar la función que obtendra la nueva información almacenada
          $scope.init();
@@ -44,6 +49,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
  setTimeout(function() {
 //*********************************************************Función que inserta el grupo de registros de Contabilidad cargos- abonos
     if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos - abonos
+           $scope.tipoPunteo = 3;
            $scope.newId = JSON.parse(localStorage.getItem('idRelationOfContableRows'));
             if($scope.newId.length == 0){
                $scope.newId = 0;
@@ -63,7 +69,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
                 currentArray = key1;
                                                                           //Estatusid = 2, indica que el registro ya se encuentra relacionado
-               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result){
+               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result){
                
                var resultado = result.data;  
 
@@ -76,7 +82,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
           }
 //*********************************************************Fin de la función que inserta el grupo de registros de Contabilidad cargos- abonos
       if($scope.abonoCargoBanco.length > 0){
-       
+       $scope.tipoPunteo = 2;
        $scope.newId = JSON.parse(localStorage.getItem('idRelationOfBancoRows'));
             if($scope.newId.length == 0){
                $scope.newId = 0;
@@ -94,7 +100,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
         angular.forEach(value, function(value2, key2){
             currentArray = key1;                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario
-            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result){
+            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result){
              var resultado = result.data;
              });
 
@@ -108,7 +114,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
 
 
     if($scope.punteoBanco.length >= 1 &&  $scope.punteoAuxiliar.length >= 1) {
-             
+             $scope.tipoPunteo = 1;
              var currentColorAux = undefined, currentColorBanc = undefined;
              var currentArray = undefined;
              var controlPunteoGrupos = undefined;
@@ -164,7 +170,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                      if(idColorAuxiliar == idColorBanco && idColorAuxiliar != undefined && idColorBanco != undefined && currentColorBanc != '#c9dde1' && currentColorAux != '#c9dde1'){
                       controlPunteoGrupos = 1;
                                                                                                                              //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];
@@ -177,7 +183,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
                   }
                   else if(idPrepAuxiliar == idPrepBanco && controlPunteoGrupos == undefined && currentColorBanc == '#c9dde1' && currentColorAux == '#c9dde1') { 
                                                                                                                                 //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];

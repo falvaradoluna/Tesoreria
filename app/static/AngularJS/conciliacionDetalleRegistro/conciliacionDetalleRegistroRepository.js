@@ -15,7 +15,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco) {
+        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
                 method: "POST",
@@ -27,7 +27,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idPadre: idpadre,
                     idOpcion : idOpcion,
                     idEmpresa: idEmpresa,
-                    idBanco: idBanco
+                    idBanco: idBanco,
+                    tipoPunteo: tipoPunteo
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -35,7 +36,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco){
+        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo){
           return $http ({
             url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
             method: "POST",
@@ -47,7 +48,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 idPadre: idPadre,
                 idOpcion : idOpcion,
                 idEmpresa: idEmpresa,
-                idBanco: idBanco
+                idBanco: idBanco,
+                tipoPunteo: tipoPunteo
             },
             headers:{
                 'Content-Type': 'application/json'
