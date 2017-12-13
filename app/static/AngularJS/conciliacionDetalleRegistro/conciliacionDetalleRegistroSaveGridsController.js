@@ -9,7 +9,7 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
         $scope.punteoBanco = JSON.parse(localStorage.getItem('infoGridBanco'));
         $scope.abonoCargoAuxiliar = JSON.parse(localStorage.getItem('infoGridAbonoCargoAuxiliar'));
         $scope.abonoCargoBanco = JSON.parse(localStorage.getItem('infoGridAbonoCargoBanco'));
-
+        $scope.DPIdata = JSON.parse(localStorage.getItem('infoDPIData'));
 
         $scope.bancoPadre = JSON.parse(localStorage.getItem('bancoPadre'));
         $scope.auxiliarPadre = JSON.parse(localStorage.getItem('auxiliarPadre'));
@@ -230,16 +230,11 @@ registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',f
         if($scope.punteoAuxiliar != null){
          alertFactory.warning('Acción incorrecta, no es posible enviar a DPI los Abonos o Cargos Contables seleccionados');
          } else {
-        if($scope.punteoBanco.length > 0){
+        if($scope.DPIdata.length > 0){
           
-                angular.forEach($scope.punteoBanco, function(value, key) {
+                angular.forEach($scope.DPIdata, function(value, key) {
                   if(value.cargo == 0){
-                conciliacionDetalleRegistroRepository.insertDepositosDPI(value.idBmer, value.idBanco,idUsuario).then(function(result) {
-                    if (result.data[0].ESTATUS == 2) {
-                        console.log('Respuesta Correcta');
-                    } else {
-                        console.log('Respuesta Incorrecta');
-                    }
+                conciliacionDetalleRegistroRepository.insertDepositosDPI(value.idBmer, value.idBanco, $scope.busqueda.IdEmpresa, idUsuario).then(function(result) {
                 })
                 contRegBancos += 1;
             }else{

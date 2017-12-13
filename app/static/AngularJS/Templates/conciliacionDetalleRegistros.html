@@ -84,7 +84,7 @@
                         <label class="divGrupoPunteo"><input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
                     </div>
                     <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
-                     <div style="padding-left: 44%;"><p class="text-info text-semibold">Total Abonos Bancarios: {{totalAbonoBancario | currency}}
+                     <div style="padding-left: 35%;"><p class="text-info text-semibold">Total Abonos Bancarios: {{totalAbonoBancario | currency}}
                                                                            &nbsp;&nbsp; Total Cargos Bancarios: {{totalCargoBancario | currency}}</p>
                       </div>
                     <div class="media middle pad-all">
@@ -135,7 +135,7 @@
                         <label></label>
                     </div>
                     <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
-                    <div style="padding-right: 44%;"><p class="text-info text-semibold">Total Abonos Contables: {{totalAbonoContable | currency}}
+                    <div style="padding-right: 35%;"><p class="text-info text-semibold">Total Abonos Contables: {{totalAbonoContable | currency}}
                                                                            &nbsp;&nbsp; Total Cargos Contables: {{totalCargoContable | currency}}</p> 
                     </div>
                     <div class="media middle pad-all">  
@@ -145,11 +145,24 @@
                           </span>
                         </div>
                         <div class="media-body">
-                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : cargoAuxiliar > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0, 'text-danger text-semibold' : cargoBanco > 0 && cargoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{cargoAuxiliar | currency}}</p>
+                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : cargoAuxiliar > 0 
+                                                                 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0
+                                                                 ,'text-danger text-semibold' : 
+                                                                 cargoBanco > 0 && cargoAuxiliar > 0 
+                                                                 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 
+                                                                 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{cargoAuxiliar | currency}}</p>
                             <p class="text-muted mar-no">Cargo</p>
                         </div>
                         <div class="media-body">
-                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoAuxiliar > 0 && (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) || ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0, 'text-danger text-semibold' : abonoBanco > 0 && abonoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{abonoAuxiliar | currency}}</p>
+                            <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoAuxiliar > 0 
+                                                                            && (((cargoBanco - difMonetaria) <= abonoAuxiliar 
+                                                                            && abonoAuxiliar <= (cargoBanco + difMonetaria)) 
+                                                                            || ((abonoAuxiliar - difMonetaria) <= cargoBanco 
+                                                                            && cargoBanco <= (abonoAuxiliar + difMonetaria))) 
+                                                                            || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0
+                                                                            ,'text-danger text-semibold' : abonoBanco > 0 && abonoAuxiliar > 0 
+                                                                            || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 
+                                                                            || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{abonoAuxiliar | currency}}</p>
                             <p class="text-muted mar-no">Abono</p>
                         </div>
                         <div class="media-body">
@@ -403,7 +416,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                            <div style="padding-left: 82%;"><p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{bancoReferenciadosAbonosTotales | currency}}</p> </div>
+                                            <div style="padding-left: 80%;"><p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{bancoReferenciadosAbonosTotales | currency}}</p> </div>
                       </div>
 
 
@@ -435,7 +448,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                            <div style="padding-left: 82%;"><p class="text-info text-semibold">Total Cargos Bancarios Referenciados: {{bancoReferenciadosCargosTotales | currency}}</p> </div>
+                                            <div style="padding-left: 80%;"><p class="text-info text-semibold">Total Cargos Bancarios Referenciados: {{bancoReferenciadosCargosTotales | currency}}</p> </div>
                       </div>
 
 
@@ -489,7 +502,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div style="padding-left: 82%;"><p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p> </div>
+                                <div style="padding-left: 80%;"><p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p> </div>
                       </div>
 
                        <div class="col-md-12">
@@ -520,7 +533,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                 <div style="padding-left: 82%;"><p class="text-info text-semibold">Total Cargos Contables Referenciados: {{contableReferenciadosCargosTotales | currency}}</p> </div>
+                                 <div style="padding-left: 80%;"><p class="text-info text-semibold">Total Cargos Contables Referenciados: {{contableReferenciadosCargosTotales | currency}}</p> </div>
                       </div>
 
 

@@ -88,23 +88,6 @@ conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, ne
     });
 };
 
- conciliacionDetalleRegistro.prototype.get_auxiliarDPI = function(req, res, next) {
-
-    var self = this;
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING }
-    ];
-
-    this.model.query('SEL_AUXILIARDPI', params, function(error, result) {
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-};
-
-
 conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next) {
 
     var self = this;
@@ -332,8 +315,9 @@ conciliacionDetalleRegistro.prototype.post_generaPunteo = function(req, res, nex
 conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
    var self = this;
 
-   var params = [ {name: 'idCargoBanco', value: req.body.idCargoBanco, type: self.model.types.INT},
+   var params = [ {name: 'idAbonoBanco', value: req.body.idAbonoBanco, type: self.model.types.INT},
                   {name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT},
+                  {name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT},
                   {name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT}
                 ];
 
@@ -343,6 +327,7 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
         result: result
         });
    });
+   console.log(result);
 };
 
 

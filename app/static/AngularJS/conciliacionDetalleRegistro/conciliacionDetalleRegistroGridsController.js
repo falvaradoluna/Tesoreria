@@ -4,6 +4,7 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
       $scope.depositosBancos = '';
 
       $scope.control = undefined;
+      $scope.isDPI = undefined;
 
             $scope.abonoAuxiliar = 0;
             $scope.cargoAuxiliar = 0;
@@ -422,6 +423,23 @@ registrationModule.controller('conciliacionDetalleRegistroGridsController',funct
               }
 
         }
+
+        if($scope.abonoBanco != 0 && $scope.cargoBanco != 0 && $scope.isDPI == undefined) {
+      
+              if ((($scope.cargoBanco - $scope.difMonetaria) <= $scope.abonoBanco && $scope.abonoBanco <= ($scope.cargoBanco + $scope.difMonetaria)) || (($scope.abonoBanco - $scope.difMonetaria) <= $scope.cargoBanco && $scope.cargoBanco <= ($scope.abonoBanco + $scope.difMonetaria)))
+              {
+                   $scope.control = 1; 
+              } else{
+                alertFactory.error('La cantidad de abono y cargo para conciliar Registros Bancarios no coinciden!!');
+                $scope.control = undefined;
+              }
+
+        }
+
+        if($scope.abonoBanco != 0 && $scope.cargoBanco == 0 && $scope.isDPI != undefined) {
+                $scope.control = 1;
+        }
+
         else { 
         if ($scope.cargoBanco != 0 && $scope.abonoAuxiliar != 0) {
                 if ((($scope.cargoBanco - $scope.difMonetaria) <= $scope.abonoAuxiliar && $scope.abonoAuxiliar <= ($scope.cargoBanco + $scope.difMonetaria)) || (($scope.abonoAuxiliar - $scope.difMonetaria) <= $scope.cargoBanco && $scope.cargoBanco <= ($scope.abonoAuxiliar + $scope.difMonetaria))) {
@@ -895,7 +913,7 @@ else if(deSel.length == 0 && auSel.length > 0){
         }
     }
 
-
+///Inicia la funsión que guarda cargos - abonos Bancarios
     else if(deSel.length > 0 && auSel.length == 0){
      var gruposBancoSolo = $filter('filter')(deSel,function(value){
                            return (coloresUsados.indexOf(value.Color) == -1)?value.color:value.color =='.........';
@@ -939,14 +957,44 @@ else if(deSel.length == 0 && auSel.length > 0){
      $('#alertaGuardarPunteoPrevio').modal('hide');
     };
     
+    ////////////////////////////////////////////////////////Funsión para guardar los depositos no identificados////////////////////////////////////////////////7
      $scope.ShowAlertDPI = function(){
-        $('#alertaGuardarDPI').modal('show');
+
+          $scope.isDPI = 1;
+
+           
+          var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
+
+          angular.forEach($scope.gridApiBancos.grid.options.data , function(value, key) {             
+                            if(value.color != undefined && value.color != '') {               
+                                    PunteoDPI.push(value);
+                                    AbonoBanco += value.abono;
+                                    CargoBanco += value.cargo;
+                            }
+                        });
+          if(AbonoBanco > 0 && CargoBanco == 0){
+               $scope.control = 1;
+          }
+
+          if ($scope.control != undefined){
+          $('#alertaGuardarDPI').modal('show');
+          localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
+
+        ///////////////////////////////////////////////////////////////////////////////
         $scope.punteoAuxiliar = [];
         $scope.punteoBanco = [];
         $scope.gridApiBancos.selection.clearSelectedRows();
         $scope.gridApiAuxiliar.selection.clearSelectedRows();
         $scope.limpiaVariables();
+        //////////////////////////////////////////////////////////////////////////////
+    }
+    else {
+
+        alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
+    }
      };
+
+     ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
 
      $scope.cancelaPunteoDPI = function(){
         $scope.limpiaVariables();
