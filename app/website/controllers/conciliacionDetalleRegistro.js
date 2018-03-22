@@ -36,8 +36,13 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT },
         { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-        { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT}
+        { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT},
+        { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT},
     ];
+
+    console.log('INS_PUNTEO_DEPOSITO_AUXILIAR_SP')
+    console.log(params)
+
 
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -104,13 +109,13 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
                   { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
-
-    //console.log('SEL_PUNTEO_DEPOSITOS_PADRES_SP')	
-    //console.log(params)	
-
+    /*
+    console.log('SEL_PUNTEO_DEPOSITOS_PADRES_SP')	
+    console.log(params)	
+    */
     this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP', params, function(error, result) {
 
-        //console.log('result: ',result)
+        ///console.log('result: ',result)
 
         self.view.expositor(res, {
             error: error,

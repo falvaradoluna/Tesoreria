@@ -54,8 +54,8 @@ Conciliacion.prototype.get_cargoContable = function(req, res, next) {
                   { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING}];
     
-    console.log('SEL_CARGO_CONTABLE_SP')
-    console.log(params)
+    //console.log('SEL_CARGO_CONTABLE_SP')
+    //console.log(params)
 
     /*var params = [{ name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
                   { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.STRING },
