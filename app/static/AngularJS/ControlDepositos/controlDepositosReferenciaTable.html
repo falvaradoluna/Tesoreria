@@ -13,7 +13,7 @@
                     <th>Empresa</th>
                     <th>Fecha</th>
                     <th>Importe</th>
-                    <th data-sort-ignore="true" class="min-width"></th>
+                    <th data-sort-ignore="true" class="min-width" ng-hide="btnAplicarReferencias"></th>
                     <th data-sort-ignore="true" class="min-width"></th>
                     <th data-sort-ignore="true" class="min-width"></th>
                 </tr>
@@ -27,7 +27,7 @@
                     <td>{{pendiente.nomEmpresa}}</td>
                     <td>{{pendiente.fecha | date:'dd/MM/yyyy'}}</td>
                     <td>{{pendiente.importe | currency}}</td>
-                    <td>
+                    <td ng-hide="btnAplicarReferencias">
                         <button class="btn btn-success btn-xs" ng-click="aplicarReferencia(pendiente.idReferencia)" ng-show="userData.idPerfil>2"><i class="ti-check"></i></button>
                     </td>
                     <td>
@@ -45,5 +45,6 @@
     <div class="col-md-10"></div>
     <div class="col-md-2">
         <button type="button" ng-hide="btnAplicarReferencias" class="btn btn-success" ng-click="aplicarReferenciaTodas(tblPendientes)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Aplicar Referencias</button>
+        <!-- <button type="button" class="btn btn-success" ng-click="aplicarReferenciaTodas(tblPendientes)"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Aplicar Referencias</button> -->
     </div>
 </div>

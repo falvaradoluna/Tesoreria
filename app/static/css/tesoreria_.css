@@ -1,0 +1,97 @@
+.text-white{
+	color: white;
+}
+
+.pestania{
+    float: right;
+    width: 150px;
+    height: 50px;
+    background-color: #f4f4f4;
+    cursor: pointer;
+    text-align: center;
+    padding-top: 13px;
+    overflow: hidden;
+    font-size: 14px;
+    z-index: 1024;
+}
+
+.pestania div{
+
+}
+
+.pestania:hover{
+    background-color: #ccc;
+    color: white;
+}
+
+.active{
+    background-color: #2095f3 !important;
+    color: white !important;
+}
+
+
+
+
+.fondo-success button, .fondo-success input{
+    background-color: #dff0d8;
+    border: none !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    border-bottom: solid 2px #5dba32 !important;
+}
+
+.fondo-success button:hover{
+    background-color: #5dba32; 
+    color: white;  
+}
+
+.fondo-danger button, .fondo-danger input{
+    background-color: #f0dddd;
+    border: none !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    border-bottom: solid 2px #e87676 !important;
+}
+
+.fondo-danger button:hover{
+    background-color: #e87676;
+    color: white;
+}
+
+.fondo-warning button, .fondo-warning input{
+    background-color: #faf6e3;
+    border: none !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    border-bottom: solid 2px #fccb4e !important;
+}
+
+.fondo-warning button:hover{
+    background-color: #fccb4e;
+    color: white;
+}
+
+.fondo-info button, .fondo-info input{
+    background-color: #e3f1fa;
+    border: none !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    border-bottom: solid 2px #6fa7c9 !important;
+}
+
+.fondo-info button:hover{
+    background-color: #6fa7c9;
+    color: white;
+}
+
+input:focus {
+    outline: none;
+}
+
+.fa-sliders{
+    cursor: pointer;
+}

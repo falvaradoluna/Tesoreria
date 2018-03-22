@@ -35,11 +35,34 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },
+    actualizarCartera: function(idEmpresa) {
+            return $http({
+                url: controlDepositosURL + 'actualizacartera/',
+                method: "GET",
+                params: {idEmpresa: idEmpresa},
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
         createReference: function(objData) {
             return $http({
                 url: controlDepositosURL + 'createReference/',
                 method: "GET",
                 params: objData,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        guardausuario: function(idReferencia,idUsuario) {
+            return $http({
+                url: controlDepositosURL + 'guardausuario/',
+                method: "GET",
+                params: {
+                    idReferencia: idReferencia,
+                    idUsuario: idUsuario
+                },
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -128,11 +151,14 @@ registrationModule.factory('controlDepositosRepository', function($http) {
                 }
             });
         },        
-        insApplyReference: function(idReferencia) {
+        insApplyReference: function( idReferencia, idUsuario ) {
             return $http({
                 url: controlDepositosURL + 'applyReference/',
                 method: "GET",
-                params: { idReferencia: idReferencia },
+                params: { 
+                    idReferencia: idReferencia,
+                    idUsuario: idUsuario
+                },
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -204,6 +204,48 @@
         </button>
         <!--===================================================-->
     </div>
+
+    <div class="cargando">
+        <div class="contenedor">
+            <img src="/images/logoa.png" width="200">
+            <br>
+            <img src="/images/loading.gif">
+        </div>
+    </div>
+
+    <div class="no-success">
+        <div class="contenedor">
+            <img src="/images/logoa.png" width="200">
+            <h2>Tesoreria</h2>
+            <p>Favor de entrar desde Control de Aplizaciones</p>
+        </div>
+    </div>
+
+    <style type="text/css">
+        .no-success, .cargando{
+            /*display: none;*/
+            width: 100%;
+            height: 100%;
+            background-color: #ecf0f5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1024;
+        }
+
+        .cargando .contenedor,
+        .no-success .contenedor{
+            width: 400px;
+            height: 200px;
+            margin: 15% auto;
+            text-align: center;
+        }
+
+        .no-success{
+            display: none;
+        }
+    </style>
+    
     <!--Interface de usuario-->
     <!-- Librerias Angular-->
     <script src="js/tab.js"></script>

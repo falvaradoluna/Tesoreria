@@ -35,8 +35,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-                                                                                                                                        //LQMA add 10032018 - diBmerPadre
-        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre){
+
+        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo){
           return $http ({
             url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
             method: "POST",
@@ -49,8 +49,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 idOpcion : idOpcion,
                 idEmpresa: idEmpresa,
                 idBanco: idBanco,
-                tipoPunteo: tipoPunteo,
-                idBmerPadre: idBmerPadre
+                tipoPunteo: tipoPunteo
             },
             headers:{
                 'Content-Type': 'application/json'

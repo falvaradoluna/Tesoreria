@@ -93,18 +93,15 @@
               }
 
        var currentArray = undefined;
-       //LQMA add 10032018
-       var idBmerPadre = $scope.abonoCargoBanco[0][0].idBmer
-
        angular.forEach($scope.abonoCargoBanco, function(value, key1){
 
         if(key1 != currentArray){
           $scope.newId = $scope.newId + 1
         }
-        
+
         angular.forEach(value, function(value2, key2){
-            currentArray = key1;                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario //LQMA add 10032018 - idBmerPadre
-            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,idBmerPadre).then(function(result){
+            currentArray = key1;                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario
+            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result){
              var resultado = result.data;
              });
 

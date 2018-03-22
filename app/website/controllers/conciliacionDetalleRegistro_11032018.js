@@ -58,8 +58,7 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, r
                 { name: 'idOpcion', value: req.body.idOpcion, type: self.model.types.INT},
                 { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
                 { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-                { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT},
-                { name: 'idBmerPadre', value: req.body.idBmerPadre, type: self.model.types.INT} //LQMA add 10032018
+                { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT}
               ];
 
        this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result){
@@ -81,11 +80,11 @@ conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, ne
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
 
-    //console.log('SEL_PUNTEO_AUXILIAR_PADRES_SP')	
-    //console.log(params)
+    console.log('SEL_PUNTEO_AUXILIAR_PADRES_SP')	
+    console.log(params)
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP', params, function(error, result) {
-        //console.log('result: ',result)
+        console.log('result: ',result)
         self.view.expositor(res, {
             error: error,
             result: result
@@ -105,12 +104,12 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
 
-    //console.log('SEL_PUNTEO_DEPOSITOS_PADRES_SP')	
-    //console.log(params)	
+    console.log('SEL_PUNTEO_DEPOSITOS_PADRES_SP')	
+    console.log(params)	
 
     this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP', params, function(error, result) {
 
-        //console.log('result: ',result)
+        console.log('result: ',result)
 
         self.view.expositor(res, {
             error: error,
@@ -148,11 +147,9 @@ conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function(req, res, n
                   { name: 'opcion', value: req.body.opcion, type: self.model.types.INT },
                   { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
                   { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT }
+
                   ];
-                      
-    console.log('DEL_PUNTEO_AUXILIAR_DEPOSITO_SP')
-    console.log(params)              
-    
+
     this.model.query('DEL_PUNTEO_AUXILIAR_DEPOSITO_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
@@ -169,12 +166,7 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function(req, res, ne
                    {name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
                    {name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
                    {name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
-                   ];                   
-
-
-    console.log('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP')
-    console.log(params)              
-    
+                   ];
 
     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -305,7 +297,7 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function(req, res, next) {
         transporter.close;
         object.error = null;            
         object.result = 1; 
-        //console.log(object.result)
+        console.log(object.result)
         req.body = [];
     }); 
 };
@@ -318,9 +310,6 @@ conciliacionDetalleRegistro.prototype.post_generaPunteo = function(req, res, nex
         { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
         { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
     ];
-
-    //console.log('UPD_GUARDAR_PUNTEO_FINAL_MES_SP')
-    //console.log(params)
 
     this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -340,8 +329,8 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
                   {name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT}
                 ];
 
-   //console.log('UPD_AUXILIARDEPOSITO_DPI_SP')
-   //console.log(params)      	
+   console.log('UPD_AUXILIARDEPOSITO_DPI_SP')
+   console.log(params)      	
 
    this.model.query('UPD_AUXILIARDEPOSITO_DPI_SP', params, function(error,result){
     self.view.expositor(res,{
@@ -349,7 +338,7 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
         result: result
         });
    });
-   //console.log(result);
+   console.log(result);
 };
 
 
@@ -403,10 +392,6 @@ var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,t
              {name: 'noCuenta', value: req.query.cuentaBanco, type: self.model.types.STRING},
              {name: 'idRegistroBanco', value: req.query.idRegistroBancario, type: self.model.types.INT}
             ];
-    /*        
-    console.log('SEL_RELACION_REG_BANCOS_REF_SP')
-    console.log(params)        
-    */
     this.model.query('SEL_RELACION_REG_BANCOS_REF_SP', params, function(error, result){
      self.view.expositor(res,{
          error: error,

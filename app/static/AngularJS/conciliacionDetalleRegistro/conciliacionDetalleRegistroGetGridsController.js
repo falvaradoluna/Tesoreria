@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
+﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
 
      //Declaracion de variables locales
      $scope.bancoReferenciadosAbonos = '';
@@ -7,6 +7,8 @@ registrationModule.controller('conciliacionDetalleRegistroGetGridsController',fu
      $scope.contableReferenciadosCargos = '';
      $scope.BancoReferenciadoCargos = '';
      $scope.BancoReferenciadoAbonos = '';
+     $scope.AuxiliarPunteado = '';
+     $scope.BancoPunteado = '';
      $scope.cargoActual = 0;
      $scope.abonoActual = 0;
 
@@ -17,7 +19,11 @@ registrationModule.controller('conciliacionDetalleRegistroGetGridsController',fu
      $scope.contableReferenciadosCargosTotales = 0;
      $scope.BancoReferenciadoCargosTotales = 0;
      $scope.BancoReferenciadoAbonosTotales = 0;
-
+     $scope.AuxiliarPunteadoAbonosTotales = 0;
+     $scope.AuxiliarPunteadoCargosTotales = 0;
+     $scope.BancoPunteadoAbonosTotales = 0;
+     $scope.BancoPunteadoCargosTotales = 0;
+     $scope.bancoDPITotal = 0;
 
 
 $scope.init = function() {
@@ -45,8 +51,24 @@ $scope.init = function() {
    $scope.getAuxiliarPunteo = function(idempresa, cuenta, fechaElaboracion, fechaCorte) {
 
         conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta, fechaElaboracion, fechaCorte).then(function(result) {
+	    console.log('Auxiliar Punteo: ')
+	    console.log(result.data);
             $scope.auxiliarPadre = result.data;
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
+
+            $scope.AuxiliarPunteado = $filter('filter')(result.data, function(value){
+            return value.idEstatus == 3;
+            });
+           
+           //Obtener la uma total de los registros
+             angular.forEach($scope.AuxiliarPunteado, function(value, key) {
+                    $scope.AuxiliarPunteadoAbonosTotales += value.abono;
+                    });
+             
+             angular.forEach($scope.AuxiliarPunteado, function(value, key) {
+                    $scope.AuxiliarPunteadoCargosTotales += value.cargo;
+                    });
+
             $scope.tabla('auxiliarPunteo');
         });
     };
@@ -59,6 +81,21 @@ $scope.init = function() {
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
+
+            $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function(value){
+            return value.idPAdre == 3;
+            });
+           
+           //Obtener la uma total de los registros
+             angular.forEach($scope.BancoPunteado, function(value, key) {
+                    $scope.BancoPunteadoAbonosTotales += value.abono;
+                    });
+             
+             angular.forEach($scope.BancoPunteado, function(value, key) {
+                    $scope.BancoPunteadoCargosTotales += value.cargo;
+                    });
+
+
             $scope.tabla('bancoPunteo');
         });
     };
@@ -70,6 +107,11 @@ $scope.init = function() {
 
         conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco).then(function(result) {
             $scope.bancoDPI = result.data;
+            //Obtener la suma total de los registros
+             angular.forEach($scope.bancoDPI, function(value, key) {
+                    $scope.bancoDPITotal += value.abono;
+                    });
+             
             $scope.tabla('bancodpi');
         });
     };

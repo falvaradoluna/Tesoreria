@@ -1,4 +1,4 @@
-﻿registrationModule.controller('excelExportController', function($scope, alertFactory, $rootScope, localStorageService,excelExportRepository, $window, filtrosRepository, $filter){
+registrationModule.controller('excelExportController', function($scope, alertFactory, $rootScope, localStorageService,excelExportRepository, $window, filtrosRepository, $filter){
     
     //Declaración de Variables locales
     $scope.selectedFile = null;
@@ -118,10 +118,7 @@
                          }
                        }
                        else if(value.Fecha.length == 10 || value.Fecha.indexOf('/') != 0) {
-                      	var dep = value.Depositos;//LQMA
-                        var ret = value.Retiros;//LQMA
-			//LQMA
-                      	excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Tipo_Transaccion,value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, (dep != undefined)?dep.replace(',',''):dep,(ret != undefined)?ret.replace(',',''):ret, workbook.Strings[0].h).then(function(result){
+                      excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Tipo_Transaccion,value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, value.Depositos, value.Retiros, workbook.Strings[0].h).then(function(result){
                         console.log(result);
                       }, function(error){
                             alertFactory.warning(error);

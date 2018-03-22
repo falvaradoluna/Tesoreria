@@ -185,7 +185,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="banco in bancoPadre | filter:{idPunteoFinalBancos:2}">
+                            <tr ng-repeat="banco in bancoPadre | filter:{idPAdre:2}">
                                 <td>{{banco.banco}}</td>
                                 <td>{{banco.referencia}}</td>
                                 <td>{{banco.concepto}}</td>
@@ -219,7 +219,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idPunteoFinalBancos:2}">
+                            <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idEstatus:2}">
                                 <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
                                 <td>{{auxiliar.polTipo}}</td>
                                 <td>{{auxiliar.polConsecutivo}}</td>
@@ -273,7 +273,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="banco in bancoPadre | filter:{idPunteoFinalBancos:3}">
+                                        <tr ng-repeat="banco in bancoPadre | filter:{idPAdre:3}">
                                             <td>{{banco.banco}}</td>
                                             <td>{{banco.referencia}}</td>
                                             <td>{{banco.concepto}}</td>
@@ -310,7 +310,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idPunteoFinalBancos:3}">
+                                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idEstatus:3}">
                                             <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
                                             <td>{{auxiliar.polTipo}}</td>
                                             <td>{{auxiliar.polConsecutivo}}</td>
@@ -692,6 +692,17 @@
     </div>
 </div>
 <!--===============================Fin Modal Detalle de Registros Bancarios Referenciaados (Abonos)====================-->
+
+
+
+
+
+
+
+
+
+
+
 
 </div>
 <!--Modal para colocar el numero del punteo-->

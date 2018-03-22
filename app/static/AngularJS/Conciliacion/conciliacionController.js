@@ -33,7 +33,10 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         $scope.obtieneCargosAbonos($scope.busqueda);
         
         $scope.resumenDPI = [];
-
+        
+        setTimeout( function(){
+                $(".cargando").remove();
+                }, 1500 );
     }
 
     $scope.obtieneCargosAbonos = function(busqueda) {

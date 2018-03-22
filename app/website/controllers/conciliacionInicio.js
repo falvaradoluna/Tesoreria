@@ -46,7 +46,8 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
                   { name: 'fechaElaboracion', value: req.body.fechaElaboracion, type: self.model.types.STRING},
                   { name: 'fechaCorte', value: req.body.fechaCorte, type: self.model.types.STRING},
                   { name: 'polizaPago', value: req.body.polizaPago, type: self.model.types.STRING},
-                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT}
+                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT},
+                  { name: 'idUsuario', value: req.body.opcion, type: self.model.types.INT} //LQMA ADD 06032018
                   ];
     
     this.model.query('SEL_TOTAL_ABONOCARGO_SP', params, function(error, result) {

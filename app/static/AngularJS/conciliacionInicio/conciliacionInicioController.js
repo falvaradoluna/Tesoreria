@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionInicioController', function($window, $filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
+﻿registrationModule.controller('conciliacionInicioController', function($window, $filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
@@ -40,6 +40,9 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                 $rootScope.mostrarMenu = 1;
                 $scope.paramBusqueda = [];
                 variablesLocalStorage();
+                setTimeout( function(){
+                $(".cargando").remove();
+                }, 1500 );
             }
 
             var variablesLocalStorage = function() {
@@ -56,7 +59,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                     $scope.InmemoryAcountBanc = $scope.busqueda.Cuenta;
                     $scope.fechaElaboracion = $scope.busqueda.fechaElaboracion;
                     $scope.fechaCorte = $scope.busqueda.fechaCorte;
-                    $scope.contadorGerente=[{'Usuario':$scope.busqueda.usuario,
+                    $scope.contadorGerente=[{'NombreUsuario':$scope.busqueda.usuario,
                                              'NombreGerente':$scope.busqueda.gerente,
                                              'NombreContador':$scope.busqueda.contador
                                             }];
@@ -65,7 +68,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
 
                     //Reemplazo la consulta que retorna el valor del mes activo
                     $scope.mesActivo = $scope.busqueda.MesActivo;
-                    conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, $scope.polizaPago,1).then(function(result) {
+                    conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, $scope.polizaPago,1,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
                     if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
@@ -151,15 +154,15 @@ registrationModule.controller('conciliacionInicioController', function($window, 
 
 
                       $('#actualizarBD').modal('show');
-                    conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, $scope.empresaActual.polizaPago, 2).then(function(result) {
+                    conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, $scope.empresaActual.polizaPago, 2,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
                         $('#actualizarBD').modal('hide');
                         if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
                             $scope.mesActivo = result.data[0].mesActivo;
-                            //console.log($scope.totalesAbonosCargos)
+                            
 
-                            //Mensaje de alerta que corrobora la disponibilidad para conciliar registros del mes consultado
+                            //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
                             
                             if($scope.mesActivo != 1){
                                 alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
@@ -168,7 +171,7 @@ registrationModule.controller('conciliacionInicioController', function($window, 
                             $scope.paramBusqueda = [];
 
                             setTimeout(function() {
-                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreGerente, "gerente": $scope.contadorGerente[0].NombreContador,"usuario": $scope.contadorGerente[0].Usuario,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago};
+                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreContador, "gerente": $scope.contadorGerente[0].NombreGerente,"usuario": $scope.contadorGerente[0].Usuario,"fechaElaboracion": $scope.fechaElaboracion,"fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago};
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 console.log('$scope.paramBusqueda')
                                 console.log($scope.paramBusqueda)
@@ -263,7 +266,9 @@ else {
                                                        [
                                                            {
                                                                "titulo"   :   "ELABORÓ",
-                                                               "nombre"   :    $scope.busqueda.usuario,
+                                                             
+                                                               "nombre"   :    $scope.contadorGerente[0].Usuario,
+
                                                                "fecha"   :   ""
                                                            },
                                                            {
@@ -279,8 +284,8 @@ else {
                                                         ]
                                                     };
           var jsonData = {
-                            "template": {
-                                "name": "ResumenConciliacion_rpt"
+                            "template": {                                
+				"name": "ResumenConciliacion_rpt"
                             },
                             "data": rptDetalleConciliacionBancaria 
                         }

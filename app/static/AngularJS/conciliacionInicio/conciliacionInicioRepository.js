@@ -3,7 +3,7 @@ var conciliacionInicioURL = global_settings.urlCORS + 'api/conciliacionInicio/';
 registrationModule.factory('conciliacionInicioRepository', function($http) {
     return {
 
-    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion) {
+    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario) { //LQMA add 06032018 idUsuario
             return $http({
                 url: conciliacionInicioURL + 'totalAbonoCargo/',
                 method: "POST",
@@ -15,7 +15,8 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
                     fechaElaboracion: fechaE,
                     fechaCorte: fechaC,
                     polizaPago: polizaPago,
-                    opcion: opcion
+                    opcion: opcion,
+                    idUsuario: idUsuario //LQMA add 06032018
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -40,7 +41,9 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
 
         getReporteTesoreria: function(myJson) {
             return $http({
-                url: 'http://189.204.141.193:5488/api/report',
+                //LQMA changed 01022018
+                //url: 'http://189.204.141.193:5488/api/report',
+                url: 'http://192.168.20.89:5488/api/report',
                 method: "POST",
                 data: {
                     template: { name: myJson.template.name },

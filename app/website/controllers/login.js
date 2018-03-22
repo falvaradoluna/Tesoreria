@@ -25,15 +25,16 @@ Login.prototype.get_permisos = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'User', value: req.query.usuario, type: self.model.types.STRING }];
+    var params = [{ name: 'idUsuario', value: req.query.usuario, type: self.model.types.STRING }];
 
-    this.model.query('SEL_LOGIN_SP', params, function(error, result) {
+    this.model.query('SEL_VALIDAUSUARIO_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
+
 Login.prototype.get_empleado = function(req, res, next) {
 
     var self = this;

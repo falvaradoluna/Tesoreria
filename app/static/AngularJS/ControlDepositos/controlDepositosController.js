@@ -1,6 +1,8 @@
 ﻿registrationModule.controller('controlDepositosController', function($scope, $rootScope, $location, localStorageService, filtrosRepository, alertFactory, $http, $log, $timeout, uiGridConstants, controlDepositosRepository) {
     $rootScope.userData = localStorageService.get('userData');
     $scope.idUsuario = $rootScope.userData.idUsuario;
+    //$scope.idUsuario = localStorage.getItem("idUsuario");
+
 
     //Listas Onjetos BD
     $scope.lstEmpresaUsuario = [];
@@ -51,6 +53,10 @@
     $scope.carteraTotal = 0;
     //
 
+    setTimeout( function(){
+        $(".cargando").remove();
+    }, 1500 );
+    
     $scope.rojo = function(){
         $scope.currentColor = '#C00';
     }
@@ -296,6 +302,23 @@
             format: "dd/mm/yyyy"
         });
     };
+
+    $scope.formatName = function( a ){
+	console.log( "Valor", $scope[ a ] );
+	var fecha1 = $scope[ a ].split('/')
+	var fecha2 = new Date( fecha1[1]+"/"+fecha1[0]+"/"+fecha1[2] );
+	var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
+	if( fecha2 >= firstDay && fecha2 <= lastDay  ){
+
+	}
+	else{
+	    swal('Control de Depositos','La fecha no es permitida, asegurate de seleccionar una fecha del mes corriente');
+	    $scope[ a ] = '';
+	}
+    }
 
     $scope.setTableStyle = function() {
         setTimeout(function() {
@@ -595,6 +618,9 @@
             $scope.promise = controlDepositosRepository.createReference(objData).then(function(result) {
                 if (result.data.length > 0) {
                     var idRef = result.data[0].idReferencia;
+                    console.log( "[idRef]", idRef );
+
+                    controlDepositosRepository.guardausuario( idRef, $scope.idUsuario );
 
                     for (var i = 0; i < $scope.RowCartera.length; i++) {
                         // console.log( $scope.RowCartera[i] );
@@ -715,7 +741,7 @@
             closeOnConfirm: true
         },
         function() {
-            controlDepositosRepository.insApplyReference(idReferencia).then(function(result) {
+            controlDepositosRepository.insApplyReference( idReferencia, $scope.idUsuario ).then(function(result) {
                 swal("Aplicado", "Referencia aplicada", "success");
                 $scope.insertaRefAntipag();
                 $scope.loadPendingDocs();
@@ -736,7 +762,7 @@
             function() {
                 $('#mdlLoading').modal('show');
                 for (var i = 0; i < data.length; i++) {
-                    controlDepositosRepository.insApplyReference(data[i].idReferencia);
+                    controlDepositosRepository.insApplyReference( data[i].idReferencia, $scope.idUsuario );
                 }
 
                 setTimeout( function(){
@@ -790,6 +816,13 @@
     };
 
     $scope.showReferenceDetails = function(obj) {
+        $scope.montosAplicados = {
+                    totalDocumentos: 0,
+                    totalAplicado:   0,
+                    totalBPRO:       0,
+                    saldoPendiente:  0,
+                    anticipo:        0
+                }
         var idReferencia = obj.idReferencia;
         if( obj.idReferencia === undefined ){
             idReferencia = obj;
@@ -807,6 +840,27 @@
 
             if (result.data.length > 0) {
                 $scope.tblPendientesDetalle = result.data;
+                console.log( "tblPendientesDetalle", $scope.tblPendientesDetalle );
+
+                $scope.montosAplicados = {
+                    totalDocumentos: 0,
+                    totalAplicado:   0,
+                    totalBPRO:       0,
+                    saldoPendiente:  0,
+                    anticipo:        0
+                }
+
+                $scope.tblPendientesDetalle.forEach( function( item, key ){
+                    $scope.montosAplicados.totalDocumentos = $scope.montosAplicados.totalDocumentos + parseFloat(item.importeDocumento);
+                    $scope.montosAplicados.totalAplicado   = $scope.montosAplicados.totalAplicado + parseFloat(item.importeAplicar);
+                    $scope.montosAplicados.totalBPRO       = $scope.montosAplicados.totalBPRO + parseFloat(item.importeBPRO);
+                });
+
+                $scope.montosAplicados.saldoPendiente = $scope.montosAplicados.totalDocumentos - $scope.montosAplicados.totalAplicado;
+                $scope.montosAplicados.anticipo       = $scope.montosAplicados.totalBPRO - $scope.montosAplicados.totalAplicado;
+
+                // console.log( "montosAplicados", $scope.montosAplicados );
+                
             } else {
                 // console.log('loadPendingDocsDetails no result');
             }
@@ -961,16 +1015,41 @@
     $scope.seguridad = function() {
         controlDepositosRepository.seguridad( $scope.idUsuario ).then(function(result) {
             if (result.data.length > 0) {
-                // console.log('ok');
+                console.log('ok');
                 $scope.btnAplicarReferencias = false;
             } else {
                 $scope.btnAplicarReferencias = true;
-                // console.log('no trajo nada seguridad');
+                console.log('no trajo nada seguridad');
             }
         }, function(error) {
             // console.log('Error');
         });
     };
+
+    $scope.actualizarCartera = function(){
+        if( $scope.selectedValueEmpresaID === null || $scope.selectedValueEmpresaID == 0 ){
+            swal( "Control de Depósitos", "Debe seleccionar una empresa" );
+        }
+        else{
+            swal({
+                title: "Control de Depósitos",
+                text: "¿Desea actualizar la cartera, esto puede tardar uno poco?",
+                showCancelButton: true,
+                closeOnConfirm: false,
+                showLoaderOnConfirm: true
+            }, function () {
+                controlDepositosRepository.actualizarCartera( $scope.selectedValueEmpresaID ).then(function(result) {
+                    if (result.data.length > 0) {
+                        swal( "Control de Depósitos", "Cartera actualizada correctamente." );
+                    } else {
+                        swal( "Control de Depósitos", "Cartera actualizada correctamente" );
+                    }
+                }, function(error) {
+                    // console.log('Error');
+                });
+            });
+        }        
+    }
 
     $scope.seguridad();
     setTimeout( function(){

@@ -45,7 +45,10 @@ Filtros.prototype.get_sucursales = function(req, res, next) {
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
+    console.log( "Parametros", params );
+
     this.model.query('SEL_SUCURSAL_BY_USUARIO_SP', params, function(error, result) {
+	console.log( "Resultado", result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -136,7 +139,7 @@ Filtros.prototype.get_addAuxiliarContable = function(req, res, next) {
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'fechaIni', value: req.query.fechaIni, type: self.model.types.STRING },
         { name: 'fechaFin', value: req.query.fechaFin, type: self.model.types.STRING }
-    ];
+    ];    
 
     this.model.query('INS_AUXILIAR_CONTABLE_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -177,6 +180,9 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
         { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
     ];
+
+    console.log(params)
+    console.log('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP')		
 
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
         self.view.expositor(res, {

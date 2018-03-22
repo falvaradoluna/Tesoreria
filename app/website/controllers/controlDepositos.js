@@ -1,4 +1,4 @@
-var controlDepositosView = require('../views/reference'),
+﻿var controlDepositosView = require('../views/reference'),
     controlDepositosModel = require('../models/dataAccess'),
     moment = require('moment');
 var phantom = require('phantom');
@@ -82,6 +82,22 @@ controlDepositos.prototype.get_quitarDPI = function(req, res, next) {
     ];
 
     this.model.query('INS_QUITAR_DPI_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_actualizacartera = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+
+    ];
+    
+    this.model.query('CARTERAACTUALIZA_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -178,7 +194,10 @@ controlDepositos.prototype.get_pendingReferenceDetails = function(req, res, next
 controlDepositos.prototype.get_applyReference = function(req, res, next) {
     var self = this;
 
-    var params = [{ name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT }];
+    var params = [
+        { name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+    ];
 
     this.model.query('INS_APLICA_REFERENCIAS_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -622,6 +641,22 @@ controlDepositos.prototype.get_seguridad = function(req, res, next) {
     var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
 
     this.model.query('SEL_SEGURUDAD_SP', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+controlDepositos.prototype.get_guardausuario = function(req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'idReferencia', value: req.query.idReferencia, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }
+    ];
+
+    this.model.query('INS_GUARDAUSUARIO_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

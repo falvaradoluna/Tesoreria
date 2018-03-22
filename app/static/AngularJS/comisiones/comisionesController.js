@@ -47,6 +47,10 @@
         enableFiltering: true
     };
 
+    setTimeout( function(){
+        $(".cargando").remove();
+    }, 1500 );
+
     $scope.gridComisiones.columnDefs = comisionesRepository.gridComisionesColumns();
     $scope.gridComisiones.multiSelect = true;
 

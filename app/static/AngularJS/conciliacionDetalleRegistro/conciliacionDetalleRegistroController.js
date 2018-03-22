@@ -8,7 +8,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.abonoBanco = 0;
     $scope.cargoBanco = 0;
     $scope.auxiliarPadre = '';
-    $scope.bancoPadre = '';
     $scope.detallePunteo = '';
     $scope.detallePunteoBanco = '';
     i18nService.setCurrentLang('es'); //Para seleccionar el idioma  
@@ -28,7 +27,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
       $scope.pageSize = 10;
       $scope.pages = [];
     //*************************************************************************
-
     // INICIA 
     //****************************************************************************************************
     $scope.init = function() {
@@ -36,6 +34,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $rootScope.mostrarMenu = 1;
         console.log($scope.busqueda);
         $scope.DameLaFechaHora();
+        setTimeout( function(){
+                $(".cargando").remove();
+                }, 1500 );
     };
     var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
@@ -62,30 +63,31 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
     $scope.verDetallePunteo = function(detallepunteo,opcion) {
-       ///Tipo de punteo 1 = (Abonos o cargos Bancarios) - (Abonos o cargos Contables)
-       ///Tipo de punteo 2 = Punteos Bancarios (conciliación entre los mismos tipos de datos)
-       ///Tipo de punteo 3 = Punteo Contable (conciliación entre los mismos tipos de datos)
-
         var accionBusqueda = 0;
         var datoBusqueda = '';
-        if(opcion == 1){ //Detalle de registros Bancarios
-            if(detallepunteo.tipoPunteo == 2){ //Opcion para consultar registros Bancarios conciliados entre si
-            accionBusqueda = 4;
-            }
-            else if(detallepunteo.tipoPunteo == 1){//Opción para consultar registros Bancarios - Contables
+        if(opcion == 1){
+
+              if(detallepunteo.idPAdre == 4){
+                datoBusqueda = detallepunteo.idDepositoBanco;
+                accionBusqueda = 4;
+              }
+              else if(detallepunteo.idPAdre == 2){
+
+            datoBusqueda = detallepunteo.idDepositoBanco;
             accionBusqueda = 1;
-             }
-             datoBusqueda = detallepunteo.idDepositoBanco; //Asigno el idBancario a consultar
-        } else { //Detalle de registros Contables
-            if(detallepunteo.tipoPunteo == 3){//Opción para consultar registros Contables conciliados entre si
+        }
+        
+        } else {
+            if(detallepunteo.idPAdre == 3){
+                datoBusqueda = detallepunteo.idAuxiliarContable;
                 accionBusqueda = 3;
-                }else if(detallepunteo.tipoPunteo == 1){//Opcion para consultar registros Contables - Bancarios
-                
+                }else if(detallepunteo.idPAdre == 2){
+                datoBusqueda = detallepunteo.idAuxiliarContable;
                 accionBusqueda = 2;
                }
-               datoBusqueda = detallepunteo.idAuxiliarContable;
+
         }
-        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta,accionBusqueda).then(function(result) {
+        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
 
                 $scope.detallePunteo = result.data[0];
