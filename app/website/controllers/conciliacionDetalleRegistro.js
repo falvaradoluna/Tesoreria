@@ -43,8 +43,11 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
     console.log('INS_PUNTEO_DEPOSITO_AUXILIAR_SP')
     console.log(params)
 
-
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
+
+      console.log('error',error)
+      console.log('result',result)
+
         self.view.expositor(res, {
             error: error,
             result: result
@@ -67,7 +70,14 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, r
                 { name: 'idBmerPadre', value: req.body.idBmerPadre, type: self.model.types.INT} //LQMA add 10032018
               ];
 
+       console.log('INS_PUNTEO_DEPOSITO_AUXILIAR_SP')
+       console.log(params)       
+
        this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result){
+
+        console.log('error',error)
+        console.log('result',result)
+
        self.view.expositor(res,{
            error: error,
            result: result  
