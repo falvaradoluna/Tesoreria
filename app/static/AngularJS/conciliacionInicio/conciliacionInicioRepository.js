@@ -1,9 +1,11 @@
 var conciliacionInicioURL = global_settings.urlCORS + 'api/conciliacionInicio/';
 
 registrationModule.factory('conciliacionInicioRepository', function($http) {
-    return {
+    return {       
 
     	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario) { //LQMA add 06032018 idUsuario
+            
+            console.log('conciliacionInicioRepository  sssss URL :', conciliacionInicioURL + 'totalAbonoCargo/')
             return $http({
                 url: conciliacionInicioURL + 'totalAbonoCargo/',
                 method: "POST",

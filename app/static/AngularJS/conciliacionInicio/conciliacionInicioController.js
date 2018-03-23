@@ -39,7 +39,7 @@
                 
                 $rootScope.mostrarMenu = 1;
                 $scope.paramBusqueda = [];
-                variablesLocalStorage();
+                //variablesLocalStorage();
                 setTimeout( function(){
                 $(".cargando").remove();
                 }, 1500 );
@@ -146,7 +146,6 @@
                     else{
 
 
-
                     console.log($scope.cuentaActual);
                     localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
                     
@@ -156,16 +155,15 @@
                       $('#actualizarBD').modal('show');
                     conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, $scope.empresaActual.polizaPago, 2,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
                         $('#actualizarBD').modal('hide');
-                        if (result.data.length > 0) {
-                            //console.log('entra')                
+                        if (result.data.length > 0) {                            
                             $scope.totalesAbonosCargos = result.data;
-                            $scope.mesActivo = result.data[0].mesActivo;
-                            
+                            $scope.mesActivo = result.data[0].mesActivo;                          
+
 
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
                             
                             if($scope.mesActivo != 1){
-                                alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                                alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
                             }
 
                             $scope.paramBusqueda = [];

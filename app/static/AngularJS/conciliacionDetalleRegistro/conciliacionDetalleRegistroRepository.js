@@ -15,7 +15,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo) {
+        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario) {
+            console.log('conciliacionDetalleRegistroURL:', conciliacionDetalleRegistroURL)
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
                 method: "POST",
@@ -28,7 +29,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idOpcion : idOpcion,
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
-                    tipoPunteo: tipoPunteo
+                    tipoPunteo: tipoPunteo,
+                    idUsuario: idUsuario
                 },
                 headers: {
                     'Content-Type': 'application/json'

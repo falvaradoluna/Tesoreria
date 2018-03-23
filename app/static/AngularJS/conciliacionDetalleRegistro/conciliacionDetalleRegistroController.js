@@ -63,6 +63,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
     $scope.verDetallePunteo = function(detallepunteo,opcion) {
+
+        console.log('detallepunteo: ',detallepunteo)
+
         var accionBusqueda = 0;
         var datoBusqueda = '';
         if(opcion == 1){
