@@ -27,7 +27,7 @@ Login.prototype.get_permisos = function(req, res, next) {
 
     var params = [{ name: 'idUsuario', value: req.query.usuario, type: self.model.types.STRING }];
 
-    this.model.query('SEL_VALIDAUSUARIO_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('SEL_VALIDAUSUARIO_PRUEBA_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
