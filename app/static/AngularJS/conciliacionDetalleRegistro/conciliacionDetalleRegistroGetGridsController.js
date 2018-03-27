@@ -12,6 +12,12 @@
      $scope.cargoActual = 0;
      $scope.abonoActual = 0;
 
+     //Detalle Abono
+     $rootScope.detalleAbono = [];
+     $rootScope.detalleAbonoPadre = [];
+     $rootScope.abonoTotalBanco;
+     $rootScope.abonoTotalBancoSuma;
+
      //Variables para los resultados totales de cada Grid
      $scope.bancoReferenciadosAbonosTotales = 0;
      $scope.bancoReferenciadosCargosTotales = 0;
@@ -232,10 +238,23 @@ $scope.init = function() {
     };    
     //****************************************************************************************************
 
-    $scope.detalleRegistrosReferenciadosContables = function(registroConciliado){
-     
-     alertFactory.warning('Función en desarrollo...');
-
+    $scope.detalleRegistrosReferenciadosContablesAbono = function (registroConciliado) {
+        console.log('registroConciliado', registroConciliado );
+        conciliacionDetalleRegistroRepository.getDetalleAbono( registroConciliado )
+        .then(function(result){
+            console.log( "result", result );
+            $rootScope.detalleAbono = result.data[0];
+            $rootScope.detalleAbonoPadre = result.data[1];
+            $rootScope.abonoTotalBanco = result.data[1][0].MOV_HABER;
+            $rootScope.abonoTotalBancoSuma = result.data[0][0].Total;
+            if($rootScope.detalleAbono.length> 0){
+                $('#regContablesAbonoDetalle').modal('show');
+                $rootScope.detalleAbono.forEach(function( item, key ){
+                    console.log( "item", item );
+                });
+            }
+        });
+        //alertFactory.warning('Función en desarrollo...');
     };
      
 

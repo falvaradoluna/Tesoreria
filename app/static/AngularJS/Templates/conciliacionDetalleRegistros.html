@@ -560,7 +560,7 @@
                             <td>{{contableAbono.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContables(contableAbono)">
+                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -1048,3 +1048,86 @@
 </div>
 <!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
 <!--===================================================-->
+
+<!-- Ing. Luis Antonio García Perrusquía -->
+<!--Modal para colocar el numero del punteo-->
+<!--===================================================-->
+<div class="modal fade" id="regContablesAbonoDetalle" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header label-mint">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="pci-cross pci-circle text-white"></i>
+                </button>
+                <h4 class="modal-title text-white">Detalle del Abono</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo Póliza</th>
+                            <th># de Póliza</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th>Abono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="abonoPadre in detalleAbonoPadre">
+                            <td>{{abonoPadre.MOV_FECHOPE}}</td>
+                            <td>{{abonoPadre.MOV_TIPOPOL}}</td>
+                            <td>{{abonoPadre.MOV_CONSPOL}}</td>
+                            <td>{{abonoPadre.MOV_CONCEPTO}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : abonoPadre.cargoBanco > 0}">{{abonoPadre.cargoBanco | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : abonoPadre.abonoBanco > 0}">{{abonoPadre.MOV_HABER | currency}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-info text-semibold text-right">
+                                <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
+                            </td>
+                            <td colspan="3" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span>
+                            </td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="abonoTotalBanco > 0">{{abonoTotalBanco | currency}}</span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Numero de Cuenta</th>
+                            <th>Importe Pagado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="abono in detalleAbono">
+                            <td>{{abono.concepto}}</td>
+                            <td>{{abono.numeroCuenta}}</td>
+                            <td>{{abono.importePagado}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="abonoTotalBancoSuma > 0">{{cargoTotalBanco | currency}}</span>
+                            </td>
+                            <td  class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="abonoTotalBancoSuma > 0">{{abonoTotalBanco | currency}}</span>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Modal para colocar el numero del punteo-->

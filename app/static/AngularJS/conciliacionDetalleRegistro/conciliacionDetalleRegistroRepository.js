@@ -283,7 +283,21 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     'Content-Type' : 'application/json'
                 }
             });
-        }
+        },
+
+        // Ing.LAGP
+        getDetalleAbono: function( idAbono ){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRegistroAbono',
+                method: 'GET',
+                params: {
+                    idAbono: idAbono
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
 
 //Fin de la llave return
     };

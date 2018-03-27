@@ -414,5 +414,26 @@ var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,t
        });
     });
 };
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistroAbono
+*/
+conciliacionDetalleRegistro.prototype.get_detalleRegistroAbono = function (req, res, next) {
+    console.log( "===============================" );
+    console.log( "SotredDetalle" );
+    var self = this;
+    var idAbono = req.query.idAbono;
+
+    var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT }];
+
+    this.model.queryAllRecordSet('[dbo].[SEL_DOC_PAG_BY_ABONO_ID_SP]', params, function (error, result) {
+        console.log( "error", error );
+        console.log( "result", result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = conciliacionDetalleRegistro;
