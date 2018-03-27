@@ -1,8 +1,7 @@
-registrationModule.controller('conciliacionDetalleRegistroController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter) {
-    console.log( 'Hola AQUI conciliacionDetalleRegistroController' );
+registrationModule.controller('conciliacionDetalleRegistroConsultaController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository,$filter) {
+
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
-    $rootScope.showBotones = localStorageService.get('ShowBtns')[0];
     $scope.nodoPadre = [];
     $scope.abonoAuxiliar = 0;
     $scope.cargoAuxiliar = 0;
@@ -32,9 +31,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     $scope.init = function() {
         variablesLocalStorage();
-        $scope.showBtns();
         $rootScope.mostrarMenu = 1;
-        //console.log($scope.busqueda);
+        console.log($scope.busqueda);
         $scope.DameLaFechaHora();
         setTimeout( function(){
                 $(".cargando").remove();
@@ -92,7 +90,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                }
 
         }
-        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
+        conciliacionDetalleRegistroConsultaRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
             $('#punteoDetalle').modal('show');
 
                 $scope.detallePunteo = result.data[0];
@@ -133,14 +131,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     };
     //****************************************************************************************************
 
-    //****************************************************************************************************
-    // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
-    //****************************************************************************************************
-    $scope.showBtns = function() {
-        console.log( 'Perru' );
-        console.log( "showBtnsFuntion", $scope.showBotones );
-    };
-    //****************************************************************************************************
+
 
     //Inicia la función que me retorna la fecha y hora actual
     //****************************************************************************************************

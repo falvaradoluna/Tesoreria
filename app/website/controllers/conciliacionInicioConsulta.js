@@ -1,5 +1,5 @@
-var conciliacionInicioView = require('../views/reference'),
-    conciliacionInicioModel = require('../models/dataAccess'),
+var conciliacionInicioConsultaView = require('../views/reference'),
+    conciliacionInicioConsultaModel = require('../models/dataAccess'),
     moment = require('moment');
 var phantom = require('phantom');
 var path = require('path');
@@ -11,11 +11,11 @@ var JSZip = require("jszip");
 var zip = new JSZip();
 
 
-var conciliacionInicio = function(conf) {
+var conciliacionInicioConsulta = function(conf) {
     this.conf = conf || {};
 
-    this.view = new conciliacionInicioView();
-    this.model = new conciliacionInicioModel({
+    this.view = new conciliacionInicioConsultaView();
+    this.model = new conciliacionInicioConsultaModel({
         parameters: this.conf.parameters
     });
 
@@ -26,7 +26,7 @@ var conciliacionInicio = function(conf) {
 
 
 //LQMA 27022017 add obtiene totales de abonos y cargos no relacionados
-conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
+conciliacionInicioConsulta.prototype.post_totalAbonoCargo = function(req, res, next) {
 
     /*
     console.log('entro a post_totalAbonoCargo Rodrigo')
@@ -38,7 +38,6 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
     console.log('fechaCorte',req.body.fechaCorte)
     console.log('opcion',req.body.opcion)
     */
-
     var self = this;
 
     var params = [{ name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
@@ -51,16 +50,11 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
                   { name: 'opcion', value: req.body.opcion, type: self.model.types.INT},
                   { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT} //LQMA ADD 06032018
                   ];
-   /*                  
-    console.log('SEL_TOTAL_ABONOCARGO_SP')
-    console.log(params)                  
-    */
-
-    this.model.query('SEL_TOTAL_ABONOCARGO_SP', params, function(error, result) {        
-        /*
-        console.log('error',error)
-        console.log('result',result)    
-        */
+                     
+    console.log('SEL_TOTAL_ABONOCARGO_SP_H')
+    console.log(params)    
+    
+    this.model.query('SEL_TOTAL_ABONOCARGO_SP_H', params, function(error, result) {
         
         self.view.expositor(res, {
             error: error,
@@ -71,7 +65,7 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
 
 
 //LQMA 27022017 add obtiene totales de abonos y cargos no relacionados
-conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
+conciliacionInicioConsulta.prototype.get_gerenteContador = function(req, res, next) {
 
     //console.log('entro a get_gerenteContador')
     //console.log(req.query)
@@ -91,4 +85,4 @@ conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
 };
 
 
-module.exports = conciliacionInicio;
+module.exports = conciliacionInicioConsulta;

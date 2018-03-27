@@ -19,6 +19,13 @@ var registrationModule = angular.module("registrationModule", ["ngRoute", "color
             templateUrl: 'AngularJS/Templates/conciliacionInicio.html', //example 1
             controller: 'conciliacionInicioController'
         });
+
+        //LQMA add 16032018 consultas por periodico y mensual
+        $routeProvider.when('/conciliacionInicioConsulta', {
+            templateUrl: 'AngularJS/Templates/conciliacionInicioConsulta.html', //example 1
+            controller: 'conciliacionInicioConsultaController'
+        });
+
         $routeProvider.when('/conciliacion', {
             templateUrl: 'AngularJS/Templates/conciliacion.html', //example 1
             controller: 'conciliacionController'

@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionInicioController', function($window, $filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
+﻿registrationModule.controller('conciliacionInicioConsultaController', function($window, $filter,$scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
 
             // ****************** Se guarda la información del usuario en variable userData
             $rootScope.userData = localStorageService.get('userData');
@@ -43,6 +43,7 @@
                 setTimeout( function(){
                 $(".cargando").remove();
                 }, 1500 );
+
             }
 
             var variablesLocalStorage = function() {
@@ -68,7 +69,7 @@
 
                     //Reemplazo la consulta que retorna el valor del mes activo
                     $scope.mesActivo = $scope.busqueda.MesActivo;
-                    conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, $scope.polizaPago,1,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
+                    conciliacionInicioConsultaRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable,$scope.busqueda.fechaElaboracion,$scope.busqueda.fechaCorte, $scope.polizaPago,1,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
                     if (result.data.length > 0) {
                             //console.log('entra')                
                             $scope.totalesAbonosCargos = result.data;
@@ -138,13 +139,13 @@
                 }
 
 
-                $scope.getTotalesAbonoCargo = function() {
+                $scope.getTotalesAbonoCargo = function() {                    
+
                     console.log($scope.fechaElaboracion.substr(-5,2));
                     if($scope.fechaElaboracion.substr(-5,2) != $scope.fechaCorte.substr(-5,2)){
                       alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
                     }
                     else{
-
 
                     console.log($scope.cuentaActual);
                     localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
@@ -153,7 +154,7 @@
 
 
                       $('#actualizarBD').modal('show');
-                    conciliacionInicioRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, $scope.empresaActual.polizaPago, 2,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
+                    conciliacionInicioConsultaRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable,$scope.fechaElaboracion,$scope.fechaCorte, $scope.empresaActual.polizaPago, 2,$rootScope.userData.idUsuario).then(function(result) { //LQMA add 06032018 idUsuario
                         $('#actualizarBD').modal('hide');
                         if (result.data.length > 0) {                            
                             $scope.totalesAbonosCargos = result.data;
@@ -184,7 +185,7 @@
                         }
                     });
 
-                    conciliacionInicioRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.cuentaActual.IdEmpresa).then(function(result) {
+                    conciliacionInicioConsultaRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.cuentaActual.IdEmpresa).then(function(result) {
                         if (result.data.length > 0) {
                             $scope.contadorGerente = result.data;
                         }

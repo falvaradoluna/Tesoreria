@@ -1,13 +1,12 @@
-var conciliacionInicioURL = global_settings.urlCORS + 'api/conciliacionInicio/';
+var conciliacionInicioConsultaURL = global_settings.urlCORS + 'api/conciliacionInicioConsulta/';
 
-registrationModule.factory('conciliacionInicioRepository', function($http) {
-    return {       
+registrationModule.factory('conciliacionInicioConsultaRepository', function($http) {
+    return {
 
     	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario) { //LQMA add 06032018 idUsuario
             
-            console.log('conciliacionInicioRepository  sssss URL :', conciliacionInicioURL + 'totalAbonoCargo/')
             return $http({
-                url: conciliacionInicioURL + 'totalAbonoCargo/',
+                url: conciliacionInicioConsultaURL + 'totalAbonoCargo/',
                 method: "POST",
                 data: {                    
                     idBanco: idBanco,                    
@@ -28,7 +27,7 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
         },
         getGerenteContador: function(idUsuario, idEmpresa) {
             return $http({
-                url: conciliacionInicioURL + 'gerenteContador/',
+                url: conciliacionInicioConsultaURL + 'gerenteContador/',
                 method: "GET",
                 params: {                    
                     idUsuario: idUsuario,
