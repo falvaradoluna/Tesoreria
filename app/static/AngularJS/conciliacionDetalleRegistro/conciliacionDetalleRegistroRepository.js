@@ -285,7 +285,70 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     'Content-Type' : 'application/json'
                 }
             });
-        }
+        },
+
+        // Ing.LAGP
+        getDetalleAbono: function( idAbono ){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRegistroAbono',
+                method: 'GET',
+                params: {
+                    idAbono: idAbono
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
+
+        getRegistrosBancariosCargos: function(){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'registrosBancariosCargos',
+                method: 'GET',
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
+
+        detalleRegistrosBancariosCargos: function( idCargo ){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRegistrosBancariosCargos',
+                method: 'GET',
+                params: {
+                    idCargo: idCargo
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
+
+        detalleRegistrosBancariosAbonos: function( idAbono ){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRegistrosBancariosAbonos',
+                method: 'GET',
+                params: {
+                    idAbono: idAbono
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
+
+        detalleRegistrosContablesAbonos: function( idAuxiliar ){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleRegistrosContablesAbonos',
+                method: 'GET',
+                params: {
+                    idAuxiliar: idAuxiliar
+                },
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            });
+        },
 
 //Fin de la llave return
     };
