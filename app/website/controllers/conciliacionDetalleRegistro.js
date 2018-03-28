@@ -372,7 +372,6 @@ conciliacionDetalleRegistro.prototype.get_bancoReferenciado = function(req, res,
 
     var self = this;
 
-
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
                   { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING},
                   { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
@@ -381,7 +380,7 @@ conciliacionDetalleRegistro.prototype.get_bancoReferenciado = function(req, res,
                  ];
 
         this.model.query('SEL_REG_BANCOS_REFERENCIADOS', params, function(error, result) {
-
+            
         self.view.expositor(res, {
             error: error,
             result: result
@@ -429,19 +428,57 @@ var params =[{name: 'referenciaAmpliada', value: req.query.ReferenciaAmpliada ,t
        });
     });
 };
+
 /** 
  * ING. LAGP
  * api/conciliacionDetalleRegistro/detalleRegistroAbono
 */
 conciliacionDetalleRegistro.prototype.get_detalleRegistroAbono = function (req, res, next) {
-    console.log( "===============================" );
-    console.log( "SotredDetalle" );
+    
     var self = this;
     var idAbono = req.query.idAbono;
 
     var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT }];
 
     this.model.queryAllRecordSet('[dbo].[SEL_DOC_PAG_BY_ABONO_ID_SP]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/registrosBancariosCargos
+*/
+conciliacionDetalleRegistro.prototype.get_registrosBancariosCargos= function (req, res, next) {
+    
+    var self = this;
+
+    var params = [];
+
+    this.model.query('[dbo].[SEL_ALL_CARGOS_BANCARIO]', params, function (error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosBancariosCargos
+*/
+conciliacionDetalleRegistro.prototype.get_detalleRegistrosBancariosCargos = function (req, res, next) {
+    
+    var self = this;
+    var idCargo = req.query.idCargo;
+
+    var params = [{ name: 'idCargo', value: idCargo, type: self.model.types.INT }];
+
+    this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP]', params, function (error, result) {
         console.log( "error", error );
         console.log( "result", result );
         self.view.expositor(res, {
@@ -449,6 +486,56 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistroAbono = function (req, 
             result: result
         });
     });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosBancariosAbonos
+*/
+conciliacionDetalleRegistro.prototype.get_detalleRegistrosBancariosAbonos = function (req, res, next) {
+    
+    var self = this;
+    var idAbono = req.query.idAbono;
+
+    var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT }];
+
+        self.view.expositor(res, {
+            result: "Hola"
+        });
+
+    // this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP]', params, function (error, result) {
+    //     console.log( "error", error );
+    //     console.log( "result", result );
+    //     self.view.expositor(res, {
+    //         error: error,
+    //         result: result
+    //     });
+    // });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosBancariosAbonos
+*/
+conciliacionDetalleRegistro.prototype.get_detalleRegistrosContablesAbonos = function (req, res, next) {
+    
+    var self = this;
+    var idAuxiliar = req.query.idAuxiliar;
+
+    var params = [{ name: 'idAuxiliar', value:idAuxiliar, type: self.model.types.INT }];
+
+        self.view.expositor(res, {
+            result: "detalleRegistrosContablesAbonos"
+        });
+
+    // this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP]', params, function (error, result) {
+    //     console.log( "error", error );
+    //     console.log( "result", result );
+    //     self.view.expositor(res, {
+    //         error: error,
+    //         result: result
+    //     });
+    // });
 };
 
 module.exports = conciliacionDetalleRegistro;

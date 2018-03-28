@@ -18,6 +18,21 @@
      $rootScope.abonoTotalBanco;
      $rootScope.abonoTotalBancoSuma;
 
+     //Cargos bancario
+     $rootScope.registrosBancariosCargos = [];
+     $rootScope.detalleRegistrosBancariosCargos = [];
+     $rootScope.detalleRegistrosBancariosCargosTotal;
+     $rootScope.detalleRegistrosBancariosCargosFecha;
+     $rootScope.detalleRegistrosBancariosCargostipoPoliza;
+     $rootScope.detalleRegistrosBancariosCargosnumeroCuenta;
+     $rootScope.detalleRegistrosBancariosCargosnumeroCuenta;
+     $rootScope.detalleRegistrosBancariosCargosconcepto;
+     $rootScope.detalleRegistrosBancariosCargosAbono;
+
+     //Abonos bancarios
+     $rootScope.registrosBancariosAbonos = [];
+     $rootScope.registrosBancariosAbonosTotal;
+
      //Variables para los resultados totales de cada Grid
      $scope.bancoReferenciadosAbonosTotales = 0;
      $scope.bancoReferenciadosCargosTotales = 0;
@@ -41,6 +56,7 @@ $scope.init = function() {
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.bancoReferenciados();
         $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
+        $scope.getRegistrosBancariosCargos();
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
@@ -127,7 +143,7 @@ $scope.init = function() {
     //****************************************************************************************************
      $scope.bancoReferenciados = function() {
         conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function(result) {
-
+            console.log( "result", result );
         $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function(value){
             return value.tipoMovimiento == 0;
         });
@@ -145,7 +161,7 @@ $scope.init = function() {
              angular.forEach($scope.bancoReferenciadosCargos, function(value, key) {
                     $scope.bancoReferenciadosCargosTotales += value.cargo;
                     });
-
+        console.log( "bancoReferenciadosCargosTotales", $scope.bancoReferenciadosCargosTotales );
       });
     };
     //****************************************************************************************************
@@ -235,7 +251,45 @@ $scope.init = function() {
             }
 
       });
-    };    
+    };
+    
+    //********************************* Ing. Luis Antonio García Perrusquía 27/03/2018
+    // Get Registros bancarios cargos
+    //*/
+
+    $scope.getRegistrosBancariosCargos = function () {
+        conciliacionDetalleRegistroRepository.getRegistrosBancariosCargos( )
+        .then(function(result){
+            $rootScope.registrosBancariosCargos = result.data
+            console.log( "registrosBancariosCargos", $rootScope.registrosBancariosCargos );
+        });
+    };
+
+    $scope.detalleRegistrosBancariosCargosF = function ( idCargo ) {
+        conciliacionDetalleRegistroRepository.detalleRegistrosBancariosCargos( idCargo )
+        .then(function(result){
+            console.log( "Hola1" );
+            console.log( "result", result );
+            $rootScope.detalleRegistrosBancariosCargos = result.data;
+            
+            console.log( "detalleRegistrosBancariosCargos", $rootScope.detalleRegistrosBancariosCargos );
+            console.log( "detalleRegistrosBancariosCargosTotal", $rootScope.detalleRegistrosBancariosCargosTotal );
+            if($rootScope.detalleRegistrosBancariosCargos.length > 0){
+                $rootScope.detalleRegistrosBancariosCargosTotal         = result.data[0].Total;
+                $rootScope.detalleRegistrosBancariosCargosFecha         = result.data[0].Fecha;
+                $rootScope.detalleRegistrosBancariosCargostipoPoliza    = result.data[0].tipoPoliza;
+                $rootScope.detalleRegistrosBancariosCargosconsPoliza    = result.data[0].consPoliza;
+                $rootScope.detalleRegistrosBancariosCargosnumeroCuenta  = result.data[0].numeroCuenta;
+                $rootScope.detalleRegistrosBancariosCargosconcepto      = result.data[0].concepto;
+                $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
+                $('#regBancariosCargoDetalle').modal('show');
+            }else{
+                alertFactory.warning('No se encontraron datos.');
+            }
+        });
+        // console.log( "registroConciliado", registroConciliado );
+        // console.log( "Hola" );
+    };
     //****************************************************************************************************
 
     $scope.detalleRegistrosReferenciadosContablesAbono = function (registroConciliado) {
@@ -257,9 +311,37 @@ $scope.init = function() {
         //alertFactory.warning('Función en desarrollo...');
     };
      
+    $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
+        console.log('idAbono', abonosData.IDABONOSBANCOS );
+        $rootScope.registrosBancariosAbonos[0] = abonosData;
+        $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
+        console.log('registrosBancariosAbonos', $rootScope.registrosBancariosAbonos)
+        conciliacionDetalleRegistroRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS )
+        .then(function(result){
+            console.log( "result", result );
+            
+            $('#regBancariosAbonoDetalle').modal('show');
+            // if($rootScope.detalleAbono.length> 0){
+            // }
+        });
+        //alertFactory.warning('Función en desarrollo...');
+    };
 
-
-
+    $scope.detalleRegistrosContablesAbonos = function (abonosData) {
+        console.log('abonosData', abonosData.idAuxiliar );
+        // $rootScope.registrosBancariosAbonos[0] = abonosData;
+        // $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
+        // console.log('registrosBancariosAbonos', $rootScope.registrosBancariosAbonos)
+        // conciliacionDetalleRegistroRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS )
+        // .then(function(result){
+        //     console.log( "result", result );
+            
+        //     $('#regBancariosAbonoDetalle').modal('show');
+            // if($rootScope.detalleAbono.length> 0){
+            // }
+        //});
+        //alertFactory.warning('Función en desarrollo...');
+    };
 
     // INICIA inicio la tabla para los distintos casos
         //****************************************************************************************************

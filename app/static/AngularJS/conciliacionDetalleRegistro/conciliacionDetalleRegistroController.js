@@ -1,5 +1,5 @@
 registrationModule.controller('conciliacionDetalleRegistroController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter) {
-    console.log( 'Hola AQUI conciliacionDetalleRegistroController' );
+   
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $rootScope.showBotones = localStorageService.get('ShowBtns')[0];
@@ -137,7 +137,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************
     $scope.showBtns = function() {
-        console.log( 'Perru' );
         console.log( "showBtnsFuntion", $scope.showBotones );
     };
     //****************************************************************************************************
