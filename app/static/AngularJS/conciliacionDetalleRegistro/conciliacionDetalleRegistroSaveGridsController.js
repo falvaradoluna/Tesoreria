@@ -68,10 +68,9 @@
 
                angular.forEach(value, function(value2, key2){
 
-                currentArray = key1;
-                console.log('ppppppp')
-                                                                          //Estatusid = 2, indica que el registro ya se encuentra relacionado
-               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario).then(function(result){
+                currentArray = key1;                
+                                                                          //Estatusid = 2, indica que el registro ya se encuentra relacionado                                                                                                       //LQMA 01042018 esCargo  
+               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario,value2.esCargo,'1').then(function(result){
                
                var resultado = result.data;  
 
@@ -105,8 +104,8 @@
         
         angular.forEach(value, function(value2, key2){
             currentArray = key1;
-            console.log('ooooooo')                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario //LQMA add 10032018 - idBmerPadre
-            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,idBmerPadre).then(function(result){
+            console.log('ooooooo',value2)                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario //LQMA add 10032018 - idBmerPadre //LQMA 01042018 esCargo
+            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,idBmerPadre,value2.esCargo,0).then(function(result){
              var resultado = result.data;
              });
 
@@ -138,6 +137,7 @@
                    var valueAuxiliar = valueAux2.idAuxiliarContable;
                    var conceptoPago = valueAux2.movConcepto;
                    currentColorAux = valueAux2.color;
+                   var esCargoContable = valueAux2.esCargo;
 
 
                    if(valueAux2.indexPrePunteo != 99999 && valueAux2.indexPrePunteo != -1   && currentColorAux == '#c9dde1'){
@@ -176,7 +176,7 @@
                      if(idColorAuxiliar == idColorBanco && idColorAuxiliar != undefined && idColorBanco != undefined && currentColorBanc != '#c9dde1' && currentColorAux != '#c9dde1'){
                       controlPunteoGrupos = 1;
                                                                                                                              //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario,valueBanco2.esCargo,esCargoContable).then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];
@@ -189,7 +189,7 @@
                   }
                   else if(idPrepAuxiliar == idPrepBanco && controlPunteoGrupos == undefined && currentColorBanc == '#c9dde1' && currentColorAux == '#c9dde1') { 
                                                                                                                                 //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario).then(function(result) {
+                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario,esCargo,'3').then(function(result) {
                         if (result.data[0].length) {    
                             console.log('Respuesta Incorrecta');
                             $scope.punteoAuxiliar = [];

@@ -15,7 +15,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario) {
+        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario, esCargoBanco, esCargoContable){ //LQMA 01042018
             console.log('conciliacionDetalleRegistroURL:', conciliacionDetalleRegistroURL)
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
@@ -30,7 +30,9 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
                     tipoPunteo: tipoPunteo,
-                    idUsuario: idUsuario
+                    idUsuario: idUsuario,
+                    esCargoBanco: esCargoBanco, //LQMA 01042018
+                    esCargoContable: esCargoContable
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,7 +40,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
                                                                                                                                         //LQMA add 10032018 - diBmerPadre
-        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre){
+        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre, esCargoBanco, esCargoContable){ //LQMA 01042018
           return $http ({
             url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
             method: "POST",
@@ -52,7 +54,9 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 idEmpresa: idEmpresa,
                 idBanco: idBanco,
                 tipoPunteo: tipoPunteo,
-                idBmerPadre: idBmerPadre
+                idBmerPadre: idBmerPadre,
+                esCargoBanco: esCargoBanco, //LQMA 01042018
+                esCargoContable: esCargoContable
             },
             headers:{
                 'Content-Type': 'application/json'
