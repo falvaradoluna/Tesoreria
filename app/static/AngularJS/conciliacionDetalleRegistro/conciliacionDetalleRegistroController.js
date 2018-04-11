@@ -34,7 +34,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         variablesLocalStorage();
         $scope.showBtns();
         $rootScope.mostrarMenu = 1;
-        //console.log($scope.busqueda);
         $scope.DameLaFechaHora();
         setTimeout( function(){
                 $(".cargando").remove();
@@ -65,8 +64,6 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
     $scope.verDetallePunteo = function(detallepunteo,opcion) {
-
-        console.log('detallepunteo: ',detallepunteo)
 
         var accionBusqueda = 0;
         var datoBusqueda = '';
@@ -137,7 +134,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************
     $scope.showBtns = function() {
-        console.log( "showBtnsFuntion", $scope.showBotones );
+        
     };
     //****************************************************************************************************
 

@@ -1,8 +1,8 @@
 var conciliacionDetalleRegistroURL = global_settings.urlCORS + 'api/conciliacionDetalleRegistro/';
 
-registrationModule.factory('conciliacionDetalleRegistroRepository', function($http) {
+registrationModule.factory('conciliacionDetalleRegistroRepository', function ($http) {
     return {
-        getReportePdf: function(jsondata) {
+        getReportePdf: function (jsondata) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'reportePdf/',
                 method: "POST",
@@ -15,7 +15,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario) {
+        insertPuntoDeposito: function (banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario) {
             console.log('conciliacionDetalleRegistroURL:', conciliacionDetalleRegistroURL)
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
@@ -26,7 +26,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     descripcion: descripcion,
                     idEstatus: estatus,
                     idPadre: idpadre,
-                    idOpcion : idOpcion,
+                    idOpcion: idOpcion,
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
                     tipoPunteo: tipoPunteo,
@@ -37,31 +37,31 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-                                                                                                                                        //LQMA add 10032018 - diBmerPadre
-        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre){
-          return $http ({
-            url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
-            method: "POST",
-            data: {
-                idDepositoBanco: banco,
-                idAuxiliarContable: auxiliar,
-                descripcion: descripcion,
-                idEstatus: estatus,
-                idPadre: idPadre,
-                idOpcion : idOpcion,
-                idEmpresa: idEmpresa,
-                idBanco: idBanco,
-                tipoPunteo: tipoPunteo,
-                idBmerPadre: idBmerPadre
-            },
-            headers:{
-                'Content-Type': 'application/json'
-            }
+        //LQMA add 10032018 - diBmerPadre
+        insertPunteoBancoCargoAbono: function (banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
+                method: "POST",
+                data: {
+                    idDepositoBanco: banco,
+                    idAuxiliarContable: auxiliar,
+                    descripcion: descripcion,
+                    idEstatus: estatus,
+                    idPadre: idPadre,
+                    idOpcion: idOpcion,
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    tipoPunteo: tipoPunteo,
+                    idBmerPadre: idBmerPadre
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
 
-          });
+            });
         },
 
-        getAuxiliarPunteo: function(idempresa, cuentaContable, fechaInicio, fechaCorte) {
+        getAuxiliarPunteo: function (idempresa, cuentaContable, fechaInicio, fechaCorte) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'auxiliarPunteo/',
                 method: "GET",
@@ -78,7 +78,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getAuxiliarDPI: function(idempresa, cuentaContable) {
+        getAuxiliarDPI: function (idempresa, cuentaContable) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'auxiliarDPI/',
                 method: "GET",
@@ -94,7 +94,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
         },
 
 
-        getBancoPunteo: function(idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
+        getBancoPunteo: function (idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
                 method: "GET",
@@ -112,7 +112,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-         getBancoDPI: function(idempresa, cuentaBancaria) {
+        getBancoDPI: function (idempresa, cuentaBancaria) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoDPI/',
                 method: "GET",
@@ -128,7 +128,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
         },
 
 
-        eliminarPunteo: function(datoBusqueda, opcion, idEmpresa, idBanco) {
+        eliminarPunteo: function (datoBusqueda, opcion, idEmpresa, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'eliminarPunteo/',
                 method: "POST",
@@ -143,7 +143,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda) {
+        detallePunteo: function (idPunteo, idBanco, noCuenta, cuentaContable, accionBusqueda) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detallePunteo/',
                 method: "POST",
@@ -159,7 +159,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        sendMail: function(filename, file, fileUrl,cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
+        sendMail: function (filename, file, fileUrl, cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'sendMail/',
                 method: "POST",
@@ -178,7 +178,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                 }
             });
         },
-        generaPunteo: function(idempresa, idbanco, cuentacontable, cuentabancaria) {
+        generaPunteo: function (idempresa, idbanco, cuentacontable, cuentabancaria) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'generaPunteo/',
                 method: "POST",
@@ -194,7 +194,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        insertDepositosDPI: function(idAbonoBanco, idBanco, idEmpresa, idUsuario) {
+        insertDepositosDPI: function (idAbonoBanco, idBanco, idEmpresa, idUsuario) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertDPI/',
                 method: "POST",
@@ -210,15 +210,15 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa){
+        getBancosRef: function (idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoReferenciado/',
-                method:"GET",
-                params:{
-                    idBanco : idBanco,
-                    noCuenta : noCuenta,
-                    fechaInicio : fechaInicio,
-                    fechaCorte : fechaCorte,
+                method: "GET",
+                params: {
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    fechaInicio: fechaInicio,
+                    fechaCorte: fechaCorte,
                     idEmpresa: idEmpresa
                 },
                 headers: {
@@ -227,27 +227,27 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getContablesRef: function(cuentacontable, cuentaBanco, fechaInicio, fechaCorte, polizaPago, idEmpresa, idBanco){
+        getContablesRef: function (cuentacontable, cuentaBanco, fechaInicio, fechaCorte, polizaPago, idEmpresa, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'contableReferenciado/',
                 method: 'GET',
-                params:{
+                params: {
                     cuentaContable: cuentacontable,
                     cuentaBanco: cuentaBanco,
                     fechaInicio: fechaInicio,
                     fechaCorte: fechaCorte,
                     polizaPago: polizaPago,
                     idEmpresa: idEmpresa,
-                    idBanco : idBanco
+                    idBanco: idBanco
                 },
-                headers:{
-                     'Content-Type': 'application/json'
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
 
-        getDetalleRelacion: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
+        getDetalleRelacion: function (refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
                 method: 'GET',
@@ -262,12 +262,12 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idRegistroBancario: idRegistroBancario
                 },
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
-        getDetalleRelacionContables: function(refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario){
+        getDetalleRelacionContables: function (refampliada, tipoRegistro, idEmpresa, cuentaContable, fecha, polizaPago, cuentaBanco, idRegistroBancario) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRelacionBancos/',
                 method: 'GET',
@@ -282,13 +282,13 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idRegistroBancario: idRegistroBancario
                 },
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
         // Ing.LAGP
-        getDetalleAbono: function( idAbono ){
+        getDetalleAbono: function (idAbono) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRegistroAbono',
                 method: 'GET',
@@ -296,22 +296,22 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idAbono: idAbono
                 },
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
-        getRegistrosBancariosCargos: function(){
+        getRegistrosBancariosCargos: function () {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'registrosBancariosCargos',
                 method: 'GET',
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
-        detalleRegistrosBancariosCargos: function( idCargo ){
+        detalleRegistrosBancariosCargos: function (idCargo) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRegistrosBancariosCargos',
                 method: 'GET',
@@ -319,12 +319,12 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idCargo: idCargo
                 },
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
-        detalleRegistrosBancariosAbonos: function( idAbono ){
+        detalleRegistrosBancariosAbonos: function (idAbono) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRegistrosBancariosAbonos',
                 method: 'GET',
@@ -332,12 +332,12 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idAbono: idAbono
                 },
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
-        detalleRegistrosContablesAbonos: function( idAuxiliar ){
+        detalleRegistrosContablesAbonos: function (idAuxiliar) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detalleRegistrosContablesAbonos',
                 method: 'GET',
@@ -345,11 +345,73 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idAuxiliar: idAuxiliar
                 },
                 headers: {
-                    'Content-Type' : 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
         },
 
-//Fin de la llave return
+        getTotalUniverso: function (
+            idEmpresa,
+            idBanco,
+            noCuenta,
+            cuentaContable,
+            fechaElaboracion,
+            fechaCorte,
+            polizaPago,
+            opcion,
+            idUsuario
+        ) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'totalUniverso',
+                method: 'GET',
+                params: {
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    cuentaContable: cuentaContable,
+                    fechaElaboracion: fechaElaboracion,
+                    fechaCorte: fechaCorte,
+                    polizaPago: polizaPago,
+                    opcion: opcion,
+                    idUsuario: idUsuario
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
+        getTotalUniversoBancario: function (
+            idEmpresa,
+            idBanco,
+            noCuenta,
+            cuentaContable,
+            fechaElaboracion,
+            fechaCorte,
+            polizaPago,
+            opcion,
+            idUsuario
+        ) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'totalUniversoBancario',
+                method: 'GET',
+                params: {
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    cuentaContable: cuentaContable,
+                    fechaElaboracion: fechaElaboracion,
+                    fechaCorte: fechaCorte,
+                    polizaPago: polizaPago,
+                    opcion: opcion,
+                    idUsuario: idUsuario
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
+        //Fin de la llave return
     };
 });

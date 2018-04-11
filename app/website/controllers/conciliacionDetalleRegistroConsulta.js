@@ -106,8 +106,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function(req, re
     ];
    
     this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP_H', params, function(error, result) {
-
-        ///console.log('result: ',result)
+        
 
         self.view.expositor(res, {
             error: error,
@@ -128,7 +127,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function(req,
 
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function(error, result) {
-        //console.log('result: ',result)
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -260,8 +259,7 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function(req, res,
     var self = this;
     var params = [{ name: 'tipoParametro', value: 0, type: self.model.types.INT }];
     this.model.query('SEL_PARAMETROS_SP', params, function(error, result) {
-        console.log(result[0].valor, 'result de ENVIOMAIL')
-        console.log(error, 'error de ENVIOMAIL')
+        
 
            
         var nombreArchivo = req.body.nombreArchivo;
@@ -320,7 +318,7 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function(req, res,
         transporter.close;
         object.error = null;            
         object.result = 1; 
-        //console.log(object.result)
+        
         req.body = [];
     }); 
 };

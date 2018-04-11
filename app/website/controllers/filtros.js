@@ -27,8 +27,7 @@ Filtros.prototype.get_empresas = function(req, res, next) {
     var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
 
     this.model.query('SEL_EMPRESA_BY_USUARIO_SP', params, function(error, result) {
-        //console.log(error, 'soy el resultado');
-        //console.log(result, 'soy el error');
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -45,10 +44,8 @@ Filtros.prototype.get_sucursales = function(req, res, next) {
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
-    console.log( "Parametros", params );
-
     this.model.query('SEL_SUCURSAL_BY_USUARIO_SP', params, function(error, result) {
-	console.log( "Resultado", result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -90,7 +87,7 @@ Filtros.prototype.get_bancos = function(req, res, next) {
 Filtros.prototype.get_cuentabanco = function(req, res, next) {
 
     var self = this;
-    //console.log('Cuenta Bancaria', req.query.idBanco, req.query.idEmpresa)
+    
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
@@ -180,9 +177,7 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
         { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
     ];
-
-    console.log(params)
-    console.log('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP')		
+    	
 
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
         self.view.expositor(res, {
@@ -268,7 +263,7 @@ Filtros.prototype.get_depositosAplicados = function(req, res, next) {
 };
 
 Filtros.prototype.get_cartera = function(req, res, next) {
-    console.log('get_cartera');
+    
     var self = this;
 
     var params = [{ name: 'idCliente', value: req.query.cliente, type: self.model.types.INT },
