@@ -15,7 +15,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
             });
         },
 
-        insertPuntoDeposito: function (banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario) {
+        insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario, esCargoBanco, esCargoContable){ //LQMA 01042018
             console.log('conciliacionDetalleRegistroURL:', conciliacionDetalleRegistroURL)
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
@@ -30,33 +30,37 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
                     tipoPunteo: tipoPunteo,
-                    idUsuario: idUsuario
+                    idUsuario: idUsuario,
+                    esCargoBanco: esCargoBanco, //LQMA 01042018
+                    esCargoContable: esCargoContable
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
-        //LQMA add 10032018 - diBmerPadre
-        insertPunteoBancoCargoAbono: function (banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre) {
-            return $http({
-                url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
-                method: "POST",
-                data: {
-                    idDepositoBanco: banco,
-                    idAuxiliarContable: auxiliar,
-                    descripcion: descripcion,
-                    idEstatus: estatus,
-                    idPadre: idPadre,
-                    idOpcion: idOpcion,
-                    idEmpresa: idEmpresa,
-                    idBanco: idBanco,
-                    tipoPunteo: tipoPunteo,
-                    idBmerPadre: idBmerPadre
-                },
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                                                                                                                                        //LQMA add 10032018 - diBmerPadre
+        insertPunteoBancoCargoAbono: function(banco, auxiliar, descripcion, estatus, idPadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idBmerPadre, esCargoBanco, esCargoContable){ //LQMA 01042018
+          return $http ({
+            url: conciliacionDetalleRegistroURL + 'insertPunteoBancoAC/',
+            method: "POST",
+            data: {
+                idDepositoBanco: banco,
+                idAuxiliarContable: auxiliar,
+                descripcion: descripcion,
+                idEstatus: estatus,
+                idPadre: idPadre,
+                idOpcion : idOpcion,
+                idEmpresa: idEmpresa,
+                idBanco: idBanco,
+                tipoPunteo: tipoPunteo,
+                idBmerPadre: idBmerPadre,
+                esCargoBanco: esCargoBanco, //LQMA 01042018
+                esCargoContable: esCargoContable
+            },
+            headers:{
+                'Content-Type': 'application/json'
+            }
 
             });
         },

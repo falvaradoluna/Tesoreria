@@ -38,6 +38,8 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
         { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT},
         { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT},
+        { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT}, //LQMA 01042018
+        { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT} //LQMA 01042018
     ];
     
 
@@ -63,7 +65,9 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, r
                 { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
                 { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
                 { name: 'tipoPunteo', value: req.body.tipoPunteo, type: self.model.types.INT},
-                { name: 'idBmerPadre', value: req.body.idBmerPadre, type: self.model.types.INT} //LQMA add 10032018
+                { name: 'idBmerPadre', value: req.body.idBmerPadre, type: self.model.types.INT}, //LQMA add 10032018
+                { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT}, //LQMA 01042018
+                { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT} //LQMA 01042018
               ];
                    
 
@@ -174,6 +178,10 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function(req, res, ne
     
 
     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function(error, result) {
+
+      console.log('error',error)
+      console.log('result',result)
+
         self.view.expositor(res, {
             error: error,
             result: result
