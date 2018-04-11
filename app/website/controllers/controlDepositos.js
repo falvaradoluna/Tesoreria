@@ -21,7 +21,7 @@ var controlDepositos = function(conf) {
 
 controlDepositos.prototype.get_createReference = function(req, res, next) {
     var self = this;
-    console.log( 'importeDocumento',req.query.importeDocumento );
+    
     var params = [
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idSucursal', value: req.query.idSucursal, type: self.model.types.INT },
@@ -38,8 +38,6 @@ controlDepositos.prototype.get_createReference = function(req, res, next) {
         { name: 'importeAplica', value: req.query.importeAplicar, type: self.model.types.DECIMAL },
         { name: 'importeBPRO', value: req.query.importeBPRO, type: self.model.types.DECIMAL }
     ];
-
-    console.log(params);
 
     this.model.query('SEL_REFERENCIA_SP', params, function(error, result) {
         self.view.expositor(res, {
