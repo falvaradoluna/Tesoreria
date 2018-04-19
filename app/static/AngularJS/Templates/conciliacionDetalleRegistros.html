@@ -638,7 +638,7 @@
         <div class="panel col-md-12">
             <div class="col-md-12">
                 <div class="text-main">
-                    <h4>Total Registros Contables (Cargos)</h4>
+                    <h4>Total Registros Contables (Cargos y Abonos)</h4>
                 </div>
                 <table id="contableUniCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -652,12 +652,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="unicargo in universoCargo">
-                            <td> {{ unicargo.MOV_FECHOPE | date:'yyyy-MM-dd' }} </td>
-                            <td>{{ unicargo.MOV_TIPOPOL }}</td>
-                            <td>{{ unicargo.MOV_CONSPOL }}</td>
-                            <td>{{ unicargo.MOV_CONCEPTO }}</td>
-                            <td>{{ unicargo.MOV_DEBE }}</td>
+                        <tr ng-repeat="unicontable in universoContable">
+                            <td> {{ unicontable.MOV_FECHOPE | date:'yyyy-MM-dd' }} </td>
+                            <td>{{ unicontable.MOV_TIPOPOL }}</td>
+                            <td>{{ unicontable.MOV_CONSPOL }}</td>
+                            <td>{{ unicontable.MOV_CONCEPTO }}</td>
+                            <td>{{ unicontable.MOV_DEBE | currency}}</td>
                             <!-- <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                                 <td class="text-center">
                                     <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
@@ -729,7 +729,7 @@
             
             <div class="col-md-12">
                 <div class="text-main">
-                    <h4>Total Registros Bancarios (Cargos)</h4>
+                    <h4>Total Registros Bancarios (Cargos y Abonos)</h4>
                 </div>
                 <table id="contableUniBancarioCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -743,12 +743,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="unicargo in universoBancarioCargo">
-                            <td> {{ unicargo.fechaOperacion | date:'yyyy-MM-dd' }} </td>
-                            <td>{{ unicargo.noCuenta }}</td>
-                            <td>{{ unicargo.referencia }}</td>
-                            <td>{{ unicargo.concepto }}</td>
-                            <td>{{ unicargo.importe }}</td>
+                        <tr ng-repeat="uniBanco in universoBancario">
+                            <td> {{ uniBanco.fechaOperacion | date:'yyyy-MM-dd' }} </td>
+                            <td>{{ uniBanco.noCuenta }}</td>
+                            <td>{{ uniBanco.referencia }}</td>
+                            <td>{{ uniBanco.concepto }}</td>
+                            <td>{{ uniBanco.importe | currency }}</td>
                             <!-- <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                                 <td class="text-center">
                                     <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
@@ -784,7 +784,7 @@
                             <td>{{ uniabono.noCuenta }}</td>
                             <td>{{ uniabono.referencia }}</td>
                             <td>{{ uniabono.concepto }}</td>
-                            <td>{{ uniabono.importe }}</td>
+                            <td>{{ uniabono.importe | currency}}</td>
                             <!-- <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                                     <td class="text-center">
                                         <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
