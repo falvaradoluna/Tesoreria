@@ -416,6 +416,23 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
             });
         },
 
+        guardarHistorico: function(idUsuario, idEmpresa, idBanco, cuentaContable, cuentaBancaria) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'guardarHistorico/',
+                method: "GET",
+                params: {                    
+                    idUsuario: idUsuario,
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    cuentaContable: cuentaContable,
+                    cuentaBancaria: cuentaBancaria
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        }
+
         //Fin de la llave return
     };
 });

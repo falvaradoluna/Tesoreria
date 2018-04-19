@@ -478,24 +478,21 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistrosBancariosAbonos = func
     var self = this;
     var idAbono = req.query.idAbono;
 
-    var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT }];
+    var params = [{ name: 'IDABONOSBANCOS', value: idAbono, type: self.model.types.INT }];
 
+    this.model.query('[dbo].[SEL_CONCILIADOS_ABONOBAN_CARGOCON_SP]', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
-            result: "Hola"
+            error: error,
+            result: result
         });
-
-    // this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP]', params, function (error, result) {
-        
-    //     self.view.expositor(res, {
-    //         error: error,
-    //         result: result
-    //     });
-    // });
+    });
 };
 
 /** 
  * ING. LAGP
- * api/conciliacionDetalleRegistro/detalleRegistrosBancariosAbonos
+ * api/conciliacionDetalleRegistro/detalleRegistrosContablesAbonos
 */
 conciliacionDetalleRegistro.prototype.get_detalleRegistrosContablesAbonos = function (req, res, next) {
     
@@ -588,6 +585,39 @@ conciliacionDetalleRegistro.prototype.get_totalUniversoBancario = function (req,
                 
     this.model.query('[dbo].[SEL_BANCARIO_TODO_SP]', params, function (error, result) {
         
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+//../guardarHistorico
+conciliacionDetalleRegistro.prototype.get_guardarHistorico = function (req, res, next) {
+    var self = this;
+    var idUsuario = req.query.idUsuario;
+    var idBanco = req.query.idBanco;
+    var idEmpresa = req.query.idEmpresa;
+    var cuentaContable = req.query.cuentaContable;
+    var cuentaBancaria = req.query.cuentaBancaria;
+
+    var params = [
+        { name: 'idUsuario', value: idUsuario, type: self.model.types.INT },
+        { name: 'idBanco', value: idBanco, type: self.model.types.INT },
+        { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
+        { name: 'cuentaContable', value: cuentaContable, type: self.model.types.INT },
+        { name: 'cuentaBancaria', value: cuentaBancaria, type: self.model.types.INT }
+    ];
+
+    console.log( "params", params );
+
+    // self.view.expositor(res, {
+        
+    //     result: "LLegue we a guardar historico"
+    // });
+    this.model.query('INS_GUARDAHISTORICO_SP', params, function(error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result

@@ -320,13 +320,13 @@ $scope.init = function() {
     };
      
     $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
-        
+        console.log("Si es aqui");
         $rootScope.registrosBancariosAbonos[0] = abonosData;
         $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
         
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS )
         .then(function(result){
-            
+            console.log( 'result',result );
             $('#regBancariosAbonoDetalle').modal('show');
             // if($rootScope.detalleAbono.length> 0){
             // }

@@ -49,6 +49,10 @@ var registrationModule = angular.module("registrationModule", ["ngRoute", "color
             controller: 'interesController'
         });
 
+        $routeProvider.when('/conciliacionDetalleConsulta', {
+            templateUrl: 'AngularJS/Templates/conciliacionDetalleRegistrosConsulta.html', //FAL 19012017
+            controller: 'conciliacionDetalleRegistroConsultaController'
+        });
 
         $routeProvider.when('/controlDepositos', {
             templateUrl: 'AngularJS/Templates/controldepositos.html', //FAL 19012017

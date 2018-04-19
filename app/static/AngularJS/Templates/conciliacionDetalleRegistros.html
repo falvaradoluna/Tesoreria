@@ -79,24 +79,16 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
-                                        <!--a class="btn btn-warning pull-right" ng-click="desSeleccionar()"><i class="ti-layout-list-thumb"></i> Quitar Selección</a-->&nbsp;&nbsp;
                                         <a class="btn btn-success pull-right" ng-click="mostrarTodos()">
                                             <i class="ti-control-shuffle"></i>Todos</a>&nbsp;&nbsp;
                                         <a class="btn btn-primary pull-right" ng-click="mostrarNoPunteados()">
                                             <i class="ti-control-shuffle"></i>No punteados</a>
                                     </div>
-                                    <!--div class="col-sm-1">
-                            <button type="button" class="btn btn-primary pull-right" ng-click="desSeleccionar()">Quitar Selección</button>
-                        </div>
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-success pull-right" ng-click="mostrarTodos()">Todos</button>
-                        </div>
-                        <div class="col-sm-1">
-                            <button type="button" class="btn btn-warning pull-right" ng-click="mostrarNoPunteados()">No punteados</button>
-                        </div-->
                                     <div class="col-sm-6" id="panelGrupos">
                                         <div id="divGrupos" class="divContainerGrupoPunteo">
-
+                                            <button ng-click="guardarHistorico()"" class="btn btn-primary pull-right" style="height: 50px;">
+                                                Guardar estatus de la conciliacion
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -726,7 +718,7 @@
     <!--Inicio del septimo Tab / Registros Universo Total-->
     <div id="totalUniversoBancarios" class="tabcontent">
         <div class="panel col-md-12">
-            
+
             <div class="col-md-12">
                 <div class="text-main">
                     <h4>Total Registros Bancarios (Cargos y Abonos)</h4>
