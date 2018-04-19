@@ -53,10 +53,10 @@
     //Variables para obtener los valores para el stored de total
     $scope.busquedaUniverso = JSON.parse(localStorage.getItem("paramBusqueda")); 
     $scope.usuarioData = JSON.parse( localStorage.getItem( "ls.userData" ) );
-    $scope.universoAbono = [];
-    $scope.universoCargo = [];
-    $scope.universoBancarioAbono = [];
-    $scope.universoBancarioCargo = [];
+    //$scope.universoAbono = [];
+    $scope.universoContable = [];
+    $scope.universoBancario = [];
+    //$scope.universoBancarioCargo = [];
 
 $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
@@ -365,13 +365,16 @@ $scope.init = function() {
             //console.log( "resultUniverso", result );
             if( result.data.length != 0 ){
                 
+                /*
                 for( var i = 0; i < result.data.length; i++ ){
                     if( result.data[i].tipoMovimiento == 0 ){
                         $scope.universoCargo.push( result.data[i] );
                     }else{
                         $scope.universoAbono.push( result.data[i] );
                     }
-                }
+                }*/
+                $scope.universoContable = result.data;
+
                 $scope.tabla('contableUniCargo');
                 $scope.tabla('contableUniAbonos');
             }else{
@@ -398,13 +401,16 @@ $scope.init = function() {
         .then(function(result){
             console.log( "resultUniversoBancario", result );
             if( result.data.length != 0 ){
+                /*
                 for( var i = 0; i < result.data.length; i++ ){
                     if( result.data[i].tipoMovimiento == 0 ){
                         $scope.universoBancarioCargo.push( result.data[i] );
                     }else{
                         $scope.universoBancarioAbono.push( result.data[i] );
                     }
-                }
+                }*/
+                $scope.universoBancario = result.data;
+
                 $scope.tabla('contableUniBancarioCargo');
                 $scope.tabla('contableUniBancarioAbono');
             }else{
