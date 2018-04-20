@@ -57,12 +57,12 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function (req, res
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.cuentaBancaria, type: self.model.types.STRING },
-        { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
+    
     this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP_H', params, function (error, result) {
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -77,15 +77,12 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function (r
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-        { name: 'noCuenta', value: req.query.numero_cuenta, type: self.model.types.STRING },
-        { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
-        { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
-        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
+    console.log( 'auxiliarContableParams', params );
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'eresult', result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -156,10 +153,9 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res,
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
     ];
-    console.log( 'dpiParams', params );
+    
     this.model.query('SEL_DEPOSITOSDPI_H', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result

@@ -39,7 +39,7 @@
                 </div>
         <!--Inicio del primer Tab Detalle de Registros no Punteados-->
         <div id="CargosSinPuntear" class="tabcontent" style="display: block;">
-        <div ng-controller="conciliacionDetalleRegistroGridsController">
+        <div ng-controller="conciliacionDetalleRegistroGridsConsultaController">
         <!--LQMA add 24082017 colorpicker y grupos de colores BEGIN-->
                 <div class="panel panel-default">        
                     <div class="panel-body">
@@ -881,7 +881,7 @@
                     <br>
                     <h4 class="text-title">Deseas guardar la relación de registros seleccionados?
                         <span>
-                            <span ng-controller="conciliacionDetalleRegistroGridsController">
+                            <span ng-controller="conciliacionDetalleRegistroGridsConsultaController">
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaPunteoPrevio()"><i class="ti-close"></i> Cancelar</button>
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -912,7 +912,7 @@
                     <br>
                     <h4 class="text-title">Deseas continuar con el envío a DPI?
                         <span>
-                            <span ng-controller="conciliacionDetalleRegistroGridsController">
+                            <span ng-controller="conciliacionDetalleRegistroGridsConsultaController">
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaPunteoDPI()"><i class="ti-close"></i> Cancelar</button>
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>

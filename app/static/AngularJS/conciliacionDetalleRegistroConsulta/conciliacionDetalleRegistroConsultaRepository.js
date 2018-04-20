@@ -59,17 +59,16 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_DEPOSITOS_REFERENCIADOS_SP_H
-        getDepositos: function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, idEmpresa) {
+        getDepositos: function(idBanco, idestatus, cuentaBancaria, idEmpresa, idHistorico) {
             return $http({
-                url: filtrosURL + 'depositos/',
+                url: conciliacionDetalleRegistroConsultaURL + 'depositos/',
                 method: "GET",
                 params: {
                     idBanco: idBanco,
                     idEstatus: idestatus,
                     cuentaBancaria: cuentaBancaria,
-                    fElaboracion: fElaboracion,
-                    fCorte: fCorte,
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -78,19 +77,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H
-        getAuxiliar: function(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
+        getAuxiliar: function(idEmpresa, idBanco, idHistorico) {
             return $http({
-                url: filtrosURL + 'auxiliarContable/',
+                url: conciliacionDetalleRegistroConsultaURL + 'auxiliarContable/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
-                    numero_cuenta: numero_cuenta,
-                    idEstatus: idestatus,
-                    fElaboracion: fElaboracion,
-                    fCorte: fCorte,
-                    polizaPago: polizaPago,
-                    cuentaBancaria: cuentaBancaria
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
