@@ -279,7 +279,6 @@ $scope.init = function() {
     };
 
     $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
-        console.log( "idCargo", idCargo );
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosCargos( idCargo )
         .then(function(result){
             
@@ -322,7 +321,6 @@ $scope.init = function() {
     };
      
     $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
-        console.log("Si es aqui");
         $rootScope.registrosBancariosAbonos[0] = abonosData;
         $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
         
@@ -406,7 +404,6 @@ $scope.init = function() {
             $scope.usuarioData.idUsuario
         )
         .then(function(result){
-            console.log( "resultUniversoBancario", result );
             if( result.data.length != 0 ){
                 /*
                 for( var i = 0; i < result.data.length; i++ ){

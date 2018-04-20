@@ -159,13 +159,18 @@
                     </div>
                 </div>
             <div class="col-md-12" ng-show="mesActivo">
-            <a class="btn btn-danger pull-right"  ng-click="ShowAlertDPI()"><i class="ti-layout-list-thumb"></i> Envíar  a  DPI</a>
-               &nbsp;&nbsp; <a class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()"><i class="ti-control-shuffle">  </i>Punteo</a>
+            <button disabled class="btn btn-danger pull-right"  ng-click="ShowAlertDPI()">
+                <i class="ti-layout-list-thumb"></i> Envíar  a  DPI
+            </button>
+               &nbsp;&nbsp; 
+                <button disabled class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()"><i class="ti-control-shuffle">  </i>
+                    Punteo
+                </button>
                 <br>
                 <br/> &nbsp;
             </div>
             </div>
-            <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController">
+            <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsConsultaController">
                 <br>
                 <br>
                 <div class="col-md-12" ng-init="init()">
@@ -241,7 +246,9 @@
             <div class="col-md-12">
                 <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
                     <a class="btn btn-warning" href="/conciliacionInicio "><i class="ti-back-right"></i> Regresar</a> &nbsp;
-                    <button class="btn btn-success" ng-click="generaAlertaPunteo()" ng-show="mesActivo"><i class="ti-harddrives">  </i>Generar Punteo</button>
+                    <button disabled class="btn btn-success" ng-click="generaAlertaPunteo()" ng-show="mesActivo"><i class="ti-harddrives">  </i>
+                        Generar Punteo
+                    </button>
                 </div>
                 <br>
                 <br/> &nbsp;

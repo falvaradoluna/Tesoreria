@@ -1,7 +1,5 @@
 registrationModule.controller('conciliacionDetalleRegistroConsultaController', function ($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
-    console.log( 'conciliacionDetalleRegistroConsultaController' );
-    console.log( 'localParams', JSON.parse(localStorage.getItem('paramBusqueda')) );
-    // ****************** Se guarda la información del usuario en variable userData
+       // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $scope.nodoPadre = [];
     $scope.abonoAuxiliar = 0;
