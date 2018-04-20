@@ -3,6 +3,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $rootScope.showBotones = localStorageService.get('ShowBtns')[0];
+    $rootScope.paramsSaveHistori = JSON.parse(localStorage.getItem('paramBusqueda'));
     $scope.nodoPadre = [];
     $scope.abonoAuxiliar = 0;
     $scope.cargoAuxiliar = 0;
@@ -192,4 +193,19 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
 
     //****************************************************************************************************
 
+    //LAGP
+    $scope.guardarHistorico = function() {
+        console.log( "Guardar el historico" ); 
+        console.log( "Usuario", $rootScope.userData.idUsuario );
+        console.log( "Parametro", $rootScope.paramsSaveHistori );
+        conciliacionDetalleRegistroRepository.guardarHistorico( $rootScope.userData.idUsuario, 
+                                                                $rootScope.paramsSaveHistori.IdEmpresa,
+                                                                $rootScope.paramsSaveHistori.IdBanco,
+                                                                $rootScope.paramsSaveHistori.CuentaContable,
+                                                                $rootScope.paramsSaveHistori.Cuenta )
+        .then(function( result ){
+            console.log( 'result', result );
+        });
+
+    };
 });

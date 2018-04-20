@@ -55,6 +55,23 @@ registrationModule.factory('conciliacionInicioConsultaRepository', function($htt
                 },
                 responseType: 'arraybuffer'
             });
+        },
+
+        getHistorico: function(idUsuario, idEmpresa, idBanco, cuentaContable, cuentaBancaria) {
+            return $http({
+                url: conciliacionInicioConsultaURL + 'historico/',
+                method: "GET",
+                params: {                    
+                    idUsuario: idUsuario,
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    cuentaContable: cuentaContable,
+                    cuentaBancaria: cuentaBancaria
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
         }
 
 //Fin de la llave "return"
