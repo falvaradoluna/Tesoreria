@@ -37,6 +37,7 @@
     $scope.bancoId;
     $scope.bancariaCuenta;
     $scope.contableCuenta;
+    $rootScope.fechaHistorico;
 
     $scope.init = function () {
 
@@ -151,13 +152,13 @@
 
     $scope.getTotalesAbonoCargo = function () {
 
-        console.log($scope.fechaElaboracion.substr(-5, 2));
+        //console.log($scope.fechaElaboracion.substr(-5, 2));
         if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
             alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
         }
         else {
 
-            console.log($scope.cuentaActual);
+           // console.log($scope.cuentaActual);
             localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
 
             localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
@@ -169,8 +170,7 @@
                 if (result.data.length > 0) {
                     $scope.totalesAbonosCargos = result.data;
                     $scope.mesActivo = result.data[0].mesActivo;
-                    console.log( 'result', result );
-
+                    $rootScope.fechaHistorico = result.data[0].fecha;
                     //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
                     // if ($scope.mesActivo != 1) {
@@ -180,11 +180,26 @@
                     $scope.paramBusqueda = [];
 
                     setTimeout(function () {
-                        $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreContador, "gerente": $scope.contadorGerente[0].NombreGerente, "usuario": $scope.contadorGerente[0].Usuario, "fechaElaboracion": $scope.fechaElaboracion, "fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago };
+                        $scope.paramBusqueda = { 
+                            "IdBanco": $scope.cuentaActual.IdBanco, 
+                            "Banco": $scope.cuentaActual.NOMBRE, 
+                            "IdEmpresa": $scope.cuentaActual.IdEmpresa, 
+                            "Empresa": $scope.empresaActual.emp_nombre, 
+                            "Cuenta": $scope.cuentaActual.Cuenta, 
+                            "CuentaContable": $scope.cuentaActual.CuentaContable, 
+                            "contador": $scope.contadorGerente[0].NombreContador, 
+                            "gerente": $scope.contadorGerente[0].NombreGerente, 
+                            "usuario": $scope.contadorGerente[0].Usuario, 
+                            "fechaElaboracion": $scope.fechaElaboracion, 
+                            "fechaCorte": $scope.fechaCorte, 
+                            "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, 
+                            "MesActivo": $scope.mesActivo, 
+                            "PolizaPago": $scope.empresaActual.polizaPago, 
+                            "HistoricoId": result.data[0].idHistorico, 
+                            "FechaHistoricoSave": result.data[0].fecha 
+                        };
                         localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
-                        console.log('$scope.paramBusqueda')
-                        console.log($scope.paramBusqueda)
-
+                        // console.log('$scope.paramBusqueda', $scope.paramBusqueda);                        
                     }, 1000);
 
                     $scope.enableBottonReport = false;
@@ -315,7 +330,7 @@
     };
 
     $scope.go = function (path) {
-        console.log( 'go', path );
+        // console.log( 'go', path );
         if (!$scope.enableBottonReport) {
             $location.path(path);
         }
@@ -324,14 +339,9 @@
     //********************************************Luis Antonio Garcia Perrusquia***********************************
 
     $scope.getHistorico = function () {
-        console.log("Local", $rootScope.userData);
-        console.log( 'Empresa', $scope.empresaId );
-        console.log( 'Banco', $scope.bancoId );
-        console.log( 'cuentaBancaria', $scope.bancariaCuenta );
-        console.log( 'contableCuenta', $scope.contableCuenta );
         conciliacionInicioConsultaRepository.getHistorico( $rootScope.userData, $scope.empresaId, $scope.bancoId, $scope.contableCuenta, $scope.bancariaCuenta )
         .then(function(result){
-            console.log( 'result', result );
+            //console.log( 'result', result );
         });
     };
 
