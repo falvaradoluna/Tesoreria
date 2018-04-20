@@ -12,9 +12,9 @@
             <!--Div Fecha Actual-->
                 <div class="media-body">
                             <div class="text-right">
-                          <p class="text-danger mar-no">Fecha y Hora Actual</p>
-                          <p class="text-1x mar-no text-semibold">&nbsp;{{FechahoraActual}}</p>
-                          <p id="liveclock" class="text-1x mar-no text-semibold"></p>
+                          <p class="text-danger mar-no">Fecha de captura:</p>
+                          <p class="text-1x mar-no text-semibold">&nbsp;{{ fechaHistoricoSave }}</p>
+                          <!-- <p id="liveclock" class="text-1x mar-no text-semibold"></p> -->
                         </div>
                         </div>
                 <!--Fin Div Fecha Actual-->
@@ -26,7 +26,7 @@
                 </div>
                 
 
-                <div class="tab">
+                <div class="tab" style="background-color: green">
                 <button class="tablinks active" onclick="openCity(event, 'CargosSinPuntear')"><span style="color:white; font-weight: bold;"> Registros sin Puntear </span></button>
                 <button class="tablinks" onclick="openCity(event, 'CargosPunteados')"><span style="color:white; font-weight: bold;"> Registros Punteados</span></button>
                 <button class="tablinks" onclick="openCity(event, 'DepositosDPI')"><span style="color:white; font-weight: bold;"> Depositos por Identificar</span></button>
