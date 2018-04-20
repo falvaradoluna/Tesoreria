@@ -100,7 +100,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 datoBusqueda = '';
             }
             else {
-                alertFactory.error('No existen punteos en este detalle')
+                alertFactory.error('No existen punteos en este detalle');
             }
             
         });
@@ -195,16 +195,19 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
 
     //LAGP
     $scope.guardarHistorico = function() {
-        console.log( "Guardar el historico" ); 
-        console.log( "Usuario", $rootScope.userData.idUsuario );
-        console.log( "Parametro", $rootScope.paramsSaveHistori );
         conciliacionDetalleRegistroRepository.guardarHistorico( $rootScope.userData.idUsuario, 
                                                                 $rootScope.paramsSaveHistori.IdEmpresa,
                                                                 $rootScope.paramsSaveHistori.IdBanco,
                                                                 $rootScope.paramsSaveHistori.CuentaContable,
-                                                                $rootScope.paramsSaveHistori.Cuenta )
+                                                                $rootScope.paramsSaveHistori.Cuenta 
+        )
         .then(function( result ){
             console.log( 'result', result );
+            if( result.data[0].estatus == 0 ){
+                alertFactory.success(result.data[0].mensaje);
+            }else{
+                alertFactory.error(result.data[0].mensaje);
+            }
         });
 
     };
