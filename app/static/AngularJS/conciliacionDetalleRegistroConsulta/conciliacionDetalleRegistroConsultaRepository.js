@@ -99,7 +99,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_PUNTEO_DEPOSITOS_PADRES_SP_H
-        getBancoPunteo: function(idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
+        getBancoPunteo: function(idempresa, cuentaBancaria, idBanco, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoPunteo/',
                 method: "GET",
@@ -107,8 +107,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idEmpresa: idempresa,
                     cuentaBancaria: cuentaBancaria,
                     idBanco: idBanco,
-                    fechaInicio: fechaInicio,
-                    fechaCorte: fechaCorte
+                    idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -117,15 +116,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_PUNTEO_AUXILIAR_PADRES_SP_H      
-        getAuxiliarPunteo: function(idempresa, cuentaContable, fechaInicio, fechaCorte) {
+        getAuxiliarPunteo: function(idempresa, cuentaContable, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'auxiliarPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
                     cuentaContable: cuentaContable,
-                    fechaInicio: fechaInicio,
-                    fechaCorte: fechaCorte
+                    idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -134,13 +132,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },     
         //SEL_DEPOSITOSDPI_H
-        getBancoDPI: function(idempresa, cuentaBancaria) {
+        getBancoDPI: function(idempresa, cuentaBancaria, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoDPI/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
-                    cuentaBancaria: cuentaBancaria
+                    cuentaBancaria: cuentaBancaria,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'

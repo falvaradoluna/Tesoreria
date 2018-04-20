@@ -11,7 +11,7 @@ var JSZip = require("jszip");
 var zip = new JSZip();
 
 
-var conciliacionDetalleRegistroConsulta = function(conf) {
+var conciliacionDetalleRegistroConsulta = function (conf) {
     this.conf = conf || {};
 
     this.view = new conciliacionDetalleRegistroConsultaView();
@@ -19,29 +19,29 @@ var conciliacionDetalleRegistroConsulta = function(conf) {
         parameters: this.conf.parameters
     });
 
-    this.response = function() {
+    this.response = function () {
         this[this.conf.funcionalidad](this.conf.req, this.conf.res, this.conf.next);
     };
 };
 
-conciliacionDetalleRegistroConsulta.prototype.post_totalAbonoCargo = function(req, res, next) {
-    
+conciliacionDetalleRegistroConsulta.prototype.post_totalAbonoCargo = function (req, res, next) {
+
     var self = this;
 
     var params = [{ name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-                  { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.STRING },
-                  { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.STRING },
-                  { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING},
-                  { name: 'fechaElaboracion', value: req.body.fechaElaboracion, type: self.model.types.STRING},
-                  { name: 'fechaCorte', value: req.body.fechaCorte, type: self.model.types.STRING},
-                  { name: 'polizaPago', value: req.body.polizaPago, type: self.model.types.STRING},
-                  { name: 'opcion', value: req.body.opcion, type: self.model.types.INT},
-                  { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT} //LQMA ADD 06032018
-                  ];
-                     
-    
-    this.model.query('SEL_TOTAL_ABONOCARGO_SP_H', params, function(error, result) {
-    
+        { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.STRING },
+        { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.STRING },
+        { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: req.body.fechaElaboracion, type: self.model.types.STRING },
+        { name: 'fechaCorte', value: req.body.fechaCorte, type: self.model.types.STRING },
+        { name: 'polizaPago', value: req.body.polizaPago, type: self.model.types.STRING },
+        { name: 'opcion', value: req.body.opcion, type: self.model.types.INT },
+        { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT } //LQMA ADD 06032018
+    ];
+
+
+    this.model.query('SEL_TOTAL_ABONOCARGO_SP_H', params, function (error, result) {
+
         self.view.expositor(res, {
             error: error,
             result: result
@@ -50,7 +50,7 @@ conciliacionDetalleRegistroConsulta.prototype.post_totalAbonoCargo = function(re
 };
 
 
-conciliacionDetalleRegistroConsulta.prototype.get_depositos = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_depositos = function (req, res, next) {
 
     var self = this;
 
@@ -62,7 +62,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function(req, res,
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
-    this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP_H', params, function(error, result) {
+    this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP_H', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -71,7 +71,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function(req, res,
 };
 
 
-conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function (req, res, next) {
 
     var self = this;
 
@@ -84,8 +84,8 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function(re
         { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
     ];
-    
-    this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function(error, result) {
+
+    this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -93,41 +93,18 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function(re
     });
 };
 
-conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function(req, res, next) {
-
-    var self = this;
-
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-                  { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
-                  { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-                  { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
-                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
-    ];
-   
-    this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP_H', params, function(error, result) {
-        
-
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-};
-
-conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, res, next) {
 
     var self = this;
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-                  { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-                  { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
-                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
+        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
 
+    this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP_H', params, function (error, result) {
 
-    this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function(error, result) {
-        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -135,37 +112,35 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function(req,
     });
 };
 
-conciliacionDetalleRegistroConsulta.prototype.post_detallePunteo = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req, res, next) {
+    var self = this;
+
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
+    ];
+
+    this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function (error, result) {
+
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+conciliacionDetalleRegistroConsulta.prototype.post_detallePunteo = function (req, res, next) {
 
     var self = this;
 
     var params = [{ name: 'idDatoBusqueda', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT },
-                   {name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-                   {name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
-                   {name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-                   {name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
-                   ];                   
-
-    this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function(error, result) {
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-};
-
-
-conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function(req, res, next) {
-
-    var self = this;
-
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+        { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
+        { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
+        { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
     ];
 
-    this.model.query('SEL_DEPOSITOSDPI_H', params, function(error, result) {
-
+    this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -173,19 +148,38 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function(req, res, 
     });
 };
 
-conciliacionDetalleRegistroConsulta.prototype.get_bancoReferenciado = function(req, res, next) {
+
+conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res, next) {
+
+    var self = this;
+    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
+    ];
+    console.log( 'dpiParams', params );
+    this.model.query('SEL_DEPOSITOSDPI_H', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+conciliacionDetalleRegistroConsulta.prototype.get_bancoReferenciado = function (req, res, next) {
 
     var self = this;
 
 
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-                  { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING},
-                  { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
-                  { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
-                  { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT}
-                 ];
+        { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
+        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
+        { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+    ];
 
-        this.model.query('SEL_REG_BANCOS_REFERENCIADOS_H', params, function(error, result) {
+    this.model.query('SEL_REG_BANCOS_REFERENCIADOS_H', params, function (error, result) {
 
         self.view.expositor(res, {
             error: error,
@@ -195,7 +189,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoReferenciado = function(r
 };
 
 
-conciliacionDetalleRegistroConsulta.prototype.post_reportePdf = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.post_reportePdf = function (req, res, next) {
     var filename = guid();
     var filePath = path.dirname(require.main.filename) + "\\pdf\\" + filename + ".pdf";
     var options = {
@@ -207,17 +201,17 @@ conciliacionDetalleRegistroConsulta.prototype.post_reportePdf = function(req, re
             "content-type": "application/json"
         }
     };
-    var request = http.request(options, function(response) {
+    var request = http.request(options, function (response) {
         var chunks = [];
 
-        response.on("data", function(chunk) {
+        response.on("data", function (chunk) {
             chunks.push(chunk);
         });
 
-        response.on("end", function() {
+        response.on("end", function () {
             var body = Buffer.concat(chunks);
 
-            fs.writeFile(filePath, body, function(err) {
+            fs.writeFile(filePath, body, function (err) {
                 if (err) return console.log(err);
             });
 
@@ -242,12 +236,12 @@ function guid() {
         s4() + '_' + s4() + s4() + s4();
 };
 
-conciliacionDetalleRegistroConsulta.prototype.get_viewpdf = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_viewpdf = function (req, res, next) {
 
     var filename = req.query.fileName;
     var filePath = path.dirname(require.main.filename) + "\\pdf\\" + filename + ".pdf";
 
-    fs.readFile(filePath, function(err, file) {
+    fs.readFile(filePath, function (err, file) {
         res.writeHead(200, { "Content-Type": "application/pdf" });
         res.write(file, "binary");
         res.end();
@@ -255,14 +249,14 @@ conciliacionDetalleRegistroConsulta.prototype.get_viewpdf = function(req, res, n
     });
 };
 
-conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function(req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function (req, res, next) {
     var self = this;
     var params = [{ name: 'tipoParametro', value: 0, type: self.model.types.INT }];
-    this.model.query('SEL_PARAMETROS_SP', params, function(error, result) {
-        
+    this.model.query('SEL_PARAMETROS_SP', params, function (error, result) {
 
-           
-        var nombreArchivo = req.body.nombreArchivo;
+
+
+        var  nombreArchivo = req.body.nombreArchivo;
         var cuentaContable = req.body.cuentaContable;
         var nombreEmpresa = req.body.nombreEmpresa;
         var cuentaBancaria = req.body.cuentaBancaria;
@@ -274,7 +268,7 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function(req, res,
         var files = [];
         var ruta = path.dirname(require.main.filename) + "\\pdf\\" + nombreArchivo + ".pdf";
         var extension = '.pdf';
-        var carpeta = 'pdf'; 
+        var carpeta = 'pdf';
         var nodemailer = require('nodemailer');
         var smtpTransport = require('nodemailer-smtp-transport');
         var transporter = nodemailer.createTransport(smtpTransport({
@@ -292,20 +286,20 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function(req, res,
             to: 'rolivares@bism.com.mx', // list of receivers 
             subject: 'Prueba si envia subject', // Subject line 
             text: result[1].valor, // plaintext body 
-            html: '<b>' + result[1].valor + '</b><br/><br/><br/><b>Empresa: </b>' + nombreEmpresa + '<br/><b>Cuenta contable: </b>' + cuentaContable + '<br/><b>Banco: </b>'+ nombreBanco + '<br/><b>Cuenta bancaria: </b>'+ cuentaBancaria + '<br/><br/><b>Realizó: </b>' + responsable, // html body 
+            html: '<b>' + result[1].valor + '</b><br/><br/><br/><b>Empresa: </b>' + nombreEmpresa + '<br/><b>Cuenta contable: </b>' + cuentaContable + '<br/><b>Banco: </b>' + nombreBanco + '<br/><b>Cuenta bancaria: </b>' + cuentaBancaria + '<br/><br/><b>Realizó: </b>' + responsable, // html body 
             attachments: [{ // file on disk as an attachment
                 filename: nombreArchivo + '.pdf',
                 path: ruta // stream this file
             }]
         };
-        setTimeout(function() {
-            transporter.sendMail(mailOptions, function(error, info) {
+        setTimeout(function () {
+            transporter.sendMail(mailOptions, function (error, info) {
                 if (error) {
                     res.send(500);
                     console.log(error);
                 } else {
                     res.send(200);
-                    fs.stat(ruta, function(err, stats) {
+                    fs.stat(ruta, function (err, stats) {
                         if (err) {
                             return console.error(err);
                         }
@@ -316,30 +310,30 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function(req, res,
 
 
         transporter.close;
-        object.error = null;            
-        object.result = 1; 
-        
+        object.error = null;
+        object.result = 1;
+
         req.body = [];
-    }); 
+    });
 };
 
 
-conciliacionDetalleRegistroConsulta.prototype.get_contableReferenciado = function(req, res,next){
-  var self = this;
-  var params =[{name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING},
-               {name: 'cuentaBancaria', value: req.query.cuentaBanco, type: self.model.types.STRING},
-               {name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING},
-               {name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING},
-               {name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING},
-               {name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT},
-               {name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT}
-              ];
-  this.model.query('SEL_REG_CONTABLES_REF_H', params, function(error, result){
-       self.view.expositor(res,{
+conciliacionDetalleRegistroConsulta.prototype.get_contableReferenciado = function (req, res, next) {
+    var self = this;
+    var params = [{ name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING },
+        { name: 'cuentaBancaria', value: req.query.cuentaBanco, type: self.model.types.STRING },
+        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
+        { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING },
+        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }
+    ];
+    this.model.query('SEL_REG_CONTABLES_REF_H', params, function (error, result) {
+        self.view.expositor(res, {
             error: error,
             result: result
-       });
-  });
+        });
+    });
 };
 
 

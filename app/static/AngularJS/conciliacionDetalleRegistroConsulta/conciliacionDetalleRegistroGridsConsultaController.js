@@ -155,7 +155,6 @@
 
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
-                    console.log($scope.gridDepositosBancos.data, 'Desposito Bancario');
                      //LQMA 17082017 add
                     $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, $scope.busqueda.Cuenta);
                 }
@@ -173,11 +172,11 @@
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
      $scope.getAuxiliarContable = function(idEmpresa, idBanco,numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
-	    console.log('1')
+         
             filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function(result) {
-                console.log('2')
+               
 		if (result.data[0].length !=0) {
-		    console.log(result.data)
+		    
                     $scope.auxiliarContable = result.data[0];
                     $scope.gridAuxiliarContable.data = result.data[0];
 
@@ -195,7 +194,7 @@
 
 
                     localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
-                    console.log($scope.gridAuxiliarContable.data, 'Auxiliar Contable')
+                    
                      setTimeout(function() { $scope.prePunteo();}, 100); //LQMA 31
                      $('#loading').modal('hide');
                 }
@@ -241,9 +240,9 @@
                 
                     row.entity.indexPrePunteo = 99999;
                 }
-                //console.log('filtrar por indexPrePunteo: ', filtradosAuxiliar)
-                var colorRow = row.entity.color;                
-                console.log('colores',row.entity.color);
+                
+                var colorRow = row.entity.color;           
+                
                 //if(row.entity.color != '#'){
                 row.entity.color = '';
                 if(colorRow != '')
@@ -302,9 +301,9 @@
                 
                     row.entity.indexPrePunteo = 99999;
                 }
-                //console.log('filtrar por indexPrePunteo: ', filtradosAuxiliar)
-                var colorRow = row.entity.color;                
-                console.log('colores',row.entity.color);
+                
+                var colorRow = row.entity.color;         
+                
                 //if(row.entity.color != '#'){
                 row.entity.color = '';
                 if(colorRow != '')
@@ -488,7 +487,7 @@
     //LQMA 28082017
     $scope.desSeleccionar = function() {
 
-        console.log($scope.gridApiAuxiliar.grid.options.data);
+        
 
         /*
         $scope.gridApiAuxiliar.selection.clearSelectedRows();
@@ -533,14 +532,14 @@
 
 
         $scope.gridApiAuxiliar.grid.refresh()
-        //console.log('colorXXX',$scope.colorXXX)
+        
 
         $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
         $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
         $scope.gridApiAuxiliar.grid.refresh()
-        //console.log('colorXXX',$scope.colorXXX)
+        
 
         $scope.gridApiBancos.grid.api.core.raise.filterChanged();
         $scope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
@@ -584,8 +583,6 @@
             var colorAuxiliar = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function(value){
                     return value.color == color; //|| value.assignee.id === 'ak';                    
                 });
-
-            //console.log(colorBancos)
             
             color = color.replace("#","")
 
@@ -596,7 +593,6 @@
                     var myEl = angular.element( document.querySelector("#X" + color +""));
                     myEl.remove();
                 }
-                //console.log('agrega')
                  
                 //LQMA 29
                 //var divTemplate = "<div id=\"X" + color + "\" style='background-color: #"+ color +";' class='divGrupoPunteo' data-ng-click=\"setColorGrupo($event)\"><button type=\"button\" ng-click=\"saluda()\" text='O'>" + colorBancos.length + "</div>";
@@ -613,7 +609,7 @@
             }
             else
             {
-                console.log('compara para borrar')
+                
                 if (angular.element("#X" + color +"").length) {
                     var myEl = angular.element( document.querySelector("#X" + color +""));
                     myEl.remove();
@@ -720,7 +716,6 @@
 
         if($scope.hexPicker.color == '#c9dde1')
         {
-            console.log('color-->', $scope.hexPicker.color);
             $scope.hexPicker.color = '#b9b8f5'
         }
         
@@ -730,7 +725,6 @@
     $scope.filtraBanco = function(filtro)
     {   
 
-        console.log($scope.filtroBancoCarAbo)
 
         switch($scope.filtroBancoCarAbo)
         {
@@ -795,7 +789,6 @@
                                     deSel.push(value);
                                 if(value.color == $scope.hexPicker.color)
                                 {
-                                    //console.log('seleccionado: ',value.color)
                                     depoSel++;
                                 }
                             }
@@ -806,7 +799,6 @@
                                     auSel.push(value);
                                 if(value.color == $scope.hexPicker.color)
                                 {
-                                    //console.log('seleccionado: ',value.color)
                                     auxiSel++;
                                 }
                             }
@@ -871,19 +863,13 @@ $scope.crearArrayGrupos = function(deSel, auSel){
 
             var grupoActualAuxiliar = $filter('filter')(auSel, function(value){
                                             return value.color == colorActual;  
-                                        });                                
-
-            //console.log('grupo actual: ',grupoActual);
+                                        });                 
             $scope.agrupadosBancos.push(grupoActualBanco)
             $scope.agrupadosAuxiliar.push(grupoActualAuxiliar)
-
-            //console.log('busca colores: ', coloresUsados.indexOf(colorActual))
 
             filtradosColors = $filter('filter')(filtradosColors, function(value){
                                             return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;  
                                         });
-
-            //console.log('grupos restantes: ',filtradosColors);
         }
     }
 ///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
@@ -891,11 +877,8 @@ $scope.crearArrayGrupos = function(deSel, auSel){
 ///Inicia la funcion que guarda cargos - abonos Contables
 else if(deSel.length == 0 && auSel.length > 0){
         var gruposAuxiliarSolo = $filter('filter')(auSel, function(value){
-                                            //console.log(value);
                                             return (coloresUsados.indexOf(value.color) == -1)?value.color==value.color:value.color =='.........';  
                                         });
-
-        //console.log('complemento de auxiliares:',gruposAuxiliarSolo);
         
 
         while(gruposAuxiliarSolo.length > 0)
@@ -945,10 +928,6 @@ else if(deSel.length == 0 && auSel.length > 0){
 ///Finaliza la funcion que guarda cargos - abonos Contables
 
 
-        // console.log('agrupados Bancos: ', $scope.agrupadosBancos)
-        // console.log('agrupados Auxiliar: ', $scope.agrupadosAuxiliar)
-        // console.log('agrupados Auxiliar- Cargo - abono: ', $scope.agrupadosAuxiliarCargoAbono)
-
 };
 
 
@@ -981,10 +960,7 @@ else if(deSel.length == 0 && auSel.length > 0){
 
           if ($scope.control != undefined){
           $('#alertaGuardarDPI').modal('show');
-          localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
-	
-	  console.log('PunteoDPI: ')
-	  console.log(PunteoDPI)	
+          localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));	
         ///////////////////////////////////////////////////////////////////////////////
         $scope.punteoAuxiliar = [];
         $scope.punteoBanco = [];
