@@ -36,6 +36,8 @@
      //Cargos contables Abonos
      $rootScope.registroCargosAbono = [];
      $rootScope.registrosCargodAbonosTotal;
+     $rootScope.regCargoAbonoDetalle = [];
+     $rootScope.totalHijosCargos;
 
      //Variables para los resultados totales de cada Grid
      $scope.bancoReferenciadosAbonosTotales = 0;
@@ -326,10 +328,9 @@ $scope.init = function() {
         
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS )
         .then(function(result){
-            console.log( 'result',result );
+            console.log( 'result',result );//Pendiente de llenar la tabla
             $('#regBancariosAbonoDetalle').modal('show');
-            // if($rootScope.detalleAbono.length> 0){
-            // }
+            
         });
         //alertFactory.warning('Función en desarrollo...');
     };
@@ -341,12 +342,18 @@ $scope.init = function() {
         
         conciliacionDetalleRegistroRepository.detalleRegistrosContablesAbonos( abonosData.idAuxiliar )
         .then(function(result){
-            
-            $('#regCargoAbonoDetalle').modal('show');
-            if($rootScope.detalleAbono.length> 0){
+            if( result.data[1].length != 0 ){
+                //console.log( "Total", result.data[1][0].importe );
+                $rootScope.regCargoAbonoDetalle = result.data[1];
+                $rootScope.totalHijosCargos = result.data[1][0].importe;
+                console.log( 'Total', $rootScope.totalHijosCargos );
+                $('#regCargoAbonoDetalle').modal('show');
+            }else{
+                alertFactory.warning('No se encontraron datos');
             }
+           
+            
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.getTotalUniverso = function (){
