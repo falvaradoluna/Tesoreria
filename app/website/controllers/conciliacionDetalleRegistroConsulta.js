@@ -79,10 +79,9 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function (r
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-    console.log( 'auxiliarContableParams', params );
+    
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'eresult', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -166,15 +165,12 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res,
 conciliacionDetalleRegistroConsulta.prototype.get_bancoReferenciado = function (req, res, next) {
 
     var self = this;
-
-
+    
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
-        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING },
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
     this.model.query('SEL_REG_BANCOS_REFERENCIADOS_H', params, function (error, result) {
 
         self.view.expositor(res, {
@@ -316,14 +312,13 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function (req, res
 
 conciliacionDetalleRegistroConsulta.prototype.get_contableReferenciado = function (req, res, next) {
     var self = this;
-    var params = [{ name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING },
-        { name: 'cuentaBancaria', value: req.query.cuentaBanco, type: self.model.types.STRING },
-        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING },
-        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
+    var params = [{ name: 'numCuenta', value: req.query.numCuenta, type: self.model.types.STRING },
+        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
+    console.log( "paramsget_contableReferenciado", params );
     this.model.query('SEL_REG_CONTABLES_REF_H', params, function (error, result) {
         self.view.expositor(res, {
             error: error,

@@ -260,16 +260,15 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_REG_BANCOS_REFERENCIADOS_H    
-        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa){
+        getBancosRef: function(idBanco, noCuenta, idEmpresa, idHistorico){
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoReferenciado/',
                 method:"GET",
                 params:{
-                    idBanco : idBanco,
-                    noCuenta : noCuenta,
-                    fechaInicio : fechaInicio,
-                    fechaCorte : fechaCorte,
-                    idEmpresa: idEmpresa
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    idEmpresa: idEmpresa,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -277,18 +276,16 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
 
-        getContablesRef: function(cuentacontable, cuentaBanco, fechaInicio, fechaCorte, polizaPago, idEmpresa, idBanco){
+        getContablesRef: function(numCuenta, cuentaBancaria, idEmpresa, idBanco, idHistorico){
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'contableReferenciado/',
                 method: 'GET',
                 params:{
-                    cuentaContable: cuentacontable,
-                    cuentaBanco: cuentaBanco,
-                    fechaInicio: fechaInicio,
-                    fechaCorte: fechaCorte,
-                    polizaPago: polizaPago,
+                    numCuenta: numCuenta,
+                    cuentaBancaria: cuentaBancaria,
                     idEmpresa: idEmpresa,
-                    idBanco : idBanco
+                    idBanco : idBanco,
+                    idHistorico: idHistorico
                 },
                 headers:{
                      'Content-Type': 'application/json'

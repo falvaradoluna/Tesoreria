@@ -117,7 +117,13 @@
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.bancoReferenciados = function () {
-        conciliacionDetalleRegistroConsultaRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function (result) {
+        console.log( 'paramsHistory', $scope.paramsHistory );
+        conciliacionDetalleRegistroConsultaRepository.getBancosRef(
+            $scope.paramsHistory.IdBanco, 
+            $scope.paramsHistory.Cuenta, 
+            $scope.paramsHistory.IdEmpresa, 
+            $scope.paramsHistory.HistoricoId)
+        .then(function (result) {
 
             $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 0;
@@ -144,7 +150,13 @@
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.contablesReferenciados = function (polizaPago, cuentaBanco) {
-        conciliacionDetalleRegistroConsultaRepository.getContablesRef($scope.busqueda.CuentaContable, cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function (result) {
+        conciliacionDetalleRegistroConsultaRepository.getContablesRef(
+            $scope.paramsHistory.CuentaContable,
+            $scope.paramsHistory.Cuenta,
+            $scope.paramsHistory.IdEmpresa,
+            $scope.paramsHistory.IdBanco,
+            $scope.paramsHistory.HistoricoId
+        ).then(function (result) {
 
             $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 0;
