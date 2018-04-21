@@ -26,6 +26,9 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
     $scope.pageSize = 10;
     $scope.pages = [];
 
+    //Variable para los parametros
+    $scope.paramsHistory = JSON.parse(localStorage.getItem('paramBusqueda'));
+
     $rootScope.fechaHistoricoSave = JSON.parse(localStorage.getItem('paramBusqueda')).FechaHistoricoSave;
     //*************************************************************************
     // INICIA 
@@ -90,7 +93,7 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
             }
 
         }
-        conciliacionDetalleRegistroConsultaRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function (result) {
+        conciliacionDetalleRegistroConsultaRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda,$scope.paramsHistory.HistoricoId).then(function (result) {
             $('#punteoDetalle').modal('show');
 
             $scope.detallePunteo = result.data[0];

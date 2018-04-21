@@ -174,9 +174,6 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function (req, res, n
     { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
     ];
 
-
-
-
     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
 
         console.log('error', error)

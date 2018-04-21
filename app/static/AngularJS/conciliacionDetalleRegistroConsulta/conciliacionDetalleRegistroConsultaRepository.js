@@ -194,7 +194,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 }
             });
         },
-        detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda) {
+        detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'detallePunteo/',
                 method: "POST",
@@ -203,7 +203,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idBanco: idBanco,
                     noCuenta: noCuenta,
                     cuentaContable: cuentaContable,
-                    accionBusqueda: accionBusqueda
+                    accionBusqueda: accionBusqueda,
+                    idHistorico : idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
