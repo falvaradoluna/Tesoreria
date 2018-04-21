@@ -390,18 +390,38 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosAbono
         { name: 'IDABONOSBANCOS', value: idAbono, type: self.model.types.INT },
         { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
     ];
-    console.log( 'paramsdetalleRegistrosBancariosAbonos', params ); //Poner el_H
-    self.view.expositor(res, {
-        result: "Llegue wey"
+    console.log( 'paramsdetalleRegistrosBancariosAbonos', params );
+    this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_ABONOBAN_CARGOCON_SP_H]', params, function (error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
     });
-    // this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_ABONOBAN_CARGOCON_SP]', params, function (error, result) {
-    //     console.log('error', error);
-    //     console.log('result', result);
-    //     self.view.expositor(res, {
-    //         error: error,
-    //         result: result
-    //     });
-    // });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosContablesAbonos
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosContablesAbonos = function (req, res, next) {
+
+    var self = this;
+    var idAuxiliar = req.query.idAuxiliar;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [
+        { name: 'IDCARGOS_COMPLETO', value: idAuxiliar, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
+    ];
+    console.log( 'paramsdetalleRegistrosContablesAbonos', params );
+    this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_CARGOCON_ABONOBAN_SP_H]', params, function (error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
 };
 
 module.exports = conciliacionDetalleRegistroConsulta;
