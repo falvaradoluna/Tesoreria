@@ -1213,7 +1213,7 @@
                             <td>{{padreCargo.tipopol}}</td>
                             <td>{{padreCargo.numPol}}</td>
                             <td>{{padreCargo.cargo}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : padreCargo.abono > 0}">{{padreCargo.cargo | currency}}</td>
+                            <td class="text-right text-success text-semibold">{{padreCargo.cargo | currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -1232,21 +1232,25 @@
                     <thead>
                         <tr>
                             <th>Concepto</th>
-                            <!-- <th>Numero de Cuenta</th> -->
+                            <th>Referencia</th>
+                            <th>Referencia ampliada</th>
                             <th>Importe Pagado</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="hijoAbono in regCargoAbonoDetalle">
                             <td>{{ hijoAbono.concepto }}</td>
-                            <!-- <td>{{ hijoAbono. }}</td> -->
+                            <td>{{ hijoAbono.refAmpliada }}</td>
+                            <td>{{ hijoAbono.referencia }}</td>
                             <td class="text-success text-semibold text-right">{{ hijoAbono.abono | currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <!-- <td class="text-info text-semibold text-right">
-                            </td> -->
+                            <td class="text-info text-semibold text-right">
+                            </td> 
+                            <td class="text-info text-semibold text-right">
+                                </td> 
                             <td class="text-bold text-right text-info">Total</td>
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="totalHijosCargos > 0">{{ totalHijosCargos | currency}}</span>
