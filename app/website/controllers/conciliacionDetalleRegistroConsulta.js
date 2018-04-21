@@ -134,10 +134,11 @@ conciliacionDetalleRegistroConsulta.prototype.post_detallePunteo = function (req
         { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
         { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-        { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
-    ];
+        { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.body.idHistorico, type: self.model.types.INT }
+    ];    
 
-    this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
+    this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP_H', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
