@@ -59,17 +59,16 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_DEPOSITOS_REFERENCIADOS_SP_H
-        getDepositos: function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, idEmpresa) {
+        getDepositos: function(idBanco, idestatus, cuentaBancaria, idEmpresa, idHistorico) {
             return $http({
-                url: filtrosURL + 'depositos/',
+                url: conciliacionDetalleRegistroConsultaURL + 'depositos/',
                 method: "GET",
                 params: {
                     idBanco: idBanco,
                     idEstatus: idestatus,
                     cuentaBancaria: cuentaBancaria,
-                    fElaboracion: fElaboracion,
-                    fCorte: fCorte,
-                    idEmpresa: idEmpresa
+                    idEmpresa: idEmpresa,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -78,19 +77,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H
-        getAuxiliar: function(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
+        getAuxiliar: function(idEmpresa, idBanco, idHistorico) {
             return $http({
-                url: filtrosURL + 'auxiliarContable/',
+                url: conciliacionDetalleRegistroConsultaURL + 'auxiliarContable/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
-                    numero_cuenta: numero_cuenta,
-                    idEstatus: idestatus,
-                    fElaboracion: fElaboracion,
-                    fCorte: fCorte,
-                    polizaPago: polizaPago,
-                    cuentaBancaria: cuentaBancaria
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -266,16 +260,15 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_REG_BANCOS_REFERENCIADOS_H    
-        getBancosRef: function(idBanco, noCuenta, fechaInicio, fechaCorte, idEmpresa){
+        getBancosRef: function(idBanco, noCuenta, idEmpresa, idHistorico){
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoReferenciado/',
                 method:"GET",
                 params:{
-                    idBanco : idBanco,
-                    noCuenta : noCuenta,
-                    fechaInicio : fechaInicio,
-                    fechaCorte : fechaCorte,
-                    idEmpresa: idEmpresa
+                    idBanco: idBanco,
+                    noCuenta: noCuenta,
+                    idEmpresa: idEmpresa,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -283,18 +276,16 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
 
-        getContablesRef: function(cuentacontable, cuentaBanco, fechaInicio, fechaCorte, polizaPago, idEmpresa, idBanco){
+        getContablesRef: function(numCuenta, cuentaBancaria, idEmpresa, idBanco, idHistorico){
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'contableReferenciado/',
                 method: 'GET',
                 params:{
-                    cuentaContable: cuentacontable,
-                    cuentaBanco: cuentaBanco,
-                    fechaInicio: fechaInicio,
-                    fechaCorte: fechaCorte,
-                    polizaPago: polizaPago,
+                    numCuenta: numCuenta,
+                    cuentaBancaria: cuentaBancaria,
                     idEmpresa: idEmpresa,
-                    idBanco : idBanco
+                    idBanco : idBanco,
+                    idHistorico: idHistorico
                 },
                 headers:{
                      'Content-Type': 'application/json'
@@ -341,7 +332,37 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     'Content-Type' : 'application/json'
                 }
             });
-        }
+        },
+        
+        // Ing.LAGP
+        getDetalleAbono: function (idAbono, idHistorico) {
+            
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'detalleRegistroAbono',
+                method: 'GET',
+                params: {
+                    idAbono: idAbono,
+                    idHistorico: idHistorico
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
+        detalleRegistrosBancariosCargos: function (idCargo, idHistorico) {
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'detalleRegistrosBancariosCargos',
+                method: 'GET',
+                params: {
+                    idCargo: idCargo,
+                    idHistorico: idHistorico
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
 
 //Fin de la llave return
     };

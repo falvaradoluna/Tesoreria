@@ -461,7 +461,8 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistrosBancariosCargos = func
     var params = [{ name: 'idCargo', value: idCargo, type: self.model.types.INT }];
 
     this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP]', params, function (error, result) {
-
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result

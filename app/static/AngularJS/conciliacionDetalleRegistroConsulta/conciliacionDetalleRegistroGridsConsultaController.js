@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGridsController',function($scope, $log,  $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants){
+﻿registrationModule.controller('conciliacionDetalleRegistroGridsConsultaController',function($scope, $log,  $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants, conciliacionDetalleRegistroConsultaRepository){
 
       $scope.gridsInfo = [];
       $scope.depositosBancos = '';
@@ -30,11 +30,14 @@
             //LQMA 29
             $scope.fechaActual = '2017-05-07';
 
+            //Historial LAGP
+            $scope.paramHistory = JSON.parse( localStorage.getItem('paramBusqueda') );
+            //console.log( 'conciliacionDetalleRegistroGridsConsultaControllerPams', $scope.paramHistory );
      $scope.init = function() {
         $('#loading').modal('show');
 
         variablesLocalStorage();
-        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
+        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.IdEmpresa, $scope.paramHistory.HistoricoId);
         //LQMA comment 17082017
         //$scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
     };
@@ -135,9 +138,10 @@
 
 
     //******************Función para llenar el grid Depositos Bancos********************************
-    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
+    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico) {
         if (idestatus == 1) { 
-            filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
+            console.log('Aqui'),
+            conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico).then(function(result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
@@ -156,11 +160,11 @@
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, $scope.busqueda.Cuenta);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.paramHistory.HistoricoId);
                 }
             });
         } else if (idestatus == 2) {
-            filtrosRepository.getDepositos(idBanco, idestatus).then(function(result) {
+            conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus).then(function(result) {
                 if (result.data.length > 0) {
                     $scope.depositosBancos = result.data;
                 }
@@ -171,10 +175,10 @@
 
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
-     $scope.getAuxiliarContable = function(idEmpresa, idBanco,numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
-         
-            filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function(result) {
-               
+     $scope.getAuxiliarContable = function(idEmpresa, idBanco, idHistorico) {
+         console.log( 'getAuxiliarContable' );
+        conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, idHistorico).then(function(result) {
+               console.log( 'result', result );
 		if (result.data[0].length !=0) {
 		    
                     $scope.auxiliarContable = result.data[0];

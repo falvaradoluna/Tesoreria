@@ -117,7 +117,13 @@
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.bancoReferenciados = function () {
-        conciliacionDetalleRegistroConsultaRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function (result) {
+        
+        conciliacionDetalleRegistroConsultaRepository.getBancosRef(
+            $scope.paramsHistory.IdBanco, 
+            $scope.paramsHistory.Cuenta, 
+            $scope.paramsHistory.IdEmpresa, 
+            $scope.paramsHistory.HistoricoId)
+        .then(function (result) {
 
             $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 0;
@@ -127,7 +133,6 @@
             });
             $scope.tabla('bancoReferenciadoAbono');
             $scope.tabla('bancoReferenciadoCargo');
-
             //Obtener la uma total de los registros
             angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
                 $scope.bancoReferenciadosAbonosTotales += value.abono;
@@ -144,7 +149,13 @@
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.contablesReferenciados = function (polizaPago, cuentaBanco) {
-        conciliacionDetalleRegistroConsultaRepository.getContablesRef($scope.busqueda.CuentaContable, cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function (result) {
+        conciliacionDetalleRegistroConsultaRepository.getContablesRef(
+            $scope.paramsHistory.CuentaContable,
+            $scope.paramsHistory.Cuenta,
+            $scope.paramsHistory.IdEmpresa,
+            $scope.paramsHistory.IdBanco,
+            $scope.paramsHistory.HistoricoId
+        ).then(function (result) {
 
             $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 0;
@@ -225,15 +236,56 @@
     };
     //****************************************************************************************************
 
-    $scope.detalleRegistrosReferenciadosContables = function (registroConciliado) {
+    // $scope.detalleRegistrosReferenciadosContables = function (registroConciliado) {
 
-        alertFactory.warning('Función en desarrollo...');
+    //     alertFactory.warning('Función en desarrollo...');
 
+    // };
+
+
+    $scope.detalleRegistrosReferenciadosContablesAbono = function (registroConciliado) {
+        
+        conciliacionDetalleRegistroConsultaRepository.getDetalleAbono( registroConciliado, $scope.paramsHistory.HistoricoId )
+        .then(function(result){
+            
+            $rootScope.detalleAbono = result.data[0];
+            
+            $rootScope.detalleAbonoPadre = result.data[1];
+            $rootScope.abonoTotalBanco = result.data[1][0].MOV_HABER;
+            $rootScope.abonoTotalBancoSuma = result.data[0][0].Total;
+            if($rootScope.detalleAbono.length > 0){
+                
+                $('#regContablesAbonoDetalle').modal('show');
+                $rootScope.detalleAbono.forEach(function( item, key ){
+                    
+                });
+            }
+        });
+        //alertFactory.warning('Función en desarrollo...');
     };
 
-
-
-
+    $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
+        
+        conciliacionDetalleRegistroConsultaRepository.detalleRegistrosBancariosCargos( idCargo, $scope.paramsHistory.HistoricoId )
+        .then(function(result){
+            
+            $rootScope.detalleRegistrosBancariosCargos = result.data;
+            
+            if($rootScope.detalleRegistrosBancariosCargos.length > 0){
+                $rootScope.detalleRegistrosBancariosCargosTotal         = result.data[0].Abono;
+                $rootScope.detalleRegistrosBancariosCargosFecha         = result.data[0].Fecha;
+                $rootScope.detalleRegistrosBancariosCargostipoPoliza    = result.data[0].tipoPoliza;
+                $rootScope.detalleRegistrosBancariosCargosconsPoliza    = result.data[0].consPoliza;
+                $rootScope.detalleRegistrosBancariosCargosnumeroCuenta  = result.data[0].numeroCuenta;
+                $rootScope.detalleRegistrosBancariosCargosconcepto      = result.data[0].concepto;
+                $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
+                $('#regBancariosCargoDetalle').modal('show');
+            }else{
+                alertFactory.warning('No se encontraron datos.');
+            }
+        });
+        
+    };
 
     // INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************

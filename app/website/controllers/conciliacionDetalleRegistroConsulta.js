@@ -57,12 +57,12 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function (req, res
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.cuentaBancaria, type: self.model.types.STRING },
-        { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
+    
     this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP_H', params, function (error, result) {
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -77,15 +77,11 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function (r
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-        { name: 'noCuenta', value: req.query.numero_cuenta, type: self.model.types.STRING },
-        { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
-        { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
-        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
+    
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function (error, result) {
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -156,10 +152,9 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res,
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
     ];
-    console.log( 'dpiParams', params );
+    
     this.model.query('SEL_DEPOSITOSDPI_H', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -170,15 +165,12 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res,
 conciliacionDetalleRegistroConsulta.prototype.get_bancoReferenciado = function (req, res, next) {
 
     var self = this;
-
-
+    
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
-        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING },
-        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
     this.model.query('SEL_REG_BANCOS_REFERENCIADOS_H', params, function (error, result) {
 
         self.view.expositor(res, {
@@ -320,15 +312,62 @@ conciliacionDetalleRegistroConsulta.prototype.post_sendMail = function (req, res
 
 conciliacionDetalleRegistroConsulta.prototype.get_contableReferenciado = function (req, res, next) {
     var self = this;
-    var params = [{ name: 'numCuenta', value: req.query.cuentaContable, type: self.model.types.STRING },
-        { name: 'cuentaBancaria', value: req.query.cuentaBanco, type: self.model.types.STRING },
-        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING },
-        { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
+    var params = [{ name: 'numCuenta', value: req.query.numCuenta, type: self.model.types.STRING },
+        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT }
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
+    
     this.model.query('SEL_REG_CONTABLES_REF_H', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistroAbono
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistroAbono = function (req, res, next) {
+
+    var self = this;
+    var idAbono = req.query.idAbono;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT },
+    { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }];
+    
+    this.model.queryAllRecordSet('[dbo].[SEL_DOC_PAG_BY_ABONO_ID_SP_H]', params, function (error, result) {
+        // console.log( 'error', error );
+        // console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosBancariosCargos
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosCargos = function (req, res, next) {
+
+    var self = this;
+    var idCargo = req.query.idCargo;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [
+        { name: 'idCargo', value: idCargo, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
+    ];
+    console.log( 'paramsDetalleRegistrosBancariosCargos', params );
+    this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP_H]', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
