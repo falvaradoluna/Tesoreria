@@ -350,6 +350,20 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
 
+        detalleRegistrosBancariosCargos: function (idCargo, idHistorico) {
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'detalleRegistrosBancariosCargos',
+                method: 'GET',
+                params: {
+                    idCargo: idCargo,
+                    idHistorico: idHistorico
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
 //Fin de la llave return
     };
 });

@@ -279,7 +279,7 @@ $scope.init = function() {
     };
 
     $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
-        console.log( "detalleRegistrosBancariosCargosF" );
+        
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosCargos( idCargo )
         .then(function(result){
             

@@ -339,10 +339,35 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistroAbono = functio
 
     var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT },
     { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }];
-    console.log( "paramsget_detalleRegistroAbonoCONSULTA", params );
+    
     this.model.queryAllRecordSet('[dbo].[SEL_DOC_PAG_BY_ABONO_ID_SP_H]', params, function (error, result) {
         // console.log( 'error', error );
         // console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosBancariosCargos
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosCargos = function (req, res, next) {
+
+    var self = this;
+    var idCargo = req.query.idCargo;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [
+        { name: 'idCargo', value: idCargo, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
+    ];
+    console.log( 'paramsDetalleRegistrosBancariosCargos', params );
+    this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP_H]', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result

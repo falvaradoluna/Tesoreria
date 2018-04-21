@@ -442,7 +442,9 @@
                                             <td>{{banco.concepto}}</td>
                                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                                             <td class="text-center">
-                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosBancos(banco)"><i class="ti-eye"></i></button>
+                                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosCargosF(banco.IDABONOSBANCOS_H, banco)">
+                                                    <i class="ti-eye"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1015,6 +1017,87 @@
     <!--===================================================-->
     <!--End Modal para colocar abono-->
 
+    <!--Modal para colocar cargo bancario-->
+<!--===================================================-->
+<div class="modal fade" id="regBancariosCargoDetalle" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header label-mint">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="pci-cross pci-circle text-white"></i>
+                    </button>
+                    <h4 class="modal-title text-white">Detalle del Cargo</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Tipo Póliza</th>
+                                <th># de Póliza</th>
+                                <th>Concepto</th>
+                                <th>Cargo</th>
+                                <th>Abono</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{detalleRegistrosBancariosCargosFecha}}</td>
+                                <td>{{detalleRegistrosBancariosCargostipoPoliza}}</td>
+                                <td>{{detalleRegistrosBancariosCargosconsPoliza}}</td>
+                                <td>{{detalleRegistrosBancariosCargosconcepto}}</td>
+                                <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosAbono > 0}">{{detalleRegistrosBancariosCargosAbono | currency}}</td>
+                                <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosconcepto > 0}">{{detalleRegistrosBancariosCargosconcepto | currency}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-info text-semibold text-right">
+                                    <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
+                                </td>
+                                <td colspan="3" class="text-bold text-right text-info">Total</td>
+                                <td class="text-info text-semibold text-right">
+                                    <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span>
+                                </td>
+                                <td class="text-info text-semibold text-right">
+                                    <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{abonoTotalBanco | currency}}</span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Concepto</th>
+                                <th>Numero de Cuenta</th>
+                                <th>Importe Pagado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="cargo in detalleRegistrosBancariosCargos">
+                                <td>{{cargo.concepto}}</td>
+                                <td>{{cargo.numeroCuenta}}</td>
+                                <td>{{cargo.importePagado}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-info text-semibold text-right">
+                                    <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
+                                </td>
+                                <td class="text-bold text-right text-info">Total</td>
+                                <td class="text-info text-semibold text-right">
+                                    <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===================================================-->
+    <!--End Modal para colocar cargo bancario-->
 
 <!--INICIA modal spinner -->
 <!--===================================================-->

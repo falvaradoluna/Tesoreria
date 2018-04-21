@@ -117,7 +117,7 @@
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.bancoReferenciados = function () {
-        console.log( 'paramsHistory', $scope.paramsHistory );
+        
         conciliacionDetalleRegistroConsultaRepository.getBancosRef(
             $scope.paramsHistory.IdBanco, 
             $scope.paramsHistory.Cuenta, 
@@ -133,7 +133,6 @@
             });
             $scope.tabla('bancoReferenciadoAbono');
             $scope.tabla('bancoReferenciadoCargo');
-
             //Obtener la uma total de los registros
             angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
                 $scope.bancoReferenciadosAbonosTotales += value.abono;
@@ -265,6 +264,28 @@
         //alertFactory.warning('Función en desarrollo...');
     };
 
+    $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
+        
+        conciliacionDetalleRegistroConsultaRepository.detalleRegistrosBancariosCargos( idCargo, $scope.paramsHistory.HistoricoId )
+        .then(function(result){
+            
+            $rootScope.detalleRegistrosBancariosCargos = result.data;
+            
+            if($rootScope.detalleRegistrosBancariosCargos.length > 0){
+                $rootScope.detalleRegistrosBancariosCargosTotal         = result.data[0].Abono;
+                $rootScope.detalleRegistrosBancariosCargosFecha         = result.data[0].Fecha;
+                $rootScope.detalleRegistrosBancariosCargostipoPoliza    = result.data[0].tipoPoliza;
+                $rootScope.detalleRegistrosBancariosCargosconsPoliza    = result.data[0].consPoliza;
+                $rootScope.detalleRegistrosBancariosCargosnumeroCuenta  = result.data[0].numeroCuenta;
+                $rootScope.detalleRegistrosBancariosCargosconcepto      = result.data[0].concepto;
+                $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
+                $('#regBancariosCargoDetalle').modal('show');
+            }else{
+                alertFactory.warning('No se encontraron datos.');
+            }
+        });
+        
+    };
 
     // INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************
