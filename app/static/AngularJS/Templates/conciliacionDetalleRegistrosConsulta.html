@@ -958,7 +958,7 @@
                                 <th>Tipo Póliza</th>
                                 <th># de Póliza</th>
                                 <th>Concepto</th>
-                                <th>Cargo</th>
+                                <!-- <th>Cargo</th> -->
                                 <th>Abono</th>
                             </tr>
                         </thead>
@@ -968,19 +968,19 @@
                                 <td>{{abonoPadre.MOV_TIPOPOL}}</td>
                                 <td>{{abonoPadre.MOV_CONSPOL}}</td>
                                 <td>{{abonoPadre.MOV_CONCEPTO}}</td>
-                                <td class="text-right" ng-class="{'text-success text-semibold' : abonoPadre.cargoBanco > 0}">{{abonoPadre.cargoBanco | currency}}</td>
-                                <td class="text-right" ng-class="{'text-success text-semibold' : abonoPadre.abonoBanco > 0}">{{abonoPadre.MOV_HABER | currency}}</td>
+                                <!-- <td class="text-right" ng-class="{'text-success text-semibold' : abonoPadre.cargoBanco > 0}">{{abonoPadre.cargoBanco | currency}}</td> -->
+                                <td class="text-right text-success">{{abonoPadre.MOV_HABER | currency}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td class="text-info text-semibold text-right">
+                                <!-- <td class="text-info text-semibold text-right"> -->
                                     <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
-                                </td>
-                                <td colspan="3" class="text-bold text-right text-info">Total</td>
+                                <!-- </td> -->
                                 <td class="text-info text-semibold text-right">
                                     <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span>
                                 </td>
+                                <td colspan="3" class="text-bold text-right text-info">Total</td>
                                 <td class="text-info text-semibold text-right">
                                     <span ng-if="abonoTotalBanco > 0">{{abonoTotalBanco | currency}}</span>
                                 </td>
@@ -999,7 +999,7 @@
                             <tr ng-repeat="abono in detalleAbono">
                                 <td>{{abono.concepto}}</td>
                                 <td>{{abono.numeroCuenta}}</td>
-                                <td class="text-right text-right text-info">{{abono.importePagado | currency}}</td>
+                                <td class="text-right text-right text-success">{{abono.importePagado | currency}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
