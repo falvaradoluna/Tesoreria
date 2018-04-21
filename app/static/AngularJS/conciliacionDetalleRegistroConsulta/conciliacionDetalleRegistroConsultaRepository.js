@@ -364,6 +364,20 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 }
             });
         },
+        //CLON LAGP
+        detalleRegistrosBancariosAbonos: function (idAbono, idHistorico) {
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'detalleRegistrosBancariosAbonos',
+                method: 'GET',
+                params: {
+                    idAbono: idAbono,
+                    idHistorico: idHistorico
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
 
 //Fin de la llave return
     };

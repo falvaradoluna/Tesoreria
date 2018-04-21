@@ -211,6 +211,7 @@ $scope.init = function() {
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
     $scope.detalleRegistrosReferenciadosBancos = function(registroConciliado){
+        
         $('#loading').modal('show');
              
                                                                                                     /*  Números identificadores para el tipo de referencia de cada registro Bancario "ABONOS - CARGOS"

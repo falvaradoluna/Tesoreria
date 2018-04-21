@@ -25,6 +25,11 @@
     $scope.BancoPunteadoCargosTotales = 0;
     $scope.bancoDPITotal = 0;
 
+    //Abonos bancarios
+    $rootScope.registrosBancariosAbonos = [];
+    $rootScope.registrosBancariosAbonosTotal;
+    $rootScope.regBancariosAbonoDetalle = [];
+
     //Variable para los parametros
     $scope.paramsHistory = JSON.parse(localStorage.getItem('paramBusqueda'));
 
@@ -285,6 +290,27 @@
             }
         });
         
+    };
+    //CLON LAGP
+    $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
+        console.log( 'DetalleRegistrosEnlaConsulta' );
+        console.log( "abonosDatadetalleRegistrosBancariosAbonos", abonosData );
+        $rootScope.registrosBancariosAbonos[0] = abonosData;
+        $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
+        console.log( 'registroBancariosAbonos', $rootScope.registrosBancariosAbonos );
+        conciliacionDetalleRegistroConsultaRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS_H, $scope.paramsHistory.HistoricoId )
+        .then(function(result){
+            console.log( 'result',result );
+            // if( result.data[1].length > 0 ){
+            //     $rootScope.regBancariosAbonoDetalle = result.data[1];
+            //     //$rootScope.esCargo = result.data[0][0].esCargo;
+                
+                $('#regBancariosAbonoDetalle').modal('show');
+            // }else{
+            //     alertFactory.warning('No se encontraron datos.');
+            // }
+        });
+        //alertFactory.warning('Función en desarrollo...');
     };
 
     // INICIA inicio la tabla para los distintos casos
