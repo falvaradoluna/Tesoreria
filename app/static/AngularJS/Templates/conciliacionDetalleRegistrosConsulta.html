@@ -1041,7 +1041,7 @@
                                 <th># de Póliza</th>
                                 <th>Concepto</th>
                                 <th>Cargo</th>
-                                <th>Abono</th>
+                                <!-- <th>Abono</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -1051,7 +1051,7 @@
                                 <td>{{detalleRegistrosBancariosCargosconsPoliza}}</td>
                                 <td>{{detalleRegistrosBancariosCargosconcepto}}</td>
                                 <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosAbono > 0}">{{detalleRegistrosBancariosCargosAbono | currency}}</td>
-                                <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosconcepto > 0}">{{detalleRegistrosBancariosCargosconcepto | currency}}</td>
+                                <!-- <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosconcepto > 0}">{{detalleRegistrosBancariosCargosconcepto | currency}}</td> -->
                             </tr>
                         </tbody>
                         <tfoot>
@@ -1063,16 +1063,16 @@
                                 <td class="text-info text-semibold text-right">
                                     <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span>
                                 </td>
-                                <td class="text-info text-semibold text-right">
+                                <!-- <td class="text-info text-semibold text-right">
                                     <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{abonoTotalBanco | currency}}</span>
-                                </td>
+                                </td> -->
                             </tr>
                         </tfoot>
                     </table>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Concepto</th>
+                                <th>Concepto1</th>
                                 <th>Numero de Cuenta</th>
                                 <th>Importe Pagado</th>
                             </tr>
@@ -1081,7 +1081,7 @@
                             <tr ng-repeat="cargo in detalleRegistrosBancariosCargos">
                                 <td>{{cargo.concepto}}</td>
                                 <td>{{cargo.numeroCuenta}}</td>
-                                <td>{{cargo.importePagado}}</td>
+                                <td class="text-success text-semibold text-right">{{cargo.importePagado | currency}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
