@@ -318,8 +318,31 @@ conciliacionDetalleRegistroConsulta.prototype.get_contableReferenciado = functio
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-    console.log( "paramsget_contableReferenciado", params );
+    
     this.model.query('SEL_REG_CONTABLES_REF_H', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistroAbono
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistroAbono = function (req, res, next) {
+
+    var self = this;
+    var idAbono = req.query.idAbono;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [{ name: 'idAbono', value: idAbono, type: self.model.types.INT },
+    { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }];
+    console.log( "paramsget_detalleRegistroAbonoCONSULTA", params );
+    this.model.queryAllRecordSet('[dbo].[SEL_DOC_PAG_BY_ABONO_ID_SP_H]', params, function (error, result) {
+        // console.log( 'error', error );
+        // console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
