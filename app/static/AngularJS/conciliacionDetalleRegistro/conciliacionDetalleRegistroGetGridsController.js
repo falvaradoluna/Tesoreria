@@ -48,10 +48,10 @@
      $scope.contableReferenciadosCargosTotales = 0;
      $scope.BancoReferenciadoCargosTotales = 0;
      $scope.BancoReferenciadoAbonosTotales = 0;
-     $scope.AuxiliarPunteadoAbonosTotales = 0;
-     $scope.AuxiliarPunteadoCargosTotales = 0;
-     $scope.BancoPunteadoAbonosTotales = 0;
-     $scope.BancoPunteadoCargosTotales = 0;
+     $rootScope.AuxiliarPunteadoAbonosTotales = 0;
+     $rootScope.AuxiliarPunteadoCargosTotales = 0;
+     $rootScope.BancoPunteadoAbonosTotales = 0;
+     $rootScope.BancoPunteadoCargosTotales = 0;
      $scope.bancoDPITotal = 0;
 
     //Variables para obtener los valores para el stored de total
@@ -99,13 +99,18 @@ $scope.init = function() {
             });
            
            //Obtener la uma total de los registros
-             angular.forEach($scope.AuxiliarPunteado, function(value, key) {
-                    $scope.AuxiliarPunteadoAbonosTotales += value.abono;
-                    });
-             
-             angular.forEach($scope.AuxiliarPunteado, function(value, key) {
-                    $scope.AuxiliarPunteadoCargosTotales += value.cargo;
-                    });
+            angular.forEach($scope.AuxiliarPunteado, function (value, key) {
+                $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+            });
+
+            angular.forEach($scope.AuxiliarPunteado, function (value, key) {
+                $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+            });
+
+            angular.forEach(result.data, function( value, key ){
+                $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+                $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+            });
 
             $scope.tabla('auxiliarPunteo');
         });
@@ -125,14 +130,18 @@ $scope.init = function() {
             });
            
            //Obtener la uma total de los registros
-             angular.forEach($scope.BancoPunteado, function(value, key) {
-                    $scope.BancoPunteadoAbonosTotales += value.abono;
-                    });
-             
-             angular.forEach($scope.BancoPunteado, function(value, key) {
-                    $scope.BancoPunteadoCargosTotales += value.cargo;
-                    });
+            angular.forEach($scope.BancoPunteado, function (value, key) {
+                $rootScope.BancoPunteadoAbonosTotales += value.abono;
+            });
 
+            angular.forEach($scope.BancoPunteado, function (value, key) {
+                $rootScope.BancoPunteadoCargosTotales += value.cargo;
+            });
+
+            angular.forEach(result.data, function( value, key ){
+                $rootScope.BancoPunteadoAbonosTotales += value.abono;
+                $rootScope.BancoPunteadoCargosTotales += value.cargo;
+            });
 
             $scope.tabla('bancoPunteo');
         });
