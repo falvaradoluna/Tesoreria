@@ -68,7 +68,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idEstatus: idestatus,
                     cuentaBancaria: cuentaBancaria,
                     idEmpresa: idEmpresa,
-                    idHistorico: idHistorico
+                    idHistorico: idHistorico //LQMA 21042018
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -84,7 +84,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 params: {
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
-                    idHistorico: idHistorico
+                    idHistorico: idHistorico //LQMA 21042018                    
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -101,7 +101,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idEmpresa: idempresa,
                     cuentaBancaria: cuentaBancaria,
                     idBanco: idBanco,
-                    idHistorico
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -110,14 +110,15 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_PUNTEO_AUXILIAR_PADRES_SP_H      
-        getAuxiliarPunteo: function(idempresa, cuentaContable, idHistorico) {
+        getAuxiliarPunteo: function(idempresa, cuentaContable, idHistorico, idEstatus) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'auxiliarPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
                     cuentaContable: cuentaContable,
-                    idHistorico
+                    idHistorico: idHistorico,
+                    idEstatus : idEstatus  //LQMA 21042018 add idEstatus = 2 : punteo tempora, = 3 punteo final 
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -356,6 +357,20 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 method: 'GET',
                 params: {
                     idCargo: idCargo,
+                    idHistorico: idHistorico
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        //CLON LAGP
+        detalleRegistrosBancariosAbonos: function (idAbono, idHistorico) {
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'detalleRegistrosBancariosAbonos',
+                method: 'GET',
+                params: {
+                    idAbono: idAbono,
                     idHistorico: idHistorico
                 },
                 headers: {

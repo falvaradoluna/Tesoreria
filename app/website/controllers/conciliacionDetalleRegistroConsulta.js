@@ -113,7 +113,8 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
+        { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT }
     ];
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function (error, result) {
@@ -375,5 +376,32 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosCargo
     });
 };
 
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosBancariosAbonos
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosAbonos = function (req, res, next) {
+
+    var self = this;
+    var idAbono = req.query.idAbono;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [
+        { name: 'IDABONOSBANCOS', value: idAbono, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
+    ];
+    console.log( 'paramsdetalleRegistrosBancariosAbonos', params ); //Poner el_H
+    self.view.expositor(res, {
+        result: "Llegue wey"
+    });
+    // this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_ABONOBAN_CARGOCON_SP]', params, function (error, result) {
+    //     console.log('error', error);
+    //     console.log('result', result);
+    //     self.view.expositor(res, {
+    //         error: error,
+    //         result: result
+    //     });
+    // });
+};
 
 module.exports = conciliacionDetalleRegistroConsulta;
