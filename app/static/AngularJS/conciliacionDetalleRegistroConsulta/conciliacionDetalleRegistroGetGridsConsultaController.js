@@ -30,6 +30,14 @@
     $rootScope.registrosBancariosAbonosTotal;
     $rootScope.regBancariosAbonoDetalle = [];
 
+     //Cargos contables Abonos
+     $rootScope.registroCargosAbono = [];
+     $rootScope.registrosCargodAbonosTotal;
+     $rootScope.regCargoAbonoDetalle = [];
+     $rootScope.totalHijosCargos;
+     $rootScope.esCargo;
+
+
     //Variable para los parametros
     $scope.paramsHistory = JSON.parse(localStorage.getItem('paramBusqueda'));
 
@@ -300,18 +308,39 @@
         console.log( 'registroBancariosAbonos', $rootScope.registrosBancariosAbonos );
         conciliacionDetalleRegistroConsultaRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS_H, $scope.paramsHistory.HistoricoId )
         .then(function(result){
-            console.log( 'result',result );
-            // if( result.data[1].length > 0 ){
-            //     $rootScope.regBancariosAbonoDetalle = result.data[1];
-            //     //$rootScope.esCargo = result.data[0][0].esCargo;
-                
+            //console.log( 'result',result );
+            if( result.data[1].length > 0 ){
+                $rootScope.regBancariosAbonoDetalle = result.data[1];
+                //$rootScope.esCargo = result.data[0][0].esCargo;
+                console.log( '$rootScope.regBancariosAbonoDetalle', $rootScope.regBancariosAbonoDetalle );
                 $('#regBancariosAbonoDetalle').modal('show');
-            // }else{
-            //     alertFactory.warning('No se encontraron datos.');
-            // }
+            }else{
+                alertFactory.warning('No se encontraron datos.');
+            }
         });
         //alertFactory.warning('Función en desarrollo...');
     };
+    //CLON LAGP
+    $scope.detalleRegistrosContablesAbonos = function (abonosData) {
+        
+        console.log( 'DetsalleContableAbonoCONSULTA' );
+        $rootScope.registroCargosAbono[0] = abonosData;
+        $rootScope.registrosCargodAbonosTotal = abonosData.cargo;
+        console.log( 'registroCargosAbono', $rootScope.registroCargosAbono );
+        
+        conciliacionDetalleRegistroConsultaRepository.detalleRegistrosContablesAbonos( abonosData.idAuxiliar, $scope.paramsHistory.HistoricoId )
+        .then(function(result){
+            if( result.data[1].length != 0 ){
+                console.log( 'result', result );
+                $rootScope.regCargoAbonoDetalle = result.data[1];
+                $rootScope.totalHijosCargos = result.data[1][0].importe;
+                
+                $('#regCargoAbonoDetalle').modal('show');
+            }else{
+                alertFactory.warning('No se encontraron datos');
+            }  
+        });
+    }
 
     // INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************
