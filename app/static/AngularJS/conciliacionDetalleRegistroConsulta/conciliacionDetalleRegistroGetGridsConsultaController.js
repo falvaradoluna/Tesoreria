@@ -317,11 +317,11 @@
         console.log( 'registroBancariosAbonos', $rootScope.registrosBancariosAbonos );
         conciliacionDetalleRegistroConsultaRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS_H, $scope.paramsHistory.HistoricoId )
         .then(function(result){
-            //console.log( 'result',result );
+            console.log( 'result',result );
             if( result.data[1].length > 0 ){
                 $rootScope.regBancariosAbonoDetalle = result.data[1];
-                //$rootScope.esCargo = result.data[0][0].esCargo;
-                console.log( '$rootScope.regBancariosAbonoDetalle', $rootScope.regBancariosAbonoDetalle );
+                $rootScope.totalAbonoBanco = result.data[1][0].ABONO_BANCO;
+                console.log( '$rootScope.totalAbonoBanco', $rootScope.totalAbonoBanco );
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
                 alertFactory.warning('No se encontraron datos.');

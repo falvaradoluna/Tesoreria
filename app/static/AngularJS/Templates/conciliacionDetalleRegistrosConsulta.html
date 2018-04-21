@@ -1159,8 +1159,8 @@
                         <tr ng-repeat="detAbono in regBancariosAbonoDetalle">
                             <td>{{ detAbono.MOV_CONCEPTO }}</td>
                             <td>{{ detAbono.noCuenta }}</td>
-                            <td>{{ detAbono.rap_importeC | currency }}</td>
-                            <td>{{ detAbono.rap_importe | currency}}</td>
+                            <td class="text-info text-semibold text-right">{{ detAbono.rap_importeC | currency }}</td>
+                            <td class="text-info text-semibold text-right">{{ detAbono.rap_importe | currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
@@ -1172,8 +1172,8 @@
                                 <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
                             </td>
                             <td class="text-bold text-right text-info">Total</td>
-                            <td class="text-info text-semibold text-right">
-                                <span ng-if="detAbono.ABONO_BANCO > 0">{{detAbono.ABONO_BANCO | currency}}</span>
+                            <td class="text-success text-semibold text-right">
+                                <span>{{totalAbonoBanco | currency}}</span>
                             </td>
                         </tr>
                     </tfoot>
