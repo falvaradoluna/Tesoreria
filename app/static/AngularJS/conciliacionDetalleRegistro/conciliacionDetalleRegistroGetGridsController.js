@@ -342,10 +342,10 @@ $scope.init = function() {
         conciliacionDetalleRegistroRepository.detalleRegistrosContablesAbonos( abonosData.idAuxiliar )
         .then(function(result){
             if( result.data[1].length != 0 ){
-                //console.log( "Total", result.data[1][0].importe );
+                
                 $rootScope.regCargoAbonoDetalle = result.data[1];
                 $rootScope.totalHijosCargos = result.data[1][0].importe;
-                console.log( 'Total', $rootScope.totalHijosCargos );
+                
                 $('#regCargoAbonoDetalle').modal('show');
             }else{
                 alertFactory.warning('No se encontraron datos');
@@ -368,7 +368,7 @@ $scope.init = function() {
             $scope.usuarioData.idUsuario
         )
         .then(function(result){
-            //console.log( "resultUniverso", result );
+            
             if( result.data.length != 0 ){
                 
                 /*
@@ -387,9 +387,6 @@ $scope.init = function() {
                 alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
             }
         });
-        // console.log( "getTotalAbonos" );
-        // console.log( "totalAbonosContables", $scope.totalAbonosContables );
-        // console.log( "usuario", $scope.usuarioData );
     }
 
     $scope.getTotalUniversoBancario = function (){
