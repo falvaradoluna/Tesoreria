@@ -113,7 +113,8 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
+        { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT }
     ];
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function (error, result) {

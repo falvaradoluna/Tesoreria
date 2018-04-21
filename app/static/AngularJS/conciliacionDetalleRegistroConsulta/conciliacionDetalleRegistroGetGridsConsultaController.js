@@ -51,7 +51,7 @@
     // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
     $scope.getAuxiliarPunteo = function (idempresa, cuenta, idHistorico) {
-        conciliacionDetalleRegistroConsultaRepository.getAuxiliarPunteo(idempresa, cuenta, idHistorico).then(function (result) {
+        conciliacionDetalleRegistroConsultaRepository.getAuxiliarPunteo(idempresa, cuenta, idHistorico,2).then(function (result) {
             $scope.auxiliarPadre = result.data;
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
 
