@@ -416,16 +416,30 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
             });
         },
 
-        guardarHistorico: function(idUsuario, idEmpresa, idBanco, cuentaContable, cuentaBancaria) {
+        guardarHistorico: function(
+            idUsuario, 
+            idBanco,
+            idEmpresa,  
+            cuentaBancaria,
+            cuentaContable,
+            fechaElaboracion,
+            fechaCorte,
+            polizaPago,
+            opcion
+        ) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'guardarHistorico/',
                 method: "GET",
                 params: {                    
                     idUsuario: idUsuario,
-                    idEmpresa: idEmpresa,
                     idBanco: idBanco,
+                    idEmpresa: idEmpresa,
+                    cuentaBancaria: cuentaBancaria,
                     cuentaContable: cuentaContable,
-                    cuentaBancaria: cuentaBancaria
+                    fechaElaboracion: fechaElaboracion,
+                    fechaCorte: fechaCorte,
+                    polizaPago: polizaPago,
+                    opcion: opcion
                 },
                 headers: {
                     'Content-Type': 'application/json'
