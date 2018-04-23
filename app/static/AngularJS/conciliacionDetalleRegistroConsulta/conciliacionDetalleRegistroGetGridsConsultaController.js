@@ -71,20 +71,24 @@
             $scope.AuxiliarPunteado = $filter('filter')(result.data, function (value) {
                 return value.idEstatus == 3;
             });
-
+            console.log( 'resultSumasAuxiliarPunto', result );
             //Obtener la uma total de los registros
-            angular.forEach($scope.AuxiliarPunteado, function (value, key) {
-                $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-            });
+            // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
+            //     $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+            // });
 
-            angular.forEach($scope.AuxiliarPunteado, function (value, key) {
-                $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-            });
+            // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
+            //     $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+            // });
 
-            angular.forEach(result.data, function( value, key ){
-                $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-                $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-            });
+            if( $rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0 ){
+                angular.forEach(result.data, function( value, key ){
+                    if( value.idPunteoFinalBancos == 3 ){
+                        $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+                        $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+                    }
+                });
+            }
 
             $scope.tabla('auxiliarPunteo');
         });
@@ -97,24 +101,28 @@
         conciliacionDetalleRegistroConsultaRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, idHistorico).then(function (result) {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-
+            console.log( 'resultSumasBancoPunteo', result );
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
                 return value.idPAdre == 3;
             });
 
             //Obtener la uma total de los registros
-            angular.forEach($scope.BancoPunteado, function (value, key) {
-                $rootScope.BancoPunteadoAbonosTotales += value.abono;
-            });
+            // angular.forEach($scope.BancoPunteado, function (value, key) {
+            //     $rootScope.BancoPunteadoAbonosTotales += value.abono;
+            // });
 
-            angular.forEach($scope.BancoPunteado, function (value, key) {
-                $rootScope.BancoPunteadoCargosTotales += value.cargo;
-            });
+            // angular.forEach($scope.BancoPunteado, function (value, key) {
+            //     $rootScope.BancoPunteadoCargosTotales += value.cargo;
+            // });
 
-            angular.forEach(result.data, function( value, key ){
-                $rootScope.BancoPunteadoAbonosTotales += value.abono;
-                $rootScope.BancoPunteadoCargosTotales += value.cargo;
-            });
+            if( $rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0 ){
+                angular.forEach(result.data, function( value, key ){
+                    if(value.idPunteoFinalBancos == 3){
+                        $rootScope.BancoPunteadoAbonosTotales += value.abono;
+                        $rootScope.BancoPunteadoCargosTotales += value.cargo;
+                    }
+                });
+            }
 
             $scope.tabla('bancoPunteo');
         });
@@ -310,18 +318,16 @@
     };
     //CLON LAGP
     $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
-        console.log( 'DetalleRegistrosEnlaConsulta' );
-        console.log( "abonosDatadetalleRegistrosBancariosAbonos", abonosData );
+        
         $rootScope.registrosBancariosAbonos[0] = abonosData;
         $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
-        console.log( 'registroBancariosAbonos', $rootScope.registrosBancariosAbonos );
+        
         conciliacionDetalleRegistroConsultaRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS_H, $scope.paramsHistory.HistoricoId )
         .then(function(result){
-            console.log( 'result',result );
+            
             if( result.data[1].length > 0 ){
                 $rootScope.regBancariosAbonoDetalle = result.data[1];
                 $rootScope.totalAbonoBanco = result.data[1][0].ABONO_BANCO;
-                console.log( '$rootScope.totalAbonoBanco', $rootScope.totalAbonoBanco );
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
                 alertFactory.warning('No se encontraron datos.');
@@ -331,16 +337,12 @@
     };
     //CLON LAGP
     $scope.detalleRegistrosContablesAbonos = function (abonosData) {
-        
-        console.log( 'DetsalleContableAbonoCONSULTA' );
         $rootScope.registroCargosAbono[0] = abonosData;
         $rootScope.registrosCargodAbonosTotal = abonosData.cargo;
-        console.log( 'registroCargosAbono', $rootScope.registroCargosAbono );
         
         conciliacionDetalleRegistroConsultaRepository.detalleRegistrosContablesAbonos( abonosData.idAuxiliar, $scope.paramsHistory.HistoricoId )
         .then(function(result){
             if( result.data[1].length != 0 ){
-                console.log( 'result', result );
                 $rootScope.regCargoAbonoDetalle = result.data[1];
                 $rootScope.totalHijosCargos = result.data[1][0].importe;
                 
