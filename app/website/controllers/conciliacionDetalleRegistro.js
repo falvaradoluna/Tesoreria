@@ -593,15 +593,23 @@ conciliacionDetalleRegistro.prototype.get_guardarHistorico = function (req, res,
     var idUsuario = req.query.idUsuario;
     var idBanco = req.query.idBanco;
     var idEmpresa = req.query.idEmpresa;
-    var cuentaContable = req.query.cuentaContable;
     var cuentaBancaria = req.query.cuentaBancaria;
+    var cuentaContable = req.query.cuentaContable;
+    var fechaElaboracion = req.query.fechaElaboracion;
+    var fechaCorte = req.query.fechaCorte;
+    var polizaPago = req.query.polizaPago;
+    var opcion = req.query.opcion;
 
     var params = [
         { name: 'idUsuario', value: idUsuario, type: self.model.types.INT },
         { name: 'idBanco', value: idBanco, type: self.model.types.INT },
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
+        { name: 'cuentaBancaria', value: cuentaBancaria, type: self.model.types.INT },
         { name: 'cuentaContable', value: cuentaContable, type: self.model.types.INT },
-        { name: 'cuentaBancaria', value: cuentaBancaria, type: self.model.types.INT }
+        { name: 'fechaElaboracion', value: fechaElaboracion, type: self.model.types.INT },
+        { name: 'fechaCorte', value: fechaCorte, type: self.model.types.INT },
+        { name: 'polizaPago', value: polizaPago, type: self.model.types.INT },
+        { name: 'opcion', value: opcion, type: self.model.types.INT },
     ];
 
     console.log("params", params);

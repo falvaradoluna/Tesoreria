@@ -194,21 +194,26 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
     //****************************************************************************************************
 
     //LAGP
-    $scope.guardarHistorico = function() {
-        conciliacionDetalleRegistroRepository.guardarHistorico( $rootScope.userData.idUsuario, 
-                                                                $rootScope.paramsSaveHistori.IdEmpresa,
-                                                                $rootScope.paramsSaveHistori.IdBanco,
-                                                                $rootScope.paramsSaveHistori.CuentaContable,
-                                                                $rootScope.paramsSaveHistori.Cuenta 
+    $scope.guardarHistorico = function () {
+        conciliacionDetalleRegistroRepository.guardarHistorico(
+            $rootScope.userData.idUsuario,
+            $rootScope.paramsSaveHistori.IdBanco,
+            $rootScope.paramsSaveHistori.IdEmpresa,
+            $rootScope.paramsSaveHistori.Cuenta,    
+            $rootScope.paramsSaveHistori.CuentaContable,
+            $rootScope.paramsSaveHistori.fechaElaboracion,
+            $rootScope.paramsSaveHistori.fechaCorte,
+            $rootScope.paramsSaveHistori.PolizaPago,
+            1,
         )
-        .then(function( result ){
-            console.log( 'result', result );
-            if( result.data[0].estatus == 0 ){
-                alertFactory.success(result.data[0].mensaje);
-            }else{
-                alertFactory.error(result.data[0].mensaje);
-            }
-        });
+            .then(function (result) {
+                console.log('result', result);
+                if (result.data[0].estatus == 0) {
+                    alertFactory.success(result.data[0].mensaje);
+                } else {
+                    alertFactory.error(result.data[0].mensaje);
+                }
+            });
 
     };
 });

@@ -61,6 +61,7 @@
     $scope.universoContable = [];
     $scope.universoBancario = [];
     //$scope.universoBancarioCargo = [];
+    
 
 $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
@@ -88,61 +89,70 @@ $scope.init = function() {
      // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
    $scope.getAuxiliarPunteo = function(idempresa, cuenta, fechaElaboracion, fechaCorte) {
-
         conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta, fechaElaboracion, fechaCorte).then(function(result) {
             
             $scope.auxiliarPadre = result.data;
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
-
             $scope.AuxiliarPunteado = $filter('filter')(result.data, function(value){
             return value.idEstatus == 3;
             });
+           console.log( 'resultAuxiliarPunteo', result );
            
            //Obtener la uma total de los registros
-            angular.forEach($scope.AuxiliarPunteado, function (value, key) {
-                $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-            });
+            // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
+            //     $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+            // });
 
-            angular.forEach($scope.AuxiliarPunteado, function (value, key) {
-                $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-            });
+            // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
+            //     $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+            // });
 
-            angular.forEach(result.data, function( value, key ){
-                $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-                $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-            });
+            if( $rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0 ){
+                angular.forEach(result.data, function( value, key ){
+                    if( value.idPunteoFinalBancos == 3 ){
+                        $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+                        $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+                    }
+                });
+            }
+            
 
             $scope.tabla('auxiliarPunteo');
         });
+        $scope.conteoAuxiliar++;
     };
     //****************************************************************************************************
 
     // INICIA Obtengo los padres del Banco punteado
     //****************************************************************************************************
      $scope.getBancoPunteo = function(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte) {
-
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-
+            
+            //console.log( '$scope.conteoBanco', $scope.conteoBanco);
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function(value){
             return value.idPAdre == 3;
             });
-           
+            //console.log( 'resultBancoPunteo', result );
            //Obtener la uma total de los registros
-            angular.forEach($scope.BancoPunteado, function (value, key) {
-                $rootScope.BancoPunteadoAbonosTotales += value.abono;
-            });
+            // angular.forEach($scope.BancoPunteado, function (value, key) {
+            //     $rootScope.BancoPunteadoAbonosTotales += value.abono;
+            // });
 
-            angular.forEach($scope.BancoPunteado, function (value, key) {
-                $rootScope.BancoPunteadoCargosTotales += value.cargo;
-            });
+            // angular.forEach($scope.BancoPunteado, function (value, key) {
+            //     $rootScope.BancoPunteadoCargosTotales += value.cargo;
+            // });
 
-            angular.forEach(result.data, function( value, key ){
-                $rootScope.BancoPunteadoAbonosTotales += value.abono;
-                $rootScope.BancoPunteadoCargosTotales += value.cargo;
-            });
-
+            if( $rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0 ){
+                angular.forEach(result.data, function( value, key ){
+                    if(value.idPunteoFinalBancos == 3){
+                        $rootScope.BancoPunteadoAbonosTotales += value.abono;
+                        $rootScope.BancoPunteadoCargosTotales += value.cargo;
+                    }
+                });
+            }
+            
             $scope.tabla('bancoPunteo');
         });
     };
