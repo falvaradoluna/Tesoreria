@@ -60,6 +60,10 @@
     //$scope.universoAbono = [];
     $scope.universoContable = [];
     $scope.universoBancario = [];
+    $rootScope.universoTotalMovimientoContableCargo = 0;
+    $rootScope.universoTotalMovimientoContableAbono = 0;
+    $rootScope.universoTotalMovimientoBancarioCargo = 0;
+    $rootScope.universoTotalMovimientoBancarioAbono = 0;
     //$scope.universoBancarioCargo = [];
     
 
@@ -400,14 +404,17 @@ $scope.init = function() {
             
             if( result.data.length != 0 ){
                 
-                /*
-                for( var i = 0; i < result.data.length; i++ ){
-                    if( result.data[i].tipoMovimiento == 0 ){
-                        $scope.universoCargo.push( result.data[i] );
-                    }else{
-                        $scope.universoAbono.push( result.data[i] );
-                    }
-                }*/
+                if ($rootScope.universoTotalMovimientoContableCargo == 0 && $rootScope.universoTotalMovimientoContableAbono == 0) {
+                    angular.forEach(result.data, function (value, key) {
+                        if (value.tipoMovimiento == 0) {
+                            $rootScope.universoTotalMovimientoContableCargo += value.cargo;
+                        }
+
+                        if (value.tipoMovimiento == 1) {
+                            $rootScope.universoTotalMovimientoContableAbono += value.abono;
+                        }
+                    });
+                }
                 $scope.universoContable = result.data;
 
                 $scope.tabla('contableUniCargo');
@@ -418,8 +425,8 @@ $scope.init = function() {
         });
     }
 
-    $scope.getTotalUniversoBancario = function (){
-        conciliacionDetalleRegistroRepository.getTotalUniversoBancario( 
+    $scope.getTotalUniversoBancario = function () {
+        conciliacionDetalleRegistroRepository.getTotalUniversoBancario(
             $scope.busquedaUniverso.IdEmpresa,
             $scope.busquedaUniverso.IdBanco,
             $scope.busquedaUniverso.Cuenta,
@@ -430,24 +437,29 @@ $scope.init = function() {
             0,
             $scope.usuarioData.idUsuario
         )
-        .then(function(result){
-            if( result.data.length != 0 ){
-                /*
-                for( var i = 0; i < result.data.length; i++ ){
-                    if( result.data[i].tipoMovimiento == 0 ){
-                        $scope.universoBancarioCargo.push( result.data[i] );
-                    }else{
-                        $scope.universoBancarioAbono.push( result.data[i] );
-                    }
-                }*/
-                $scope.universoBancario = result.data;
+            .then(function (result) {
+                if (result.data.length != 0) {
+                    console.log('resultGetTotalUniversoBancario', result);
+                    if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {
+                        angular.forEach(result.data, function (value, key) {
+                            if (value.tipoMovimiento == 0) {
+                                $rootScope.universoTotalMovimientoBancarioCargo += value.cargo;
+                            }
 
-                $scope.tabla('contableUniBancarioCargo');
-                $scope.tabla('contableUniBancarioAbono');
-            }else{
-                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
-            }
-        });
+                            if (value.tipoMovimiento == 1) {
+                                $rootScope.universoTotalMovimientoBancarioAbono += value.abono;
+                            }
+                        });
+                    }
+                    $scope.universoBancario = result.data;
+                    console.log( 'bancariosUniversoTotalCargo', $rootScope.universoTotalMovimientoBancarioCargo );
+                    console.log( 'bancariosUniversoTotalAbono', $rootScope.universoTotalMovimientoBancarioAbono );
+                    $scope.tabla('contableUniBancarioCargo');
+                    $scope.tabla('contableUniBancarioAbono');
+                } else {
+                    alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                }
+            });
     }
 
     // INICIA inicio la tabla para los distintos casos
