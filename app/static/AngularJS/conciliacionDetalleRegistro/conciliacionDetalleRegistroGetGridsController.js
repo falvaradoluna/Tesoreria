@@ -42,8 +42,8 @@
      $rootScope.esCargo;
 
      //Variables para los resultados totales de cada Grid
-     $scope.bancoReferenciadosAbonosTotales = 0;
-     $scope.bancoReferenciadosCargosTotales = 0;
+     $rootScope.bancoReferenciadosAbonosTotales = 0;
+     $rootScope.bancoReferenciadosCargosTotales = 0;
      $scope.contableReferenciadosAbonosTotales = 0;
      $scope.contableReferenciadosCargosTotales = 0;
      $scope.BancoReferenciadoCargosTotales = 0;
@@ -100,8 +100,7 @@ $scope.init = function() {
             $scope.AuxiliarPunteado = $filter('filter')(result.data, function(value){
             return value.idEstatus == 3;
             });
-           console.log( 'resultAuxiliarPunteo', result );
-           
+            
            //Obtener la uma total de los registros
             // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
             //     $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
@@ -134,11 +133,10 @@ $scope.init = function() {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             
-            //console.log( '$scope.conteoBanco', $scope.conteoBanco);
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function(value){
             return value.idPAdre == 3;
             });
-            //console.log( 'resultBancoPunteo', result );
+            
            //Obtener la uma total de los registros
             // angular.forEach($scope.BancoPunteado, function (value, key) {
             //     $rootScope.BancoPunteadoAbonosTotales += value.abono;
@@ -180,28 +178,50 @@ $scope.init = function() {
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-     $scope.bancoReferenciados = function() {
-        conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function(result) {
+    $scope.bancoReferenciados = function () {
+        conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function (result) {
             
-        $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function(value){
-            return value.tipoMovimiento == 0;
-        });
-        $scope.bancoReferenciadosCargos = $filter('filter')(result.data,function(value){
-            return value.tipoMovimiento == 1;
-        });
-        $scope.tabla('bancoReferenciadoAbono');
-        $scope.tabla('bancoReferenciadoCargo');
+            $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
+                return value.tipoMovimiento == 0;
+            });
+            // $scope.bancoReferenciadosCargos = $filter('filter')(result.data, function (value) {
+            //     return value.tipoMovimiento == 1;
+            // });
+            $scope.tabla('bancoReferenciadoAbono');
+            $scope.tabla('bancoReferenciadoCargo');
+            //Obtener la uma total de los registros
 
-        //Obtener la uma total de los registros
+            // if ($rootScope.bancoReferenciadosAbonosTotales == 0 ) {
+            //     angular.forEach(result.data, function (value, key) {
+
+
+            //         if (value.tipoMovimiento == 1) {
+            //             $rootScope.bancoReferenciadosAbonosTotales += value.abono;
+            //         }
+            //     });
+            // }
              angular.forEach($scope.bancoReferenciadosAbonos, function(value, key) {
                     $scope.bancoReferenciadosAbonosTotales += value.abono;
                     });
-             
-             angular.forEach($scope.bancoReferenciadosCargos, function(value, key) {
-                    $scope.bancoReferenciadosCargosTotales += value.cargo;
-                    });
-                    
-      });
+
+            //  angular.forEach($scope.bancoReferenciadosCargos, function(value, key) {
+            //         $scope.bancoReferenciadosCargosTotales += value.cargo;
+            //         });
+            //$scope.bancoReferenciadosCargosTotales = 1;
+
+        });
+    };
+
+    $scope.getRegistrosBancariosCargos = function () {
+        conciliacionDetalleRegistroRepository.getRegistrosBancariosCargos()
+        .then(function (result) {
+            $rootScope.registrosBancariosCargos = result.data
+            if ($rootScope.bancoReferenciadosCargosTotales == 0) {
+                angular.forEach(result.data, function (value, key) {
+                    $rootScope.bancoReferenciadosCargosTotales += value.importe;
+                });
+            }
+        });
     };
     //****************************************************************************************************
     
@@ -297,13 +317,6 @@ $scope.init = function() {
     // Get Registros bancarios cargos
     //*/
 
-    $scope.getRegistrosBancariosCargos = function () {
-        conciliacionDetalleRegistroRepository.getRegistrosBancariosCargos( )
-        .then(function(result){
-            $rootScope.registrosBancariosCargos = result.data
-        });
-    };
-
     $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
         
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosCargos( idCargo )
@@ -346,19 +359,19 @@ $scope.init = function() {
         });
         //alertFactory.warning('Función en desarrollo...');
     };
-     
+     //Ing. Luis Antonio García Perrusquía
     $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
-        console.log( "abonosDatadetalleRegistrosBancariosAbonos", abonosData );
+        
         $rootScope.registrosBancariosAbonos[0] = abonosData;
         $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS )
         .then(function(result){
-            console.log( 'result',result );//Pendiente de llenar la tabla
+            
             if( result.data[1].length > 0 ){
                 $rootScope.regBancariosAbonoDetalle = result.data[1];
                 $rootScope.totalAbonoBanco = result.data[1][0].ABONO_BANCO;
                 $rootScope.esCargo = result.data[0][0].esCargo;
-                console.log( '$rootScope.esCargo', $rootScope.esCargo );
+                
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
                 alertFactory.warning('No se encontraron datos.');
@@ -387,7 +400,7 @@ $scope.init = function() {
             
         });
     };
-
+    //Ing. Luis Antonio García Perrusquía
     $scope.getTotalUniverso = function (){
         conciliacionDetalleRegistroRepository.getTotalUniverso( 
             $scope.busquedaUniverso.IdEmpresa,
@@ -424,7 +437,7 @@ $scope.init = function() {
             }
         });
     }
-
+    //Ing. Luis Antonio García Perrusquía
     $scope.getTotalUniversoBancario = function () {
         conciliacionDetalleRegistroRepository.getTotalUniversoBancario(
             $scope.busquedaUniverso.IdEmpresa,
@@ -439,7 +452,7 @@ $scope.init = function() {
         )
             .then(function (result) {
                 if (result.data.length != 0) {
-                    console.log('resultGetTotalUniversoBancario', result);
+                    
                     if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {
                         angular.forEach(result.data, function (value, key) {
                             if (value.tipoMovimiento == 0) {
@@ -452,8 +465,7 @@ $scope.init = function() {
                         });
                     }
                     $scope.universoBancario = result.data;
-                    console.log( 'bancariosUniversoTotalCargo', $rootScope.universoTotalMovimientoBancarioCargo );
-                    console.log( 'bancariosUniversoTotalAbono', $rootScope.universoTotalMovimientoBancarioAbono );
+                    
                     $scope.tabla('contableUniBancarioCargo');
                     $scope.tabla('contableUniBancarioAbono');
                 } else {
