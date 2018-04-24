@@ -253,64 +253,60 @@ $scope.init = function() {
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-    $scope.detalleRegistrosReferenciadosBancos = function(registroConciliado){
-        
+    $scope.detalleRegistrosReferenciadosBancos = function (registroConciliado) {
+
         $('#loading').modal('show');
-             
-                                                                                                    /*  Números identificadores para el tipo de referencia de cada registro Bancario "ABONOS - CARGOS"
-                                                                                                        1 Corresponde a depositos Bancarios (Abonos) referenciados (Directos)
-                                                                                                        2 Corresponde a depositos BANCARIOS (Abonos) referenciados (Control de depositos)
-                                                                                                        3 Corresponde a depositos Bancarios (Cargos) referenciados
-                                                                                                        4 Corresponde a depositos Bancarios (Cargos) referenciados (Comisiones)*/
-            conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, registroConciliado.tipoReferencia, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago, $scope.busqueda.Cuenta, registroConciliado.idBmer).then(function(result){
+
+        /*  Números identificadores para el tipo de referencia de cada registro Bancario "ABONOS - CARGOS"
+            1 Corresponde a depositos Bancarios (Abonos) referenciados (Directos)
+            2 Corresponde a depositos BANCARIOS (Abonos) referenciados (Control de depositos)
+            3 Corresponde a depositos Bancarios (Cargos) referenciados
+            4 Corresponde a depositos Bancarios (Cargos) referenciados (Comisiones)*/
+        conciliacionDetalleRegistroRepository.getDetalleRelacion(registroConciliado.refAmpliada, registroConciliado.tipoReferencia, $scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.polizaPago, $scope.busqueda.Cuenta, registroConciliado.idBmer).then(function (result) {
             $scope.datoBancarioActual = registroConciliado;
-            
+
             $scope.abonoTotal = 0;
             $scope.cargoTotal = 0;
-            if(registroConciliado.tipoReferencia >= 3)
-            {
-             if(registroConciliado.tipoReferencia == 3)
-             {
-                    if(result.data.length > 0){
+            if (registroConciliado.tipoReferencia >= 3) {
+                if (registroConciliado.tipoReferencia == 3) {
+                    if (result.data.length > 0) {
+                        $('#loading').modal('hide');
+                        $scope.cargoActual = $scope.datoBancarioActual.cargo;
+                        $scope.BancoReferenciadoCargos = result.data;
+
+                        angular.forEach($scope.BancoReferenciadoCargos, function (value, key) {
+                            $scope.abonoTotal += value.abono;
+                        });
+
+                        $('#DetalleRelacionCargos').modal('show');
+                    }
+                    else {
+                        alertFactory.warning('No existe relación para este registro');
+                    }
+                }
+                else if (registroConciliado.tipoReferencia == 4) {
                     $('#loading').modal('hide');
-                   $scope.cargoActual = $scope.datoBancarioActual.cargo;
-                   $scope.BancoReferenciadoCargos = result.data;
-                   
-                    angular.forEach($scope.BancoReferenciadoCargos, function(value, key) {
-                    $scope.abonoTotal += value.abono;
+                    alertFactory.warning('Función en desarrollo ...');
+                }
+            }
+            else if (registroConciliado.tipoReferencia < 3) {
+                if (result.data.length > 0) {
+                    $('#loading').modal('hide');
+                    $scope.abonoActual = $scope.datoBancarioActual.abono;
+                    $scope.BancoReferenciadoAbonos = result.data;
+
+                    angular.forEach($scope.BancoReferenciadoAbonos, function (value, key) {
+                        $scope.cargoTotal += value.cargo;
                     });
 
-                       $('#DetalleRelacionCargos').modal('show');
-                       }
-                else{
+                    $('#DetalleRelacionAbonos').modal('show');
+                }
+                else {
                     alertFactory.warning('No existe relación para este registro');
                 }
-              }
-              else if(registroConciliado.tipoReferencia == 4)
-              {
-                $('#loading').modal('hide');
-                alertFactory.warning('Función en desarrollo ...');
-              }
-            }
-            else if(registroConciliado.tipoReferencia < 3)
-            {
-                if(result.data.length > 0){
-                $('#loading').modal('hide');
-                $scope.abonoActual = $scope.datoBancarioActual.abono;
-                $scope.BancoReferenciadoAbonos = result.data;
-                
-                angular.forEach($scope.BancoReferenciadoAbonos, function(value, key) {
-                $scope.cargoTotal += value.cargo;
-                });
-
-                $('#DetalleRelacionAbonos').modal('show');
-            }
-            else{
-                alertFactory.warning('No existe relación para este registro');
-            }
             }
 
-      });
+        });
     };
     
     //********************************* Ing. Luis Antonio García Perrusquía 27/03/2018
