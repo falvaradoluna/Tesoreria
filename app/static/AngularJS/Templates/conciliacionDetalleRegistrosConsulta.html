@@ -1151,7 +1151,7 @@
                         <tr>
                             <th>Concepto</th>
                             <th>Numero de Cuenta</th>
-                            <th>Cargo</th>
+                            <!-- <th>Cargo</th> -->
                             <th>Abono</th>
                         </tr>
                     </thead>
@@ -1159,7 +1159,7 @@
                         <tr ng-repeat="detAbono in regBancariosAbonoDetalle">
                             <td>{{ detAbono.MOV_CONCEPTO }}</td>
                             <td>{{ detAbono.noCuenta }}</td>
-                            <td class="text-info text-semibold text-right">{{ detAbono.rap_importeC | currency }}</td>
+                            <!-- <td class="text-info text-semibold text-right">{{ detAbono.rap_importeC | currency }}</td> -->
                             <td class="text-info text-semibold text-right">{{ detAbono.rap_importe | currency}}</td>
                         </tr>
                     </tbody>
@@ -1234,7 +1234,7 @@
                             <th>Concepto</th>
                             <th>Referencia</th>
                             <th>Referencia ampliada</th>
-                            <th>Importe Pagado</th>
+                            <th>Abono</th>
                         </tr>
                     </thead>
                     <tbody>

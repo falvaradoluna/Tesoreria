@@ -347,12 +347,12 @@ $scope.init = function() {
         console.log( "abonosDatadetalleRegistrosBancariosAbonos", abonosData );
         $rootScope.registrosBancariosAbonos[0] = abonosData;
         $rootScope.registrosBancariosAbonosTotal = abonosData.abono;
-        
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosAbonos( abonosData.IDABONOSBANCOS )
         .then(function(result){
             console.log( 'result',result );//Pendiente de llenar la tabla
             if( result.data[1].length > 0 ){
                 $rootScope.regBancariosAbonoDetalle = result.data[1];
+                $rootScope.totalAbonoBanco = result.data[1][0].ABONO_BANCO;
                 $rootScope.esCargo = result.data[0][0].esCargo;
                 console.log( '$rootScope.esCargo', $rootScope.esCargo );
                 $('#regBancariosAbonoDetalle').modal('show');

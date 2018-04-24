@@ -43,6 +43,12 @@
                 setTimeout( function(){
                 $(".cargando").remove();
                 }, 1500 );
+
+                var d = new Date();
+                var n = d.getMonth();
+                
+                $scope.mesesSelect = n + 1;
+                console.log( 'mesesSelect', $scope.mesesSelect );
             }
 
             var variablesLocalStorage = function() {
