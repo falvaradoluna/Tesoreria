@@ -393,6 +393,45 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 }
             });
         },
+        //Ing. LAGPC
+        getUniversoContableConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, polizaPago) {
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'universoContableConsulta',
+                method: 'GET',
+                params: {
+                    idEmpresa: idEmpresa,
+                    idUsuario: idUsuario,
+                    idHistorico: idHistorico,
+                    noCuenta: noCuenta,
+                    cuentaContable: cuentaContable,
+                    fechaElaboracion: fechaElaboracion,
+                    polizaPago: polizaPago
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+        //Ing. LAGPC
+        getUniversoBancariosConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, fechaCorte, polizaPago) {
+            return $http({
+                url: conciliacionDetalleRegistroConsultaURL + 'universoBancarioConsulta',
+                method: 'GET',
+                params: {
+                    idEmpresa: idEmpresa,
+                    idUsuario: idUsuario,
+                    idHistorico: idHistorico,
+                    noCuenta: noCuenta,
+                    cuentaContable: cuentaContable,
+                    fechaElaboracion: fechaElaboracion,
+                    fechaCorte: fechaCorte,
+                    polizaPago: polizaPago
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
 
 //Fin de la llave return
     };

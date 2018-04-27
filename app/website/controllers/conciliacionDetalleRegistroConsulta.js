@@ -425,4 +425,99 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosContablesAbono
     });
 };
 
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/detalleRegistrosContablesAbonos
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_getUniversoContable = function (req, res, next) {
+
+    var self = this;
+    var idAuxiliar = req.query.idAuxiliar;
+    var idHistorico = req.query.idHistorico;
+
+    var params = [
+        { name: 'IDCARGOS_COMPLETO', value: idAuxiliar, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
+    ];
+    console.log( 'paramsdetalleRegistrosContablesAbonos', params );
+    this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_CARGOCON_ABONOBAN_SP_H]', params, function (error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/universoContableConsulta
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_universoContableConsulta = function (req, res, next) {
+
+    var self = this;
+    var idEmpresa = req.query.idEmpresa;
+    var idUsuario = req.query.idUsuario;
+    var idHistorico = req.query.idHistorico;
+    var noCuenta = req.query.noCuenta;
+    var cuentaContable = req.query.cuentaContable;
+    var fechaElaboracion = req.query.fechaElaboracion;
+    var polizaPago = req.query.polizaPago;
+
+    var params = [
+        { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
+        { name: 'idUsuario', value: idUsuario, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT },
+        { name: 'noCuenta', value: noCuenta, type: self.model.types.STRING },
+        { name: 'cuentaContable', value: cuentaContable, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: fechaElaboracion, type: self.model.types.STRING },
+        { name: 'polizaPago', value: polizaPago, type: self.model.types.STRING },
+        
+    ];
+    
+    this.model.query('[dbo].[SEL_CONTABLE_TODO_SP_H]', params, function (error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/** 
+ * ING. LAGP
+ * api/conciliacionDetalleRegistro/universoBancarioConsulta
+*/
+conciliacionDetalleRegistroConsulta.prototype.get_universoBancarioConsulta = function (req, res, next) {
+
+    var self = this;
+    var idEmpresa = req.query.idEmpresa;
+    var idUsuario = req.query.idUsuario;
+    var idHistorico = req.query.idHistorico;
+    var noCuenta = req.query.noCuenta;
+    var cuentaContable = req.query.cuentaContable;
+    var fechaElaboracion = req.query.fechaElaboracion;
+    var fechaCorte = req.query.fechaCorte;
+    var polizaPago = req.query.polizaPago;
+
+    var params = [
+        { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
+        { name: 'idUsuario', value: idUsuario, type: self.model.types.INT },
+        { name: 'idHistorico', value: idHistorico, type: self.model.types.INT },
+        { name: 'noCuenta', value: noCuenta, type: self.model.types.STRING },
+        { name: 'cuentaContable', value: cuentaContable, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: fechaElaboracion, type: self.model.types.STRING },
+        { name: 'fechaCorte', value: fechaCorte, type: self.model.types.STRING },
+        { name: 'polizaPago', value: polizaPago, type: self.model.types.STRING },
+    ];
+    
+    this.model.query('[dbo].[SEL_BANCARIO_TODO_SP_H]', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = conciliacionDetalleRegistroConsulta;
