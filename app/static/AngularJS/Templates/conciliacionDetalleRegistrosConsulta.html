@@ -27,15 +27,35 @@
                 
 
                 <div class="tab" style="background-color: green">
-                <button class="tablinks active" onclick="openCity(event, 'CargosSinPuntear')"><span style="color:white; font-weight: bold;"> Registros sin Puntear </span></button>
-                <button class="tablinks" onclick="openCity(event, 'CargosPunteados')"><span style="color:white; font-weight: bold;"> Registros Punteados</span></button>
-                <button class="tablinks" onclick="openCity(event, 'DepositosDPI')"><span style="color:white; font-weight: bold;"> Depositos por Identificar</span></button>
-                <button class="tablinks" onclick="openCity(event, 'BancoReferenciados')"><span style="color:white; font-weight: bold;">
-                 Registros Bancarios Referenciados
-                </span></button>
-                <button class="tablinks" onclick="openCity(event, 'ContablesReferenciados')"><span style="color:white; font-weight: bold;">
-                 Registros Contables Referenciados
-                </span></button>
+                    <button class="tablinks active" onclick="openCity(event, 'CargosSinPuntear')">
+                        <span style="color:white; font-weight: bold;"> Registros sin Puntear </span>
+                    </button>
+                    <button class="tablinks" onclick="openCity(event, 'CargosPunteados')">
+                        <span style="color:white; font-weight: bold;"> Registros Punteados</span>
+                    </button>
+                    <button class="tablinks" onclick="openCity(event, 'DepositosDPI')">
+                        <span style="color:white; font-weight: bold;"> Depositos por Identificar</span>
+                    </button>
+                    <button class="tablinks" onclick="openCity(event, 'BancoReferenciados')">
+                        <span style="color:white; font-weight: bold;">
+                            Registros Bancarios Referenciados
+                        </span>
+                    </button>
+                    <button class="tablinks" onclick="openCity(event, 'ContablesReferenciados')">
+                        <span style="color:white; font-weight: bold;">
+                            Registros Contables Referenciados
+                        </span>
+                    </button>
+                    <button class="tablinks" onclick="openCity(event, 'totalUniversoContables')">
+                        <span style="color:white; font-weight: bold;">
+                            Total Movimientos Contables
+                        </span>
+                    </button>
+                    <button class="tablinks" onclick="openCity(event, 'totalUniversoBancarios')">
+                        <span style="color:white; font-weight: bold;">
+                            Total Movimientos Bancarios
+                        </span>
+                    </button>
                 </div>
         <!--Inicio del primer Tab Detalle de Registros no Punteados-->
         <div id="CargosSinPuntear" class="tabcontent" style="display: block;">
@@ -558,9 +578,131 @@
 
 
 
+        <!--Inicio del sexto Tab / Registros Universo Total-->
+        <div id="totalUniversoContables" class="tabcontent">
+            <div class="panel col-md-12">
+                <div class="col-md-12">
+                    <div class="text-main">
+                        <h4>Total Registros Contables (Cargos y Abonos) Consulta</h4>
+                    </div>
+                    <table id="contableUniCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Fecha aqui</th>
+                                <th>Tipo de Póliza</th>
+                                <th># de Póliza</th>
+                                <th>Concepto</th>
+                                <th>Abono</th>
+                                <th>Cargo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="unicontable in universoContable">
+                                <td> {{ unicontable.MOV_FECHOPE | date:'yyyy-MM-dd' }} </td>
+                                <td>{{ unicontable.MOV_TIPOPOL }}</td>
+                                <td>{{ unicontable.MOV_CONSPOL }}</td>
+                                <td>{{ unicontable.MOV_CONCEPTO }}</td>
+                                <td>{{ unicontable.cargo | currency}}</td>
+                                <td>{{ unicontable.abono | currency}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    <div class="pull-right">
+                        <br>
+                        <label class='text-bold'>
+                            Total registros contables cargos:
+                        </label>
+                        <label class="text-success text-semibold">
+                            {{ universoTotalMovimientoContableCargo | currency}}
+                        </label>
+                        <br>
+                        <label class='text-bold'>
+                            Total registros contables abonos:
+                        </label>
+                        <label class="text-info text-semibold">
+                            {{ universoTotalMovimientoContableAbono | currency}}
+                        </label>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+        
+                <div class="col-md-12">
+                    <div class="text-right">
+                        <a class="btn btn-warning" href="/conciliacionInicio ">
+                            <i class="ti-back-right"></i> Regresar
+                        </a> &nbsp;
+                    </div>
+                    <br>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <!--Fin del sexto Tab / Registros Contables Referenciados-->
 
-
-
+        <!--Inicio del septimo Tab / Registros Universo Total-->
+    <div id="totalUniversoBancarios" class="tabcontent">
+        <div class="panel col-md-12">
+    
+            <div class="col-md-12">
+                <div class="text-main">
+                    <h4>Total Registros Bancarios (Cargos y Abonos) Consulta</h4>
+                </div>
+                <table id="contableUniBancarioCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Numero cuenta</th>
+                            <th>Referencia</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th>Abono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="uniBanco in universoBancario">
+                            <td> {{ uniBanco.fechaOperacion | date:'yyyy-MM-dd' }} </td>
+                            <td>{{ uniBanco.noCuenta }}</td>
+                            <td>{{ uniBanco.referencia }}</td>
+                            <td>{{ uniBanco.concepto }}</td>
+                            <td>{{ uniBanco.cargo | currency }}</td>
+                            <td>{{ uniBanco.abono | currency }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pull-right">
+                    <br>
+                    <label class='text-bold'>
+                        Total registros bancarios cargos:
+                    </label>
+                    <label class="text-success text-semibold">
+                        {{ universoTotalMovimientoBancarioCargo | currency}}
+                    </label>
+                    <br>
+                    <label class='text-bold'>
+                        Total registros bancarios abonos:
+                    </label>
+                    <label class="text-info text-semibold">
+                        {{ universoTotalMovimientoBancarioAbono | currency}}
+                    </label>
+                    <br>
+                    <br>
+                </div>
+    
+            </div>
+            <div class="col-md-12">
+                <div class="text-right">
+                    <a class="btn btn-warning" href="/conciliacionInicio ">
+                        <i class="ti-back-right"></i> Regresar</a> &nbsp;
+                </div>
+                <br>
+                <br/>
+            </div>
+        </div>
+    </div>
+    <!--Fin del Septimo Tab / Registros Contables Referenciados-->
 
 <!--=====================Modal Detalle de Registros Bancarios Referenciaados (Cargos)==============================-->
 <div class="modal fade" id="DetalleRelacionCargos" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">

@@ -412,7 +412,7 @@ $scope.init = function() {
         .then(function(result){
             
             if( result.data.length != 0 ){
-                
+                console.log( 'resultUniversoContable', result );
                 if ($rootScope.universoTotalMovimientoContableCargo == 0 && $rootScope.universoTotalMovimientoContableAbono == 0) {
                     angular.forEach(result.data, function (value, key) {
                         if (value.tipoMovimiento == 0) {

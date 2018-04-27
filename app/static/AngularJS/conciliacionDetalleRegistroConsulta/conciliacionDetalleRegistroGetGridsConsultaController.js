@@ -37,11 +37,22 @@
      $rootScope.totalHijosCargos;
      $rootScope.esCargo;
 
+     //Universos
+     $scope.universoContable = [];
+     $scope.universoBancario = [];
+     $rootScope.universoTotalMovimientoContableCargo = 0;
+     $rootScope.universoTotalMovimientoContableAbono = 0;
+     $rootScope.universoTotalMovimientoBancarioCargo = 0;
+     $rootScope.universoTotalMovimientoBancarioAbono = 0;
+
 
     //Variable para los parametros
     $scope.paramsHistory = JSON.parse(localStorage.getItem('paramBusqueda'));
+    $scope.userData = JSON.parse( localStorage.getItem('ls.userData') );
 
     $scope.init = function () {
+        $scope.getUniversoContableConsulta();
+        $scope.getUniversoBancariosConsulta();
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
@@ -71,7 +82,6 @@
             $scope.AuxiliarPunteado = $filter('filter')(result.data, function (value) {
                 return value.idEstatus == 3;
             });
-            console.log( 'resultSumasAuxiliarPunto', result );
             //Obtener la uma total de los registros
             // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
             //     $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
@@ -101,7 +111,6 @@
         conciliacionDetalleRegistroConsultaRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, idHistorico).then(function (result) {
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-            console.log( 'resultSumasBancoPunteo', result );
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
                 return value.idPAdre == 3;
             });
@@ -289,6 +298,75 @@
                 $rootScope.detalleAbono.forEach(function( item, key ){
                     
                 });
+            }
+        });
+        //alertFactory.warning('Función en desarrollo...');
+    };
+
+    $scope.getUniversoContableConsulta = function (registroConciliado) {
+        conciliacionDetalleRegistroConsultaRepository.getUniversoContableConsulta( 
+            $scope.paramsHistory.IdEmpresa, 
+            $scope.userData.idUsuario, 
+            $scope.paramsHistory.HistoricoId,
+            $scope.paramsHistory.Cuenta,
+            $scope.paramsHistory.CuentaContable,
+            $scope.paramsHistory.fechaElaboracion,
+            $scope.paramsHistory.PolizaPago )
+        .then(function(result){
+            if( result.data.length != 0 ){
+                if ($rootScope.universoTotalMovimientoContableCargo == 0 && $rootScope.universoTotalMovimientoContableAbono == 0) {
+                    angular.forEach(result.data, function (value, key) {
+                        if (value.tipoMovimiento == 0) {
+                            $rootScope.universoTotalMovimientoContableCargo += value.cargo;
+                        }
+
+                        if (value.tipoMovimiento == 1) {
+                            $rootScope.universoTotalMovimientoContableAbono += value.abono;
+                        }
+                    });
+                }
+                $scope.universoContable = result.data;
+
+                $scope.tabla('contableUniCargo');
+                $scope.tabla('contableUniAbonos');
+            }else{
+                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+            }
+        });
+        //alertFactory.warning('Función en desarrollo...');
+    };
+
+    $scope.getUniversoBancariosConsulta = function (registroConciliado) {
+        conciliacionDetalleRegistroConsultaRepository.getUniversoBancariosConsulta( 
+            $scope.paramsHistory.IdEmpresa, 
+            $scope.userData.idUsuario, 
+            $scope.paramsHistory.HistoricoId,
+            $scope.paramsHistory.Cuenta,
+            $scope.paramsHistory.CuentaContable,
+            $scope.paramsHistory.fechaElaboracion,
+            $scope.paramsHistory.fechaCorte,
+            $scope.paramsHistory.PolizaPago )
+        .then(function(result){
+            console.log( 'getUniversoBancariosConsultaResult', result );
+            if (result.data.length != 0) {
+                    
+                if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {
+                    angular.forEach(result.data, function (value, key) {
+                        if (value.tipoMovimiento == 0) {
+                            $rootScope.universoTotalMovimientoBancarioCargo += value.cargo;
+                        }
+
+                        if (value.tipoMovimiento == 1) {
+                            $rootScope.universoTotalMovimientoBancarioAbono += value.abono;
+                        }
+                    });
+                }
+                $scope.universoBancario = result.data;
+                
+                $scope.tabla('contableUniBancarioCargo');
+                $scope.tabla('contableUniBancarioAbono');
+            } else {
+                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
             }
         });
         //alertFactory.warning('Función en desarrollo...');
