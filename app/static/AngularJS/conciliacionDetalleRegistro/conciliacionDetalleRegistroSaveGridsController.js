@@ -70,7 +70,7 @@
 
                 currentArray = key1;                
                                                                           //Estatusid = 2, indica que el registro ya se encuentra relacionado                                                                                                       //LQMA 01042018 esCargo  
-               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario,value2.esCargo,'1').then(function(result){
+               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,$rootScope.userData.idUsuario,0,value2.esCargo).then(function(result){
                
                var resultado = result.data;  
 
