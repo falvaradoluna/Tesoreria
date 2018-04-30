@@ -612,15 +612,19 @@ conciliacionDetalleRegistro.prototype.get_guardarHistorico = function (req, res,
         { name: 'opcion', value: opcion, type: self.model.types.INT },
     ];
 
-    console.log("params", params);
+    
 
     // self.view.expositor(res, {
 
     //     result: "LLegue we a guardar historico"
     // });
-    this.model.query('INS_GUARDAHISTORICO_SP', params, function (error, result) {
+
+    
+    this.model.queryAllRecordSet('INS_GUARDAHISTORICO_SP', params, function (error, result) {
+       /*
         console.log('error', error);
         console.log('result', result);
+        */
         self.view.expositor(res, {
             error: error,
             result: result

@@ -208,10 +208,10 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
         )
             .then(function (result) {
                 console.log('result', result);
-                if (result.data[0].estatus == 0) {
-                    alertFactory.success(result.data[0].mensaje);
+                if (result.data[1][0].estatus == 0) {
+                    alertFactory.success(result.data[1][0].mensaje);
                 } else {
-                    alertFactory.error(result.data[0].mensaje);
+                    alertFactory.error(result.data[1][0].mensaje);
                 }
             });
 
