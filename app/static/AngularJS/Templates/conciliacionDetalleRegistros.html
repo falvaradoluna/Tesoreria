@@ -453,7 +453,7 @@
                 <table id="bancoReferenciadoAbono" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Banco1</th>
+                            <th>Banco</th>
                             <th>Referencia</th>
                             <th>Fecha</th>
                             <th>Concepto</th>
@@ -475,6 +475,16 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Banco</th>
+                            <th>Referencia</th>
+                            <th>Fecha</th>
+                            <th>Concepto</th>
+                            <th>Abono</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{bancoReferenciadosAbonosTotales | currency}}</p>
@@ -511,6 +521,16 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Banco</th>
+                            <th>Referencia</th>
+                            <th>Fecha</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th data-sort-ignore="true" class="min-width">Detalle</th>
+                        </tr>
+                    </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Cargos Bancarios Referenciados: {{bancoReferenciadosCargosTotales | currency}}</p>
@@ -570,6 +590,16 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo de Póliza</th>
+                            <th># de Póliza</th>
+                            <th>Concepto</th>
+                            <th>Abono</th>
+                            <th data-sort-ignore="true" class="min-width">Detalle</th>
+                        </tr>
+                    </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p>
@@ -605,6 +635,16 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo de Póliza</th>
+                            <th># de Póliza</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th data-sort-ignore="true" class="min-width">Detalle</th>
+                        </tr>
+                    </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Cargos Contables Referenciados: {{contableReferenciadosCargosTotales | currency}}</p>
@@ -641,7 +681,6 @@
                             <th>Concepto</th>
                             <th>Abono</th>
                             <th>Cargo</th>
-                            <!-- <th data-sort-ignore="true" class="min-width">Detalle</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -652,19 +691,19 @@
                             <td>{{ unicontable.MOV_CONCEPTO }}</td>
                             <td>{{ unicontable.cargo | currency}}</td>
                             <td>{{ unicontable.abono | currency}}</td>
-                            <!-- <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
-                                            <i class="ti-eye"></i>
-                                        </button>
-                                    </td> -->
                         </tr>
+                        <tfoot>
+                            <tr>
+                                <th>Fecha aqui</th>
+                                <th>Tipo de Póliza</th>
+                                <th># de Póliza</th>
+                                <th>Concepto</th>
+                                <th>Abono</th>
+                                <th>Cargo</th>
+                            </tr>
+                        </tfoot>
                     </tbody>
                 </table>
-                <!-- <div style="padding-left: 64%;">
-                            <p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p>
-                        </div> -->
-    
                 <div class="pull-right">
                     <br>
                     <label class='text-bold'> 
@@ -714,7 +753,6 @@
                             <th>Concepto</th>
                             <th>Cargo</th>
                             <th>Abono</th>
-                            <!-- <th data-sort-ignore="true" class="min-width">Detalle</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -725,18 +763,19 @@
                             <td>{{ uniBanco.concepto }}</td>
                             <td>{{ uniBanco.cargo | currency }}</td>
                             <td>{{ uniBanco.abono | currency }}</td>
-                            <!-- <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
-                                        <td class="text-center">
-                                            <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
-                                                <i class="ti-eye"></i>
-                                            </button>
-                                        </td> -->
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Numero cuenta</th>
+                            <th>Referencia</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th>Abono</th>
+                        </tr>
+                    </tfoot>
                 </table>
-                <!-- <div style="padding-left: 64%;">
-                                                                <p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p>
-                                                            </div> -->
                 <div class="pull-right">
                     <br>
                     <label class='text-bold'>

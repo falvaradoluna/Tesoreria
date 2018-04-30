@@ -365,6 +365,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
             opcion,
             idUsuario
         ) {
+            
             return $http({
                 url: conciliacionDetalleRegistroURL + 'totalUniverso',
                 method: 'GET',

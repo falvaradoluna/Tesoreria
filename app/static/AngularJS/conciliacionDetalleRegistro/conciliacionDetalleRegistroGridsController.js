@@ -146,11 +146,11 @@
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos
-                    console.log( 'DepositosbancosGRID', result );
+                     
                     angular.forEach($scope.depositosBancos, function(value, key) {
                     $scope.totalAbonoBancario += value.abono;
                     });
-                    console.log( 'anio', result );
+                    
                      //Suma del total monetario cargos
 
                      angular.forEach($scope.depositosBancos, function(value, key) {
