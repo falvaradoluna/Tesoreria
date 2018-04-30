@@ -170,8 +170,8 @@
             $scope.bancoReferenciadosCargos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 1;
             });
-            $scope.tabla('bancoReferenciadoAbono');
-            $scope.tabla('bancoReferenciadoCargo');
+            $scope.tablaSearch('bancoReferenciadoAbono');
+            $scope.tablaSearch('bancoReferenciadoCargo');
             //Obtener la uma total de los registros
             angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
                 $scope.bancoReferenciadosAbonosTotales += value.abono;
@@ -202,8 +202,8 @@
             $scope.contableReferenciadosCargos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 1;
             });
-            $scope.tabla('contableRefAbonos');
-            $scope.tabla('contableRefCargos');
+            $scope.tablaSearch('contableRefAbonos');
+            $scope.tablaSearch('contableRefCargos');
 
             //Obtener la uma total de los registros
             angular.forEach($scope.contableReferenciadosAbonos, function (value, key) {
@@ -327,8 +327,8 @@
                 }
                 $scope.universoContable = result.data;
 
-                $scope.tabla('contableUniCargo');
-                $scope.tabla('contableUniAbonos');
+                $scope.tablaSearch('contableUniCargo');
+                $scope.tablaSearch('contableUniAbonos');
             }else{
                 alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
             }
@@ -363,8 +363,8 @@
                 }
                 $scope.universoBancario = result.data;
                 
-                $scope.tabla('contableUniBancarioCargo');
-                $scope.tabla('contableUniBancarioAbono');
+                $scope.tablaSearch('contableUniBancarioCargo');
+                $scope.tablaSearch('contableUniBancarioAbono');
             } else {
                 alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
             }
@@ -446,5 +446,33 @@
         }, 1000);
     };
     //****************************************************************************************************
+
+    $scope.tablaSearch = function (idtabla) {
+        $('#' + idtabla).DataTable().destroy();
+
+        setTimeout(function () {
+            $('#' + idtabla + ' thead th').each(function (i) {
+                var title = $('#' + idtabla + ' tfoot th').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="Buscar ' + title + '" data-index="' + i + '" />');
+            });
+
+            var table = $('#' + idtabla).DataTable({
+                destroy: true,
+                "responsive": false,
+                searching: true,
+                paging: true,
+                autoFill: false,
+                fixedColumns: true
+
+            });
+
+            $(table.table().container()).on('keyup', 'thead input', function () {
+                table
+                    .column($(this).data('index'))
+                    .search(this.value)
+                    .draw();
+            });
+        }, 1000);
+    };
 
 });
