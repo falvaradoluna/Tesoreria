@@ -347,7 +347,7 @@
             $scope.paramsHistory.fechaCorte,
             $scope.paramsHistory.PolizaPago )
         .then(function(result){
-            console.log( 'getUniversoBancariosConsultaResult', result );
+            
             if (result.data.length != 0) {
                     
                 if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {

@@ -180,37 +180,23 @@ $scope.init = function() {
     //****************************************************************************************************
     $scope.bancoReferenciados = function () {
         conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function (result) {
-            
+
             $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
                 return value.tipoMovimiento == 0;
             });
-            // $scope.bancoReferenciadosCargos = $filter('filter')(result.data, function (value) {
-            //     return value.tipoMovimiento == 1;
-            // });
-            $scope.tabla('bancoReferenciadoAbono');
-            $scope.tabla('bancoReferenciadoCargo');
+
+            $scope.tablaSearch('bancoReferenciadoAbono');
+            $scope.tablaSearch('bancoReferenciadoCargo');
             //Obtener la uma total de los registros
+            
 
-            // if ($rootScope.bancoReferenciadosAbonosTotales == 0 ) {
-            //     angular.forEach(result.data, function (value, key) {
-
-
-            //         if (value.tipoMovimiento == 1) {
-            //             $rootScope.bancoReferenciadosAbonosTotales += value.abono;
-            //         }
-            //     });
-            // }
-             angular.forEach($scope.bancoReferenciadosAbonos, function(value, key) {
-                    $scope.bancoReferenciadosAbonosTotales += value.abono;
-                    });
-
-            //  angular.forEach($scope.bancoReferenciadosCargos, function(value, key) {
-            //         $scope.bancoReferenciadosCargosTotales += value.cargo;
-            //         });
-            //$scope.bancoReferenciadosCargosTotales = 1;
-
+            angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
+                $scope.bancoReferenciadosAbonosTotales += value.abono;
+            });
         });
     };
+
+    
 
     $scope.getRegistrosBancariosCargos = function () {
         conciliacionDetalleRegistroRepository.getRegistrosBancariosCargos()
@@ -236,8 +222,8 @@ $scope.init = function() {
         $scope.contableReferenciadosCargos = $filter('filter')(result.data, function(value){
          return value.tipoMovimiento == 1;
         });
-        $scope.tabla('contableRefAbonos');
-        $scope.tabla('contableRefCargos');
+        $scope.tablaSearch('contableRefAbonos');
+        $scope.tablaSearch('contableRefCargos');
 
         //Obtener la uma total de los registros
              angular.forEach($scope.contableReferenciadosAbonos, function(value, key) {
@@ -398,6 +384,7 @@ $scope.init = function() {
     };
     //Ing. Luis Antonio García Perrusquía
     $scope.getTotalUniverso = function (){
+        console.log( 'getTotalUniverso' );
         conciliacionDetalleRegistroRepository.getTotalUniverso( 
             $scope.busquedaUniverso.IdEmpresa,
             $scope.busquedaUniverso.IdBanco,
@@ -411,8 +398,8 @@ $scope.init = function() {
         )
         .then(function(result){
             
+            console.log( 'resultUniversoContable12', result );
             if( result.data.length != 0 ){
-                console.log( 'resultUniversoContable', result );
                 if ($rootScope.universoTotalMovimientoContableCargo == 0 && $rootScope.universoTotalMovimientoContableAbono == 0) {
                     angular.forEach(result.data, function (value, key) {
                         if (value.tipoMovimiento == 0) {
@@ -426,8 +413,7 @@ $scope.init = function() {
                 }
                 $scope.universoContable = result.data;
 
-                $scope.tabla('contableUniCargo');
-                $scope.tabla('contableUniAbonos');
+                $scope.tablaSearch('contableUniCargo');
             }else{
                 alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
             }
@@ -462,8 +448,7 @@ $scope.init = function() {
                     }
                     $scope.universoBancario = result.data;
                     
-                    $scope.tabla('contableUniBancarioCargo');
-                    $scope.tabla('contableUniBancarioAbono');
+                    $scope.tablaSearch('contableUniBancarioCargo');
                 } else {
                     alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
                 }
@@ -472,18 +457,50 @@ $scope.init = function() {
 
     // INICIA inicio la tabla para los distintos casos
         //****************************************************************************************************
-        $scope.tabla = function(idtabla) {
-            $('#' + idtabla).DataTable().destroy();
-            setTimeout(function() {
-                $('#' + idtabla).DataTable({
-                    destroy: true,
-                    "responsive": true,
-                    searching: false,
-                    paging: true,
-                    autoFill: true
-                });
-            }, 1000);
-        };
+    $scope.tabla = function (idtabla) {
+        $('#' + idtabla).DataTable().destroy();
+
+        setTimeout(function () {
+            
+            var table = $('#' + idtabla).DataTable({
+                destroy: true,
+                "responsive": true,
+                searching: true,
+                paging: true,
+                autoFill: false,
+                fixedColumns:   true
+            });
+            
+        }, 1000);
+    };
+
+    $scope.tablaSearch = function (idtabla) {
+        $('#' + idtabla).DataTable().destroy();
+
+        setTimeout(function () {
+            $('#' + idtabla + ' thead th').each(function (i) {
+                var title = $('#' + idtabla + ' tfoot th').eq($(this).index()).text();
+                $(this).html('<input type="text" placeholder="Buscar ' + title + '" data-index="' + i + '" />');
+            });
+
+            var table = $('#' + idtabla).DataTable({
+                destroy: true,
+                "responsive": true,
+                searching: true,
+                paging: true,
+                autoFill: false,
+                fixedColumns: true
+
+            });
+
+            $(table.table().container()).on('keyup', 'thead input', function () {
+                table
+                    .column($(this).data('index'))
+                    .search(this.value)
+                    .draw();
+            });
+        }, 1000);
+    };
     //****************************************************************************************************
 
 });
