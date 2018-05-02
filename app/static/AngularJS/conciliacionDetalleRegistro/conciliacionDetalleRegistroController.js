@@ -2,7 +2,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
    
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
-    $rootScope.showBotones = localStorageService.get('ShowBtns')[0];
+    $rootScope.showBotones = JSON.parse(localStorage.getItem('ShowBtns'));
     $rootScope.paramsSaveHistori = JSON.parse(localStorage.getItem('paramBusqueda'));
     $scope.nodoPadre = [];
     $scope.abonoAuxiliar = 0;
@@ -51,13 +51,23 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.nombreBanco = $scope.busqueda.Banco;
         $scope.nombreGerente = $scope.busqueda.gerente;
         $scope.nombreContador = $scope.busqueda.contador;
-        if($scope.busqueda.MesActivo != 1)
-        {
-          $scope.mesActivo = false;
-          alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+        // if($scope.busqueda.MesActivo != 1)
+        // {
+        //   $scope.mesActivo = false;
+        //   alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+        // }
+        // else{
+        //     $scope.mesActivo = true;
+        // }
+        
+        if ($scope.busqueda.MesActivo != 1) {
+            //$scope.mesActivo = false;
+            $scope.mesActivo = true
+            alertFactory.error($scope.busqueda.mensaje);//LAGP
         }
-        else{
+        else {
             $scope.mesActivo = true;
+            alertFactory.success($scope.busqueda.mensaje);//LAGP
         }
 
     };

@@ -34,7 +34,7 @@ console.log($rootScope.currentEmployee)
     $scope.permisos = function(usuario ) {
         loginRepository.getPermisos(usuario).then(function(result) {
             console.log( 'result', result );
-            localStorageService.set( 'ShowBtns', result.data[1] );
+            localStorage.setItem( 'ShowBtns', JSON.stringify( result.data[1] ) );
             if (result.data.length > 0) {
                 $scope.login = result.data[0][0];
                 $scope.getEmpleado(usuario);

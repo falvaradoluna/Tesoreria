@@ -188,17 +188,33 @@
                             $scope.totalesAbonosCargos = result.data[0];
                             $scope.mesActivo = result.data[0].mesActivo;
                             localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
-
+                            
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
-                            if ($scope.mesActivo != 1) {
-                                alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
-                            }
+                            // if ($scope.mesActivo != 1) {
+                            //     alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                            // }
 
                             $scope.paramBusqueda = [];
 
                             setTimeout(function () {
-                                $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreContador, "gerente": $scope.contadorGerente[0].NombreGerente, "usuario": $scope.contadorGerente[0].Usuario, "fechaElaboracion": $scope.fechaElaboracion, "fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago };
+                                $scope.paramBusqueda = { 
+                                "IdBanco": $scope.cuentaActual.IdBanco, 
+                                "Banco": $scope.cuentaActual.NOMBRE, 
+                                "IdEmpresa": $scope.cuentaActual.IdEmpresa, 
+                                "Empresa": $scope.empresaActual.emp_nombre, 
+                                "Cuenta": $scope.cuentaActual.Cuenta, 
+                                "CuentaContable": $scope.cuentaActual.CuentaContable, 
+                                "contador": $scope.contadorGerente[0].NombreContador,
+                                "gerente": $scope.contadorGerente[0].NombreGerente,
+                                "usuario": $scope.contadorGerente[0].Usuario, 
+                                "fechaElaboracion": $scope.fechaElaboracion, 
+                                "fechaCorte": $scope.fechaCorte, 
+                                "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, 
+                                "MesActivo": $scope.mesActivo, 
+                                "PolizaPago": $scope.empresaActual.polizaPago,
+                                "mensaje": result.data[0].mensaje
+                            };
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
 
                             }, 1000);
