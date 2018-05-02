@@ -174,7 +174,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
     $scope.getAbonoContable = function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable, polizaPago) {
         conciliacionRepository.getAbonoContable(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable, polizaPago).then(function(result) {
-            console.log(result);
+            //console.log(result);
             if (result.data.length > 0) {
 
                 if (opcion == 1) {  

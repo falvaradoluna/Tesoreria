@@ -384,7 +384,7 @@ $scope.init = function() {
     };
     //Ing. Luis Antonio García Perrusquía
     $scope.getTotalUniverso = function (){
-        console.log( 'getTotalUniverso' );
+        
         conciliacionDetalleRegistroRepository.getTotalUniverso( 
             $scope.busquedaUniverso.IdEmpresa,
             $scope.busquedaUniverso.IdBanco,
@@ -398,7 +398,6 @@ $scope.init = function() {
         )
         .then(function(result){
             
-            console.log( 'resultUniversoContable12', result );
             if( result.data.length != 0 ){
                 if ($rootScope.universoTotalMovimientoContableCargo == 0 && $rootScope.universoTotalMovimientoContableAbono == 0) {
                     angular.forEach(result.data, function (value, key) {

@@ -514,7 +514,7 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistrosContablesAbonos = func
  * api/conciliacionDetalleRegistro/totalUniverso
 */
 conciliacionDetalleRegistro.prototype.get_totalUniverso = function (req, res, next) {
-    console.log( 'get_totalUniverso' );
+    
     var self = this;
     var idEmpresa = req.query.idEmpresa;
     var idBanco = req.query.idBanco;
