@@ -276,5 +276,11 @@
         }
     };
     //****************************************************************************************************
+    $scope.comeBack = function(){
+        console.log( 'comeBack' );
+        localStorage.setItem('comeBack', true)
+        $window.location.href = "/conciliacionInicio";
+    }
+    
 
 });

@@ -284,8 +284,9 @@
                     </div>
                     <div class="col-md-12">
                         <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
-                            <a class="btn btn-warning" href="/conciliacionInicio ">
-                                <i class="ti-back-right"></i> Regresar</a> &nbsp;
+                            <button class="btn btn-warning" ng-click="comeBack()">
+                                <i class="ti-back-right"></i> Regresara
+                            </button> &nbsp;
                             <button ng-disabled="showBotones.BtnGenerarPunteo == 0" class="btn btn-success" ng-click="generaAlertaPunteo()" ng-show="mesActivo">
                                 <i class="ti-harddrives"> </i>Generar Punteo</button>
                         </div>
@@ -521,7 +522,7 @@
                             </td>
                         </tr>
                     </tbody>
-                    <tfoot>
+                    <thead>
                         <tr>
                             <th>Banco</th>
                             <th>Referencia</th>
@@ -530,7 +531,7 @@
                             <th>Cargo</th>
                             <th data-sort-ignore="true" class="min-width">Detalle</th>
                         </tr>
-                    </tfoot>
+                    </thead>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Cargos Bancarios Referenciados: {{bancoReferenciadosCargosTotales | currency}}</p>
@@ -692,7 +693,7 @@
                             <td>{{ unicontable.cargo | currency}}</td>
                             <td>{{ unicontable.abono | currency}}</td>
                         </tr>
-                        <tfoot>
+                        <tf>
                             <tr>
                                 <th>Fecha aqui</th>
                                 <th>Tipo de Póliza</th>
@@ -701,7 +702,7 @@
                                 <th>Abono</th>
                                 <th>Cargo</th>
                             </tr>
-                        </tfoot>
+                        </tf>
                     </tbody>
                 </table>
                 <div class="pull-right">

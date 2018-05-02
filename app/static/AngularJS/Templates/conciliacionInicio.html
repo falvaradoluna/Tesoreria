@@ -45,13 +45,13 @@
                             <div class="form-group col-md-2">
                                 <label for="fInicio" class="text-main">Clabe:</label>
                                 <div class="input-group date">
-                                    <label>{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : InmemoryAcountBanc}}</label>
+                                    <label>{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : cuentaNumerica}}</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="fInicio" class="text-main">Cuenta Contable:</label>
                                 <div class="input-group date">
-                                    <label>{{cuentaActual.CuentaContable != NULL ? cuentaActual.CuentaContable : InmemoryAcount}}</label>
+                                    <label>{{cuentaActual.CuentaContable != NULL ? cuentaActual.CuentaContable : cuentaContable}}</label>
                                 </div>
                             </div>                            
                             <div class="form-group col-md-3">
@@ -113,9 +113,9 @@
                         <!--===================================================-->
                         <div class="col-sm-7">
                             <label class="text-main text-semibold" ng-show="InfoBusqueda">
-                                <span class="text-info">{{empresaActual.emp_nombre != NULL ? empresaActual.emp_nombre : empresaActual}}</span> /
-                                <span class="text-info">{{cuentaActual.NOMBRE != NULL ? cuentaActual.NOMBRE : bancoNombre}}</span> /
-                                <span class="text-info">{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : InmemoryAcountBanc}}</span>
+                                <span class="text-info">{{empresaActual.emp_nombre != NULL ? empresaActual.emp_nombre : empresaNombre}}</span> /
+                                <span class="text-info">{{cuentaActual.NOMBRE != NULL ? cuentaActual.NOMBRE : bancoNombreT}}</span> /
+                                <span class="text-info">{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : cuentaNumerica}}</span>
                             </label>
                             <table class="table table-striped table-bordered">
                                 <thead>
@@ -128,23 +128,23 @@
                                 <tbody>
                                     <tr>
                                         <td>Saldo Banco</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].saldoBanco | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.saldoBanco | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Abonos en Contabilidad no considerados en Bancos</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoContable | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tAbonoContable | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Abonos en Bancos no considerados en Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoBancario | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tAbonoBancario | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cargos en Contabilidad no considerados en Bancos</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoContable | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tCargoContable | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cargos Bancos no considerados en Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoBancario | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tCargoBancario | currency}}</td>
                                     </tr>
 
 
@@ -166,15 +166,15 @@
 
                                     <tr>
                                         <td>Saldo según Conciliacion</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.sConciliacion | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Saldo según Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].sContabilidad | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.sContabilidad | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Diferencia</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].diferencia | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.diferencia | currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>
