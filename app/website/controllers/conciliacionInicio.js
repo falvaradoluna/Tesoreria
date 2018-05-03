@@ -72,5 +72,21 @@ conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
     });
 };
 
+conciliacionInicio.prototype.get_meses = function(req, res, next) {
+    console.log( 'Meses' );
+    var self = this;
+    var params = [];
+        self.view.expositor(res, {
+            result: 'LLegue'
+        });
+    // this.model.query('SEL_MESES_ACTIVOS_SP', params, function(error, result) {
+    //     console.log( 'error', error );
+    //     console.log( 'result', result );
+    //     self.view.expositor(res, {
+    //         error: error,
+    //         result: result
+    //     });
+    // });
+};
 
 module.exports = conciliacionInicio;
