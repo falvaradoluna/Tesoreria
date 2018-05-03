@@ -20,6 +20,7 @@
     $scope.bancoNombre = '';
     $scope.difMonetaria = 0;
     $scope.mesActivo = undefined;
+    $rootScope.tipoConsulta = 1;
     //***************************************************************
 
     //*****Variables para ocultar Depositos y Pagos referenciados
@@ -40,6 +41,9 @@
     $rootScope.fechaHistorico;
 
     $scope.init = function () {
+
+        $rootScope.tiposConsultas = [{ tipo: 'Por empresa', value: 1 }, { tipo: 'Por sistema', value: 2 }];
+        $scope.tipoConsulta = {  tipo: 'Por empresa', value: 1 };
 
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
@@ -164,6 +168,10 @@
         }
     }
 
+    $scope.tipoConsultaF = function (consulta) {
+        console.log( 'tipoConsulta', consulta );
+    }
+
 
     $scope.getTotalesAbonoCargo = function () {
 
@@ -180,9 +188,21 @@
 
 
             $('#actualizarBD').modal('show');
-            conciliacionInicioConsultaRepository.getTotalAbonoCargo($scope.cuentaActual.IdBanco, $scope.cuentaActual.IdEmpresa, $scope.cuentaActual.Cuenta, $scope.cuentaActual.CuentaContable, $scope.fechaElaboracion, $scope.fechaCorte, $scope.empresaActual.polizaPago, 2, $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
+            conciliacionInicioConsultaRepository.getTotalAbonoCargo(
+                $scope.cuentaActual.IdBanco, 
+                $scope.cuentaActual.IdEmpresa, 
+                $scope.cuentaActual.Cuenta, 
+                $scope.cuentaActual.CuentaContable, 
+                $scope.fechaElaboracion, 
+                $scope.fechaCorte, 
+                $scope.empresaActual.polizaPago, 
+                2, 
+                $rootScope.userData.idUsuario,
+                $scope.tipoConsulta.value
+            ).then(function (result) { //LQMA add 06032018 idUsuario
                 $('#actualizarBD').modal('hide');
                 if (result.data.length > 0) {
+                    console.log( 'result', result );
                     $scope.totalesAbonosCargos = result.data;
                     $scope.mesActivo = result.data[0].mesActivo;
                     $rootScope.fechaHistorico = result.data[0].fecha;
