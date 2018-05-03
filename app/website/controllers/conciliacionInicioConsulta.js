@@ -96,5 +96,21 @@ conciliacionInicioConsulta.prototype.get_historico = function (req, res, next) {
     // });
 };
 
+//Ing. LAGP03052018
+//api/meses
+conciliacionInicioConsulta.prototype.get_meses = function(req, res, next) {
+    console.log( 'Meses' );
+    var self = this;
+    var params = [];
+
+    this.model.query('SEL_MESES_ACTIVOS_SP', params, function(error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = conciliacionInicioConsulta;

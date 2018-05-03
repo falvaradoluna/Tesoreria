@@ -71,7 +71,8 @@ conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
         });
     });
 };
-
+//Ing. LAGP03052018
+//api/meses
 conciliacionInicio.prototype.get_meses = function(req, res, next) {
     console.log( 'Meses' );
     var self = this;

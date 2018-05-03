@@ -121,7 +121,6 @@
 
     //Ing. LAGP 03052018
     $scope.getMeses = function () {
-        
         conciliacionInicioRepository.getMeses().then(function (result) {
             console.log( 'result', result );
             if( result.data.length != 0 ){

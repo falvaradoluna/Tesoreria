@@ -43,7 +43,7 @@
 
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
-
+        $scope.getMeses();
         $rootScope.mostrarMenu = 1;
         $scope.paramBusqueda = [];
         //variablesLocalStorage();
@@ -104,6 +104,21 @@
                 }
             });
     }
+
+    //Ing. LAGP 03052018
+    $scope.getMeses = function () {
+        conciliacionInicioConsultaRepository.getMeses().then(function (result) {
+            console.log( 'result', result );
+            if( result.data.length != 0 ){
+                $rootScope.mesSelect = result.data;
+                angular.forEach($rootScope.mesSelect, function( value, key ){
+                    if( value.ACTIVO == 1 ){
+                        $scope.mesActual = value;
+                    }
+                });
+            }
+        });
+    };
 
     $scope.getBancos = function (idEmpresa) {
         $scope.activaInputCuenta = true;
