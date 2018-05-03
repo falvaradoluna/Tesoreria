@@ -288,8 +288,9 @@
                     </div>
                     <div class="col-md-12">
                         <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
-                            <a class="btn btn-warning" href="/conciliacionInicio ">
-                                <i class="ti-back-right"></i> Regresar</a> &nbsp;
+                            <button class="btn btn-warning" ng-click="comeBackConsulta()">
+                                <i class="ti-back-right"></i> Regresar
+                            </button> &nbsp;
                             <button disabled class="btn btn-success" ng-click="generaAlertaPunteo()" ng-show="mesActivo">
                                 <i class="ti-harddrives"> </i>
                                 Generar Punteo

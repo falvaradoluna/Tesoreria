@@ -128,36 +128,36 @@
                                 <tbody>
                                     <tr>
                                         <td>Saldo Banco</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].saldoBanco | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.saldoBanco | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Abonos en Contabilidad no considerados en Bancos</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoContable | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tAbonoContable | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Abonos en Bancos no considerados en Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoBancario | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tAbonoBancario | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cargos en Contabilidad no considerados en Bancos</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoContable | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tCargoContable | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cargos Bancos no considerados en Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoBancario | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tCargoBancario | currency}}</td>
                                     </tr>
 
                                     <tr>
                                         <td>Saldo según Conciliacion</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.sConciliacion | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Saldo según Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].sContabilidad | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.sContabilidad | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Diferencia</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].diferencia | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.diferencia | currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>

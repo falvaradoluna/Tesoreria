@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionDetalleRegistroConsultaController', function ($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
+registrationModule.controller('conciliacionDetalleRegistroConsultaController', function ($window, $scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
        // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $scope.nodoPadre = [];
@@ -188,6 +188,11 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
         setTimeout($scope.DameLaFechaHora, 1000);
     }
 
+    $scope.comeBackConsulta = function(){
+        console.log( 'comeBackConsulta' );
+        localStorage.setItem('comeBackConsulta', true)
+        $window.location.href = "/conciliacionInicioConsulta";
+    }
 
     //***************************************************************************************************
 });

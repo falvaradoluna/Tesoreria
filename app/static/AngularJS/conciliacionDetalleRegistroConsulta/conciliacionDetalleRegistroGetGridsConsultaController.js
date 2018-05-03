@@ -330,7 +330,7 @@
                 $scope.tablaSearch('contableUniCargo');
                 $scope.tablaSearch('contableUniAbonos');
             }else{
-                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                alertFactory.warning('No se encontraron datos, intentelo de nuevoAQUI.');
             }
         });
         //alertFactory.warning('Función en desarrollo...');
@@ -366,7 +366,7 @@
                 $scope.tablaSearch('contableUniBancarioCargo');
                 $scope.tablaSearch('contableUniBancarioAbono');
             } else {
-                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                alertFactory.warning('No se encontraron datos, intentelo de nuevoQUI.');
             }
         });
         //alertFactory.warning('Función en desarrollo...');
