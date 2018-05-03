@@ -3,8 +3,8 @@ var conciliacionInicioConsultaURL = global_settings.urlCORS + 'api/conciliacionI
 registrationModule.factory('conciliacionInicioConsultaRepository', function($http) {
     return {
 
-    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario) { //LQMA add 06032018 idUsuario
-            
+    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario, tipoReporte) { //LQMA add 06032018 idUsuario
+            console.log( 'factory', tipoReporte );
             return $http({
                 url: conciliacionInicioConsultaURL + 'totalAbonoCargo/',
                 method: "POST",
@@ -17,7 +17,8 @@ registrationModule.factory('conciliacionInicioConsultaRepository', function($htt
                     fechaCorte: fechaC,
                     polizaPago: polizaPago,
                     opcion: opcion,
-                    idUsuario: idUsuario //LQMA add 06032018
+                    idUsuario: idUsuario,
+                    tipoReporte: tipoReporte //LQMA add 06032018
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -72,7 +73,19 @@ registrationModule.factory('conciliacionInicioConsultaRepository', function($htt
                     'Content-Type': 'application/json'
                 }
             });
-        }
+        },
+        //Ing. LAGP03052018
+        getMeses: function() {
+            return $http({
+                url: conciliacionInicioURL + 'meses/',
+                method: "GET",
+                params: {},
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
 
 //Fin de la llave "return"
     };

@@ -56,7 +56,19 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
                 },
                 responseType: 'arraybuffer'
             });
-        }
+        },
+        //Ing. LAGP03052018
+        getMeses: function() {
+            return $http({
+                url: conciliacionInicioURL + 'meses/',
+                method: "GET",
+                params: {},
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
 
 //Fin de la llave "return"
     };

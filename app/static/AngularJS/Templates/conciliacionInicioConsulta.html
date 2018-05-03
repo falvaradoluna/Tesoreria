@@ -12,9 +12,9 @@
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label class="form-label text-main">Tipo Consulta:</label>
-                                <select class="form-control">
-                                    <option value="1">Mensual</option>
-                                    <option value="2">Por usuario</option>
+                                <select class="form-control" ng-model="tipoConsulta" ng-options="tipo.tipo for tipo in tiposConsultas
+                                track by tipo.tipo" ng-change="tipoConsultaF(tipoConsulta)">
+                                    <option ng-repeat="tipo in tiposConsultas" >Seleccione un rtipo de consulta</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-2 pull-right">
@@ -68,21 +68,10 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
-                                <label class="form-label text-main " >Consulta:</label>
-                                <select class="form-control" ng-init="mesesSelect">
-                                    <option value="1">Enero</option>
-                                    <option value="2">Febrero</option>
-                                    <option value="3">Marzo</option>
-                                    <option value="4">Abril</option>
-                                    <option value="5">Mayo</option>
-                                    <option value="6">Junio</option>
-                                    <option value="7">Julio</option>
-                                    <option value="8">Agosto</option>
-                                    <option value="9">Septiembre</option>
-                                    <option value="10">Octubre</option>
-                                    <option value="11">Noviembre</option>
-                                    <option value="12">Diciembre</option>
-                                </select>
+                                <label class="form-label text-main">Consulta:</label>
+                                <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES">
+                                  <option value="">Mes</option>
+                                </select>  
                                 <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
                                     <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar">
                                         <i class="ti-search"></i> Consultar historico</button>
@@ -139,36 +128,36 @@
                                 <tbody>
                                     <tr>
                                         <td>Saldo Banco</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].saldoBanco | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.saldoBanco | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Abonos en Contabilidad no considerados en Bancos</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoContable | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tAbonoContable | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Abonos en Bancos no considerados en Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tAbonoBancario | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tAbonoBancario | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cargos en Contabilidad no considerados en Bancos</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoContable | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tCargoContable | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Cargos Bancos no considerados en Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].tCargoBancario | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.tCargoBancario | currency}}</td>
                                     </tr>
 
                                     <tr>
                                         <td>Saldo según Conciliacion</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].sConciliacion | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.sConciliacion | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Saldo según Contabilidad</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].sContabilidad | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.sContabilidad | currency}}</td>
                                     </tr>
                                     <tr>
                                         <td>Diferencia</td>
-                                        <td class="text-right">{{ totalesAbonosCargos[0].diferencia | currency}}</td>
+                                        <td class="text-right">{{ totalesAbonosCargos.diferencia | currency}}</td>
                                     </tr>
                                 </tbody>
                             </table>
