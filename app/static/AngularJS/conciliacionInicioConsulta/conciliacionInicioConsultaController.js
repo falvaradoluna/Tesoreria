@@ -214,6 +214,7 @@
                         $('#actualizarBD').modal('hide');
                         //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                         console.log( 'resultSinLocalSotrage', result.data );
+
                         if (result.data.length > 0) {
                             if( result.data[0].resultado == 0 ){
                                 alertFactory.error( result.data[0].mensaje); 
@@ -222,6 +223,7 @@
                                 $scope.totalesAbonosCargos = result.data[0];
                                 $scope.mesActivo = result.data[0].mesActivo;
                                 localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
+                                $rootScope.fechaHistorico = result.data[0].fecha;
 
                                 $scope.paramBusqueda = [];
 
@@ -283,7 +285,7 @@
                             $scope.totalesAbonosCargos = result.data[0];
                             $scope.mesActivo = result.data[0].mesActivo;
                             localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
-
+                            $rootScope.fechaHistorico = result.data[0].fecha;
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
                             if ($scope.mesActivo != 1) {

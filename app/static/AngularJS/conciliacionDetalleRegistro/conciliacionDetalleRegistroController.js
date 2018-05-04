@@ -63,11 +63,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         if ($scope.busqueda.MesActivo != 1) {
             //$scope.mesActivo = false;
             $scope.mesActivo = true
-            alertFactory.error($scope.busqueda.mensaje);//LAGP
+            // alertFactory.error($scope.busqueda.mensaje);//LAGP
         }
         else {
             $scope.mesActivo = true;
-            alertFactory.success($scope.busqueda.mensaje);//LAGP
+            // alertFactory.success($scope.busqueda.mensaje);//LAGP
         }
 
     };

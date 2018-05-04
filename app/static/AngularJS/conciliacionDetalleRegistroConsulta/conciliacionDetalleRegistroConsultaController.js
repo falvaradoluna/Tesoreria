@@ -55,11 +55,11 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
         $scope.nombreContador = $scope.busqueda.contador;
         if ($scope.busqueda.MesActivo != 1) {
             $scope.mesActivo = false;
-            alertFactory.error($scope.busqueda.mensaje);
+            // alertFactory.error($scope.busqueda.mensaje);
         }
         else {
             $scope.mesActivo = true;
-            alertFactory.success($scope.busqueda.mensaje);
+            // alertFactory.success($scope.busqueda.mensaje);
         }
 
     };
