@@ -78,7 +78,8 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function (r
 
     var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
+        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING }
     ];
     
     this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function (error, result) {

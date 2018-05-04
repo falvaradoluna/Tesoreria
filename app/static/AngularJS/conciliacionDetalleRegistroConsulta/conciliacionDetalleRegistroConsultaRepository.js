@@ -78,14 +78,15 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H
-        getAuxiliar: function(idEmpresa, idBanco, idHistorico) {
+        getAuxiliar: function(idEmpresa, idBanco, idHistorico, fechaElaboracion) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'auxiliarContable/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
-                    idHistorico: idHistorico //LQMA 21042018                    
+                    idHistorico: idHistorico, //LQMA 21042018    
+                    fechaElaboracion: fechaElaboracion //LAGP 03052018                
                 },
                 headers: {
                     'Content-Type': 'application/json'

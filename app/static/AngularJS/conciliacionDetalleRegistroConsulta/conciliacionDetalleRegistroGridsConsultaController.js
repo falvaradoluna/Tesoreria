@@ -166,7 +166,7 @@
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.paramHistory.HistoricoId);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.paramHistory.HistoricoId, $scope.fechaElaboracion);
                 }
             });
         } else if (idestatus == 2) {
@@ -181,9 +181,9 @@
 
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
-     $scope.getAuxiliarContable = function(idEmpresa, idBanco, idHistorico) {
+     $scope.getAuxiliarContable = function(idEmpresa, idBanco, idHistorico, fechaElaboracion) {
          console.log( 'getAuxiliarContable' );
-        conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, idHistorico).then(function(result) {
+        conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, idHistorico, fechaElaboracion).then(function(result) {
                console.log( 'result', result );
 		if (result.data[0].length !=0) {
 		    
