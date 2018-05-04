@@ -98,11 +98,9 @@
             //Reemplazo la consulta que retorna el valor del mes activo
             $scope.mesActivo = $scope.busqueda.MesActivo;
             conciliacionInicioConsultaRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, 1, $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                if (result.data.length > 0) {
-                    //console.log('entra')                
+                if (result.data.length > 0) {             
                     $scope.totalesAbonosCargos = result.data;
                     $scope.mesActivo = result.data.mesActivo;
-                    //Habilita botones
                     $scope.activaBotonBuscar = false;
                     $scope.enableBottonReport = false;
                     /////
@@ -128,7 +126,6 @@
     //Ing. LAGP 03052018
     $scope.getMeses = function () {
         conciliacionInicioConsultaRepository.getMeses().then(function (result) {
-            console.log( 'result', result );
             if( result.data.length != 0 ){
                 $rootScope.mesSelect = result.data;
                 angular.forEach($rootScope.mesSelect, function( value, key ){
@@ -185,14 +182,11 @@
     }
 
     $scope.tipoConsultaF = function (consulta) {
-        console.log( 'tipoConsulta', consulta );
     }
 
 
     $scope.getTotalesAbonoCargo = function () {
         
-        localStorage.removeItem('comeBackConsulta');
-        //console.log($scope.fechaElaboracion.substr(-5, 2));
         if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
             alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
         }
@@ -337,6 +331,8 @@
                 });
             }
         }
+        
+        localStorage.removeItem('comeBackConsulta');
     }
 
     $scope.setCuenta = function (cuenta) {
@@ -451,7 +447,6 @@
     };
 
     $scope.go = function (path) {
-        // console.log( 'go', path );
         if (!$scope.enableBottonReport) {
             $location.path(path);
         }
@@ -462,7 +457,6 @@
     $scope.getHistorico = function () {
         conciliacionInicioConsultaRepository.getHistorico( $rootScope.userData, $scope.empresaId, $scope.bancoId, $scope.contableCuenta, $scope.bancariaCuenta )
         .then(function(result){
-            //console.log( 'result', result );
         });
     };
 

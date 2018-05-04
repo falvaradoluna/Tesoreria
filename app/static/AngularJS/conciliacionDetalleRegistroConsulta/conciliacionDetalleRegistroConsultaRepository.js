@@ -59,7 +59,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_DEPOSITOS_REFERENCIADOS_SP_H
-        getDepositos: function(idBanco, idestatus, cuentaBancaria, idEmpresa, idHistorico) {
+        getDepositos: function(idBanco, idestatus, cuentaBancaria, idEmpresa, idHistorico, fechaElaboracion) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'depositos/',
                 method: "GET",
@@ -68,7 +68,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idEstatus: idestatus,
                     cuentaBancaria: cuentaBancaria,
                     idEmpresa: idEmpresa,
-                    idHistorico: idHistorico //LQMA 21042018
+                    idHistorico: idHistorico, //LQMA 21042018
+                    fechaElaboracion: fechaElaboracion //LAGP 03052018
                 },
                 headers: {
                     'Content-Type': 'application/json'

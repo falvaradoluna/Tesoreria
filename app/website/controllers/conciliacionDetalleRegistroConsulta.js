@@ -58,7 +58,8 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function (req, res
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.cuentaBancaria, type: self.model.types.STRING },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
+        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING } //LAGP 03052018
     ];
     
     this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP_H', params, function (error, result) {
