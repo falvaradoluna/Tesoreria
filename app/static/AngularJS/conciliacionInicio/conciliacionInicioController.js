@@ -27,8 +27,10 @@
     //***********************************************************
 
     //*****Cambio del formato en fechas predeterminadas para la búsqueda
-    $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
-    $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
+    // $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
+    // $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
+
+    
     //******************************************************************
 
     $scope.init = function () {
@@ -175,9 +177,25 @@
         }
     }
 
-    $scope.getTotalesAbonoCargo = function () {
-        localStorage.removeItem('dataSearch');
+    // $scope.getTotalesAbonoCargo = function () {
+    //     $scope.fechaComboElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+    //     $scope.fechaComboCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
 
+    //     $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+    //     $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
+        
+    //     // $scope.fechaCorte = $filter('date')(new Date($scope.fechaComboCorte), 'yyyy-MM-dd');
+    //     // $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaComboElaboracion), 'yyyy-MM-dd');
+    //     console.log( '$fechaComboElaboracion', $scope.fechaComboElaboracion );
+    //     console.log( '$fechaComboCorte', $scope.fechaComboCorte );
+    //     console.log( '$scope.fechaCorte', $scope.fechaCorte );
+    //     console.log( '$scope.fechaElaboracion', $scope.fechaElaboracion );
+    //     console.log( '$scope.mesActual', $scope.mesActual );
+    // }
+
+    $scope.getTotalesAbonoCargo = function () {
+        $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+        $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
         if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
             alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
         }

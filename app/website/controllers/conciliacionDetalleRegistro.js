@@ -525,7 +525,8 @@ conciliacionDetalleRegistro.prototype.get_totalUniverso = function (req, res, ne
     var polizaPago = req.query.polizaPago;
     var opcion = req.query.opcion;
     var idUsuario = req.query.idUsuario;
-
+    // console.log( 'fechaElaboracionContable', fechaElaboracion );
+    // console.log( 'fechaCorteContable', fechaCorte );
     var params = [
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: idBanco, type: self.model.types.INT },
@@ -564,7 +565,8 @@ conciliacionDetalleRegistro.prototype.get_totalUniversoBancario = function (req,
     var polizaPago = req.query.polizaPago;
     var opcion = req.query.opcion;
     var idUsuario = req.query.idUsuario;
-
+    // console.log( 'fechaElaboracionBancario', fechaElaboracion );
+    // console.log( 'fechaCorteBancario', fechaCorte );
     var params = [
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: idBanco, type: self.model.types.INT },

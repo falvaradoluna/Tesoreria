@@ -140,9 +140,11 @@
 
     //******************Función para llenar el grid Depositos Bancos********************************
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
+        
         if (idestatus == 1) { 
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
+                    
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos

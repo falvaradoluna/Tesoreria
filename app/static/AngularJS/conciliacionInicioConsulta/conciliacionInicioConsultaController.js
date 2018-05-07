@@ -29,8 +29,8 @@
     //***********************************************************
 
     //*****Cambio del formato en fechas predeterminadas para la búsqueda
-    $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
-    $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
+    // $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
+    // $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
     //******************************************************************
 
     //Variables para traer el historio LAGP
@@ -184,9 +184,16 @@
     $scope.tipoConsultaF = function (consulta) {
     }
 
-
+    // $scope.getTotalesAbonoCargo = function () {
+    //     console.log( 'AQUI EN CONSULTA' );
+    //     $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+    //     $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
+    //     console.log( '$scope.fechaElaboracion', $scope.fechaElaboracion );
+    //     console.log( '$scope.fechaCorte', $scope.fechaCorte );
+    // }
     $scope.getTotalesAbonoCargo = function () {
-        
+        $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+        $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
         if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
             alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
         }
