@@ -144,20 +144,31 @@
         if (idestatus == 1) { 
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
-                    
+                    //console.log( 'resultadoBancos', result.data );
                     $scope.depositosBancos = result.data[0];
+                    
+                    angular.forEach($scope.depositosBancos, function( value, key ){
+                        if( value.esCargo == 1 ){
+                            $scope.depositosBancos[key]['cargo'] = value.importe;
+                            $scope.totalCargoBancario += value.importe;
+                        }else if(value.esCargo == 0){
+                            $scope.depositosBancos[key]['abono'] = value.importe;
+                            $scope.totalAbonoBancario += value.importe;
+                        }
+                    });
+                    
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos
                      
-                    angular.forEach($scope.depositosBancos, function(value, key) {
-                    $scope.totalAbonoBancario += value.abono;
-                    });
+                    // angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalAbonoBancario += value.abono;
+                    // });
                     
-                     //Suma del total monetario cargos
+                    //  //Suma del total monetario cargos
 
-                     angular.forEach($scope.depositosBancos, function(value, key) {
-                    $scope.totalCargoBancario += value.cargo;
-                    });
+                    //  angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalCargoBancario += value.cargo;
+                    // });
 
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
