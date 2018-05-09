@@ -181,18 +181,18 @@ $scope.init = function() {
     $scope.bancoReferenciados = function () {
         conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function (result) {
 
-            // $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
-            //     return value.tipoMovimiento == 0;
-            // });
+            $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
+                return value.tipoMovimiento == 0;
+            });
 
-            // $scope.tablaSearch('bancoReferenciadoAbono');
-            // $scope.tablaSearch('bancoReferenciadoCargo');
+            $scope.tablaSearch('bancoReferenciadoAbono');
+            $scope.tablaSearch('bancoReferenciadoCargo');
             //Obtener la uma total de los registros
             
 
-            // angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
-            //     $scope.bancoReferenciadosAbonosTotales += value.abono;
-            // });
+            angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
+                $scope.bancoReferenciadosAbonosTotales += value.abono;
+            });
         });
     };
 
@@ -201,12 +201,12 @@ $scope.init = function() {
     $scope.getRegistrosBancariosCargos = function () {
         conciliacionDetalleRegistroRepository.getRegistrosBancariosCargos()
         .then(function (result) {
-            // $rootScope.registrosBancariosCargos = result.data
-            // if ($rootScope.bancoReferenciadosCargosTotales == 0) {
-            //     angular.forEach(result.data, function (value, key) {
-            //         $rootScope.bancoReferenciadosCargosTotales += value.importe;
-            //     });
-            // }
+            $rootScope.registrosBancariosCargos = result.data
+            if ($rootScope.bancoReferenciadosCargosTotales == 0) {
+                angular.forEach(result.data, function (value, key) {
+                    $rootScope.bancoReferenciadosCargosTotales += value.importe;
+                });
+            }
         });
     };
     //****************************************************************************************************
@@ -216,23 +216,23 @@ $scope.init = function() {
      $scope.contablesReferenciados = function(polizaPago, cuentaBanco){
         conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
 
-    //     $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
-    //      return value.tipoMovimiento == 0;
-    //     });
-    //     $scope.contableReferenciadosCargos = $filter('filter')(result.data, function(value){
-    //      return value.tipoMovimiento == 1;
-    //     });
-    //     $scope.tablaSearch('contableRefAbonos');
-    //     $scope.tablaSearch('contableRefCargos');
+        $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
+         return value.tipoMovimiento == 0;
+        });
+        $scope.contableReferenciadosCargos = $filter('filter')(result.data, function(value){
+         return value.tipoMovimiento == 1;
+        });
+        $scope.tablaSearch('contableRefAbonos');
+        $scope.tablaSearch('contableRefCargos');
 
-    //     //Obtener la uma total de los registros
-    //          angular.forEach($scope.contableReferenciadosAbonos, function(value, key) {
-    //                 $scope.contableReferenciadosAbonosTotales += value.abono;
-    //                 });
+        //Obtener la uma total de los registros
+             angular.forEach($scope.contableReferenciadosAbonos, function(value, key) {
+                    $scope.contableReferenciadosAbonosTotales += value.abono;
+                    });
              
-    //          angular.forEach($scope.contableReferenciadosCargos, function(value, key) {
-    //                 $scope.contableReferenciadosCargosTotales += value.cargo;
-    //                 });  
+             angular.forEach($scope.contableReferenciadosCargos, function(value, key) {
+                    $scope.contableReferenciadosCargosTotales += value.cargo;
+                    });  
       });
     };
     //****************************************************************************************************
