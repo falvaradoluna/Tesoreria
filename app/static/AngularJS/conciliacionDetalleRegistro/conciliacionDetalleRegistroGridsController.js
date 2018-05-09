@@ -190,7 +190,7 @@
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
      $scope.getAuxiliarContable = function(idEmpresa, idBanco,numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
-         
+
             filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function(result) {
               
 		if (result.data[0].length !=0) {

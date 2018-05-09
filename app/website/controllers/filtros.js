@@ -177,9 +177,9 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
         { name: 'polizaPago', value: req.query.polizaPago, type: self.model.types.STRING },
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
     ];
-    	
+    console.log( 'PARAMS', params );
 
-    this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('[dbo].[SEL_TODO_CONTABLE_SP]', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result

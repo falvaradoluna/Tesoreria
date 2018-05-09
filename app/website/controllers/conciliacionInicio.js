@@ -27,7 +27,7 @@ var conciliacionInicio = function(conf) {
 
 //LQMA 27022017 add obtiene totales de abonos y cargos no relacionados
 conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
-    
+    console.log( '1' );
 
     var self = this;
 
