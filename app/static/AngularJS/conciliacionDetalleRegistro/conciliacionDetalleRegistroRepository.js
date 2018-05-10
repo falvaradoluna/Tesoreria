@@ -16,7 +16,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
         },
 
         insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario, esCargoBanco, esCargoContable){ //LQMA 01042018
-            console.log('conciliacionDetalleRegistroURL:', conciliacionDetalleRegistroURL)
+            //console.log('conciliacionDetalleRegistroURL:', conciliacionDetalleRegistroURL)
             return $http({
                 url: conciliacionDetalleRegistroURL + 'insertPuntoDeposito/',
                 method: "POST",
