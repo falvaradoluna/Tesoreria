@@ -27,7 +27,6 @@ var conciliacionInicio = function(conf) {
 
 //LQMA 27022017 add obtiene totales de abonos y cargos no relacionados
 conciliacionInicio.prototype.post_totalAbonoCargo = function(req, res, next) {
-    console.log( '1' );
 
     var self = this;
 
@@ -74,13 +73,12 @@ conciliacionInicio.prototype.get_gerenteContador = function(req, res, next) {
 //Ing. LAGP03052018
 //api/meses
 conciliacionInicio.prototype.get_meses = function(req, res, next) {
-    console.log( 'Meses' );
+    
     var self = this;
     var params = [];
 
     this.model.query('SEL_MESES_ACTIVOS_SP', params, function(error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result

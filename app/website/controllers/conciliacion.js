@@ -53,10 +53,7 @@ Conciliacion.prototype.get_cargoContable = function(req, res, next) {
                   { name: 'opcion', value: req.query.opcion, type: self.model.types.INT },
                   { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING}];
-    
-    //console.log('SEL_CARGO_CONTABLE_SP')
-    //console.log(params)
-
+                  
     /*var params = [{ name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
                   { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.STRING },
                   { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.STRING },
@@ -122,8 +119,7 @@ Conciliacion.prototype.get_cargoBancario = function(req, res, next) {
 };
 
 Conciliacion.prototype.get_depositosPendientes = function(req, res, next) {
-
-    //console.log('freshh')
+    
 
     var self = this;
 
