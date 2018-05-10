@@ -41,10 +41,9 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function (req, 
     { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
     { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-    console.log( 'InsertPuntoDeposito', params );
+    
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function (error, result) {
-        console.log( 'errorPuntoDeposito', error );
-        console.log( 'resultPuntoDeposito', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -68,10 +67,9 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function (req, 
     { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
     { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-    console.log( 'insertPunteoBancoACParams', params );
+    
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function (error, result) {
-        console.log( 'errorBancoAc', error );
-        console.log( 'resultBanacoAc', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
