@@ -96,7 +96,6 @@ $scope.init = function() {
         conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta, fechaElaboracion, fechaCorte).then(function(result) {
             
             $scope.auxiliarPadre = result.data;
-            console.log( 'auxiliarPadre', $scope.auxiliarPadre );
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
             $scope.AuxiliarPunteado = $filter('filter')(result.data, function(value){
             return value.idEstatus == 3;
@@ -132,7 +131,6 @@ $scope.init = function() {
      $scope.getBancoPunteo = function(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte) {
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte).then(function(result) {
             $scope.bancoPadre = result.data;
-            console.log( 'bancoPadre', $scope.bancoPadre );
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function(value){

@@ -32,7 +32,7 @@
 
             //Historial LAGP
             $scope.paramHistory = JSON.parse( localStorage.getItem('paramBusqueda') );
-            
+            //console.log( 'conciliacionDetalleRegistroGridsConsultaControllerPams', $scope.paramHistory );
      $scope.init = function() {
         $('#loading').modal('show');
         //LUIS ANTONIO
@@ -146,10 +146,10 @@
     //******************Función para llenar el grid Depositos Bancos********************************
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion) {//LAGP 03052018
         if (idestatus == 1) { 
-            
+            console.log('Aqui'),
             conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion).then(function(result) {
                 if (result.data.length >= 0) {
-                    
+                    console.log( 'resultBancosConsulta', result.data );
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos
@@ -191,9 +191,9 @@
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
      $scope.getAuxiliarContable = function(idEmpresa, idBanco, idHistorico, fechaElaboracion) {
-         
+         console.log( 'getAuxiliarContable' );
         conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, idHistorico, fechaElaboracion).then(function(result) {
-              
+               console.log( 'result', result );
 		if (result.data[0].length !=0) {
 		    
                     $scope.auxiliarContable = result.data[0];
