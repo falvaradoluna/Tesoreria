@@ -977,52 +977,53 @@ else if(deSel.length == 0 && auSel.length > 0){
     };
     
     ////////////////////////////////////////////////////////Funsión para guardar los depositos no identificados////////////////////////////////////////////////7
-     $scope.ShowAlertDPI = function(){
+    $scope.ShowAlertDPI = function () {
 
-          $scope.isDPI = 1;
+        $scope.isDPI = 1;
 
-           
-          var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
 
-          angular.forEach($scope.gridApiBancos.grid.options.data , function(value, key) {             
-                            if(value.color != undefined && value.color != '') {               
-                                    PunteoDPI.push(value);
-                                    AbonoBanco += value.abono;
-                                    CargoBanco += value.cargo;
-                            }
-                        });
-          if(AbonoBanco > 0 && CargoBanco == 0){
-               $scope.control = 1;
-          }
+        var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
+        
+        angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
+            if (value.color != undefined && value.color != '') {
+                PunteoDPI.push(value);
+                AbonoBanco += value.abono;
+                CargoBanco += value.cargo;
+            }
+        });
+        
+        if (AbonoBanco > 0 && CargoBanco == 0) {
+            $scope.control = 1;
+        }
 
-          if ($scope.control != undefined){
-          $('#alertaGuardarDPI').modal('show');
-          localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
-	
-	   //console.log('PunteoDPI: ')
-	   //console.log(PunteoDPI)	
-        ///////////////////////////////////////////////////////////////////////////////
-        $scope.punteoAuxiliar = [];
-        $scope.punteoBanco = [];
-        $scope.gridApiBancos.selection.clearSelectedRows();
-        $scope.gridApiAuxiliar.selection.clearSelectedRows();
+        if ($scope.control != undefined) {
+            $('#alertaGuardarDPI').modal('show');
+            localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
+
+            //console.log('PunteoDPI: ')
+            //console.log(PunteoDPI)	
+            ///////////////////////////////////////////////////////////////////////////////
+            $scope.punteoAuxiliar = [];
+            $scope.punteoBanco = [];
+            $scope.gridApiBancos.selection.clearSelectedRows();
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.limpiaVariables();
+            //////////////////////////////////////////////////////////////////////////////
+        }
+        else {
+
+            alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
+        }
+    };
+
+    ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
+
+    $scope.cancelaPunteoDPI = function () {
         $scope.limpiaVariables();
-        //////////////////////////////////////////////////////////////////////////////
-    }
-    else {
+        $('#alertaGuardarDPI').modal('hide');
+    };
 
-        alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
-    }
-     };
-
-     ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
-
-     $scope.cancelaPunteoDPI = function(){
-        $scope.limpiaVariables();
-      $('#alertaGuardarDPI').modal('hide');
-     };
-
-    $scope.limpiaVariables = function() {
+    $scope.limpiaVariables = function () {
         $scope.abonoAuxiliar = 0;
         $scope.cargoAuxiliar = 0;
         $scope.abonoBanco = 0;

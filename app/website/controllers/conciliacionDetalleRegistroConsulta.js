@@ -118,9 +118,10 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT }
     ];
-
+    console.log( 'ParametrosAuxiliar', params );
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function (error, result) {
-
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result

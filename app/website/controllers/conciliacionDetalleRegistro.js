@@ -306,14 +306,13 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function (req, res, next) 
 conciliacionDetalleRegistro.prototype.post_generaPunteo = function (req, res, next) {
 
     var self = this;
-
+    console.log( 'Generar Punteo' );
     var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
     { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
     ];
-
-
+    console.log( 'paramsGenerarPunteo', params );
     this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
