@@ -21,7 +21,11 @@
      // INICIA Se guarda el punteo que ya no podra ser modificado
     //****************************************************************************************************
     $scope.generaPunteo = function() {
-        conciliacionDetalleRegistroRepository.generaPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, $scope.busqueda.Cuenta).then(function(result) {
+        conciliacionDetalleRegistroRepository.generaPunteo(
+            $scope.busqueda.IdEmpresa, 
+            $scope.busqueda.IdBanco, 
+            $scope.busqueda.CuentaContable, 
+            $scope.busqueda.Cuenta).then(function(result) {
             console.log(result.data[0].idEstatus)
             $('#alertaPunteo').modal('hide');
             if(result.data[0].idEstatus==1){
