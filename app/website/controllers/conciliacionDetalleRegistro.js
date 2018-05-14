@@ -41,9 +41,10 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function (req, 
     { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
     { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-    
+    console.log( 'ParametrosPuntoDeposito', params );
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function (error, result) {
-        
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -67,9 +68,10 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function (req, 
     { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
     { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-    
+    console.log( 'insertPunteoBancoACPARAMS', params );
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function (error, result) {
-        
+        console.log( 'errorPunetoBanco', error );
+        console.log( 'resultPunetoBanco', result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -306,13 +308,13 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function (req, res, next) 
 conciliacionDetalleRegistro.prototype.post_generaPunteo = function (req, res, next) {
 
     var self = this;
-    console.log( 'Generar Punteo' );
+    
     var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
     { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
     ];
-    console.log( 'paramsGenerarPunteo', params );
+    
     this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
@@ -330,8 +332,7 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function (req, res, next)
     { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
     { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT }
     ];
-
-
+    
     this.model.query('UPD_AUXILIARDEPOSITO_DPI_SP', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
