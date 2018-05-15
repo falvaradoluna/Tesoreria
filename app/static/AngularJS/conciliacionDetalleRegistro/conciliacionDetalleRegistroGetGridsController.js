@@ -436,11 +436,12 @@ $scope.init = function() {
                     
                     if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {
                         angular.forEach(result.data, function (value, key) {
-                            if (value.tipoMovimiento == 0) {
-                                $rootScope.universoTotalMovimientoBancarioCargo += value.cargo;
+                            if (value.tipoMovimiento == 1) {
+                                $rootScope.universoTotalMovimientoBancarioCargo +=  value.cargo;
+                                //console.log( 'cargo', value.cargo );
                             }
 
-                            if (value.tipoMovimiento == 1) {
+                            if (value.tipoMovimiento == 0) {
                                 $rootScope.universoTotalMovimientoBancarioAbono += value.abono;
                             }
                         });

@@ -176,23 +176,7 @@
             });
         }
     }
-
-    // $scope.getTotalesAbonoCargo = function () {
-    //     $scope.fechaComboElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
-    //     $scope.fechaComboCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
-
-    //     $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
-    //     $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
-        
-    //     // $scope.fechaCorte = $filter('date')(new Date($scope.fechaComboCorte), 'yyyy-MM-dd');
-    //     // $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaComboElaboracion), 'yyyy-MM-dd');
-    //     console.log( '$fechaComboElaboracion', $scope.fechaComboElaboracion );
-    //     console.log( '$fechaComboCorte', $scope.fechaComboCorte );
-    //     console.log( '$scope.fechaCorte', $scope.fechaCorte );
-    //     console.log( '$scope.fechaElaboracion', $scope.fechaElaboracion );
-    //     console.log( '$scope.mesActual', $scope.mesActual );
-    // }
-
+    
     $scope.getTotalesAbonoCargo = function () {
         //Se coloca la fecha que se obtiene del dropdawn
         $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
