@@ -42,9 +42,9 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function (req, res, next) {
         { name: 'idUsuario',        value: req.body.idUsuario, type: self.model.types.INT }, //LQMA ADD 06032018
         { name: 'idHistorico',      value: 0, type: self.model.types.INT } //LQMA ADD 06032018
     ];
-    console.log( 'ParametrosTotalAbonoCargo', params );
+    
     this.model.query('SEL_TOTAL_ABONOCARGO_SP', params, function (error, result) {
-
+        
         self.view.expositor(res, {
             error: error,
             result: result
