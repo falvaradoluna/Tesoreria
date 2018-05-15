@@ -118,9 +118,10 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT }
     ];
-
+    console.log( 'ParametrosAuxiliar', params );
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function (error, result) {
-
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -345,8 +346,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistroAbono = functio
     { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }];
     
     this.model.queryAllRecordSet('[dbo].[SEL_DOC_PAG_BY_ABONO_ID_SP_H]', params, function (error, result) {
-        // console.log( 'error', error );
-        // console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -368,10 +368,9 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosCargo
         { name: 'idCargo', value: idCargo, type: self.model.types.INT },
         { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
     ];
-    console.log( 'paramsDetalleRegistrosBancariosCargos', params );
+    
     this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP_H]', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -393,7 +392,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosBancariosAbono
         { name: 'IDABONOSBANCOS', value: idAbono, type: self.model.types.INT },
         { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
     ];
-    console.log( 'paramsdetalleRegistrosBancariosAbonos', params );
+    
     this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_ABONOBAN_CARGOCON_SP_H]', params, function (error, result) {
         
         self.view.expositor(res, {
@@ -417,7 +416,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_detalleRegistrosContablesAbono
         { name: 'IDCARGOS_COMPLETO', value: idAuxiliar, type: self.model.types.INT },
         { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
     ];
-    console.log( 'paramsdetalleRegistrosContablesAbonos', params );
+    
     this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_CARGOCON_ABONOBAN_SP_H]', params, function (error, result) {
         
         self.view.expositor(res, {
@@ -441,7 +440,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_getUniversoContable = function
         { name: 'IDCARGOS_COMPLETO', value: idAuxiliar, type: self.model.types.INT },
         { name: 'idHistorico', value: idHistorico, type: self.model.types.INT }
     ];
-    console.log( 'paramsdetalleRegistrosContablesAbonos', params );
+    
     this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_CARGOCON_ABONOBAN_SP_H]', params, function (error, result) {
         
         self.view.expositor(res, {
@@ -513,8 +512,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoBancarioConsulta = fun
     ];
     
     this.model.query('[dbo].[SEL_BANCARIO_TODO_SP_H]', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result

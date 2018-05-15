@@ -149,19 +149,28 @@
             console.log('Aqui'),
             conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion).then(function(result) {
                 if (result.data.length >= 0) {
+                    console.log( 'resultBancosConsulta', result.data );
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos
 
-                    angular.forEach($scope.depositosBancos, function(value, key) {
-                    $scope.totalAbonoBancario += value.abono;
+                    // angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalAbonoBancario += value.abono;
+                    // });
+                    angular.forEach($scope.depositosBancos, function( value, key ){
+                        if( value.esCargo == 1 ){
+                            $scope.depositosBancos[key]['cargo'] = value.importe;
+                            $scope.totalCargoBancario += value.importe;
+                        }else if(value.esCargo == 0){
+                            $scope.depositosBancos[key]['abono'] = value.importe;
+                            $scope.totalAbonoBancario += value.importe;
+                        }
                     });
-
                      //Suma del total monetario cargos
 
-                     angular.forEach($scope.depositosBancos, function(value, key) {
-                    $scope.totalCargoBancario += value.cargo;
-                    });
+                    //  angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalCargoBancario += value.cargo;
+                    // });
 
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));

@@ -41,11 +41,10 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function (req, 
     { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
     { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-
-
+    console.log( 'ParametrosPuntoDeposito', params );
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function (error, result) {
-
-
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -55,7 +54,7 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function (req, 
 
 conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function (req, res, next) {
     var self = this;
-
+    
     var params = [{ name: 'idDepositoBanco', value: req.body.idDepositoBanco, type: self.model.types.INT },
     { name: 'idAuxiliarContable', value: req.body.idAuxiliarContable, type: self.model.types.INT },
     { name: 'descripcion', value: req.body.descripcion, type: self.model.types.STRING },
@@ -69,11 +68,10 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function (req, 
     { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
     { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-
-
+    console.log( 'insertPunteoBancoACPARAMS', params );
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function (error, result) {
-
-
+        console.log( 'errorPunetoBanco', error );
+        console.log( 'resultPunetoBanco', result );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -175,10 +173,7 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function (req, res, n
     ];
 
     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
-
-        console.log('error', error)
-        console.log('result', result)
-
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -313,14 +308,13 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function (req, res, next) 
 conciliacionDetalleRegistro.prototype.post_generaPunteo = function (req, res, next) {
 
     var self = this;
-
+    
     var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
     { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
     ];
-
-
+    
     this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
@@ -338,8 +332,7 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function (req, res, next)
     { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
     { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT }
     ];
-
-
+    
     this.model.query('UPD_AUXILIARDEPOSITO_DPI_SP', params, function (error, result) {
         self.view.expositor(res, {
             error: error,
@@ -458,8 +451,7 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistrosBancariosCargos = func
     var params = [{ name: 'idCargo', value: idCargo, type: self.model.types.INT }];
 
     this.model.query('[dbo].[SEL_DOC_PAG_BY_CARGO_ID_SP]', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -479,8 +471,7 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistrosBancariosAbonos = func
     var params = [{ name: 'IDABONOSBANCOS', value: idAbono, type: self.model.types.INT }];
 
     this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_ABONOBAN_CARGOCON_SP]', params, function (error, result) {
-        console.log('error', error);
-        console.log('result', result);
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -500,8 +491,7 @@ conciliacionDetalleRegistro.prototype.get_detalleRegistrosContablesAbonos = func
     var params = [{ name: 'IDCARGOS_COMPLETO', value: idAuxiliar, type: self.model.types.INT }];
 
     this.model.queryAllRecordSet('[dbo].[SEL_CONCILIADOS_CARGOCON_ABONOBAN_SP]', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -525,8 +515,7 @@ conciliacionDetalleRegistro.prototype.get_totalUniverso = function (req, res, ne
     var polizaPago = req.query.polizaPago;
     var opcion = req.query.opcion;
     var idUsuario = req.query.idUsuario;
-    // console.log( 'fechaElaboracionContable', fechaElaboracion );
-    // console.log( 'fechaCorteContable', fechaCorte );
+    
     var params = [
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: idBanco, type: self.model.types.INT },
@@ -565,8 +554,7 @@ conciliacionDetalleRegistro.prototype.get_totalUniversoBancario = function (req,
     var polizaPago = req.query.polizaPago;
     var opcion = req.query.opcion;
     var idUsuario = req.query.idUsuario;
-    // console.log( 'fechaElaboracionBancario', fechaElaboracion );
-    // console.log( 'fechaCorteBancario', fechaCorte );
+    
     var params = [
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: idBanco, type: self.model.types.INT },
@@ -615,8 +603,7 @@ conciliacionDetalleRegistro.prototype.get_guardarHistorico = function (req, res,
     ];
     
     this.model.queryAllRecordSet('INS_GUARDAHISTORICO_SP', params, function (error, result) {
-        console.log('error', error);
-        console.log('result', result);
+        
         self.view.expositor(res, {
             error: error,
             result: result

@@ -144,20 +144,31 @@
         if (idestatus == 1) { 
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
-                    
+                    //console.log( 'resultadoBancos', result.data );
                     $scope.depositosBancos = result.data[0];
+                    
+                    angular.forEach($scope.depositosBancos, function( value, key ){
+                        if( value.esCargo == 1 ){
+                            $scope.depositosBancos[key]['cargo'] = value.importe;
+                            $scope.totalCargoBancario += value.importe;
+                        }else if(value.esCargo == 0){
+                            $scope.depositosBancos[key]['abono'] = value.importe;
+                            $scope.totalAbonoBancario += value.importe;
+                        }
+                    });
+                    
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos
                      
-                    angular.forEach($scope.depositosBancos, function(value, key) {
-                    $scope.totalAbonoBancario += value.abono;
-                    });
+                    // angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalAbonoBancario += value.abono;
+                    // });
                     
-                     //Suma del total monetario cargos
+                    //  //Suma del total monetario cargos
 
-                     angular.forEach($scope.depositosBancos, function(value, key) {
-                    $scope.totalCargoBancario += value.cargo;
-                    });
+                    //  angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalCargoBancario += value.cargo;
+                    // });
 
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
@@ -179,7 +190,7 @@
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
      $scope.getAuxiliarContable = function(idEmpresa, idBanco,numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
-         
+
             filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function(result) {
               
 		if (result.data[0].length !=0) {
@@ -966,52 +977,53 @@ else if(deSel.length == 0 && auSel.length > 0){
     };
     
     ////////////////////////////////////////////////////////Funsión para guardar los depositos no identificados////////////////////////////////////////////////7
-     $scope.ShowAlertDPI = function(){
+    $scope.ShowAlertDPI = function () {
 
-          $scope.isDPI = 1;
+        $scope.isDPI = 1;
 
-           
-          var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
 
-          angular.forEach($scope.gridApiBancos.grid.options.data , function(value, key) {             
-                            if(value.color != undefined && value.color != '') {               
-                                    PunteoDPI.push(value);
-                                    AbonoBanco += value.abono;
-                                    CargoBanco += value.cargo;
-                            }
-                        });
-          if(AbonoBanco > 0 && CargoBanco == 0){
-               $scope.control = 1;
-          }
+        var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
+        
+        angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
+            if (value.color != undefined && value.color != '') {
+                PunteoDPI.push(value);
+                AbonoBanco += value.abono;
+                CargoBanco += value.cargo;
+            }
+        });
+        
+        if (AbonoBanco > 0 && CargoBanco == 0) {
+            $scope.control = 1;
+        }
 
-          if ($scope.control != undefined){
-          $('#alertaGuardarDPI').modal('show');
-          localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
-	
-	   //console.log('PunteoDPI: ')
-	   //console.log(PunteoDPI)	
-        ///////////////////////////////////////////////////////////////////////////////
-        $scope.punteoAuxiliar = [];
-        $scope.punteoBanco = [];
-        $scope.gridApiBancos.selection.clearSelectedRows();
-        $scope.gridApiAuxiliar.selection.clearSelectedRows();
+        if ($scope.control != undefined) {
+            $('#alertaGuardarDPI').modal('show');
+            localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
+
+            //console.log('PunteoDPI: ')
+            //console.log(PunteoDPI)	
+            ///////////////////////////////////////////////////////////////////////////////
+            $scope.punteoAuxiliar = [];
+            $scope.punteoBanco = [];
+            $scope.gridApiBancos.selection.clearSelectedRows();
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.limpiaVariables();
+            //////////////////////////////////////////////////////////////////////////////
+        }
+        else {
+
+            alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
+        }
+    };
+
+    ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
+
+    $scope.cancelaPunteoDPI = function () {
         $scope.limpiaVariables();
-        //////////////////////////////////////////////////////////////////////////////
-    }
-    else {
+        $('#alertaGuardarDPI').modal('hide');
+    };
 
-        alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
-    }
-     };
-
-     ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
-
-     $scope.cancelaPunteoDPI = function(){
-        $scope.limpiaVariables();
-      $('#alertaGuardarDPI').modal('hide');
-     };
-
-    $scope.limpiaVariables = function() {
+    $scope.limpiaVariables = function () {
         $scope.abonoAuxiliar = 0;
         $scope.cargoAuxiliar = 0;
         $scope.abonoBanco = 0;
