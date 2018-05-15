@@ -260,8 +260,7 @@
 
         } else {
             console.log( 'En el else' );
-            console.log( 'fechaElaboracion', JSON.parse( localStorage.getItem('paramBusqueda') ).fechaElaboracion );
-            console.log( 'fechaCorte', JSON.parse( localStorage.getItem('paramBusqueda') ).fechaCorte );
+            
             conciliacionInicioRepository.getTotalAbonoCargo(
                 $scope.bancoId,
                 $scope.empresaId,
@@ -290,7 +289,23 @@
                         $scope.paramBusqueda = [];
 
                         setTimeout(function () {
-                            $scope.paramBusqueda = { "IdBanco": $scope.cuentaActual.IdBanco, "Banco": $scope.cuentaActual.NOMBRE, "IdEmpresa": $scope.cuentaActual.IdEmpresa, "Empresa": $scope.empresaActual.emp_nombre, "Cuenta": $scope.cuentaActual.Cuenta, "CuentaContable": $scope.cuentaActual.CuentaContable, "contador": $scope.contadorGerente[0].NombreContador, "gerente": $scope.contadorGerente[0].NombreGerente, "usuario": $scope.contadorGerente[0].Usuario, "fechaElaboracion": $scope.fechaElaboracion, "fechaCorte": $scope.fechaCorte, "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, "MesActivo": $scope.mesActivo, "PolizaPago": $scope.empresaActual.polizaPago };
+                            $scope.paramBusqueda = {
+                                "IdBanco": $scope.cuentaActual.IdBanco,
+                                "Banco": $scope.cuentaActual.NOMBRE,
+                                "IdEmpresa": $scope.cuentaActual.IdEmpresa,
+                                "Empresa": $scope.empresaActual.emp_nombre,
+                                "Cuenta": $scope.cuentaActual.Cuenta,
+                                "CuentaContable": $scope.cuentaActual.CuentaContable,
+                                "contador": $scope.contadorGerente[0].NombreContador,
+                                "gerente": $scope.contadorGerente[0].NombreGerente,
+                                "usuario": $scope.contadorGerente[0].Usuario,
+                                "fechaElaboracion": $scope.fechaElaboracion,
+                                "fechaCorte": $scope.fechaCorte,
+                                "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
+                                "MesActivo": $scope.mesActivo,
+                                "PolizaPago": $scope.empresaActual.polizaPago,
+                                "mensaje": result.data[0].mensaje
+                            };
                             localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
 
                         }, 1000);
