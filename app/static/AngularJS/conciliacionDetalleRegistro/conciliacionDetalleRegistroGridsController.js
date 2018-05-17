@@ -95,7 +95,7 @@
      // INICIA las variables para el GRID BANCOS
     //****************************************************************************************************
     $scope.gridDepositosBancos = {
-        enableRowSelection: true,
+        //enableRowSelection: true,
         enableRowHeaderSelection: false,
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
@@ -799,173 +799,191 @@
 
 
 
-    $scope.ShowAlertPunteo = function(){
+    $scope.ShowAlertPunteo = function () {
+        
+        localStorage.removeItem('infoGridAuxiliar');
+        localStorage.removeItem('infoGridBanco');
+        localStorage.removeItem('infoGridAbonoCargoAuxiliar');
+        localStorage.removeItem('infoGridAbonoCargoBanco');
+        //Obtengo los registros seleccionados y agrupados por color
 
-           //Obtengo los registros seleccionados y agrupados por color
-
-        var auxiSel = 0,depoSel = 0; auxiTot = 0,depoTot = 0;
+        var auxiSel = 0, depoSel = 0; auxiTot = 0, depoTot = 0;
         var deSel = [], auSel = []; // variables en las que se almacenan los registros seleccionados
-        angular.forEach($scope.gridApiBancos.grid.options.data , function(value, key) {             
-                            if(value.color != undefined && value.color != '') {               
-                                    depoTot++;
-                                    deSel.push(value);
-                                if(value.color == $scope.hexPicker.color)
-                                {
-                                    // //console.log('seleccionado: ',value.color)
-                                    depoSel++;
-                                }
-                            }
-                        });
-        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value, key) {             
-                            if(value.color != undefined && value.color != '') {
-                                    auxiTot++;
-                                    auSel.push(value);
-                                if(value.color == $scope.hexPicker.color)
-                                {
-                                    // //console.log('seleccionado: ',value.color)
-                                    auxiSel++;
-                                }
-                            }
-                        });
-      // Mando a llamar la función que me genera el grupo de arrays por color y tipo de Punteo
+        
+        angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
+            if (value.color != undefined && value.color != '') {
+                depoTot++;
+                deSel.push(value);
+                if (value.color == $scope.hexPicker.color) {
+                    //console.log('seleccionado: ',value.color)
+                    depoSel++;
+                }
+            }
+        });
+
+        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
+            if (value.color != undefined && value.color != '') {
+                auxiTot++;
+                auSel.push(value);
+                if (value.color == $scope.hexPicker.color) {
+
+                    auxiSel++;
+                }
+            }
+        });
+
+        // Mando a llamar la función que me genera el grupo de arrays por color y tipo de Punteo
         $scope.crearArrayGrupos(deSel, auSel);
- 
-        
-        
-           //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
-          localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.agrupadosAuxiliar));
-          localStorage.setItem('infoGridBanco', JSON.stringify($scope.agrupadosBancos));
-          localStorage.setItem('infoGridAbonoCargoAuxiliar', JSON.stringify($scope.agrupadosAuxiliarCargoAbono));
-          localStorage.setItem('infoGridAbonoCargoBanco', JSON.stringify($scope.agrupadosBancosCargoAbono));
 
 
-if($scope.control != undefined){
-       $('#alertaGuardarPunteoPrevio').modal('show');
-        $scope.punteoAuxiliar = [];
-        $scope.punteoBanco = [];
-        $scope.gridApiAuxiliar.selection.clearSelectedRows();
-        $scope.gridApiBancos.selection.clearSelectedRows();
-        $scope.limpiaVariables();
-    }
-    else{
-        if(($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)){
-        alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
+
+        //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
+        localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.agrupadosAuxiliar));
+        localStorage.setItem('infoGridBanco', JSON.stringify($scope.agrupadosBancos));
+        localStorage.setItem('infoGridAbonoCargoAuxiliar', JSON.stringify($scope.agrupadosAuxiliarCargoAbono));
+        localStorage.setItem('infoGridAbonoCargoBanco', JSON.stringify($scope.agrupadosBancosCargoAbono));
+        localStorage.setItem( 'infoGridagrupadosBancosContables', JSON.stringify( $scope.agrupadosBancosContables ) );
+
+
+        if ($scope.control != undefined) {
+            $('#alertaGuardarPunteoPrevio').modal('show');
+            $scope.punteoAuxiliar = [];
+            $scope.punteoBanco = [];
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.gridApiBancos.selection.clearSelectedRows();
+            $scope.limpiaVariables();
         }
-      else if($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
-       $('#alertaGuardarPunteoPrevio').modal('show');
-        $scope.punteoAuxiliar = [];
-        $scope.punteoBanco = [];
-        $scope.gridApiAuxiliar.selection.clearSelectedRows();
-        $scope.gridApiBancos.selection.clearSelectedRows();
-        $scope.limpiaVariables();
-      } 
-     }
-
+        else {
+            if (($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)) {
+                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
+            }
+            else if ($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
+                $('#alertaGuardarPunteoPrevio').modal('show');
+                $scope.punteoAuxiliar = [];
+                $scope.punteoBanco = [];
+                $scope.gridApiAuxiliar.selection.clearSelectedRows();
+                $scope.gridApiBancos.selection.clearSelectedRows();
+                $scope.limpiaVariables();
+            }
+        }
     };
 
 
-$scope.crearArrayGrupos = function(deSel, auSel){
+    $scope.crearArrayGrupos = function (deSel, auSel) {
+        console.log('crearArrayGrupos');
+        var coloresUsados = [];
 
-        var coloresUsados = [];        
-        $scope.agrupadosBancos = []; 
+        //Variables para guardar los cargos contra abonos
+        $scope.agrupadosBancos = [];
         $scope.agrupadosAuxiliar = [];
+
+        //Variables para utilizar cuando se selecciona un cargo y un abono ya se solo bancario o contable
         $scope.agrupadosAuxiliarCargoAbono = [];
         $scope.agrupadosBancosCargoAbono = [];
-///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
-        if(deSel.length > 0 && auSel.length > 0){
-        var colorActual = deSel[0].color;
-        var filtradosColors = deSel;
-         
-        while(filtradosColors.length > 0)
-        {
-            colorActual = filtradosColors[0].color;
-            coloresUsados.push(colorActual); 
 
-            var grupoActualBanco = $filter('filter')(deSel, function(value){
-                                            return value.color == colorActual;  
-                                        }); 
+        $scope.agrupadosBancosContables = [];
 
-            var grupoActualAuxiliar = $filter('filter')(auSel, function(value){
-                                            return value.color == colorActual;  
-                                        });                                
+        ///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
+        //Condicion si se guarda un cargoBancario y abonoContable
+        if (deSel.length > 0 && auSel.length > 0) {
+            console.log('CargoBancario-AbonoContable');
 
-            // //console.log('grupo actual: ',grupoActual);
-            $scope.agrupadosBancos.push(grupoActualBanco)
-            $scope.agrupadosAuxiliar.push(grupoActualAuxiliar)
-
-            // //console.log('busca colores: ', coloresUsados.indexOf(colorActual))
-
-            filtradosColors = $filter('filter')(filtradosColors, function(value){
-                                            return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;  
-                                        });
-
-            // //console.log('grupos restantes: ',filtradosColors);
-        }
-    }
-///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
-
-///Inicia la funcion que guarda cargos - abonos Contables
-else if(deSel.length == 0 && auSel.length > 0){
-        var gruposAuxiliarSolo = $filter('filter')(auSel, function(value){
-                                            // //console.log(value);
-                                            return (coloresUsados.indexOf(value.color) == -1)?value.color==value.color:value.color =='.........';  
-                                        });
-
-        // //console.log('complemento de auxiliares:',gruposAuxiliarSolo);
-        
-
-        while(gruposAuxiliarSolo.length > 0)
-        {
-            colorActual = gruposAuxiliarSolo[0].color;
+            var colorActual = deSel[0].color;
+            var filtradosColors = deSel;
+            console.log( 'deSel', deSel );
+            console.log( 'auSel', auSel );
+            $scope.bancoCargo = [];
             
-            coloresUsados.push(colorActual); 
+            angular.forEach(deSel, function( value, key ){
+                console.log( 'valuede',value );
+                $scope.bancoCargo.push( value );
+            });
+            angular.forEach(auSel, function( value, key ){
+                console.log( 'valuau',value );
+                $scope.bancoCargo.push( value );
+            });
+            console.log( 'bancoCargo', $scope.bancoCargo );
+            /*while (filtradosColors.length > 0) {
+                colorActual = filtradosColors[0].color;
 
-            var grupoActualBanco = $filter('filter')(gruposAuxiliarSolo, function(value){
-                                            return value.color == colorActual;  
-                                        }); 
+                coloresUsados.push(colorActual);
 
-            $scope.agrupadosAuxiliarCargoAbono.push(grupoActualBanco)
+                var grupoActualBanco = $filter('filter')(deSel, function (value) {
+                    return value.color == colorActual;
+                });
+                
+                var grupoActualAuxiliar = $filter('filter')(auSel, function (value) {
+                    return value.color == colorActual;
+                });
+                
+                $scope.agrupadosBancos.push(grupoActualBanco);
+                $scope.agrupadosAuxiliar.push(grupoActualAuxiliar);
 
-            gruposAuxiliarSolo = $filter('filter')(gruposAuxiliarSolo, function(value){
-                                            return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;  
-                                        });
+                $scope.agrupadosBancosContables.push(grupoActualBanco);
+                $scope.agrupadosBancosContables.push(grupoActualAuxiliar);
+
+                filtradosColors = $filter('filter')(filtradosColors, function (value) {
+                    return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
+                });
+            }*/
         }
-    }
+        ///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
 
-///Inicia la funsión que guarda cargos - abonos Bancarios
-    else if(deSel.length > 0 && auSel.length == 0){
-     var gruposBancoSolo = $filter('filter')(deSel,function(value){
-                           return (coloresUsados.indexOf(value.Color) == -1)?value.color:value.color =='.........';
-         });
-     
+        ///Inicia la funcion que guarda cargos - abonos Contables
+        //Condicion que se ejecuta si se selecciona solo un abono contable contra un cargo contable
+        else if (deSel.length == 0 && auSel.length > 0) {
+            console.log('AbonoContable-CargoContable');
+            var gruposAuxiliarSolo = $filter('filter')(auSel, function (value) {
+                console.log(value);
+                return (coloresUsados.indexOf(value.color) == -1) ? value.color == value.color : value.color == '.........';
+            });
 
-     while(gruposBancoSolo.length > 0)
-             {
+            while (gruposAuxiliarSolo.length > 0) {
+                colorActual = gruposAuxiliarSolo[0].color;
+
+                coloresUsados.push(colorActual);
+
+                var grupoActualBanco = $filter('filter')(gruposAuxiliarSolo, function (value) {
+                    return value.color == colorActual;
+                });
+                console.log('grupoActualBanco', grupoActualBanco);
+                $scope.agrupadosAuxiliarCargoAbono.push(grupoActualBanco);
+                console.log('agrupadosAuxiliarCargoAbono', $scope.agrupadosAuxiliarCargoAbono);
+                gruposAuxiliarSolo = $filter('filter')(gruposAuxiliarSolo, function (value) {
+                    return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
+                });
+
+            }
+        }
+
+        ///Inicia la funsión que guarda cargos - abonos Bancarios
+        //Condicion que entra cuando solo seleccionas cargos y abonos bancarios
+        else if (deSel.length > 0 && auSel.length == 0) {
+            console.log('CargoBancario-AbonoBancario');
+            var gruposBancoSolo = $filter('filter')(deSel, function (value) {
+                return (coloresUsados.indexOf(value.Color) == -1) ? value.color : value.color == '.........';
+            });
+            console.log('gruposBancoSolo', gruposBancoSolo);
+            while (gruposBancoSolo.length > 0) {
                 colorActual = gruposBancoSolo[0].color;
 
                 coloresUsados.push(colorActual);
 
-                var grupoActualContable = $filter('filter')(gruposBancoSolo, function(value){
-                        return value.color == colorActual;
+                var grupoActualContable = $filter('filter')(gruposBancoSolo, function (value) {
+                    return value.color == colorActual;
                 });
-
+                console.log('grupoActualContable', grupoActualContable);
                 $scope.agrupadosBancosCargoAbono.push(grupoActualContable);
-
-                gruposBancoSolo = $filter('filter')(gruposBancoSolo, function(value){
-                                  return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;
+                console.log('agrupadosBancosCargoAbono', $scope.agrupadosBancosCargoAbono);
+                gruposBancoSolo = $filter('filter')(gruposBancoSolo, function (value) {
+                    return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
                 });
+                console.log('gruposBancoSolo', gruposBancoSolo);
+            }
 
-             }
-
-    }
-///Finaliza la funcion que guarda cargos - abonos Contables
-
-
-        //  //console.log('agrupados Bancos: ', $scope.agrupadosBancos)
-        //  //console.log('agrupados Auxiliar: ', $scope.agrupadosAuxiliar)
-        //  //console.log('agrupados Auxiliar- Cargo - abono: ', $scope.agrupadosAuxiliarCargoAbono)
-
-};
+        }
+        ///Finaliza la funcion que guarda cargos - abonos Contables
+    };
 
 
 

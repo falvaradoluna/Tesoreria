@@ -98,8 +98,21 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
             });
         },
 
+        getBancoPunteo: function (idempresa) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
+                method: "GET",
+                params: {
+                    idEmpresa: idempresa
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
 
-        getBancoPunteo: function (idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
+            });
+        },
+
+       /* getBancoPunteo: function (idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
                 method: "GET",
@@ -115,7 +128,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
                 }
 
             });
-        },
+        },*/
 
         getBancoDPI: function (idempresa, cuentaBancaria) {
             return $http({
@@ -183,21 +196,34 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
                 }
             });
         },
-        generaPunteo: function (idempresa, idbanco, cuentacontable, cuentabancaria) {
+        //Luis Antonios Garcia Perrusquia
+        generaPunteo: function () {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'generaPunteo/',
                 method: "POST",
                 data: {
-                    idEmpresa: idempresa,
-                    idBanco: idbanco,
-                    cuentaContable: cuentacontable,
-                    cuentaBancaria: cuentabancaria
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
+
+        // generaPunteo: function (idempresa, idbanco, cuentacontable, cuentabancaria) {
+        //     return $http({
+        //         url: conciliacionDetalleRegistroURL + 'generaPunteo/',
+        //         method: "POST",
+        //         data: {
+        //             idEmpresa: idempresa,
+        //             idBanco: idbanco,
+        //             cuentaContable: cuentacontable,
+        //             cuentaBancaria: cuentabancaria
+        //         },
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        // },
 
         insertDepositosDPI: function (idAbonoBanco, idBanco, idEmpresa, idUsuario) {
             return $http({

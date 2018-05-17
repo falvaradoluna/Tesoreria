@@ -211,7 +211,7 @@
                             <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>Banco</th>
+                                        <th>Banco1</th>
                                         <th>Referencia</th>
                                         <th>Concepto</th>
                                         <th>Cargo</th>
@@ -221,7 +221,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="banco in bancoPadre | filter:{idPunteoFinalBancos:2}">
+                                    <tr ng-repeat="banco in bancoPadre | filter:{aplicado:0}">
                                         <td>{{banco.banco}}</td>
                                         <td>{{banco.referencia}}</td>
                                         <td>{{banco.concepto}}</td>
@@ -240,6 +240,13 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div style="padding-left: 74%;">
+                                <p class="text-info text-semibold">Total Cargos Bancarios : {{BancoPrePunteadoCargosTotales | currency}}</p>
+                            </div>
+            
+                            <div style="padding-left: 74%;">
+                                <p class="text-info text-semibold">Total Abonos Bancarios : {{BancoPrePunteadoAbonosTotales | currency}}</p>
+                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="text-main">
@@ -259,11 +266,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idPunteoFinalBancos:2}">
-                                        <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
-                                        <td>{{auxiliar.polTipo}}</td>
-                                        <td>{{auxiliar.polConsecutivo}}</td>
-                                        <td>{{auxiliar.movConcepto}}</td>
+                                    <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:0}">
+                                        <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
+                                        <td>{{auxiliar.tipoPoliza}}</td>
+                                        <td>{{auxiliar.poliza}}</td>
+                                        <td>{{auxiliar.concepto}}</td>
                                         <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                                         <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
                                         <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
@@ -279,6 +286,13 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <div style="padding-left: 74%;">
+                                <p class="text-info text-semibold">Total Cargos Contables : {{AuxiliarPrePunteadoCargosTotales | currency}}</p>
+                            </div>
+
+                            <div style="padding-left: 74%;">
+                                <p class="text-info text-semibold">Total Abonos Contables : {{AuxiliarPrePunteadoAbonosTotales | currency}}</p>
+                            </div>
                         </div>
 
                     </div>
@@ -320,7 +334,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in bancoPadre | filter:{idPunteoFinalBancos:3}">
+                        <tr ng-repeat="banco in bancoPadre | filter:{aplicado:1}">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
@@ -365,11 +379,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idPunteoFinalBancos:3}">
-                            <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
-                            <td>{{auxiliar.polTipo}}</td>
-                            <td>{{auxiliar.polConsecutivo}}</td>
-                            <td>{{auxiliar.movConcepto}}</td>
+                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:1}">
+                            <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
+                            <td>{{auxiliar.tipoPoliza}}</td>
+                            <td>{{auxiliar.poliza}}</td>
+                            <td>{{auxiliar.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
                             <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">

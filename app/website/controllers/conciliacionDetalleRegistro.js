@@ -99,8 +99,25 @@ conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function (req, res, n
         });
     });
 };
-
+//Luis Anotnio Garcia Perrusquia
 conciliacionDetalleRegistro.prototype.get_bancoPunteo = function (req, res, next) {
+
+    var self = this;
+    
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
+    ];
+
+    this.model.queryAllRecordSet('[DBO].[SEL_PUNTEO_DETALLE_SP]', params, function (error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/*conciliacionDetalleRegistro.prototype.get_bancoPunteo = function (req, res, next) {
 
     var self = this;
 
@@ -120,7 +137,7 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function (req, res, next
             result: result
         });
     });
-};
+};*/
 
 conciliacionDetalleRegistro.prototype.get_bancoDPI = function (req, res, next) {
 
@@ -305,23 +322,40 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function (req, res, next) 
         req.body = [];
     });
 };
+// Luis Antonio Garcia Perrusquia
 conciliacionDetalleRegistro.prototype.post_generaPunteo = function (req, res, next) {
 
     var self = this;
     
-    var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
-    { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-    { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-    { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
-    ];
+    var params = [];
     
-    this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function (error, result) {
+    this.model.query('[dbo].[UPD_PUNTEO_APLICAR_SP]', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
+
+// conciliacionDetalleRegistro.prototype.post_generaPunteo = function (req, res, next) {
+
+//     var self = this;
+    
+//     var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
+//     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
+//     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
+//     { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
+//     ];
+    
+//     this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function (error, result) {
+//         self.view.expositor(res, {
+//             error: error,
+//             result: result
+//         });
+//     });
+// };
 
 
 conciliacionDetalleRegistro.prototype.post_insertDPI = function (req, res, next) {
