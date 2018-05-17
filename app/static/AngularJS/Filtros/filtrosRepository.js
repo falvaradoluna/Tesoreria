@@ -250,6 +250,18 @@ registrationModule.factory('filtrosRepository', function($http) {
                 }
 
             });
+        },
+
+        savePunteado: function(parametros) {
+            return $http({
+                url: filtrosURL + 'saveParametros/',
+                method: "GET",
+                params: parametros,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
         }
 
     }

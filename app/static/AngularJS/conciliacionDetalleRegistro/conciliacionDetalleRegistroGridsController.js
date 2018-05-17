@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGridsController',function($scope, $log,  $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants){
+﻿registrationModule.controller('conciliacionDetalleRegistroGridsController',function($scope, $log,  $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants, filterFilter){
 
       $scope.gridsInfo = [];
       $scope.depositosBancos = '';
@@ -144,7 +144,7 @@
         if (idestatus == 1) { 
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
-                    //console.log( 'resultadoBancos', result.data );
+                    console.log( 'noPunteadosBancos', result.data );
                     $scope.depositosBancos = result.data[0];
                     
                     angular.forEach($scope.depositosBancos, function( value, key ){
@@ -194,7 +194,7 @@
             filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function(result) {
               
 		if (result.data[0].length !=0) {
-		     //console.log(result.data)
+		            console.log('NoPunteadosContable',result.data)
                     $scope.auxiliarContable = result.data[0];
                     $scope.gridAuxiliarContable.data = result.data[0];
                       //Suma del total monetario, abonos
@@ -222,6 +222,7 @@
 
    // INICIA la configuración del GRID AUXILIAR CONTABLE
     //****************************************************************************************************
+    
     $scope.gridAuxiliarContable.onRegisterApi = function(gridApi) {
         //set gridApi on scope
         $scope.gridApiAuxiliar = gridApi;
@@ -234,7 +235,6 @@
                     //LQMA 23082017    
                 row.entity.color = $scope.hexPicker.color;//$scope.currentColor;
                 $scope.agregaDiv($scope.hexPicker.color);
-                  
 
             } else if (row.isSelected == false) {
                 $scope.abonoAuxiliar = $scope.abonoAuxiliar - row.entity.abono;
@@ -796,10 +796,148 @@
         $scope.gridApiBancos.grid.api.grid.queueGridRefresh();                                                                
 
     }
-
-
-
+    $scope.seleccionados = [];
+    $scope.grupoHexadecimal = [];
     $scope.ShowAlertPunteo = function () {
+        //Obtengo los registros seleccionados y agrupados por color
+
+        var auxiSel = 0, depoSel = 0; auxiTot = 0, depoTot = 0;
+        var deSel = [], auSel = []; // variables en las que se almacenan los registros seleccionados
+        
+        
+        //angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
+        //$scope.gridApiBancos.grid.options.data.forEach(function (value, key) {
+        var aux1 = $scope.gridApiBancos.grid.options.data;
+        for( var i = 0; i <= (aux1.length - 1); i++ ){
+            var value = aux1[ i ];
+            if (value.color != undefined && value.color != '') {
+                depoTot++;
+                deSel.push(value);
+                $scope.seleccionados.push(
+                    { 
+                        color: value.color, 
+                        idCargo: value.esCargo == 1 ? value.IDABONOSBANCOS : 0, 
+                        idAbono: value.esCargo == 1 ? 0 : value.IDABONOSBANCOS, 
+                        tipo: 'B', 
+                        usuario: JSON.parse(localStorage.getItem('ls.userData')).idUsuario  
+                    }
+                );
+                if( $scope.grupoHexadecimal.indexOf(value.color) == -1 ){
+                    $scope.grupoHexadecimal.push( value.color );
+                }
+                // if (value.color == $scope.hexPicker.color) {
+                //     //console.log('seleccionado: ',value.color)
+                //     depoSel++;
+                // }
+            }
+        }
+
+        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
+            if (value.color != undefined && value.color != '') {
+                auxiTot++;
+                auSel.push( value );
+                $scope.seleccionados.push(
+                    {
+                        color: value.color,
+                        idCargo: value.esCargo == 1 ? value.idAuxiliarContable : 0, 
+                        idAbono: value.esCargo == 1 ? 0 : value.idAuxiliarContable, 
+                        tipo: 'C', 
+                        usuario: JSON.parse(localStorage.getItem('ls.userData')).idUsuario   
+                    }
+                );
+                if( $scope.grupoHexadecimal.indexOf(value.color) == -1 ){
+                    $scope.grupoHexadecimal.push( value.color );
+                }
+                // if (value.color == $scope.hexPicker.color) {
+
+                //     auxiSel++;
+                // }
+            }
+        });
+
+        //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
+
+
+        if ($scope.control != undefined) {
+            $('#alertaGuardarPunteoPrevio').modal('show');
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.gridApiBancos.selection.clearSelectedRows();
+            $scope.limpiaVariables();
+        }
+        else {
+            if (($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)) {
+                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
+            }
+            else if ($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
+                $('#alertaGuardarPunteoPrevio').modal('show');
+                $scope.punteoAuxiliar = [];
+                $scope.punteoBanco = [];
+                $scope.gridApiAuxiliar.selection.clearSelectedRows();
+                $scope.gridApiBancos.selection.clearSelectedRows();
+                $scope.limpiaVariables();
+            }
+        }
+
+        localStorage.setItem("seleccionados", JSON.stringify( $scope.seleccionados));
+        localStorage.setItem("grupoHexadecimal", JSON.stringify( $scope.grupoHexadecimal))
+
+        console.log( 'Bancario', $scope.seleccionados );
+        console.log( 'Colores', $scope.grupoHexadecimal );
+        
+    };
+
+    $scope.savePunteo = function(){
+        $scope.save_seleccionados = JSON.parse( localStorage.getItem("seleccionados") );
+        $scope.save_grupoHexadecimal = JSON.parse( localStorage.getItem("grupoHexadecimal") );
+        
+        $scope.savePunteoDetalle( 0 );
+    }
+
+    $scope.auxGrupoPunteo   = 0;
+    $scope.gruposPunteo     = [];
+
+    $scope.savePunteoDetalle = function( auxCont ){
+        if( auxCont >= ( $scope.save_grupoHexadecimal.length ) ){
+            alert("Se ha guardado todo");
+            $('#alertaGuardarPunteoPrevio').modal('hide');
+        }
+        else{
+            var item = $scope.save_grupoHexadecimal[ auxCont ];
+            $scope.gruposPunteo = filterFilter($scope.save_seleccionados, { color: item });
+            
+            console.log('---------------------------');
+            console.log( $scope.gruposPunteo );
+            console.log('---------------------------');
+            $scope.auxGrupoPunteo   = 0;
+            $scope.detallePunteoSave( auxCont , 0 );
+        }
+    }
+
+    $scope.detallePunteoSave = function( auxContPadre, auxCont ){
+        console.log( 'Contadores', auxContPadre, auxCont );
+        if( auxCont >= ( $scope.gruposPunteo.length ) ){
+            $scope.savePunteoDetalle( auxContPadre + 1 );
+        }else{
+            var value = $scope.gruposPunteo[ auxCont ]
+            var parametros = {
+                grupo:   $scope.auxGrupoPunteo,
+                idCargo: value.idCargo,
+                idAbono: value.idAbono,
+                tipo:    value.tipo,
+                usuario: value.usuario,
+            }
+            filtrosRepository.savePunteado( parametros ).then(function(result) {
+                var resultado = result.data[0];
+                console.log("resultado E", resultado);
+                if( resultado.length != 0 ){
+                    $scope.auxGrupoPunteo   = resultado.grupoPunteo;
+                    $scope.detallePunteoSave( auxContPadre, auxCont + 1 );
+                }
+            })
+        }
+    }
+
+   /* $scope.ShowAlertPunteo = function () {
         
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
@@ -866,7 +1004,7 @@
                 $scope.limpiaVariables();
             }
         }
-    };
+    };*/
 
 
     $scope.crearArrayGrupos = function (deSel, auSel) {
@@ -903,7 +1041,7 @@
                 $scope.bancoCargo.push( value );
             });
             console.log( 'bancoCargo', $scope.bancoCargo );
-            /*while (filtradosColors.length > 0) {
+            while (filtradosColors.length > 0) {
                 colorActual = filtradosColors[0].color;
 
                 coloresUsados.push(colorActual);
@@ -925,7 +1063,7 @@
                 filtradosColors = $filter('filter')(filtradosColors, function (value) {
                     return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
                 });
-            }*/
+            }
         }
         ///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
 

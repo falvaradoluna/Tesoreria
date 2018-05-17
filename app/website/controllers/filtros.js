@@ -298,5 +298,26 @@ Filtros.prototype.get_cuenta = function(req, res, next) {
     });
 };
 
+Filtros.prototype.get_saveParametros = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'grupoPunteo', value: req.query.grupo, type: self.model.types.INT },
+        { name: 'idCargo', value: req.query.idCargo, type: self.model.types.INT },
+        { name: 'idAbono', value: req.query.idAbono, type: self.model.types.INT },
+        { name: 'tipo', value: req.query.tipo, type: self.model.types.STRING },
+        { name: 'idUsuario', value: req.query.usuario, type: self.model.types.INT }
+    ];
+
+    this.model.query('[dbo].[INS_PUNTEO_MANUALES_SP]', params, function(error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = Filtros;
