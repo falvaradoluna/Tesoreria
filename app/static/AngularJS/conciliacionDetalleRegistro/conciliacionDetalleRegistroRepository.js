@@ -144,23 +144,35 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
 
             });
         },
-
-
-        eliminarPunteo: function (datoBusqueda, opcion, idEmpresa, idBanco) {
+        // Ing. Luis Antonio Garcia
+        eliminarPunteo: function (datoBusqueda) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'eliminarPunteo/',
                 method: "POST",
                 data: {
-                    idDatoBusqueda: datoBusqueda,
-                    opcion: opcion,
-                    idEmpresa: idEmpresa,
-                    idBanco: idBanco
+                    idDatoBusqueda: datoBusqueda
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
+
+        // eliminarPunteo: function (datoBusqueda, opcion, idEmpresa, idBanco) {
+        //     return $http({
+        //         url: conciliacionDetalleRegistroURL + 'eliminarPunteo/',
+        //         method: "POST",
+        //         data: {
+        //             idDatoBusqueda: datoBusqueda,
+        //             opcion: opcion,
+        //             idEmpresa: idEmpresa,
+        //             idBanco: idBanco
+        //         },
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        // },
         detallePunteo: function (idPunteo, idBanco, noCuenta, cuentaContable, accionBusqueda) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detallePunteo/',
