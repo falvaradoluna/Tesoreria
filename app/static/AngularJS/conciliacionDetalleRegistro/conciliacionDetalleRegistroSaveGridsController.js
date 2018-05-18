@@ -4,11 +4,14 @@
 
      $scope.init = function(){
         //Obtengo la información almacenada, se genera en conciliacionRegistroGridsController
-        
+        //Se obtienen los datos de los abonos contables y cargos bancarios de un solo grid
         $scope.punteoAuxiliar = JSON.parse(localStorage.getItem('infoGridAuxiliar'));
         $scope.punteoBanco = JSON.parse(localStorage.getItem('infoGridBanco'));
+        //Se obtienen los datos de abonos bancarios contra cargos bancarios y viseversa
         $scope.abonoCargoAuxiliar = JSON.parse(localStorage.getItem('infoGridAbonoCargoAuxiliar'));
         $scope.abonoCargoBanco = JSON.parse(localStorage.getItem('infoGridAbonoCargoBanco'));
+        $scope.infoGridagrupadosBancosContables = JSON.parse(localStorage.getItem('infoGridagrupadosBancosContables'));
+        //Se obtienen los datos de DPI
         $scope.DPIdata = JSON.parse(localStorage.getItem('infoDPIData'));
 
 
@@ -20,203 +23,331 @@
 
      // INICIA Se guarda el punteo que ya no podra ser modificado
     //****************************************************************************************************
+    // $scope.generaPunteo = function() {
+    //     conciliacionDetalleRegistroRepository.generaPunteo(
+    //         $scope.busqueda.IdEmpresa, 
+    //         $scope.busqueda.IdBanco, 
+    //         $scope.busqueda.CuentaContable, 
+    //         $scope.busqueda.Cuenta).then(function(result) {
+    //         console.log(result.data[0].idEstatus)
+    //         $('#alertaPunteo').modal('hide');
+    //         if(result.data[0].idEstatus==1){
+    //             alertFactory.success(result.data[0].Descripcion)
+    //         }else if(result.data[0].idEstatus==0){
+    //             alertFactory.error(result.data[0].Descripcion)
+    //         }
+    //         $scope.refreshGrids();
+    //     });
+    // };
+
+    // Ing. Luis Antonio Garcia Perruquia 
     $scope.generaPunteo = function() {
-        conciliacionDetalleRegistroRepository.generaPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, $scope.busqueda.Cuenta).then(function(result) {
-            console.log(result.data[0].idEstatus)
+        conciliacionDetalleRegistroRepository.generaPunteo()
+        .then(function(result) {
             $('#alertaPunteo').modal('hide');
-            if(result.data[0].idEstatus==1){
-                alertFactory.success(result.data[0].Descripcion)
-            }else if(result.data[0].idEstatus==0){
-                alertFactory.error(result.data[0].Descripcion)
+            if(result.data[0].success == 1){
+                alertFactory.success(result.data[0].msg)
+            }else{
+                alertFactory.error(result.data[0].msg)
             }
             $scope.refreshGrids();
         });
     };
      // Fin de la funsion que guarda el punteo que ya no podra ser modificado
     //**************************************************************************************************** 
+   
+    $scope.guardaPunteoPrevio = function(){
+        ///Tipo de punteo 1 = (Abonos o cargos Bancarios) - (Abonos o cargos Contables)
+        ///Tipo de punteo 2 = Punteos Bancarios (conciliación entre los mismos tipos de datos)
+        ///Tipo de punteo 3 = Punteo Contable (conciliación entre los mismos tipos de datos)
+        console.log( 'funcionGuarda punteo' );
+        $('#alertaGuardarPunteoPrevio').modal('hide');
+        //Mando a llamar la función que obtendra la nueva información almacenada
+        $scope.init();
+        $('#loading').modal('show');
+        setTimeout(function () {
 
+            //If que inserta el grupo de registros de Contabilidad cargos- abonos
+            console.log( 'abonoCargoAuxiliar', $scope.abonoCargoAuxiliar );
+            if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos - abonos
+                console.log( 'PrimeraDiscriminante' );
+                angular.forEach($scope.abonoCargoAuxiliar, function( value, key ){
+                    console.log( 'value', value );
+                });
+            }
+            //If que inserta el grupo de registros de Bancos cargos- abonos
+            if ($scope.abonoCargoBanco.length > 0) {
+                console.log( 'SegundaDiscriminante' );
+                angular.forEach( $scope.abonoCargoBanco, function( value, key ){
+                    console.log( 'value', value );
+                });
+            }
+            //If que inserta el grupo de registros Bancos-Contable--Cargos-Abonos
+            if ($scope.punteoBanco.length >= 1 && $scope.punteoAuxiliar.length >= 1) {
+                console.log( 'TerceraDiscriminante' );
+                var arrayCargoAbono = [];
+                var contador = 0;
+                var objeto = {};
+                angular.forEach( $scope.infoGridagrupadosBancosContables, function( value, key ){
+                    angular.forEach(value, function( valueChild, keyChild ){
+                        // console.log( 'key', keyChild );
+                        console.log( 'value', valueChild );
+                        // console.log( 'valueCOlor', valueChild.color );
+                        // arrayCargoAbono.push( valueChild.color );
+                        // objeto = { color: valueChild.color };
+                    });
+                });
+                console.log( 'array', arrayCargoAbono );
+                console.log( 'objeto', objeto );
+            }
 
+        }, 3000);
+
+        setTimeout(function () {
+            $scope.refreshGrids();
+            $('#loading').modal('hide');
+            alertFactory.success('Registros guardados correctamente!!');
+        }, 10000);
+    };
+   
     // INICIA funcion para guardar el punteoPrevio
     //****************************************************************************************************
-    $scope.guardaPunteoPrevio = function() {
-      ///Tipo de punteo 1 = (Abonos o cargos Bancarios) - (Abonos o cargos Contables)
-      ///Tipo de punteo 2 = Punteos Bancarios (conciliación entre los mismos tipos de datos)
-      ///Tipo de punteo 3 = Punteo Contable (conciliación entre los mismos tipos de datos)
-      
-    $('#alertaGuardarPunteoPrevio').modal('hide');
-       //Mando a llamar la función que obtendra la nueva información almacenada
-         $scope.init();
-  $('#loading').modal('show');
- setTimeout(function() {
-//*********************************************************Función que inserta el grupo de registros de Contabilidad cargos- abonos
-    if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos - abonos
-           $scope.tipoPunteo = 3;
-           $scope.newId = JSON.parse(localStorage.getItem('idRelationOfContableRows'));
-            if($scope.newId.length == 0){
-               $scope.newId = 0;
-            }      
-           else{
-               $scope.newId = $scope.newId[0].idRelationOfContableRows;
-              }
-                
+    /*$scope.guardaPunteoPrevio = function () {
+        ///Tipo de punteo 1 = (Abonos o cargos Bancarios) - (Abonos o cargos Contables)
+        ///Tipo de punteo 2 = Punteos Bancarios (conciliación entre los mismos tipos de datos)
+        ///Tipo de punteo 3 = Punteo Contable (conciliación entre los mismos tipos de datos)
+        console.log( 'funcionGuarda punteo' );
+        $('#alertaGuardarPunteoPrevio').modal('hide');
+        //Mando a llamar la función que obtendra la nueva información almacenada
+        $scope.init();
+        $('#loading').modal('show');
+        setTimeout(function () {
+            //*********************************************************Función que inserta el grupo de registros de Contabilidad cargos- abonos
+            console.log( 'abonoCargoAuxiliar', $scope.abonoCargoAuxiliar );
+            if ($scope.abonoCargoAuxiliar.length > 0) { // Entra a guardar los registros conciliados de Contabilidad cargos - abonos
+                console.log( 'PrimeraDiscriminante' );
+                console.log( 'abonoCargoAuxiliar', $scope.abonoCargoAuxiliar );
+                $scope.tipoPunteo = 3;
+                $scope.newId = JSON.parse(localStorage.getItem('idRelationOfContableRows'));
+                console.log( '$scope.newId', $scope.newId );
+                if ($scope.newId.length == 0) {
+                    $scope.newId = 0;
+                }
+                else {
+                    $scope.newId = $scope.newId[0].idRelationOfContableRows;
+                }
+                console.log( 'abonoCargoAuxilixar', $scope.abonoCargoAuxiliar );
                 var currentArray = undefined;
-                angular.forEach($scope.abonoCargoAuxiliar, function(value, key1){
-                 
-                 if(key1 != currentArray){
-                   $scope.newId = $scope.newId + 1
-                 }                 
+                angular.forEach($scope.abonoCargoAuxiliar, function (value, key1) {
 
-               angular.forEach(value, function(value2, key2){
+                    if (key1 != currentArray) {
+                        $scope.newId = $scope.newId + 1
+                    }
 
-                currentArray = key1;
-                                                                          //Estatusid = 2, indica que el registro ya se encuentra relacionado
-               conciliacionDetalleRegistroRepository.insertPuntoDeposito($scope.newId, value2.idAuxiliarContable, value2.movConcepto, 2, 3 , 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result){
-               
-               var resultado = result.data;  
+                    angular.forEach(value, function (value2, key2) {
+
+                        currentArray = key1;
+                        //Estatusid = 2, indica que el registro ya se encuentra relacionado                                                                                                       //LQMA 01042018 esCargo  
+                        conciliacionDetalleRegistroRepository.insertPuntoDeposito(
+                            $scope.newId, value2.idAuxiliarContable, 
+                            value2.movConcepto, 
+                            2, 
+                            3, 
+                            1, 
+                            $scope.busqueda.IdEmpresa, 
+                            $scope.busqueda.IdBanco, 
+                            $scope.tipoPunteo, 
+                            $rootScope.userData.idUsuario,
+                            0, 
+                            value2.esCargo
+                        ).then(function (result) {
+
+                            var resultado = result.data;
+                            console.log( 'resultInserrPunteoDeposito', result.data );
+                        });
+                    });
+
+                });
+                $scope.refreshGrids();
+                alertFactory.success('Registros Contables guardados correctamente!!');
+            }
+            //*********************************************************Fin de la función que inserta el grupo de registros de Contabilidad cargos- abonos
+            if ($scope.abonoCargoBanco.length > 0) {
+                console.log( 'SegundaDiscriminante' );
+                $scope.tipoPunteo = 2;
+                $scope.newId = JSON.parse(localStorage.getItem('idRelationOfBancoRows'));
+                if ($scope.newId.length == 0) {
+                    $scope.newId = 0;
+                }
+                else {
+                    $scope.newId = $scope.newId[0].idRelationOfBancoRows;
+                }
+
+                var currentArray = undefined;
+                //LQMA add 10032018
+                var idBmerPadre = $scope.abonoCargoBanco[0][0].idBmer
+
+                angular.forEach($scope.abonoCargoBanco, function (value, key1) {
+
+                    if (key1 != currentArray) {
+                        $scope.newId = $scope.newId + 1
+                    }
+
+                    angular.forEach(value, function (value2, key2) {
+                        currentArray = key1;
+                        console.log('ooooooo', value2)                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario //LQMA add 10032018 - idBmerPadre //LQMA 01042018 esCargo
+                        conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(
+                            value2.idBmer, 
+                            $scope.newId, 
+                            value2.concepto, 
+                            0, 
+                            4, 
+                            2, 
+                            $scope.busqueda.IdEmpresa, 
+                            $scope.busqueda.IdBanco, 
+                            $scope.tipoPunteo, 
+                            idBmerPadre, 
+                            value2.esCargo, 
+                            0
+                        ).then(function (result) {
+                            var resultado = result.data;
+                            console.log( 'resultinsertPunteoBancoCargoAbono', result );
+                        });
 
                     });
-               });
 
-           });
-           $scope.refreshGrids();
-           alertFactory.success('Registros Contables guardados correctamente!!');
-          }
-//*********************************************************Fin de la función que inserta el grupo de registros de Contabilidad cargos- abonos
-      if($scope.abonoCargoBanco.length > 0){
-       $scope.tipoPunteo = 2;
-       $scope.newId = JSON.parse(localStorage.getItem('idRelationOfBancoRows'));
-            if($scope.newId.length == 0){
-               $scope.newId = 0;
-            }      
-           else{
-               $scope.newId = $scope.newId[0].idRelationOfBancoRows;
-              }
+                });
 
-       var currentArray = undefined;
-       //LQMA add 10032018
-       var idBmerPadre = $scope.abonoCargoBanco[0][0].idBmer
-
-       angular.forEach($scope.abonoCargoBanco, function(value, key1){
-
-        if(key1 != currentArray){
-          $scope.newId = $scope.newId + 1
-        }
-        
-        angular.forEach(value, function(value2, key2){
-            currentArray = key1;                                                                      //Estatusid = 0, no se cambia el estatus del registro bancario, 4 el tipo de relación abono- cargo Bancario //LQMA add 10032018 - idBmerPadre
-            conciliacionDetalleRegistroRepository.insertPunteoBancoCargoAbono(value2.idBmer, $scope.newId, value2.concepto, 0, 4, 2, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo,idBmerPadre).then(function(result){
-             var resultado = result.data;
-             });
-
-          });
-
-       });
-  
-       $scope.refreshGrids();
-           alertFactory.success('Registros Bancarios guardados correctamente!!');
-      }
-
-
-    if($scope.punteoBanco.length >= 1 &&  $scope.punteoAuxiliar.length >= 1) {
-             $scope.tipoPunteo = 1;
-             var currentColorAux = undefined, currentColorBanc = undefined;
-             var currentArray = undefined;
-             var controlPunteoGrupos = undefined;
-             //Se declaran las variables que identificarán a los grupos conciliados, sea por color o un indice númerico asignado previamente a la clasificación
+                $scope.refreshGrids();
+                alertFactory.success('Registros Bancarios guardados correctamente!!');
+            }
+            if ($scope.punteoBanco.length >= 1 && $scope.punteoAuxiliar.length >= 1) {
+                console.log( 'TerceraDiscriminante' );
+                $scope.tipoPunteo = 1;
+                var currentColorAux = undefined, currentColorBanc = undefined;
+                var currentArray = undefined;
+                var controlPunteoGrupos = undefined;
+                //Se declaran las variables que identificarán a los grupos conciliados, sea por color o un indice númerico asignado previamente a la clasificación
                 var idPrepAuxiliar = undefined;
                 var idPrepBanco = undefined;
                 var idColorAuxiliar = undefined;
                 var idColorBanco = undefined;
                 //Fin de la declaración de variables para identificar grupos conciliados en auxiliar contable
 
-            angular.forEach($scope.punteoAuxiliar, function(valueAux1, keyAux1) {
-                
-                angular.forEach(valueAux1, function(valueAux2, keyAux2){
-                   
-                   var valueAuxiliar = valueAux2.idAuxiliarContable;
-                   var conceptoPago = valueAux2.movConcepto;
-                   currentColorAux = valueAux2.color;
+                angular.forEach($scope.punteoAuxiliar, function (valueAux1, keyAux1) {
+
+                    angular.forEach(valueAux1, function (valueAux2, keyAux2) {
+
+                        var valueAuxiliar = valueAux2.idAuxiliarContable;
+                        var conceptoPago = valueAux2.movConcepto;
+                        currentColorAux = valueAux2.color;
+                        var esCargoContable = valueAux2.esCargo;
 
 
-                   if(valueAux2.indexPrePunteo != 99999 && valueAux2.indexPrePunteo != -1   && currentColorAux == '#c9dde1'){
-                   idPrepAuxiliar = valueAux2.indexPrePunteo;
-                    }
-                    
-                    //Validación que verifica el color del grupo de selección a conciliar en auxiliar contable
-                if(valueAux2.color != undefined && currentColorAux != '#c9dde1'){
-                 idColorAuxiliar = valueAux2.color;
-                }
-                //Fin de validación
-
-
-
-                   angular.forEach($scope.punteoBanco, function(valueBanco1, keyBanco1) {
-
-                    angular.forEach(valueBanco1, function(valueBanco2, keyBanco2){
-                     
-                     currentColorBanc = valueBanco2.color;
-
-                     //Validación que verifica si es un registro prepunteado en registros Contables   
-                if(valueBanco2.indexPrePunteo != 99999 && valueBanco2.indexPrePunteo != -1  && currentColorBanc == '#c9dde1'){
-                   idPrepBanco = valueBanco2.indexPrePunteo;
-                }
-
-                //Validación que verifica el color del grupo de selección a conciliar en auxiliar contable
-                if(valueBanco2.color != undefined && currentColorBanc != '#c9dde1'){
-                 idColorBanco = valueBanco2.color;
-                }
-                //Fin de validación
-
-                     if(controlPunteoGrupos != undefined){
-                        controlPunteoGrupos == undefined;
-                     }
-
-                     if(idColorAuxiliar == idColorBanco && idColorAuxiliar != undefined && idColorBanco != undefined && currentColorBanc != '#c9dde1' && currentColorAux != '#c9dde1'){
-                      controlPunteoGrupos = 1;
-                                                                                                                             //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result) {
-                        if (result.data[0].length) {    
-                            console.log('Respuesta Incorrecta');
-                            $scope.punteoAuxiliar = [];
-                            $scope.punteoBanco = [];
-                        
-                        } else {
-                            console.log('Respuesta Correcta');
+                        if (valueAux2.indexPrePunteo != 99999 && valueAux2.indexPrePunteo != -1 && currentColorAux == '#c9dde1') {
+                            idPrepAuxiliar = valueAux2.indexPrePunteo;
                         }
-                    });
-                  }
-                  else if(idPrepAuxiliar == idPrepBanco && controlPunteoGrupos == undefined && currentColorBanc == '#c9dde1' && currentColorAux == '#c9dde1') { 
-                                                                                                                                //Estatusid = 2, indica que el registro ya se encuentra relacionado
-                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(valueBanco2.idBmer, valueAuxiliar, conceptoPago, 2, 2, 1, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.tipoPunteo).then(function(result) {
-                        if (result.data[0].length) {    
-                            console.log('Respuesta Incorrecta');
-                            $scope.punteoAuxiliar = [];
-                            $scope.punteoBanco = [];
-                        
-                        } else {
-                            console.log('Respuesta Correcta');
+
+                        //Validación que verifica el color del grupo de selección a conciliar en auxiliar contable
+                        if (valueAux2.color != undefined && currentColorAux != '#c9dde1') {
+                            idColorAuxiliar = valueAux2.color;
                         }
+                        //Fin de validación
+
+
+
+                        angular.forEach($scope.punteoBanco, function (valueBanco1, keyBanco1) {
+
+                            angular.forEach(valueBanco1, function (valueBanco2, keyBanco2) {
+
+                                currentColorBanc = valueBanco2.color;
+
+                                //Validación que verifica si es un registro prepunteado en registros Contables   
+                                if (valueBanco2.indexPrePunteo != 99999 && valueBanco2.indexPrePunteo != -1 && currentColorBanc == '#c9dde1') {
+                                    idPrepBanco = valueBanco2.indexPrePunteo;
+                                }
+
+                                //Validación que verifica el color del grupo de selección a conciliar en auxiliar contable
+                                if (valueBanco2.color != undefined && currentColorBanc != '#c9dde1') {
+                                    idColorBanco = valueBanco2.color;
+                                }
+                                //Fin de validación
+
+                                if (controlPunteoGrupos != undefined) {
+                                    controlPunteoGrupos == undefined;
+                                }
+
+                                if (idColorAuxiliar == idColorBanco && idColorAuxiliar != undefined && idColorBanco != undefined && currentColorBanc != '#c9dde1' && currentColorAux != '#c9dde1') {
+                                    controlPunteoGrupos = 1;
+                                    //Estatusid = 2, indica que el registro ya se encuentra relacionado
+                                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(
+                                        valueBanco2.idBmer, 
+                                        valueAuxiliar, 
+                                        conceptoPago, 
+                                        2, 
+                                        2, 
+                                        1, 
+                                        $scope.busqueda.IdEmpresa, 
+                                        $scope.busqueda.IdBanco, 
+                                        $scope.tipoPunteo, 
+                                        $rootScope.userData.idUsuario, 
+                                        valueBanco2.esCargo, 
+                                        esCargoContable
+                                    ).then(function (result) {
+                                        if (result.data[0].length) {
+                                            console.log('Respuesta Incorrecta');
+                                            $scope.punteoAuxiliar = [];
+                                            $scope.punteoBanco = [];
+
+                                        } else {
+                                            console.log('Respuesta Correcta');
+                                        }
+                                    });
+                                }
+                                else if (idPrepAuxiliar == idPrepBanco && controlPunteoGrupos == undefined && currentColorBanc == '#c9dde1' && currentColorAux == '#c9dde1') {
+                                    //Estatusid = 2, indica que el registro ya se encuentra relacionado
+                                    conciliacionDetalleRegistroRepository.insertPuntoDeposito(
+                                        valueBanco2.idBmer, 
+                                        valueAuxiliar, 
+                                        conceptoPago, 
+                                        2, 
+                                        2, 
+                                        1, 
+                                        $scope.busqueda.IdEmpresa, 
+                                        $scope.busqueda.IdBanco, 
+                                        $scope.tipoPunteo, 
+                                        $rootScope.userData.idUsuario, 
+                                        esCargo, '3'
+                                    ).then(function (result) {
+                                        if (result.data[0].length) {
+                                            console.log('Respuesta Incorrecta');
+                                            $scope.punteoAuxiliar = [];
+                                            $scope.punteoBanco = [];
+
+                                        } else {
+                                            console.log('Respuesta Correcta');
+                                        }
+                                    });
+                                }
+
+                            });
+
+                        });
                     });
-                  }
-                 
+
                 });
+            }
 
-              });
-           });
+        }, 3000);
 
-            });
-       }
-
-       }, 3000);
-
-        setTimeout(function(){
-        $scope.refreshGrids();
+        setTimeout(function () {
+            $scope.refreshGrids();
             $('#loading').modal('hide');
             alertFactory.success('Registros guardados correctamente!!');
-          },10000);
+        }, 10000);
 
-       ///*********************QUEDA PENDIENTE PARA OBJETOS MAYORES A 150 ITEMS RO 2017-10-24
-    };
+        ///*********************QUEDA PENDIENTE PARA OBJETOS MAYORES A 150 ITEMS RO 2017-10-24
+    };*/
     //****************************************************************************************************
 
      // INICIA funcion para guardar los registros DPI
@@ -274,5 +405,11 @@
         }
     };
     //****************************************************************************************************
+    $scope.comeBack = function(){
+        console.log( 'comeBack' );
+        localStorage.setItem('comeBack', true)
+        $window.location.href = "/conciliacionInicio";
+    }
+    
 
 });

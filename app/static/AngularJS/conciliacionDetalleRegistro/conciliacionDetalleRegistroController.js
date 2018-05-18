@@ -1,7 +1,9 @@
 registrationModule.controller('conciliacionDetalleRegistroController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter) {
-
+   
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
+    $rootScope.showBotones = JSON.parse(localStorage.getItem('ShowBtns'));
+    $rootScope.paramsSaveHistori = JSON.parse(localStorage.getItem('paramBusqueda'));
     $scope.nodoPadre = [];
     $scope.abonoAuxiliar = 0;
     $scope.cargoAuxiliar = 0;
@@ -31,8 +33,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
     $scope.init = function() {
         variablesLocalStorage();
+        $scope.showBtns();
         $rootScope.mostrarMenu = 1;
-        console.log($scope.busqueda);
         $scope.DameLaFechaHora();
         setTimeout( function(){
                 $(".cargando").remove();
@@ -49,59 +51,81 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.nombreBanco = $scope.busqueda.Banco;
         $scope.nombreGerente = $scope.busqueda.gerente;
         $scope.nombreContador = $scope.busqueda.contador;
-        if($scope.busqueda.MesActivo != 1)
-        {
-          $scope.mesActivo = false;
-          alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+        // if($scope.busqueda.MesActivo != 1)
+        // {
+        //   $scope.mesActivo = false;
+        //   alertFactory.error("El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+        // }
+        // else{
+        //     $scope.mesActivo = true;
+        // }
+        
+        if ($scope.busqueda.MesActivo != 1) {
+            //$scope.mesActivo = false;
+            $scope.mesActivo = true
+            // alertFactory.error($scope.busqueda.mensaje);//LAGP
         }
-        else{
+        else {
             $scope.mesActivo = true;
+            // alertFactory.success($scope.busqueda.mensaje);//LAGP
         }
 
     };
 
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
-    $scope.verDetallePunteo = function(detallepunteo,opcion) {
-        var accionBusqueda = 0;
-        var datoBusqueda = '';
-        if(opcion == 1){
 
-              if(detallepunteo.idPAdre == 4){
-                datoBusqueda = detallepunteo.idDepositoBanco;
-                accionBusqueda = 4;
-              }
-              else if(detallepunteo.idPAdre == 2){
-
-            datoBusqueda = detallepunteo.idDepositoBanco;
-            accionBusqueda = 1;
-        }
-        
-        } else {
-            if(detallepunteo.idPAdre == 3){
-                datoBusqueda = detallepunteo.idAuxiliarContable;
-                accionBusqueda = 3;
-                }else if(detallepunteo.idPAdre == 2){
-                datoBusqueda = detallepunteo.idAuxiliarContable;
-                accionBusqueda = 2;
-               }
-
-        }
-        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
+    $scope.verDetallePunteo = function (detallepunteo, opcion) {
+        console.log('grupo', detallepunteo);
+        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
             $('#punteoDetalle').modal('show');
-
-                $scope.detallePunteo = result.data[0];
-                $scope.detallePunteoBanco = result.data[1]; 
-                if(result.data.length > 0){
-                $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
-                datoBusqueda = '';
-            }
-            else {
-                alertFactory.error('No existen punteos en este detalle')
-            }
-            
+            $scope.detalleBanco = result.data[0];
+            $scope.detalleContable = result.data[1];
+            console.log( 'result', result.data );
         });
     };
+
+    // $scope.verDetallePunteo = function(detallepunteo,opcion) {
+
+    //     var accionBusqueda = 0;
+    //     var datoBusqueda = '';
+    //     if(opcion == 1){
+
+    //           if(detallepunteo.idPAdre == 4){
+    //             datoBusqueda = detallepunteo.idDepositoBanco;
+    //             accionBusqueda = 4;
+    //           }
+    //           else if(detallepunteo.idPAdre == 2){
+
+    //         datoBusqueda = detallepunteo.idDepositoBanco;
+    //         accionBusqueda = 1;
+    //     }
+        
+    //     } else {
+    //         if(detallepunteo.idPAdre == 3){
+    //             datoBusqueda = detallepunteo.idAuxiliarContable;
+    //             accionBusqueda = 3;
+    //             }else if(detallepunteo.idPAdre == 2){
+    //             datoBusqueda = detallepunteo.idAuxiliarContable;
+    //             accionBusqueda = 2;
+    //            }
+
+    //     }
+    //     conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
+    //         $('#punteoDetalle').modal('show');
+
+    //             $scope.detallePunteo = result.data[0];
+    //             $scope.detallePunteoBanco = result.data[1]; 
+    //             if(result.data.length > 0){
+    //             $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
+    //             datoBusqueda = '';
+    //         }
+    //         else {
+    //             alertFactory.error('No existen punteos en este detalle');
+    //         }
+            
+    //     });
+    // };
     //****************************************************************************************************
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************
@@ -128,7 +152,13 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     };
     //****************************************************************************************************
 
-
+    //****************************************************************************************************
+    // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
+    //****************************************************************************************************
+    $scope.showBtns = function() {
+        
+    };
+    //****************************************************************************************************
 
     //Inicia la función que me retorna la fecha y hora actual
     //****************************************************************************************************
@@ -184,4 +214,27 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
 
     //****************************************************************************************************
 
+    //LAGP
+    $scope.guardarHistorico = function () {
+        conciliacionDetalleRegistroRepository.guardarHistorico(
+            $rootScope.userData.idUsuario,
+            $rootScope.paramsSaveHistori.IdBanco,
+            $rootScope.paramsSaveHistori.IdEmpresa,
+            $rootScope.paramsSaveHistori.Cuenta,    
+            $rootScope.paramsSaveHistori.CuentaContable,
+            $rootScope.paramsSaveHistori.fechaElaboracion,
+            $rootScope.paramsSaveHistori.fechaCorte,
+            $rootScope.paramsSaveHistori.PolizaPago,
+            1,
+        )
+            .then(function (result) {
+                console.log('result', result);
+                if (result.data[1][0].estatus == 0) {
+                    alertFactory.success(result.data[1][0].mensaje);
+                } else {
+                    alertFactory.error(result.data[1][0].mensaje);
+                }
+            });
+
+    };
 });

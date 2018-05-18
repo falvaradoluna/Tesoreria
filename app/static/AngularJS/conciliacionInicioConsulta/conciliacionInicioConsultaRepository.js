@@ -1,12 +1,12 @@
-var conciliacionInicioURL = global_settings.urlCORS + 'api/conciliacionInicio/';
+var conciliacionInicioConsultaURL = global_settings.urlCORS + 'api/conciliacionInicioConsulta/';
 
-registrationModule.factory('conciliacionInicioRepository', function($http) {
-    return {       
+registrationModule.factory('conciliacionInicioConsultaRepository', function($http) {
+    return {
 
-    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario) { //LQMA add 06032018 idUsuario
-            
+    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario, tipoReporte) { //LQMA add 06032018 idUsuario
+            console.log( 'factory', tipoReporte );
             return $http({
-                url: conciliacionInicioURL + 'totalAbonoCargo/',
+                url: conciliacionInicioConsultaURL + 'totalAbonoCargo/',
                 method: "POST",
                 data: {                    
                     idBanco: idBanco,                    
@@ -17,7 +17,8 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
                     fechaCorte: fechaC,
                     polizaPago: polizaPago,
                     opcion: opcion,
-                    idUsuario: idUsuario //LQMA add 06032018
+                    idUsuario: idUsuario,
+                    tipoReporte: tipoReporte //LQMA add 06032018
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -27,7 +28,7 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
         },
         getGerenteContador: function(idUsuario, idEmpresa) {
             return $http({
-                url: conciliacionInicioURL + 'gerenteContador/',
+                url: conciliacionInicioConsultaURL + 'gerenteContador/',
                 method: "GET",
                 params: {                    
                     idUsuario: idUsuario,
@@ -54,6 +55,23 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
                     'Content-Type': 'application/json'
                 },
                 responseType: 'arraybuffer'
+            });
+        },
+
+        getHistorico: function(idUsuario, idEmpresa, idBanco, cuentaContable, cuentaBancaria) {
+            return $http({
+                url: conciliacionInicioConsultaURL + 'historico/',
+                method: "GET",
+                params: {                    
+                    idUsuario: idUsuario,
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    cuentaContable: cuentaContable,
+                    cuentaBancaria: cuentaBancaria
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
         },
         //Ing. LAGP03052018

@@ -167,12 +167,17 @@
                                         </a>
                                     </li>
                                     <li ng-show="conciliacionAccesso == 1">
-                                        <a href="/conciliacionInicio">
+                                        <a href="#" aria-expanded="true">
                                             <i class="glyphicon glyphicon-sort"></i>
-                                            <span class="menu-title">
-                                                <strong>Conciliación Contable</strong>
-                                            </span>
-                                        </a>
+                                            <!--span class="menu-title">Conciliacion</span-->
+                                            <i class="arrow"></i>
+                                        </a>                        
+                                        <!--Submenu-->
+                                        <ul class="collapse" aria-expanded="false" style="height: 0px;">
+                                            <!--li class="active-link"><a href="index.html">Dashboard 1</a></li-->
+                                            <li><a href="/conciliacionInicio">Conciliación Contable</a></li>
+                                            <li><a href="/conciliacionInicioConsulta">Consulta de Conciliación</a></li>                                    
+                                        </ul>
                                     </li>
                                     <li ng-show="conciliacionAccesso == 1">
                                         <a href="/importarDatosExcel">
@@ -295,6 +300,9 @@
     <script src="AngularJS/login/loginRepository.js"></script>
     <script src="AngularJS/conciliacionInicio/conciliacionInicioController.js"></script>
     <script src="AngularJS/conciliacionInicio/conciliacionInicioRepository.js"></script>
+    <!--LQMA add 16032018 controller consulta-->
+    <script src="AngularJS/conciliacionInicioConsulta/conciliacionInicioConsultaController.js"></script>
+    <script src="AngularJS/conciliacionInicioConsulta/conciliacionInicioConsultaRepository.js"></script>
     <script src="AngularJS/ExportarExcel/Controller/excelExportController.js"></script>
     <script src="AngularJS/ExportarExcel/Controller/excelExportRepository.js"></script>
     <script src="AngularJS/Conciliacion/conciliacionController.js"></script>
@@ -318,6 +326,12 @@
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroSaveGridsController.js"></script>
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroGetGridsController.js"></script>
     <script src="AngularJS/conciliacionDetalleRegistro/conciliacionDetalleRegistroEliminatesRelationShipsController.js"></script>
+
+    <!--LQMA add 16032018 consulta periodica y mensual-->
+    <script src="AngularJS/conciliacionDetalleRegistroConsulta/conciliacionDetalleRegistroConsultaController.js"></script>
+    <script src="AngularJS/conciliacionDetalleRegistroConsulta/conciliacionDetalleRegistroGridsConsultaController.js"></script>
+    <script src="AngularJS/conciliacionDetalleRegistroConsulta/conciliacionDetalleRegistroConsultaRepository.js"></script>    
+    <script src="AngularJS/conciliacionDetalleRegistroConsulta/conciliacionDetalleRegistroGetGridsConsultaController.js"></script>  
 </body> 
 
 </html>

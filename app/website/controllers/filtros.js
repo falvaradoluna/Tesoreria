@@ -27,8 +27,7 @@ Filtros.prototype.get_empresas = function(req, res, next) {
     var params = [{ name: 'idUsuario', value: req.query.idUsuario, type: self.model.types.INT }];
 
     this.model.query('SEL_EMPRESA_BY_USUARIO_SP', params, function(error, result) {
-        //console.log(error, 'soy el resultado');
-        //console.log(result, 'soy el error');
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -45,10 +44,8 @@ Filtros.prototype.get_sucursales = function(req, res, next) {
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
-    console.log( "Parametros", params );
-
     this.model.query('SEL_SUCURSAL_BY_USUARIO_SP', params, function(error, result) {
-	console.log( "Resultado", result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -90,7 +87,7 @@ Filtros.prototype.get_bancos = function(req, res, next) {
 Filtros.prototype.get_cuentabanco = function(req, res, next) {
 
     var self = this;
-    //console.log('Cuenta Bancaria', req.query.idBanco, req.query.idEmpresa)
+    
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
@@ -181,10 +178,7 @@ Filtros.prototype.get_auxiliarContable = function(req, res, next) {
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
     ];
 
-    console.log(params)
-    console.log('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP')		
-
-    this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('[dbo].[SEL_TODO_CONTABLE_SP]', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -204,7 +198,7 @@ Filtros.prototype.get_depositos = function(req, res, next) {
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT }
     ];
 
-    this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP', params, function(error, result) {
+    this.model.queryAllRecordSet('[dbo].[SEL_TODO_BANCARIO_SP]', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
             result: result
@@ -268,7 +262,7 @@ Filtros.prototype.get_depositosAplicados = function(req, res, next) {
 };
 
 Filtros.prototype.get_cartera = function(req, res, next) {
-    console.log('get_cartera');
+    
     var self = this;
 
     var params = [{ name: 'idCliente', value: req.query.cliente, type: self.model.types.INT },
@@ -304,5 +298,26 @@ Filtros.prototype.get_cuenta = function(req, res, next) {
     });
 };
 
+Filtros.prototype.get_saveParametros = function(req, res, next) {
+
+    var self = this;
+
+    var params = [
+        { name: 'grupoPunteo', value: req.query.grupo, type: self.model.types.INT },
+        { name: 'idCargo', value: req.query.idCargo, type: self.model.types.INT },
+        { name: 'idAbono', value: req.query.idAbono, type: self.model.types.INT },
+        { name: 'tipo', value: req.query.tipo, type: self.model.types.STRING },
+        { name: 'idUsuario', value: req.query.usuario, type: self.model.types.INT }
+    ];
+
+    this.model.query('[dbo].[INS_PUNTEO_MANUALES_SP]', params, function(error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 module.exports = Filtros;
