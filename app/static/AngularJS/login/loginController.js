@@ -33,27 +33,28 @@ console.log($rootScope.currentEmployee)
     // *************************** Función para logueo de portal *****************
     $scope.permisos = function(usuario ) {
         loginRepository.getPermisos(usuario).then(function(result) {
-            console.log(result)
+            console.log( 'result', result );
+            localStorage.setItem( 'ShowBtns', JSON.stringify( result.data[1] ) );
             if (result.data.length > 0) {
-                $scope.login = result.data[0];
+                $scope.login = result.data[0][0];
                 $scope.getEmpleado(usuario);
                 if ($scope.login.idPerfil == 4) {
                     $rootScope.controlDepositosAcceso = 1;
                     $rootScope.conciliacionAccesso = 0;
-                    alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0].nombreUsuario);
+                    alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
                     location.href = '/conciliacionInicio';
                     localStorageService.set('userData', $scope.login);
                 } else {
                     if ($scope.login.idPerfil == 5) {
                         $rootScope.controlDepositosAcceso = 1;
                         $rootScope.conciliacionAccesso = 1;
-                        alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0].nombreUsuario);
+                        alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
                         location.href = '/controlDepositos';
                         localStorageService.set('userData', $scope.login);
                     } else {
                         $rootScope.controlDepositosAcceso = 0;
                         $rootScope.conciliacionAccesso = 1;
-                        alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0].nombreUsuario);
+                        alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
                         location.href = '/controlDepositos';
                         localStorageService.set('userData', $scope.login);
 

@@ -79,12 +79,10 @@ conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, ne
                   { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
-
-    console.log('SEL_PUNTEO_AUXILIAR_PADRES_SP')	
-    console.log(params)
+    
 
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP', params, function(error, result) {
-        console.log('result: ',result)
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -103,13 +101,10 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
                   { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
                   { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
     ];
-
-    console.log('SEL_PUNTEO_DEPOSITOS_PADRES_SP')	
-    console.log(params)	
+    
 
     this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP', params, function(error, result) {
-
-        console.log('result: ',result)
+        
 
         self.view.expositor(res, {
             error: error,
@@ -237,8 +232,7 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function(req, res, next) {
     var self = this;
     var params = [{ name: 'tipoParametro', value: 0, type: self.model.types.INT }];
     this.model.query('SEL_PARAMETROS_SP', params, function(error, result) {
-        console.log(result[0].valor, 'result de ENVIOMAIL')
-        console.log(error, 'error de ENVIOMAIL')
+        
 
            
         var nombreArchivo = req.body.nombreArchivo;
@@ -297,7 +291,7 @@ conciliacionDetalleRegistro.prototype.post_sendMail = function(req, res, next) {
         transporter.close;
         object.error = null;            
         object.result = 1; 
-        console.log(object.result)
+        
         req.body = [];
     }); 
 };
@@ -329,8 +323,7 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
                   {name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT}
                 ];
 
-   console.log('UPD_AUXILIARDEPOSITO_DPI_SP')
-   console.log(params)      	
+                    	
 
    this.model.query('UPD_AUXILIARDEPOSITO_DPI_SP', params, function(error,result){
     self.view.expositor(res,{
@@ -338,7 +331,7 @@ conciliacionDetalleRegistro.prototype.post_insertDPI = function(req,res,next) {
         result: result
         });
    });
-   console.log(result);
+   
 };
 
 

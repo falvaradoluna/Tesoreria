@@ -2,13 +2,26 @@
     <div class="panel col-md-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title" style="text-align:center">
-                <h3>Conciliación Contable Inicio</h3>
+                <h3>Consulta de Conciliación </h3>
             </div>
             <div class="panel col-md-12">
                 <!--EMPIEZA Busqueda -->
                 <!--===================================================-->
                 <form>
                     <div class="panel-body">
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="form-label text-main">Tipo Consulta:</label>
+                                <select class="form-control" ng-model="tipoConsulta" ng-options="tipo.tipo for tipo in tiposConsultas
+                                track by tipo.tipo" ng-change="tipoConsultaF(tipoConsulta)">
+                                    <option ng-repeat="tipo in tiposConsultas" >Seleccione un rtipo de consulta</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-2 pull-right">
+                               <div> <label class="form-label text-danger mar-no"><strong>Fecha de captura:</strong></label><br>
+                                <label class="form-label text-1x mar-no text-semibold"> <strong> {{ fechaHistorico }} </strong></label> </div>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-4">
                                 <label class="form-label text-main">Empresa:</label>
@@ -45,25 +58,26 @@
                             <div class="form-group col-md-2">
                                 <label for="fInicio" class="text-main">Clabe:</label>
                                 <div class="input-group date">
-                                    <label>{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : cuentaNumerica}}</label>
+                                    <label>{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : InmemoryAcountBanc}}</label>
                                 </div>
                             </div>
                             <div class="form-group col-md-3">
                                 <label for="fInicio" class="text-main">Cuenta Contable:</label>
                                 <div class="input-group date">
-                                    <label>{{cuentaActual.CuentaContable != NULL ? cuentaActual.CuentaContable : cuentaContable}}</label>
+                                    <label>{{cuentaActual.CuentaContable != NULL ? cuentaActual.CuentaContable : InmemoryAcount}}</label>
                                 </div>
-                            </div>                            
-                            <div class="form-group col-md-3">
-                                    <label class="form-label text-main">Consulta:</label>
-                                    <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES" disabled>
-                                      <option value="">Mes</option>
-                                    </select>  
-                                <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
-                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar"><i class="ti-search"></i> Buscar</button>
-                                </div>                                  
                             </div>
-                            <!-- <div class="form-group col col-md-offset-1" id="calendar">
+                            <div class="form-group col-md-3">
+                                <label class="form-label text-main">Consulta:</label>
+                                <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES">
+                                  <option value="">Mes</option>
+                                </select>  
+                                <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
+                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar">
+                                        <i class="ti-search"></i> Consultar historico</button>
+                                </div>
+                            </div>
+                            <div ng-show="false" class="form-group col-md-2 col-md-offset-1" id="calendar">
                                 <label for="fInicio" class="text-main">Fecha Elaboración:</label>
                                 <br>
                                 <div class="input-group date">
@@ -73,7 +87,7 @@
                                     <input type="text" class="form-control" id="fInicio" ng-model="fechaElaboracion">
                                 </div>
                             </div>
-                            <div class="form-group col" id="calendar">
+                            <div ng-show="false" class="form-group col-md-2" id="calendar">
                                 <label for="fInicio" class="text-main">Fecha Corte:</label>
                                 <br>
                                 <div class="input-group date">
@@ -84,11 +98,8 @@
                                         <input type="text" class="form-control" id="fInicio" ng-model="fechaCorte">
                                     </div>
                                 </div>
-                                <div class="form-group col" style="margin-top: -32px; padding-top: 30px">
-                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar">
-                                        <i class="ti-search"></i> Buscar</button>
-                                </div>
-                            </div> -->
+
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -102,9 +113,9 @@
                         <!--===================================================-->
                         <div class="col-sm-7">
                             <label class="text-main text-semibold" ng-show="InfoBusqueda">
-                                <span class="text-info">{{empresaActual.emp_nombre != NULL ? empresaActual.emp_nombre : empresaNombre}}</span> /
-                                <span class="text-info">{{cuentaActual.NOMBRE != NULL ? cuentaActual.NOMBRE : bancoNombreT}}</span> /
-                                <span class="text-info">{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : cuentaNumerica}}</span>
+                                <span class="text-info">{{empresaActual.emp_nombre != NULL ? empresaActual.emp_nombre : empresaActual}}</span> /
+                                <span class="text-info">{{cuentaActual.NOMBRE != NULL ? cuentaActual.NOMBRE : bancoNombre}}</span> /
+                                <span class="text-info">{{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : InmemoryAcountBanc}}</span>
                             </label>
                             <table class="table table-striped table-bordered">
                                 <thead>
@@ -135,23 +146,6 @@
                                         <td>Cargos Bancos no considerados en Contabilidad</td>
                                         <td class="text-right">{{ totalesAbonosCargos.tCargoBancario | currency}}</td>
                                     </tr>
-
-
-                                    <!--Elementos comentados por requerimientos
-                                    <tr ng-show='elementState.show'>
-                                    <td>Abonos Referenciados en Contabilidad</td>
-                                    <td class="text-right">{{ totalesAbonosCargos[0].tAbonoRefContable | currency}}</td>
-                                    </tr>
-                                    <tr ng-show='elementState.show'>
-                                    <td>Cargos Referenciados en Banco</td>
-                                    <td class="text-right">{{ totalesAbonosCargos[0].tCargoRefBanco | currency}}</td>
-                                    </tr>
-                                    <tr ng-show='elementState.show'>
-                                    <td>Cargos Contables "Referenciados Manual"</td>
-                                    <td class="text-right">{{ totalesAbonosCargos[0].tCargoRefManualCont | currency}}</td>
-                                    </tr>
-                                    -->
-
 
                                     <tr>
                                         <td>Saldo según Conciliacion</td>
@@ -203,7 +197,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
-                                        <a class="btn btn-primary col-md-4" ng-click="go('/conciliacionDetalleRegistros')" ng-disabled="enableBottonReport">
+                                        <a class="btn btn-primary col-md-4" ng-click="go('/conciliacionDetalleConsulta')" ng-disabled="enableBottonReport">
                                             <i class="ti-agenda"></i> Detalle Punteo de registros</a>&nbsp;&nbsp;&nbsp;
                                         <a class="btn btn-danger col-md-4 col-md-offset-1" ng-click="go('/conciliacion')" ng-disabled="enableBottonReport">
                                             <i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</a>

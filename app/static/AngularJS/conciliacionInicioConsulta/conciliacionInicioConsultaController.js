@@ -1,10 +1,11 @@
-﻿registrationModule.controller('conciliacionInicioController', function ($window, $filter, $scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
+﻿registrationModule.controller('conciliacionInicioConsultaController', function ($window, $filter, $scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
 
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $scope.fechaReporte = new Date();
     $scope.fechaCorte = new Date();
     $scope.fechaElaboracion = new Date($scope.fechaCorte.getFullYear(), $scope.fechaCorte.getMonth(), 1);
+
     //*****Inicio variables para activar o desactivar botones o input 
     $scope.activaInputBanco = true;
     $scope.activaInputCuenta = true;
@@ -19,6 +20,7 @@
     $scope.bancoNombre = '';
     $scope.difMonetaria = 0;
     $scope.mesActivo = undefined;
+    $rootScope.tipoConsulta = 1;
     //***************************************************************
 
     //*****Variables para ocultar Depositos y Pagos referenciados
@@ -26,19 +28,26 @@
     $scope.elementState.show = false;
     //***********************************************************
 
-    //*****Cambio del formato en fechas predeterminadas para la búsqueda -- Se coloca la fecha del mes en curso
+    //*****Cambio del formato en fechas predeterminadas para la búsqueda
     // $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
     // $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
-
-    
     //******************************************************************
 
+    //Variables para traer el historio LAGP
+    $scope.empresaId;
+    $scope.bancoId;
+    $scope.bancariaCuenta;
+    $scope.contableCuenta;
+    $rootScope.fechaHistorico;
+
     $scope.init = function () {
+
+        $rootScope.tiposConsultas = [{ tipo: 'Por empresa', value: 1 }, { tipo: 'Por sistema', value: 2 }];
+        $scope.tipoConsulta = {  tipo: 'Por empresa', value: 1 };
 
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
         $scope.getMeses();
-
         $rootScope.mostrarMenu = 1;
         $scope.paramBusqueda = [];
         //variablesLocalStorage();
@@ -46,13 +55,7 @@
             $(".cargando").remove();
         }, 1500);
 
-        var d = new Date();
-        var n = d.getMonth();
-
-        $scope.mesesSelect = n + 1;
-
-        if (localStorage.getItem('comeBack')) {
-            $scope.getMeses();
+        if (localStorage.getItem('comeBackConsulta')) {
             $scope.empresaNombre = JSON.parse(localStorage.getItem('empresaActualInMemory')).emp_nombre;
             $scope.bancoNombreT = JSON.parse(localStorage.getItem('cuentaActualInMemory')).NOMBRE;
             $scope.bancoId = JSON.parse(localStorage.getItem('cuentaActualInMemory')).IdBanco;
@@ -94,12 +97,10 @@
 
             //Reemplazo la consulta que retorna el valor del mes activo
             $scope.mesActivo = $scope.busqueda.MesActivo;
-            conciliacionInicioRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, 1, $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                if (result.data.length > 0) {
-
+            conciliacionInicioConsultaRepository.getTotalAbonoCargo($scope.busqueda.IdBanco, $scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, 1, $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
+                if (result.data.length > 0) {             
                     $scope.totalesAbonosCargos = result.data;
                     $scope.mesActivo = result.data.mesActivo;
-                    //Habilita botones
                     $scope.activaBotonBuscar = false;
                     $scope.enableBottonReport = false;
                     /////
@@ -124,8 +125,7 @@
 
     //Ing. LAGP 03052018
     $scope.getMeses = function () {
-        conciliacionInicioRepository.getMeses().then(function (result) {
-            console.log( 'result', result );
+        conciliacionInicioConsultaRepository.getMeses().then(function (result) {
             if( result.data.length != 0 ){
                 $rootScope.mesSelect = result.data;
                 angular.forEach($rootScope.mesSelect, function( value, key ){
@@ -146,13 +146,15 @@
             alertFactory.warning('Seleccione una Empresa');
             $scope.activaInputBanco = true;
         } else {
+            $scope.empresaId = idEmpresa;
             filtrosRepository.getBancos(idEmpresa).then(function (result) {
                 if (result.data.length > 0) {
                     $scope.activaInputBanco = false;
 
                     $scope.bancoEmpresa = $filter('filter')(result.data, function (value) {
                         return value.IdBanco != 6
-                    });
+                    });;
+
                 } else {
                     $scope.bancoCuenta = [];
                     $scope.bancoEmpresa = [];
@@ -167,6 +169,7 @@
             alertFactory.warning('Seleccioné un Banco');
             $scope.activaInputCuenta = true;
         } else {
+            $scope.bancoId = idBanco;
             $scope.paramBusqueda = [];
             filtrosRepository.getCuenta(idBanco, idEmpresa).then(function (result) {
                 if (result.data.length > 0) {
@@ -177,25 +180,33 @@
             });
         }
     }
-    
+
+    $scope.tipoConsultaF = function (consulta) {
+    }
+
+    // $scope.getTotalesAbonoCargo = function () {
+    //     console.log( 'AQUI EN CONSULTA' );
+    //     $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+    //     $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
+    //     console.log( '$scope.fechaElaboracion', $scope.fechaElaboracion );
+    //     console.log( '$scope.fechaCorte', $scope.fechaCorte );
+    // }
     $scope.getTotalesAbonoCargo = function () {
+        $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
+        $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
+        if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
+            alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
+        }
+        else {
 
-        if (!localStorage.getItem('comeBack')) {
-
-            //Se coloca la fecha que se obtiene del dropdawn
-            $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
-            $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
-            if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
-                alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
-            }
-            else {
+            if (!localStorage.getItem('comeBackConsulta')) {
                 localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
                 localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
                 localStorage.setItem('bancoActualInMemory', JSON.stringify($scope.bancoActual));
 
                 $('#actualizarBD').modal('show');
 
-                conciliacionInicioRepository.getTotalAbonoCargo(
+                conciliacionInicioConsultaRepository.getTotalAbonoCargo(
                     $scope.cuentaActual.IdBanco,
                     $scope.cuentaActual.IdEmpresa,
                     $scope.cuentaActual.Cuenta,
@@ -204,40 +215,111 @@
                     $scope.fechaCorte,
                     $scope.empresaActual.polizaPago,
                     2,
-                    $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
+                    $rootScope.userData.idUsuario,
+                    $scope.tipoConsulta.value
+                ).then(function (result) { //LQMA add 06032018 idUsuario
+                        $('#actualizarBD').modal('hide');
+                        //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
+                        console.log( 'resultSinLocalSotrage', result.data );
+
+                        if (result.data.length > 0) {
+                            if( result.data[0].resultado == 0 ){
+                                alertFactory.error( result.data[0].mensaje); 
+                                $scope.totalesAbonosCargos = [];                               
+                            }else{
+                                $scope.totalesAbonosCargos = result.data[0];
+                                $scope.mesActivo = result.data[0].mesActivo;
+                                localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
+                                $rootScope.fechaHistorico = result.data[0].fecha;
+
+                                $scope.paramBusqueda = [];
+
+                                setTimeout(function () {
+                                    $scope.paramBusqueda = {
+                                        "IdBanco": $scope.cuentaActual.IdBanco,
+                                        "Banco": $scope.cuentaActual.NOMBRE,
+                                        "IdEmpresa": $scope.cuentaActual.IdEmpresa,
+                                        "Empresa": $scope.empresaActual.emp_nombre,
+                                        "Cuenta": $scope.cuentaActual.Cuenta,
+                                        "CuentaContable": $scope.cuentaActual.CuentaContable,
+                                        "contador": $scope.contadorGerente[0].NombreContador,
+                                        "gerente": $scope.contadorGerente[0].NombreGerente,
+                                        "usuario": $scope.contadorGerente[0].Usuario,
+                                        "fechaElaboracion": $scope.fechaElaboracion,
+                                        "fechaCorte": $scope.fechaCorte,
+                                        "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
+                                        "MesActivo": $scope.mesActivo,
+                                        "PolizaPago": $scope.empresaActual.polizaPago,
+                                        "mensaje": result.data[0].mensaje,
+                                        "HistoricoId": result.data[0].idHistorico, 
+                                        "FechaHistoricoSave": result.data[0].fecha
+                                    };
+                                    localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
+
+                                }, 1000);
+
+                                $scope.enableBottonReport = false;
+                                $scope.InfoBusqueda = true;
+                            }
+                        } else {
+                            $scope.totalesAbonosCargos = [];
+                            $scope.enableBottonReport = true;
+                        }
+                    });
+
+                conciliacionInicioConsultaRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.cuentaActual.IdEmpresa).then(function (result) {
+                    if (result.data.length > 0) {
+                        $scope.contadorGerente = result.data;
+                    }
+                });
+            } else {
+
+                conciliacionInicioConsultaRepository.getTotalAbonoCargo(
+                    $scope.bancoId,
+                    $scope.empresaId,
+                    $scope.cuentaNumerica,
+                    $scope.cuentaContable,
+                    $scope.fechaElaboracion,
+                    $scope.fechaCorte,
+                    $scope.polizaPagos,
+                    2,
+                    $rootScope.userData.idUsuario,
+                    $scope.tipoConsulta.value
+                ).then(function (result) { //LQMA add 06032018 idUsuario
                         $('#actualizarBD').modal('hide');
                         //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                         if (result.data.length > 0) {
-                            console.log('resultTotal', result.data);
                             $scope.totalesAbonosCargos = result.data[0];
                             $scope.mesActivo = result.data[0].mesActivo;
                             localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
-
+                            $rootScope.fechaHistorico = result.data[0].fecha;
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
-                            // if ($scope.mesActivo != 1) {
-                            //     alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
-                            // }
+                            if ($scope.mesActivo != 1) {
+                                alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                            }
 
                             $scope.paramBusqueda = [];
 
                             setTimeout(function () {
-                                $scope.paramBusqueda = {
-                                    "IdBanco": $scope.cuentaActual.IdBanco,
-                                    "Banco": $scope.cuentaActual.NOMBRE,
-                                    "IdEmpresa": $scope.cuentaActual.IdEmpresa,
-                                    "Empresa": $scope.empresaActual.emp_nombre,
-                                    "Cuenta": $scope.cuentaActual.Cuenta,
-                                    "CuentaContable": $scope.cuentaActual.CuentaContable,
-                                    "contador": $scope.contadorGerente[0].NombreContador,
-                                    "gerente": $scope.contadorGerente[0].NombreGerente,
-                                    "usuario": $scope.contadorGerente[0].Usuario,
-                                    "fechaElaboracion": $scope.fechaElaboracion,
-                                    "fechaCorte": $scope.fechaCorte,
-                                    "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
-                                    "MesActivo": $scope.mesActivo,
+                                $scope.paramBusqueda = { 
+                                    "IdBanco": $scope.cuentaActual.IdBanco, 
+                                    "Banco": $scope.cuentaActual.NOMBRE, 
+                                    "IdEmpresa": $scope.cuentaActual.IdEmpresa, 
+                                    "Empresa": $scope.empresaActual.emp_nombre, 
+                                    "Cuenta": $scope.cuentaActual.Cuenta, 
+                                    "CuentaContable": $scope.cuentaActual.CuentaContable, 
+                                    "contador": $scope.contadorGerente[0].NombreContador, 
+                                    "gerente": $scope.contadorGerente[0].NombreGerente, 
+                                    "usuario": $scope.contadorGerente[0].Usuario, 
+                                    "fechaElaboracion": $scope.fechaElaboracion, 
+                                    "fechaCorte": $scope.fechaCorte, 
+                                    "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria, 
+                                    "MesActivo": $scope.mesActivo, 
                                     "PolizaPago": $scope.empresaActual.polizaPago,
-                                    "mensaje": result.data[0].mensaje
+                                    "mensaje": result.data[0].mensaje,
+                                    "HistoricoId": result.data[0].idHistorico, 
+                                    "FechaHistoricoSave": result.data[0].fecha
                                 };
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
 
@@ -251,84 +333,20 @@
                         }
                     });
 
-                conciliacionInicioRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.cuentaActual.IdEmpresa).then(function (result) {
+                conciliacionInicioConsultaRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.empresaId).then(function (result) {
                     if (result.data.length > 0) {
                         $scope.contadorGerente = result.data;
                     }
                 });
             }
-
-        } else {
-            console.log( 'En el else' );
-            
-            conciliacionInicioRepository.getTotalAbonoCargo(
-                $scope.bancoId,
-                $scope.empresaId,
-                $scope.cuentaNumerica,
-                $scope.cuentaContable,
-                //$scope.fechaElaboracion,
-                JSON.parse( localStorage.getItem('paramBusqueda') ).fechaElaboracion,
-                //$scope.fechaCorte,
-                JSON.parse( localStorage.getItem('paramBusqueda') ).fechaCorte,
-                $scope.polizaPagos,
-                2,
-                $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                    $('#actualizarBD').modal('hide');
-                    //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
-                    if (result.data.length > 0) {
-                        $scope.totalesAbonosCargos = result.data[0];
-                        $scope.mesActivo = result.data[0].mesActivo;
-                        localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
-
-                        //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
-
-                        if ($scope.mesActivo != 1) {
-                            alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
-                        }
-
-                        $scope.paramBusqueda = [];
-
-                        setTimeout(function () {
-                            $scope.paramBusqueda = {
-                                "IdBanco": $scope.cuentaActual.IdBanco,
-                                "Banco": $scope.cuentaActual.NOMBRE,
-                                "IdEmpresa": $scope.cuentaActual.IdEmpresa,
-                                "Empresa": $scope.empresaActual.emp_nombre,
-                                "Cuenta": $scope.cuentaActual.Cuenta,
-                                "CuentaContable": $scope.cuentaActual.CuentaContable,
-                                "contador": $scope.contadorGerente[0].NombreContador,
-                                "gerente": $scope.contadorGerente[0].NombreGerente,
-                                "usuario": $scope.contadorGerente[0].Usuario,
-                                "fechaElaboracion": $scope.fechaElaboracion,
-                                "fechaCorte": $scope.fechaCorte,
-                                "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
-                                "MesActivo": $scope.mesActivo,
-                                "PolizaPago": $scope.empresaActual.polizaPago,
-                                "mensaje": result.data[0].mensaje
-                            };
-                            localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
-
-                        }, 1000);
-
-                        $scope.enableBottonReport = false;
-                        $scope.InfoBusqueda = true;
-                    } else {
-                        $scope.totalesAbonosCargos = [];
-                        $scope.enableBottonReport = true;
-                    }
-                });
-
-            conciliacionInicioRepository.getGerenteContador($rootScope.userData.idUsuario, $scope.empresaId).then(function (result) {
-                if (result.data.length > 0) {
-                    $scope.contadorGerente = result.data;
-                }
-            });
         }
-
-        localStorage.removeItem('comeBack');
-    };
+        
+        localStorage.removeItem('comeBackConsulta');
+    }
 
     $scope.setCuenta = function (cuenta) {
+        $scope.bancariaCuenta = cuenta.Cuenta;
+        $scope.contableCuenta = cuenta.CuentaContable;
         if (cuenta == null) {
             $scope.activaBotonBuscar = true;
         } else {
@@ -442,6 +460,16 @@
             $location.path(path);
         }
     };
+
+    //********************************************Luis Antonio Garcia Perrusquia***********************************
+
+    $scope.getHistorico = function () {
+        conciliacionInicioConsultaRepository.getHistorico( $rootScope.userData, $scope.empresaId, $scope.bancoId, $scope.contableCuenta, $scope.bancariaCuenta )
+        .then(function(result){
+        });
+    };
+
+    //********************************************Luis Antonio Garcia Perrusquia***********************************
 
     //Cancelación del modal para exportar datos a excel
     // $scope.excelExportModal = function(){

@@ -4,7 +4,7 @@
         <br/>
         <div class="ibox float-e-margins">
             <div class="ibox-title" style="text-align:center">
-                <h3>Conciliación Detalle Punteo de Registros</h3>
+                <h3>Conciliación Detalle Punteo de Registros Consulta</h3>
             </div>
 
 
@@ -12,9 +12,9 @@
                 <!--Div Fecha Actual-->
                 <div class="media-body">
                     <div class="text-right">
-                        <p class="text-danger mar-no">Fecha y Hora Actual</p>
-                        <p class="text-1x mar-no text-semibold">&nbsp;{{FechahoraActual}}</p>
-                        <p id="liveclock" class="text-1x mar-no text-semibold"></p>
+                        <p class="text-danger mar-no">Fecha de captura:</p>
+                        <p class="text-1x mar-no text-semibold">&nbsp;{{ fechaHistoricoSave }}</p>
+                        <!-- <p id="liveclock" class="text-1x mar-no text-semibold"></p> -->
                     </div>
                 </div>
                 <!--Fin Div Fecha Actual-->
@@ -26,21 +26,15 @@
                 </div>
 
 
-                <div class="tab">
+                <div class="tab" style="background-color: green">
                     <button class="tablinks active" onclick="openCity(event, 'CargosSinPuntear')">
-                        <span style="color:white; font-weight: bold;">
-                            Registros sin Puntear
-                        </span>
+                        <span style="color:white; font-weight: bold;"> Registros sin Puntear </span>
                     </button>
                     <button class="tablinks" onclick="openCity(event, 'CargosPunteados')">
-                        <span style="color:white; font-weight: bold;">
-                            Registros Punteados
-                        </span>
+                        <span style="color:white; font-weight: bold;"> Registros Punteados</span>
                     </button>
                     <button class="tablinks" onclick="openCity(event, 'DepositosDPI')">
-                        <span style="color:white; font-weight: bold;">
-                            Depositos por Identificar
-                        </span>
+                        <span style="color:white; font-weight: bold;"> Depositos por Identificar</span>
                     </button>
                     <button class="tablinks" onclick="openCity(event, 'BancoReferenciados')">
                         <span style="color:white; font-weight: bold;">
@@ -65,7 +59,7 @@
                 </div>
                 <!--Inicio del primer Tab Detalle de Registros no Punteados-->
                 <div id="CargosSinPuntear" class="tabcontent" style="display: block;">
-                    <div ng-controller="conciliacionDetalleRegistroGridsController">
+                    <div ng-controller="conciliacionDetalleRegistroGridsConsultaController">
                         <!--LQMA add 24082017 colorpicker y grupos de colores BEGIN-->
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -79,16 +73,24 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
+                                        <!--a class="btn btn-warning pull-right" ng-click="desSeleccionar()"><i class="ti-layout-list-thumb"></i> Quitar Selección</a-->&nbsp;&nbsp;
                                         <a class="btn btn-success pull-right" ng-click="mostrarTodos()">
                                             <i class="ti-control-shuffle"></i>Todos</a>&nbsp;&nbsp;
                                         <a class="btn btn-primary pull-right" ng-click="mostrarNoPunteados()">
                                             <i class="ti-control-shuffle"></i>No punteados</a>
                                     </div>
+                                    <!--div class="col-sm-1">
+                            <button type="button" class="btn btn-primary pull-right" ng-click="desSeleccionar()">Quitar Selección</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-success pull-right" ng-click="mostrarTodos()">Todos</button>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-warning pull-right" ng-click="mostrarNoPunteados()">No punteados</button>
+                        </div-->
                                     <div class="col-sm-6" id="panelGrupos">
                                         <div id="divGrupos" class="divContainerGrupoPunteo">
-                                            <button ng-click="guardarHistorico()" class="btn btn-primary pull-right" style="height: 50px;">
-                                                Guardar estatus de la conciliacion
-                                            </button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -100,11 +102,14 @@
                             <div class="text-main" ng-init="init()">
                                 <h4>Cargo Bancario</h4>
                                 <label class="divGrupoPunteo">
-                                    <input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Todo</label>
+                                    <input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)'
+                                        ng-model="filtroBancoCarAbo">Todo</label>
                                 <label class="divGrupoPunteo">
-                                    <input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Cargo</label>
+                                    <input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)'
+                                        ng-model="filtroBancoCarAbo">Cargo</label>
                                 <label class="divGrupoPunteo">
-                                    <input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
+                                    <input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)'
+                                        ng-model="filtroBancoCarAbo">Abono</label>
                             </div>
                             <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
                             <div style="padding-left: 64%;">
@@ -192,16 +197,19 @@
                             </div>
                         </div>
                         <div class="col-md-12" ng-show="mesActivo">
-                            <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
-                                <i class="ti-layout-list-thumb"></i> Envíar a DPI </button>
+                            <button disabled class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
+                                <i class="ti-layout-list-thumb"></i> Envíar a DPI
+                            </button>
                             &nbsp;&nbsp;
-                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
-                                <i class="ti-control-shuffle"> </i>Punteo</button>
+                            <button disabled class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
+                                <i class="ti-control-shuffle"> </i>
+                                Punteo
+                            </button>
                             <br>
                             <br/> &nbsp;
                         </div>
                     </div>
-                    <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController">
+                    <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsConsultaController">
                         <br>
                         <br>
                         <div class="col-md-12" ng-init="init()">
@@ -216,37 +224,28 @@
                                         <th>Concepto</th>
                                         <th>Cargo</th>
                                         <th>Abono</th>
-                                        <th data-sort-ignore="true" class="min-width"></th>
+                                        <!-- <th data-sort-ignore="true" class="min-width"></th> -->
                                         <th data-sort-ignore="true" class="min-width"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="banco in bancoPadre | filter:{aplicado:0}">
+                                    <tr ng-repeat="banco in bancoPadre | filter:{idPunteoFinalBancos:2}">
                                         <td>{{banco.banco}}</td>
                                         <td>{{banco.referencia}}</td>
                                         <td>{{banco.concepto}}</td>
                                         <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                                         <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                                        <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
-                                            <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco.grupo,1)" ng-show="mesActivo">
-                                                <i class="demo-pli-cross"></i>
-                                            </button>
-                                        </td>
+                                        <!-- <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                                    <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco,1)" ng-show="mesActivo"><i class="demo-pli-cross"></i></button>
+                                </td> -->
                                         <td>
-                                            <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,1)">
+                                            <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco,1)">
                                                 <i class="ti-eye"></i>
                                             </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Cargos Bancarios : {{BancoPrePunteadoCargosTotales | currency}}</p>
-                            </div>
-            
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Abonos Bancarios : {{BancoPrePunteadoAbonosTotales | currency}}</p>
-                            </div>
                         </div>
                         <div class="col-md-12">
                             <div class="text-main">
@@ -261,48 +260,41 @@
                                         <th>Concepto</th>
                                         <th>Cargo</th>
                                         <th>Abono</th>
-                                        <th data-sort-ignore="true" class="min-width"></th>
+                                        <!-- <th data-sort-ignore="true" class="min-width"></th> -->
                                         <th data-sort-ignore="true" class="min-width"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:0}">
-                                        <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
-                                        <td>{{auxiliar.tipoPoliza}}</td>
-                                        <td>{{auxiliar.poliza}}</td>
-                                        <td>{{auxiliar.concepto}}</td>
+                                    <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idPunteoFinalBancos:2}">
+                                        <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
+                                        <td>{{auxiliar.polTipo}}</td>
+                                        <td>{{auxiliar.polConsecutivo}}</td>
+                                        <td>{{auxiliar.movConcepto}}</td>
                                         <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                                         <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
-                                        <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
-                                            <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(auxiliar.grupo,2)" ng-show="mesActivo">
-                                                <i class="demo-pli-cross"></i>
-                                            </button>
-                                        </td>
+                                        <!-- <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                                    <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(auxiliar,2)" ng-show="mesActivo"><i class="demo-pli-cross"></i></button>
+                                </td> -->
                                         <td>
-                                            <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar.grupo,2)">
+                                            <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar,2)">
                                                 <i class="ti-eye"></i>
                                             </button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Cargos Contables : {{AuxiliarPrePunteadoCargosTotales | currency}}</p>
-                            </div>
-
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Abonos Contables : {{AuxiliarPrePunteadoAbonosTotales | currency}}</p>
-                            </div>
                         </div>
 
                     </div>
                     <div class="col-md-12">
                         <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
-                            <button class="btn btn-warning" ng-click="comeBack()">
-                                <i class="ti-back-right"></i> Regresara
+                            <button class="btn btn-warning" ng-click="comeBackConsulta()">
+                                <i class="ti-back-right"></i> Regresar
                             </button> &nbsp;
-                            <button ng-disabled="showBotones.BtnGenerarPunteo == 0" class="btn btn-success" ng-click="generaAlertaPunteo()" ng-show="mesActivo">
-                                <i class="ti-harddrives"> </i>Generar Punteo</button>
+                            <button disabled class="btn btn-success" ng-click="generaAlertaPunteo()" ng-show="mesActivo">
+                                <i class="ti-harddrives"> </i>
+                                Generar Punteo
+                            </button>
                         </div>
                         <br>
                         <br/> &nbsp;
@@ -313,7 +305,7 @@
     </div>
 </div>
 <!--Fin del primer Tab Detalle de Registros no Punteados-->
-<div ng-controller="conciliacionDetalleRegistroGetGridsController">
+<div ng-controller="conciliacionDetalleRegistroGetGridsConsultaController">
     <!--Inicio del segundo Tab Detalle de Registros Punteados-->
     <div id="CargosPunteados" class="tabcontent" ng-init="init()">
         <div class="panel col-md-12">
@@ -324,29 +316,29 @@
                 <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Banco1</th>
+                            <th>Banco</th>
                             <th>Referencia</th>
                             <th>Concepto</th>
                             <th>Cargo</th>
                             <th>Abono</th>
-                            <!-- <th data-sort-ignore="true" class="min-width"></th> -->
+                            <th data-sort-ignore="true" class="min-width"></th>
                             <th data-sort-ignore="true" class="min-width"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in bancoPadre | filter:{aplicado:1}">
+                        <tr ng-repeat="banco in bancoPadre | filter:{idPunteoFinalBancos:3}">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                            <!-- <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                            <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
                                 <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco,1)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i>
                                 </button>
-                            </td> -->
+                            </td>
                             <td>
-                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteoGet(banco.grupo,1)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco,1)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -374,25 +366,25 @@
                             <th>Concepto</th>
                             <th>Cargo</th>
                             <th>Abono</th>
-                            <!-- <th data-sort-ignore="true" class="min-width"></th> -->
+                            <th data-sort-ignore="true" class="min-width"></th>
                             <th data-sort-ignore="true" class="min-width"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:1}">
-                            <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{auxiliar.tipoPoliza}}</td>
-                            <td>{{auxiliar.poliza}}</td>
-                            <td>{{auxiliar.concepto}}</td>
+                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{idPunteoFinalBancos:3}">
+                            <td>{{auxiliar.movFechaOpe | date:'yyyy-MM-dd'}}</td>
+                            <td>{{auxiliar.polTipo}}</td>
+                            <td>{{auxiliar.polConsecutivo}}</td>
+                            <td>{{auxiliar.movConcepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
-                            <!-- <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                            <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
                                 <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(auxiliar,2)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i>
                                 </button>
-                            </td> -->
+                            </td>
                             <td>
-                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteoGet(auxiliar.grupo,2)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar,2)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -468,7 +460,7 @@
                 <table id="bancoReferenciadoAbono" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Banco</th>
+                            <th>BancoCon</th>
                             <th>Referencia</th>
                             <th>Fecha</th>
                             <th>Concepto</th>
@@ -492,12 +484,12 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Banco</th>
+                            <th>BancoCon</th>
                             <th>Referencia</th>
                             <th>Fecha</th>
                             <th>Concepto</th>
                             <th>Abono</th>
-                            <th>Detalle</th>
+                            <th data-sort-ignore="true" class="min-width">Detalle</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -523,20 +515,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in registrosBancariosCargos">
-                            <td>{{banco.IDBanco}}</td>
+                        <tr ng-repeat="banco in bancoReferenciadosCargos">
+                            <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
                             <td>{{banco.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.importe | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosCargosF(banco.IDCARGOSBANCOS, bancos)">
+                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosCargosF(banco.IDABONOSBANCOS_H, banco)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
                         </tr>
                     </tbody>
-                    <thead>
+                    <tfoot>
                         <tr>
                             <th>Banco</th>
                             <th>Referencia</th>
@@ -545,7 +537,7 @@
                             <th>Cargo</th>
                             <th data-sort-ignore="true" class="min-width">Detalle</th>
                         </tr>
-                    </thead>
+                    </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Cargos Bancarios Referenciados: {{bancoReferenciadosCargosTotales | currency}}</p>
@@ -628,7 +620,7 @@
                 <table id="contableRefCargos" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Fecha</th>
+                            <th>Fechaq</th>
                             <th>Tipo de Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
@@ -652,7 +644,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Fecha</th>
+                            <th>Fechaq</th>
                             <th>Tipo de Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
@@ -680,12 +672,14 @@
     </div>
     <!--Fin del quinto Tab / Registros Contables Referenciados-->
 
+
+
     <!--Inicio del sexto Tab / Registros Universo Total-->
     <div id="totalUniversoContables" class="tabcontent">
         <div class="panel col-md-12">
             <div class="col-md-12">
                 <div class="text-main">
-                    <h4>Total Registros Contables (Cargos y Abonos)</h4>
+                    <h4>Total Registros Contables (Cargos y Abonos) Consulta</h4>
                 </div>
                 <table id="contableUniCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -707,37 +701,39 @@
                             <td>{{ unicontable.cargo | currency}}</td>
                             <td>{{ unicontable.abono | currency}}</td>
                         </tr>
-                        <tf>
-                            <tr>
-                                <th>Fecha aqui</th>
-                                <th>Tipo de Póliza</th>
-                                <th># de Póliza</th>
-                                <th>Concepto</th>
-                                <th>Abono</th>
-                                <th>Cargo</th>
-                            </tr>
-                        </tf>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Fecha aqui</th>
+                            <th>Tipo de Póliza</th>
+                            <th># de Póliza</th>
+                            <th>Concepto</th>
+                            <th>Abono</th>
+                            <th>Cargo</th>
+                        </tr>
+                    </tfoot>
                 </table>
+
                 <div class="pull-right">
                     <br>
-                    <label class='text-bold'> 
-                        Total registros contables cargos: 
+                    <label class='text-bold'>
+                        Total registros contables cargos:
                     </label>
                     <label class="text-success text-semibold">
-                        {{ universoTotalMovimientoContableCargo | currency}} 
+                        {{ universoTotalMovimientoContableCargo | currency}}
                     </label>
                     <br>
-                    <label class='text-bold'> 
-                        Total registros contables abonos: 
+                    <label class='text-bold'>
+                        Total registros contables abonos:
                     </label>
-                    <label class="text-info text-semibold"> 
-                        {{ universoTotalMovimientoContableAbono | currency}} 
+                    <label class="text-info text-semibold">
+                        {{ universoTotalMovimientoContableAbono | currency}}
                     </label>
-                    <br><br>
+                    <br>
+                    <br>
                 </div>
             </div>
-    
+
             <div class="col-md-12">
                 <div class="text-right">
                     <a class="btn btn-warning" href="/conciliacionInicio ">
@@ -754,10 +750,10 @@
     <!--Inicio del septimo Tab / Registros Universo Total-->
     <div id="totalUniversoBancarios" class="tabcontent">
         <div class="panel col-md-12">
-    
+
             <div class="col-md-12">
                 <div class="text-main">
-                    <h4>Total Registros Bancarios (Cargos y Abonos)</h4>
+                    <h4>Total Registros Bancarios (Cargos y Abonos) Consulta</h4>
                 </div>
                 <table id="contableUniBancarioCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
@@ -791,6 +787,7 @@
                         </tr>
                     </tfoot>
                 </table>
+
                 <div class="pull-right">
                     <br>
                     <label class='text-bold'>
@@ -809,7 +806,7 @@
                     <br>
                     <br>
                 </div>
-    
+
             </div>
             <div class="col-md-12">
                 <div class="text-right">
@@ -994,7 +991,7 @@
                 <h4 class="modal-title text-white">Detalle del Punteo</h4>
             </div>
             <div class="modal-body">
-                <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleBanco.length == 0">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Banco</th>
@@ -1005,16 +1002,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in detalleBanco | filter:{aplicado:0}">
-                            <td>{{banco.banco}}</td>
-                            <td>{{banco.referencia}}</td>
-                            <td>{{banco.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
+                        <tr ng-repeat="bancoD in detallePunteoBanco">
+                            <td>{{bancoD.banco}}</td>
+                            <td>{{bancoD.referenciaBanco}}</td>
+                            <td>{{bancoD.conceptoBanco}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : bancoD.cargoBanco > 0}">{{bancoD.cargoBanco | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : bancoD.abonoBanco > 0}">{{bancoD.abonoBanco | currency}}</td>
                         </tr>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span>
+                            </td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="abonoTotalBanco > 0">{{abonoTotalBanco | currency}}</span>
+                            </td>
+                        </tr>
+                    </tfoot>
                 </table>
-                <table id="auxiliarPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleContable.length == 0">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>Fecha</th>
@@ -1026,76 +1034,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="auxiliar in detalleContable | filter:{aplicado:0}">
-                            <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{auxiliar.tipoPoliza}}</td>
-                            <td>{{auxiliar.poliza}}</td>
-                            <td>{{auxiliar.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
+                        <tr ng-repeat="auxiliarD in detallePunteo">
+                            <td>{{auxiliarD.movFechaOpe | date:'yyyy/MM/dd'}}</td>
+                            <td>{{auxiliarD.polTipo}}</td>
+                            <td>{{auxiliarD.polConsecutivo}}</td>
+                            <td>{{auxiliarD.movConcepto}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliarD.cargo > 0}">{{auxiliarD.cargo | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliarD.abono > 0}">{{auxiliarD.abono | currency}}</td>
                         </tr>
                     </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-<!--===================================================-->
-<!--End Modal para colocar el numero del punteo-->
-
-<!--Modal para colocar el numero del punteo-->
-<!--===================================================-->
-<div class="modal fade" id="punteoDetalleGet" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header label-mint">
-                <button type="button" class="close" data-dismiss="modal">
-                    <i class="pci-cross pci-circle text-white"></i>
-                </button>
-                <h4 class="modal-title text-white">Detalle del Punteoq</h4>
-            </div>
-            <div class="modal-body">
-                <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleBanco.length == 0">
-                    <thead>
+                    <tfoot>
                         <tr>
-                            <th>Banco</th>
-                            <th>Referencia</th>
-                            <th>Concepto</th>
-                            <th>Cargo</th>
-                            <th>Abono</th>
+                            <td colspan="4" class="text-bold text-right text-info">Total</td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="cargoTotalAuxiliar > 0">{{cargoTotalAuxiliar | currency}}</span>
+                            </td>
+                            <td class="text-info text-semibold text-right">
+                                <span ng-if="abonoTotalAuxiliar > 0">{{abonoTotalAuxiliar | currency}}</span>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="banco in detalleBancoGet | filter:{aplicado:1}">
-                            <td>{{banco.banco}}</td>
-                            <td>{{banco.referencia}}</td>
-                            <td>{{banco.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table id="auxiliarPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleContable.length == 0">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Tipo Póliza</th>
-                            <th># Póliza</th>
-                            <th>Concepto</th>
-                            <th>Cargo</th>
-                            <th>Abono</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="auxiliar in detalleContableGet | filter:{aplicado:1}">
-                            <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{auxiliar.tipoPoliza}}</td>
-                            <td>{{auxiliar.poliza}}</td>
-                            <td>{{auxiliar.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
-                        </tr>
-                    </tbody>
+                    </tfoot>
                 </table>
             </div>
         </div>
@@ -1217,13 +1175,13 @@
                     <br>
                     <h4 class="text-title">Deseas guardar la relación de registros seleccionados?
                         <span>
-                            <span ng-controller="conciliacionDetalleRegistroGridsController">
+                            <span ng-controller="conciliacionDetalleRegistroGridsConsultaController">
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaPunteoPrevio()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span ng-controller="conciliacionDetalleRegistroGridsController">
-                                <button class="btn btn-success pull-right" ng-click="savePunteo()">
+                            <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
+                                <button class="btn btn-success pull-right" ng-click="guardaPunteoPrevio()">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
                         </span>
@@ -1250,7 +1208,7 @@
                     <br>
                     <h4 class="text-title">Deseas continuar con el envío a DPI?
                         <span>
-                            <span ng-controller="conciliacionDetalleRegistroGridsController">
+                            <span ng-controller="conciliacionDetalleRegistroGridsConsultaController">
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaPunteoDPI()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
@@ -1269,20 +1227,6 @@
 </div>
 <!--===================================================-->
 <!--End Modal alerta Punteo Previo-->
-
-
-<!--INICIA modal spinner -->
-<!--===================================================-->
-<div id="loading" class="modal fade" tabindex="-1" data-focus-on="input:first">
-    <div class="modal-dialog modal-lg">
-        <div class="spinner">
-            <div class="cube1"></div>
-            <div class="cube2"></div>
-        </div>
-    </div>
-</div>
-<!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
-<!--===================================================-->
 
 <!-- Ing. Luis Antonio García Perrusquía -->
 <!--Modal para colocar abono-->
@@ -1321,7 +1265,7 @@
                     <tfoot>
                         <tr>
                             <!-- <td class="text-info text-semibold text-right"> -->
-                                <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
+                            <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
                             <!-- </td> -->
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span>
@@ -1338,7 +1282,7 @@
                         <tr>
                             <th>Concepto</th>
                             <th>Numero de Cuenta</th>
-                            <th>Cargo</th>
+                            <th>Importe Pagado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1367,8 +1311,7 @@
 <!--===================================================-->
 <!--End Modal para colocar abono-->
 
-
- <!--Modal para colocar cargo bancario-->
+<!--Modal para colocar cargo bancario-->
 <!--===================================================-->
 <div class="modal fade" id="regBancariosCargoDetalle" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -1411,17 +1354,17 @@
                                 <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span>
                             </td>
                             <!-- <td class="text-info text-semibold text-right">
-                                <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{abonoTotalBanco | currency}}</span>
-                            </td> -->
+                                    <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{abonoTotalBanco | currency}}</span>
+                                </td> -->
                         </tr>
                     </tfoot>
                 </table>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Concepto</th>
+                            <th>Concepto1</th>
                             <th>Numero de Cuenta</th>
-                            <th>Abono</th>
+                            <th>Importe Pagado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -1498,23 +1441,23 @@
                         <tr>
                             <th>Concepto</th>
                             <th>Numero de Cuenta</th>
-                            <th>Cargo</th>
-                            <!-- <th>Abono</th> -->
+                            <!-- <th>Cargo</th> -->
+                            <th>Abono</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="detAbono in regBancariosAbonoDetalle">
                             <td>{{ detAbono.MOV_CONCEPTO }}</td>
                             <td>{{ detAbono.noCuenta }}</td>
-                            <td class="text-info text-semibold text-right">{{ detAbono.rap_importeC | currency }}</td>
-                            <!-- <td class="text-info text-semibold text-right">{{ detAbono.rap_importe | currency}}</td> -->
+                            <!-- <td class="text-info text-semibold text-right">{{ detAbono.rap_importeC | currency }}</td> -->
+                            <td class="text-info text-semibold text-right">{{ detAbono.rap_importe | currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <!-- <td class="text-info text-semibold text-right"> -->
+                            <td class="text-info text-semibold text-right">
                                 <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
-                            <!-- </td> -->
+                            </td>
                             <td class="text-info text-semibold text-right">
                                 <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
                             </td>
@@ -1580,7 +1523,7 @@
                         <tr>
                             <th>Concepto</th>
                             <th>Referencia</th>
-                            <th>Referencia Ampliada</th>
+                            <th>Referencia ampliada</th>
                             <th>Abono</th>
                         </tr>
                     </thead>
@@ -1595,9 +1538,9 @@
                     <tfoot>
                         <tr>
                             <td class="text-info text-semibold text-right">
-                            </td> 
+                            </td>
                             <td class="text-info text-semibold text-right">
-                                </td> 
+                            </td>
                             <td class="text-bold text-right text-info">Total</td>
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="totalHijosCargos > 0">{{ totalHijosCargos | currency}}</span>
@@ -1611,3 +1554,16 @@
 </div>
 <!--===================================================-->
 <!--End Modal para colocar cargo abono-->
+
+<!--INICIA modal spinner -->
+<!--===================================================-->
+<div id="loading" class="modal fade" tabindex="-1" data-focus-on="input:first">
+    <div class="modal-dialog modal-lg">
+        <div class="spinner">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</div>
+<!--TERMINA El resumen de la cuenta y la seleccion de encargados -->
+<!--===================================================-->

@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGridsController',function($scope, $log,  $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants, filterFilter){
+﻿registrationModule.controller('conciliacionDetalleRegistroGridsConsultaController',function($scope, $log,  $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants, conciliacionDetalleRegistroConsultaRepository){
 
       $scope.gridsInfo = [];
       $scope.depositosBancos = '';
@@ -30,11 +30,20 @@
             //LQMA 29
             $scope.fechaActual = '2017-05-07';
 
+            //Historial LAGP
+            $scope.paramHistory = JSON.parse( localStorage.getItem('paramBusqueda') );
+            //console.log( 'conciliacionDetalleRegistroGridsConsultaControllerPams', $scope.paramHistory );
      $scope.init = function() {
         $('#loading').modal('show');
+        //LUIS ANTONIO
+        $scope.fechaCorte = new Date();
+        $scope.fechaElaboracion = new Date($scope.fechaCorte.getFullYear(), $scope.fechaCorte.getMonth(), 1);
+
+        $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
+        $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
 
         variablesLocalStorage();
-        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
+        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.IdEmpresa, $scope.paramHistory.HistoricoId, $scope.fechaElaboracion);
         //LQMA comment 17082017
         //$scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
     };
@@ -65,8 +74,6 @@
         { name: 'cargo', displayName: 'Cargo', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abono', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },             
         { name: 'movFechaOpe', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.movFechaOpe.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.movFechaOpe.substr(0, 10)}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''
-        { name: 'MES', displayName: 'Periodo', width: 100 },
-        // { name: 'anio', displayName: 'Año', width:100 },
         //{ name: 'movFechaOpe', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'', cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.movFechaOpe  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.movFechaOpe | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''
         { name: 'polTipo', displayName: 'Referencia', width: 200 },
         { name: 'movConcepto', displayName: 'Concepto', width: 600 },
@@ -95,7 +102,7 @@
      // INICIA las variables para el GRID BANCOS
     //****************************************************************************************************
     $scope.gridDepositosBancos = {
-        //enableRowSelection: true,
+        enableRowSelection: true,
         enableRowHeaderSelection: false,
         enableSelectAll: false,
         selectionRowHeaderWidth: 35,
@@ -110,8 +117,6 @@
         { name: 'concepto', displayName: 'Concepto', width: 300 },
         { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{ row.entity.fechaOperacion.substr(0, 10) }}</span></div>'},//, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.fechaOperacion | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''//},
         { name: 'referencia', displayName: 'Referencia', width: 200 },
-        { name: 'MES', displayName: 'Periodo', width: 100 },
-        // { name: 'anio', displayName: 'Año', width:100 },
         //LQMA 07092017                  
         //{ name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
         { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
@@ -139,14 +144,19 @@
 
 
     //******************Función para llenar el grid Depositos Bancos********************************
-    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
-        
+    $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion) {//LAGP 03052018
         if (idestatus == 1) { 
-            filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
+            console.log('Aqui'),
+            conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion).then(function(result) {
                 if (result.data.length >= 0) {
-                    console.log( 'noPunteadosBancos', result.data );
+                    console.log( 'resultBancosConsulta', result.data );
                     $scope.depositosBancos = result.data[0];
-                    
+                    $scope.gridDepositosBancos.data = result.data[0];
+                     //Suma del total monetario, abonos
+
+                    // angular.forEach($scope.depositosBancos, function(value, key) {
+                    // $scope.totalAbonoBancario += value.abono;
+                    // });
                     angular.forEach($scope.depositosBancos, function( value, key ){
                         if( value.esCargo == 1 ){
                             $scope.depositosBancos[key]['cargo'] = value.importe;
@@ -156,15 +166,7 @@
                             $scope.totalAbonoBancario += value.importe;
                         }
                     });
-                    
-                    $scope.gridDepositosBancos.data = result.data[0];
-                     //Suma del total monetario, abonos
-                     
-                    // angular.forEach($scope.depositosBancos, function(value, key) {
-                    // $scope.totalAbonoBancario += value.abono;
-                    // });
-                    
-                    //  //Suma del total monetario cargos
+                     //Suma del total monetario cargos
 
                     //  angular.forEach($scope.depositosBancos, function(value, key) {
                     // $scope.totalCargoBancario += value.cargo;
@@ -172,13 +174,12 @@
 
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
-                    
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, $scope.busqueda.Cuenta);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.paramHistory.HistoricoId, $scope.fechaElaboracion);
                 }
             });
         } else if (idestatus == 2) {
-            filtrosRepository.getDepositos(idBanco, idestatus).then(function(result) {
+            conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus).then(function(result) {
                 if (result.data.length > 0) {
                     $scope.depositosBancos = result.data;
                 }
@@ -189,14 +190,15 @@
 
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
-     $scope.getAuxiliarContable = function(idEmpresa, idBanco,numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
-
-            filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function(result) {
-              
+     $scope.getAuxiliarContable = function(idEmpresa, idBanco, idHistorico, fechaElaboracion) {
+         console.log( 'getAuxiliarContable' );
+        conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, idHistorico, fechaElaboracion).then(function(result) {
+               console.log( 'result', result );
 		if (result.data[0].length !=0) {
-		            console.log('NoPunteadosContable',result.data)
+		    
                     $scope.auxiliarContable = result.data[0];
                     $scope.gridAuxiliarContable.data = result.data[0];
+
                       //Suma del total monetario, abonos
 
                     angular.forEach($scope.auxiliarContable, function(value, key) {
@@ -211,7 +213,7 @@
 
 
                     localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
-                     //console.log($scope.gridAuxiliarContable.data, 'Auxiliar Contable')
+                    
                      setTimeout(function() { $scope.prePunteo();}, 100); //LQMA 31
                      $('#loading').modal('hide');
                 }
@@ -222,7 +224,6 @@
 
    // INICIA la configuración del GRID AUXILIAR CONTABLE
     //****************************************************************************************************
-    
     $scope.gridAuxiliarContable.onRegisterApi = function(gridApi) {
         //set gridApi on scope
         $scope.gridApiAuxiliar = gridApi;
@@ -235,6 +236,7 @@
                     //LQMA 23082017    
                 row.entity.color = $scope.hexPicker.color;//$scope.currentColor;
                 $scope.agregaDiv($scope.hexPicker.color);
+                  
 
             } else if (row.isSelected == false) {
                 $scope.abonoAuxiliar = $scope.abonoAuxiliar - row.entity.abono;
@@ -257,9 +259,9 @@
                 
                     row.entity.indexPrePunteo = 99999;
                 }
-                // //console.log('filtrar por indexPrePunteo: ', filtradosAuxiliar)
-                var colorRow = row.entity.color;                
-                 //console.log('colores',row.entity.color);
+                
+                var colorRow = row.entity.color;           
+                
                 //if(row.entity.color != '#'){
                 row.entity.color = '';
                 if(colorRow != '')
@@ -318,9 +320,9 @@
                 
                     row.entity.indexPrePunteo = 99999;
                 }
-                // //console.log('filtrar por indexPrePunteo: ', filtradosAuxiliar)
-                var colorRow = row.entity.color;                
-                 //console.log('colores',row.entity.color);
+                
+                var colorRow = row.entity.color;         
+                
                 //if(row.entity.color != '#'){
                 row.entity.color = '';
                 if(colorRow != '')
@@ -504,7 +506,7 @@
     //LQMA 28082017
     $scope.desSeleccionar = function() {
 
-         //console.log($scope.gridApiAuxiliar.grid.options.data);
+        
 
         /*
         $scope.gridApiAuxiliar.selection.clearSelectedRows();
@@ -549,14 +551,14 @@
 
 
         $scope.gridApiAuxiliar.grid.refresh()
-        // //console.log('colorXXX',$scope.colorXXX)
+        
 
         $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
         $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
         $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
         $scope.gridApiAuxiliar.grid.refresh()
-        // //console.log('colorXXX',$scope.colorXXX)
+        
 
         $scope.gridApiBancos.grid.api.core.raise.filterChanged();
         $scope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
@@ -600,8 +602,6 @@
             var colorAuxiliar = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function(value){
                     return value.color == color; //|| value.assignee.id === 'ak';                    
                 });
-
-            // //console.log(colorBancos)
             
             color = color.replace("#","")
 
@@ -612,7 +612,6 @@
                     var myEl = angular.element( document.querySelector("#X" + color +""));
                     myEl.remove();
                 }
-                // //console.log('agrega')
                  
                 //LQMA 29
                 //var divTemplate = "<div id=\"X" + color + "\" style='background-color: #"+ color +";' class='divGrupoPunteo' data-ng-click=\"setColorGrupo($event)\"><button type=\"button\" ng-click=\"saluda()\" text='O'>" + colorBancos.length + "</div>";
@@ -629,7 +628,7 @@
             }
             else
             {
-                 //console.log('compara para borrar')
+                
                 if (angular.element("#X" + color +"").length) {
                     var myEl = angular.element( document.querySelector("#X" + color +""));
                     myEl.remove();
@@ -736,7 +735,6 @@
 
         if($scope.hexPicker.color == '#c9dde1')
         {
-             //console.log('color-->', $scope.hexPicker.color);
             $scope.hexPicker.color = '#b9b8f5'
         }
         
@@ -746,7 +744,6 @@
     $scope.filtraBanco = function(filtro)
     {   
 
-         //console.log($scope.filtroBancoCarAbo)
 
         switch($scope.filtroBancoCarAbo)
         {
@@ -796,335 +793,161 @@
         $scope.gridApiBancos.grid.api.grid.queueGridRefresh();                                                                
 
     }
-    $scope.seleccionados = [];
-    $scope.grupoHexadecimal = [];
-    $scope.ShowAlertPunteo = function () {
-        //Obtengo los registros seleccionados y agrupados por color
 
-        var auxiSel = 0, depoSel = 0; auxiTot = 0, depoTot = 0;
+
+
+    $scope.ShowAlertPunteo = function(){
+
+           //Obtengo los registros seleccionados y agrupados por color
+
+        var auxiSel = 0,depoSel = 0; auxiTot = 0,depoTot = 0;
         var deSel = [], auSel = []; // variables en las que se almacenan los registros seleccionados
+        angular.forEach($scope.gridApiBancos.grid.options.data , function(value, key) {             
+                            if(value.color != undefined && value.color != '') {               
+                                    depoTot++;
+                                    deSel.push(value);
+                                if(value.color == $scope.hexPicker.color)
+                                {
+                                    depoSel++;
+                                }
+                            }
+                        });
+        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value, key) {             
+                            if(value.color != undefined && value.color != '') {
+                                    auxiTot++;
+                                    auSel.push(value);
+                                if(value.color == $scope.hexPicker.color)
+                                {
+                                    auxiSel++;
+                                }
+                            }
+                        });
+      // Mando a llamar la función que me genera el grupo de arrays por color y tipo de Punteo
+        $scope.crearArrayGrupos(deSel, auSel);
+ 
         
         
-        //angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
-        //$scope.gridApiBancos.grid.options.data.forEach(function (value, key) {
-        var aux1 = $scope.gridApiBancos.grid.options.data;
-        for( var i = 0; i <= (aux1.length - 1); i++ ){
-            var value = aux1[ i ];
-            if (value.color != undefined && value.color != '') {
-                depoTot++;
-                deSel.push(value);
-                $scope.seleccionados.push(
-                    { 
-                        color: value.color, 
-                        idCargo: value.esCargo == 1 ? value.IDABONOSBANCOS : 0, 
-                        idAbono: value.esCargo == 1 ? 0 : value.IDABONOSBANCOS, 
-                        tipo: 'B', 
-                        usuario: JSON.parse(localStorage.getItem('ls.userData')).idUsuario  
-                    }
-                );
-                if( $scope.grupoHexadecimal.indexOf(value.color) == -1 ){
-                    $scope.grupoHexadecimal.push( value.color );
-                }
-                // if (value.color == $scope.hexPicker.color) {
-                //     //console.log('seleccionado: ',value.color)
-                //     depoSel++;
-                // }
-            }
+           //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
+          localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.agrupadosAuxiliar));
+          localStorage.setItem('infoGridBanco', JSON.stringify($scope.agrupadosBancos));
+          localStorage.setItem('infoGridAbonoCargoAuxiliar', JSON.stringify($scope.agrupadosAuxiliarCargoAbono));
+          localStorage.setItem('infoGridAbonoCargoBanco', JSON.stringify($scope.agrupadosBancosCargoAbono));
+
+
+if($scope.control != undefined){
+       $('#alertaGuardarPunteoPrevio').modal('show');
+        $scope.punteoAuxiliar = [];
+        $scope.punteoBanco = [];
+        $scope.gridApiAuxiliar.selection.clearSelectedRows();
+        $scope.gridApiBancos.selection.clearSelectedRows();
+        $scope.limpiaVariables();
+    }
+    else{
+        if(($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)){
+        alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
         }
+      else if($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
+       $('#alertaGuardarPunteoPrevio').modal('show');
+        $scope.punteoAuxiliar = [];
+        $scope.punteoBanco = [];
+        $scope.gridApiAuxiliar.selection.clearSelectedRows();
+        $scope.gridApiBancos.selection.clearSelectedRows();
+        $scope.limpiaVariables();
+      } 
+     }
 
-        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
-            if (value.color != undefined && value.color != '') {
-                auxiTot++;
-                auSel.push( value );
-                $scope.seleccionados.push(
-                    {
-                        color: value.color,
-                        idCargo: value.esCargo == 1 ? value.idAuxiliarContable : 0, 
-                        idAbono: value.esCargo == 1 ? 0 : value.idAuxiliarContable, 
-                        tipo: 'C', 
-                        usuario: JSON.parse(localStorage.getItem('ls.userData')).idUsuario   
-                    }
-                );
-                if( $scope.grupoHexadecimal.indexOf(value.color) == -1 ){
-                    $scope.grupoHexadecimal.push( value.color );
-                }
-                // if (value.color == $scope.hexPicker.color) {
-
-                //     auxiSel++;
-                // }
-            }
-        });
-
-        //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
-
-
-        if ($scope.control != undefined) {
-            $('#alertaGuardarPunteoPrevio').modal('show');
-            $scope.gridApiAuxiliar.selection.clearSelectedRows();
-            $scope.gridApiBancos.selection.clearSelectedRows();
-            $scope.limpiaVariables();
-        }
-        else {
-            if (($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)) {
-                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
-            }
-            else if ($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
-                $('#alertaGuardarPunteoPrevio').modal('show');
-                $scope.punteoAuxiliar = [];
-                $scope.punteoBanco = [];
-                $scope.gridApiAuxiliar.selection.clearSelectedRows();
-                $scope.gridApiBancos.selection.clearSelectedRows();
-                $scope.limpiaVariables();
-            }
-        }
-
-        localStorage.setItem("seleccionados", JSON.stringify( $scope.seleccionados));
-        localStorage.setItem("grupoHexadecimal", JSON.stringify( $scope.grupoHexadecimal))
-
-        console.log( 'Bancario', $scope.seleccionados );
-        console.log( 'Colores', $scope.grupoHexadecimal );
-        
     };
 
-    $scope.savePunteo = function(){
-        $scope.save_seleccionados = JSON.parse( localStorage.getItem("seleccionados") );
-        $scope.save_grupoHexadecimal = JSON.parse( localStorage.getItem("grupoHexadecimal") );
-        
-        $scope.savePunteoDetalle( 0 );
-    }
 
-    $scope.auxGrupoPunteo   = 0;
-    $scope.gruposPunteo     = [];
+$scope.crearArrayGrupos = function(deSel, auSel){
 
-    $scope.savePunteoDetalle = function( auxCont ){
-        if( auxCont >= ( $scope.save_grupoHexadecimal.length ) ){
-            alertFactory.success('Punteo exitoso');
-            $('#alertaGuardarPunteoPrevio').modal('hide');
-            setTimeout(function(){
-                location.reload();
-            },2500);
-        }
-        else{
-            var item = $scope.save_grupoHexadecimal[ auxCont ];
-            $scope.gruposPunteo = filterFilter($scope.save_seleccionados, { color: item });
-            
-            console.log('---------------------------');
-            console.log( $scope.gruposPunteo );
-            console.log('---------------------------');
-            $scope.auxGrupoPunteo   = 0;
-            $scope.detallePunteoSave( auxCont , 0 );
-        }
-    }
-
-    $scope.detallePunteoSave = function( auxContPadre, auxCont ){
-        console.log( 'Contadores', auxContPadre, auxCont );
-        if( auxCont >= ( $scope.gruposPunteo.length ) ){
-            $scope.savePunteoDetalle( auxContPadre + 1 );
-        }else{
-            var value = $scope.gruposPunteo[ auxCont ]
-            var parametros = {
-                grupo:   $scope.auxGrupoPunteo,
-                idCargo: value.idCargo,
-                idAbono: value.idAbono,
-                tipo:    value.tipo,
-                usuario: value.usuario,
-            }
-            filtrosRepository.savePunteado( parametros ).then(function(result) {
-                var resultado = result.data[0];
-                console.log("resultado E", resultado);
-                if( resultado.length != 0 ){
-                    $scope.auxGrupoPunteo   = resultado.grupoPunteo;
-                    $scope.detallePunteoSave( auxContPadre, auxCont + 1 );
-                }
-            })
-        }
-    }
-
-   /* $scope.ShowAlertPunteo = function () {
-        
-        localStorage.removeItem('infoGridAuxiliar');
-        localStorage.removeItem('infoGridBanco');
-        localStorage.removeItem('infoGridAbonoCargoAuxiliar');
-        localStorage.removeItem('infoGridAbonoCargoBanco');
-        //Obtengo los registros seleccionados y agrupados por color
-
-        var auxiSel = 0, depoSel = 0; auxiTot = 0, depoTot = 0;
-        var deSel = [], auSel = []; // variables en las que se almacenan los registros seleccionados
-        
-        angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
-            if (value.color != undefined && value.color != '') {
-                depoTot++;
-                deSel.push(value);
-                if (value.color == $scope.hexPicker.color) {
-                    //console.log('seleccionado: ',value.color)
-                    depoSel++;
-                }
-            }
-        });
-
-        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
-            if (value.color != undefined && value.color != '') {
-                auxiTot++;
-                auSel.push(value);
-                if (value.color == $scope.hexPicker.color) {
-
-                    auxiSel++;
-                }
-            }
-        });
-
-        // Mando a llamar la función que me genera el grupo de arrays por color y tipo de Punteo
-        $scope.crearArrayGrupos(deSel, auSel);
-
-
-
-        //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
-        localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.agrupadosAuxiliar));
-        localStorage.setItem('infoGridBanco', JSON.stringify($scope.agrupadosBancos));
-        localStorage.setItem('infoGridAbonoCargoAuxiliar', JSON.stringify($scope.agrupadosAuxiliarCargoAbono));
-        localStorage.setItem('infoGridAbonoCargoBanco', JSON.stringify($scope.agrupadosBancosCargoAbono));
-        localStorage.setItem( 'infoGridagrupadosBancosContables', JSON.stringify( $scope.agrupadosBancosContables ) );
-
-
-        if ($scope.control != undefined) {
-            $('#alertaGuardarPunteoPrevio').modal('show');
-            $scope.punteoAuxiliar = [];
-            $scope.punteoBanco = [];
-            $scope.gridApiAuxiliar.selection.clearSelectedRows();
-            $scope.gridApiBancos.selection.clearSelectedRows();
-            $scope.limpiaVariables();
-        }
-        else {
-            if (($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)) {
-                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
-            }
-            else if ($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
-                $('#alertaGuardarPunteoPrevio').modal('show');
-                $scope.punteoAuxiliar = [];
-                $scope.punteoBanco = [];
-                $scope.gridApiAuxiliar.selection.clearSelectedRows();
-                $scope.gridApiBancos.selection.clearSelectedRows();
-                $scope.limpiaVariables();
-            }
-        }
-    };*/
-
-
-    $scope.crearArrayGrupos = function (deSel, auSel) {
-        console.log('crearArrayGrupos');
-        var coloresUsados = [];
-
-        //Variables para guardar los cargos contra abonos
-        $scope.agrupadosBancos = [];
+        var coloresUsados = [];        
+        $scope.agrupadosBancos = []; 
         $scope.agrupadosAuxiliar = [];
-
-        //Variables para utilizar cuando se selecciona un cargo y un abono ya se solo bancario o contable
         $scope.agrupadosAuxiliarCargoAbono = [];
         $scope.agrupadosBancosCargoAbono = [];
+///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
+        if(deSel.length > 0 && auSel.length > 0){
+        var colorActual = deSel[0].color;
+        var filtradosColors = deSel;
+         
+        while(filtradosColors.length > 0)
+        {
+            colorActual = filtradosColors[0].color;
+            coloresUsados.push(colorActual); 
 
-        $scope.agrupadosBancosContables = [];
+            var grupoActualBanco = $filter('filter')(deSel, function(value){
+                                            return value.color == colorActual;  
+                                        }); 
 
-        ///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
-        //Condicion si se guarda un cargoBancario y abonoContable
-        if (deSel.length > 0 && auSel.length > 0) {
-            console.log('CargoBancario-AbonoContable');
+            var grupoActualAuxiliar = $filter('filter')(auSel, function(value){
+                                            return value.color == colorActual;  
+                                        });                 
+            $scope.agrupadosBancos.push(grupoActualBanco)
+            $scope.agrupadosAuxiliar.push(grupoActualAuxiliar)
 
-            var colorActual = deSel[0].color;
-            var filtradosColors = deSel;
-            console.log( 'deSel', deSel );
-            console.log( 'auSel', auSel );
-            $scope.bancoCargo = [];
+            filtradosColors = $filter('filter')(filtradosColors, function(value){
+                                            return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;  
+                                        });
+        }
+    }
+///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
+
+///Inicia la funcion que guarda cargos - abonos Contables
+else if(deSel.length == 0 && auSel.length > 0){
+        var gruposAuxiliarSolo = $filter('filter')(auSel, function(value){
+                                            return (coloresUsados.indexOf(value.color) == -1)?value.color==value.color:value.color =='.........';  
+                                        });
+        
+
+        while(gruposAuxiliarSolo.length > 0)
+        {
+            colorActual = gruposAuxiliarSolo[0].color;
             
-            angular.forEach(deSel, function( value, key ){
-                console.log( 'valuede',value );
-                $scope.bancoCargo.push( value );
-            });
-            angular.forEach(auSel, function( value, key ){
-                console.log( 'valuau',value );
-                $scope.bancoCargo.push( value );
-            });
-            console.log( 'bancoCargo', $scope.bancoCargo );
-            while (filtradosColors.length > 0) {
-                colorActual = filtradosColors[0].color;
+            coloresUsados.push(colorActual); 
 
-                coloresUsados.push(colorActual);
+            var grupoActualBanco = $filter('filter')(gruposAuxiliarSolo, function(value){
+                                            return value.color == colorActual;  
+                                        }); 
 
-                var grupoActualBanco = $filter('filter')(deSel, function (value) {
-                    return value.color == colorActual;
-                });
-                
-                var grupoActualAuxiliar = $filter('filter')(auSel, function (value) {
-                    return value.color == colorActual;
-                });
-                
-                $scope.agrupadosBancos.push(grupoActualBanco);
-                $scope.agrupadosAuxiliar.push(grupoActualAuxiliar);
+            $scope.agrupadosAuxiliarCargoAbono.push(grupoActualBanco)
 
-                $scope.agrupadosBancosContables.push(grupoActualBanco);
-                $scope.agrupadosBancosContables.push(grupoActualAuxiliar);
-
-                filtradosColors = $filter('filter')(filtradosColors, function (value) {
-                    return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
-                });
-            }
+            gruposAuxiliarSolo = $filter('filter')(gruposAuxiliarSolo, function(value){
+                                            return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;  
+                                        });
         }
-        ///Finaliza la funcion que guarda la relación (cargos - abonos) Contables y bancarios
+    }
 
-        ///Inicia la funcion que guarda cargos - abonos Contables
-        //Condicion que se ejecuta si se selecciona solo un abono contable contra un cargo contable
-        else if (deSel.length == 0 && auSel.length > 0) {
-            console.log('AbonoContable-CargoContable');
-            var gruposAuxiliarSolo = $filter('filter')(auSel, function (value) {
-                console.log(value);
-                return (coloresUsados.indexOf(value.color) == -1) ? value.color == value.color : value.color == '.........';
-            });
+///Inicia la funsión que guarda cargos - abonos Bancarios
+    else if(deSel.length > 0 && auSel.length == 0){
+     var gruposBancoSolo = $filter('filter')(deSel,function(value){
+                           return (coloresUsados.indexOf(value.Color) == -1)?value.color:value.color =='.........';
+         });
+     
 
-            while (gruposAuxiliarSolo.length > 0) {
-                colorActual = gruposAuxiliarSolo[0].color;
-
-                coloresUsados.push(colorActual);
-
-                var grupoActualBanco = $filter('filter')(gruposAuxiliarSolo, function (value) {
-                    return value.color == colorActual;
-                });
-                console.log('grupoActualBanco', grupoActualBanco);
-                $scope.agrupadosAuxiliarCargoAbono.push(grupoActualBanco);
-                console.log('agrupadosAuxiliarCargoAbono', $scope.agrupadosAuxiliarCargoAbono);
-                gruposAuxiliarSolo = $filter('filter')(gruposAuxiliarSolo, function (value) {
-                    return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
-                });
-
-            }
-        }
-
-        ///Inicia la funsión que guarda cargos - abonos Bancarios
-        //Condicion que entra cuando solo seleccionas cargos y abonos bancarios
-        else if (deSel.length > 0 && auSel.length == 0) {
-            console.log('CargoBancario-AbonoBancario');
-            var gruposBancoSolo = $filter('filter')(deSel, function (value) {
-                return (coloresUsados.indexOf(value.Color) == -1) ? value.color : value.color == '.........';
-            });
-            console.log('gruposBancoSolo', gruposBancoSolo);
-            while (gruposBancoSolo.length > 0) {
+     while(gruposBancoSolo.length > 0)
+             {
                 colorActual = gruposBancoSolo[0].color;
 
                 coloresUsados.push(colorActual);
 
-                var grupoActualContable = $filter('filter')(gruposBancoSolo, function (value) {
-                    return value.color == colorActual;
+                var grupoActualContable = $filter('filter')(gruposBancoSolo, function(value){
+                        return value.color == colorActual;
                 });
-                console.log('grupoActualContable', grupoActualContable);
-                $scope.agrupadosBancosCargoAbono.push(grupoActualContable);
-                console.log('agrupadosBancosCargoAbono', $scope.agrupadosBancosCargoAbono);
-                gruposBancoSolo = $filter('filter')(gruposBancoSolo, function (value) {
-                    return (coloresUsados.indexOf(colorActual) == -1) ? value.color == '.........' : value.color != colorActual;
-                });
-                console.log('gruposBancoSolo', gruposBancoSolo);
-            }
 
-        }
-        ///Finaliza la funcion que guarda cargos - abonos Contables
-    };
+                $scope.agrupadosBancosCargoAbono.push(grupoActualContable);
+
+                gruposBancoSolo = $filter('filter')(gruposBancoSolo, function(value){
+                                  return (coloresUsados.indexOf(colorActual) == -1)?value.color =='.........':value.color!=colorActual;
+                });
+
+             }
+
+    }
+///Finaliza la funcion que guarda cargos - abonos Contables
+
+
+};
 
 
 
@@ -1136,53 +959,49 @@
     };
     
     ////////////////////////////////////////////////////////Funsión para guardar los depositos no identificados////////////////////////////////////////////////7
-    $scope.ShowAlertDPI = function () {
+     $scope.ShowAlertDPI = function(){
 
-        $scope.isDPI = 1;
+          $scope.isDPI = 1;
 
+           
+          var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
 
-        var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
-        
-        angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
-            if (value.color != undefined && value.color != '') {
-                PunteoDPI.push(value);
-                AbonoBanco += value.abono;
-                CargoBanco += value.cargo;
-            }
-        });
-        
-        if (AbonoBanco > 0 && CargoBanco == 0) {
-            $scope.control = 1;
-        }
+          angular.forEach($scope.gridApiBancos.grid.options.data , function(value, key) {             
+                            if(value.color != undefined && value.color != '') {               
+                                    PunteoDPI.push(value);
+                                    AbonoBanco += value.abono;
+                                    CargoBanco += value.cargo;
+                            }
+                        });
+          if(AbonoBanco > 0 && CargoBanco == 0){
+               $scope.control = 1;
+          }
 
-        if ($scope.control != undefined) {
-            $('#alertaGuardarDPI').modal('show');
-            localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
-
-            //console.log('PunteoDPI: ')
-            //console.log(PunteoDPI)	
-            ///////////////////////////////////////////////////////////////////////////////
-            $scope.punteoAuxiliar = [];
-            $scope.punteoBanco = [];
-            $scope.gridApiBancos.selection.clearSelectedRows();
-            $scope.gridApiAuxiliar.selection.clearSelectedRows();
-            $scope.limpiaVariables();
-            //////////////////////////////////////////////////////////////////////////////
-        }
-        else {
-
-            alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
-        }
-    };
-
-    ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
-
-    $scope.cancelaPunteoDPI = function () {
+          if ($scope.control != undefined){
+          $('#alertaGuardarDPI').modal('show');
+          localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));	
+        ///////////////////////////////////////////////////////////////////////////////
+        $scope.punteoAuxiliar = [];
+        $scope.punteoBanco = [];
+        $scope.gridApiBancos.selection.clearSelectedRows();
+        $scope.gridApiAuxiliar.selection.clearSelectedRows();
         $scope.limpiaVariables();
-        $('#alertaGuardarDPI').modal('hide');
-    };
+        //////////////////////////////////////////////////////////////////////////////
+    }
+    else {
 
-    $scope.limpiaVariables = function () {
+        alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
+    }
+     };
+
+     ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
+
+     $scope.cancelaPunteoDPI = function(){
+        $scope.limpiaVariables();
+      $('#alertaGuardarDPI').modal('hide');
+     };
+
+    $scope.limpiaVariables = function() {
         $scope.abonoAuxiliar = 0;
         $scope.cargoAuxiliar = 0;
         $scope.abonoBanco = 0;
