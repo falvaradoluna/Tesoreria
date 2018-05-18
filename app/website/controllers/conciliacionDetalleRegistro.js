@@ -177,18 +177,16 @@ conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function (req, res, 
         });
     });
 };
+
 conciliacionDetalleRegistro.prototype.post_detallePunteo = function (req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idDatoBusqueda', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT },
-    { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-    { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
-    { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-    { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
+    var params = [
+        { name: 'grupo', value: req.body.grupo, type: self.model.types.INT }
     ];
 
-    this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
+    this.model.queryAllRecordSet('[dbo].[SEL_PUNTEO_DETALLE_GRUPO_SP]', params, function (error, result) {
         
         self.view.expositor(res, {
             error: error,
@@ -196,6 +194,26 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function (req, res, n
         });
     });
 };
+
+// conciliacionDetalleRegistro.prototype.post_detallePunteo = function (req, res, next) {
+
+//     var self = this;
+
+//     var params = [{ name: 'idDatoBusqueda', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT },
+//     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
+//     { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
+//     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
+//     { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
+//     ];
+
+//     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
+        
+//         self.view.expositor(res, {
+//             error: error,
+//             result: result
+//         });
+//     });
+// };
 conciliacionDetalleRegistro.prototype.post_reportePdf = function (req, res, next) {
     var filename = guid();
     var filePath = path.dirname(require.main.filename) + "\\pdf\\" + filename + ".pdf";

@@ -74,47 +74,58 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
-    $scope.verDetallePunteo = function(detallepunteo,opcion) {
 
-        var accionBusqueda = 0;
-        var datoBusqueda = '';
-        if(opcion == 1){
-
-              if(detallepunteo.idPAdre == 4){
-                datoBusqueda = detallepunteo.idDepositoBanco;
-                accionBusqueda = 4;
-              }
-              else if(detallepunteo.idPAdre == 2){
-
-            datoBusqueda = detallepunteo.idDepositoBanco;
-            accionBusqueda = 1;
-        }
-        
-        } else {
-            if(detallepunteo.idPAdre == 3){
-                datoBusqueda = detallepunteo.idAuxiliarContable;
-                accionBusqueda = 3;
-                }else if(detallepunteo.idPAdre == 2){
-                datoBusqueda = detallepunteo.idAuxiliarContable;
-                accionBusqueda = 2;
-               }
-
-        }
-        conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
+    $scope.verDetallePunteo = function (detallepunteo, opcion) {
+        console.log('grupo', detallepunteo);
+        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
             $('#punteoDetalle').modal('show');
-
-                $scope.detallePunteo = result.data[0];
-                $scope.detallePunteoBanco = result.data[1]; 
-                if(result.data.length > 0){
-                $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
-                datoBusqueda = '';
-            }
-            else {
-                alertFactory.error('No existen punteos en este detalle');
-            }
-            
+            $scope.detalleBanco = result.data[0];
+            $scope.detalleContable = result.data[1];
+            console.log( 'result', result.data );
         });
     };
+
+    // $scope.verDetallePunteo = function(detallepunteo,opcion) {
+
+    //     var accionBusqueda = 0;
+    //     var datoBusqueda = '';
+    //     if(opcion == 1){
+
+    //           if(detallepunteo.idPAdre == 4){
+    //             datoBusqueda = detallepunteo.idDepositoBanco;
+    //             accionBusqueda = 4;
+    //           }
+    //           else if(detallepunteo.idPAdre == 2){
+
+    //         datoBusqueda = detallepunteo.idDepositoBanco;
+    //         accionBusqueda = 1;
+    //     }
+        
+    //     } else {
+    //         if(detallepunteo.idPAdre == 3){
+    //             datoBusqueda = detallepunteo.idAuxiliarContable;
+    //             accionBusqueda = 3;
+    //             }else if(detallepunteo.idPAdre == 2){
+    //             datoBusqueda = detallepunteo.idAuxiliarContable;
+    //             accionBusqueda = 2;
+    //            }
+
+    //     }
+    //     conciliacionDetalleRegistroRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda).then(function(result) {
+    //         $('#punteoDetalle').modal('show');
+
+    //             $scope.detallePunteo = result.data[0];
+    //             $scope.detallePunteoBanco = result.data[1]; 
+    //             if(result.data.length > 0){
+    //             $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
+    //             datoBusqueda = '';
+    //         }
+    //         else {
+    //             alertFactory.error('No existen punteos en este detalle');
+    //         }
+            
+    //     });
+    // };
     //****************************************************************************************************
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************

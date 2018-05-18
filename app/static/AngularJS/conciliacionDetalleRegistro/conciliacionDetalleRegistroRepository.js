@@ -173,22 +173,37 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
         //         }
         //     });
         // },
-        detallePunteo: function (idPunteo, idBanco, noCuenta, cuentaContable, accionBusqueda) {
+        // detallePunteo: function (idPunteo, idBanco, noCuenta, cuentaContable, accionBusqueda) {
+        //     return $http({
+        //         url: conciliacionDetalleRegistroURL + 'detallePunteo/',
+        //         method: "POST",
+        //         data: {
+        //             idPunteoAuxiliarBanco: idPunteo,
+        //             idBanco: idBanco,
+        //             noCuenta: noCuenta,
+        //             cuentaContable: cuentaContable,
+        //             accionBusqueda: accionBusqueda
+        //         },
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        // },
+        
+        //Luis Antonio Garcia Perrusquia
+        detallePunteo: function (grupo) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'detallePunteo/',
                 method: "POST",
                 data: {
-                    idPunteoAuxiliarBanco: idPunteo,
-                    idBanco: idBanco,
-                    noCuenta: noCuenta,
-                    cuentaContable: cuentaContable,
-                    accionBusqueda: accionBusqueda
+                    grupo: grupo
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
+
         sendMail: function (filename, file, fileUrl, cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'sendMail/',
