@@ -898,8 +898,11 @@
 
     $scope.savePunteoDetalle = function( auxCont ){
         if( auxCont >= ( $scope.save_grupoHexadecimal.length ) ){
-            alert("Se ha guardado todo");
+            alertFactory.success('Punteo exitoso');
             $('#alertaGuardarPunteoPrevio').modal('hide');
+            setTimeout(function(){
+                location.reload();
+            },2500);
         }
         else{
             var item = $scope.save_grupoHexadecimal[ auxCont ];
