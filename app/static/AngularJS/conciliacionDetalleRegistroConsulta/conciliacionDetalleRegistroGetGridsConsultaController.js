@@ -76,7 +76,7 @@
     //****************************************************************************************************
     $scope.getAuxiliarPunteo = function (idempresa, cuenta, idHistorico) {
         conciliacionDetalleRegistroConsultaRepository.getAuxiliarPunteo(idempresa, cuenta, idHistorico,2).then(function (result) {
-            console.log( 'auxiliarPunteo', result.data );
+            
             $scope.auxiliarPadre = result.data;
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
             $scope.AuxiliarPunteado = $filter('filter')(result.data, function (value) {
@@ -109,7 +109,7 @@
     //****************************************************************************************************
     $scope.getBancoPunteo = function (idempresa, cuentaBanco, idBanco, idHistorico) {
         conciliacionDetalleRegistroConsultaRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, idHistorico).then(function (result) {
-            console.log( 'BancoPunteo', result.data );
+            
             $scope.bancoPadre = result.data;
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
@@ -312,7 +312,8 @@
             $scope.paramsHistory.Cuenta,
             $scope.paramsHistory.CuentaContable,
             $scope.paramsHistory.fechaElaboracion,
-            $scope.paramsHistory.PolizaPago )
+            $scope.paramsHistory.PolizaPago,
+            $scope.paramsHistory.IdBanco)
         .then(function(result){
             if( result.data.length != 0 ){
                 if ($rootScope.universoTotalMovimientoContableCargo == 0 && $rootScope.universoTotalMovimientoContableAbono == 0) {
@@ -346,18 +347,18 @@
             $scope.paramsHistory.CuentaContable,
             $scope.paramsHistory.fechaElaboracion,
             $scope.paramsHistory.fechaCorte,
-            $scope.paramsHistory.PolizaPago )
+            $scope.paramsHistory.PolizaPago,
+            $scope.paramsHistory.IdBanco )
         .then(function(result){
             
             if (result.data.length != 0) {
-                    
                 if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {
                     angular.forEach(result.data, function (value, key) {
-                        if (value.tipoMovimiento == 0) {
+                        if (value.tipoMovimiento == 1) {
                             $rootScope.universoTotalMovimientoBancarioCargo += value.cargo;
                         }
 
-                        if (value.tipoMovimiento == 1) {
+                        if (value.tipoMovimiento == 0) {
                             $rootScope.universoTotalMovimientoBancarioAbono += value.abono;
                         }
                     });

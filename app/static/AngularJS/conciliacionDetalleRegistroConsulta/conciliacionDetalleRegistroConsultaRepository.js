@@ -396,7 +396,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //Ing. LAGPC
-        getUniversoContableConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, polizaPago) {
+        getUniversoContableConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, polizaPago, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'universoContableConsulta',
                 method: 'GET',
@@ -407,7 +407,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     noCuenta: noCuenta,
                     cuentaContable: cuentaContable,
                     fechaElaboracion: fechaElaboracion,
-                    polizaPago: polizaPago
+                    polizaPago: polizaPago,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -415,7 +416,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //Ing. LAGPC
-        getUniversoBancariosConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, fechaCorte, polizaPago) {
+        getUniversoBancariosConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, fechaCorte, polizaPago, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'universoBancarioConsulta',
                 method: 'GET',
@@ -427,7 +428,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     cuentaContable: cuentaContable,
                     fechaElaboracion: fechaElaboracion,
                     fechaCorte: fechaCorte,
-                    polizaPago: polizaPago
+                    polizaPago: polizaPago,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'

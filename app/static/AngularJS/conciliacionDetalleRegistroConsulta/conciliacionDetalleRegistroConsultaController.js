@@ -36,7 +36,7 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
     $scope.init = function () {
         variablesLocalStorage();
         $rootScope.mostrarMenu = 1;
-        //console.log($scope.busqueda);
+        
         $scope.DameLaFechaHora();
         setTimeout(function () {
             $(".cargando").remove();
@@ -67,8 +67,7 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
     $scope.verDetallePunteo = function (detallepunteo, opcion) {
-
-        console.log('detallepunteo: ', detallepunteo)
+        
 
         var accionBusqueda = 0;
         var datoBusqueda = '';

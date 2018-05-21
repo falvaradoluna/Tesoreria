@@ -179,7 +179,9 @@
     }
     
     $scope.getTotalesAbonoCargo = function () {
-
+        localStorage.removeItem('cuentaActualInMemory');
+        localStorage.removeItem('empresaActualInMemory');
+        localStorage.removeItem('bancoActualInMemory');
         if (!localStorage.getItem('comeBack')) {
 
             //Se coloca la fecha que se obtiene del dropdawn

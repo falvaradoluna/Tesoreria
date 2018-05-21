@@ -464,6 +464,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoContableConsulta = fun
     var cuentaContable = req.query.cuentaContable;
     var fechaElaboracion = req.query.fechaElaboracion;
     var polizaPago = req.query.polizaPago;
+    var idBanco = req.query.idBanco;
 
     var params = [
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
@@ -473,10 +474,11 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoContableConsulta = fun
         { name: 'cuentaContable', value: cuentaContable, type: self.model.types.STRING },
         { name: 'fechaElaboracion', value: fechaElaboracion, type: self.model.types.STRING },
         { name: 'polizaPago', value: polizaPago, type: self.model.types.STRING },
-        
+        { name: 'idBanco', value: idBanco, type: self.model.types.INT }
     ];
     
     this.model.query('[dbo].[SEL_CONTABLE_TODO_SP_H]', params, function (error, result) {
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -499,6 +501,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoBancarioConsulta = fun
     var fechaElaboracion = req.query.fechaElaboracion;
     var fechaCorte = req.query.fechaCorte;
     var polizaPago = req.query.polizaPago;
+    var idBanco = req.query.idBanco;
 
     var params = [
         { name: 'idEmpresa', value: idEmpresa, type: self.model.types.INT },
@@ -509,10 +512,12 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoBancarioConsulta = fun
         { name: 'fechaElaboracion', value: fechaElaboracion, type: self.model.types.STRING },
         { name: 'fechaCorte', value: fechaCorte, type: self.model.types.STRING },
         { name: 'polizaPago', value: polizaPago, type: self.model.types.STRING },
+        { name: 'idBanco', value: idBanco, type: self.model.types.INT }
     ];
     
     this.model.query('[dbo].[SEL_BANCARIO_TODO_SP_H]', params, function (error, result) {
-        
+        console.log( 'error', error );
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
