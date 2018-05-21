@@ -175,7 +175,7 @@
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.paramHistory.HistoricoId, $scope.fechaElaboracion);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, $scope.fechaElaboracion, $scope.paramHistory.HistoricoId);
                 }
             });
         } else if (idestatus == 2) {
@@ -190,34 +190,33 @@
 
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
-     $scope.getAuxiliarContable = function(idEmpresa, idBanco, idHistorico, fechaElaboracion) {
-         
-        conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, idHistorico, fechaElaboracion).then(function(result) {
-            
-		if (result.data[0].length !=0) {
-		    
-                    $scope.auxiliarContable = result.data[0];
-                    $scope.gridAuxiliarContable.data = result.data[0];
+    $scope.getAuxiliarContable = function (idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico) {
+        console.log('paramsBusqueda', $scope.paramHistory);
+        conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico).then(function (result) {
 
-                      //Suma del total monetario, abonos
+            if (result.data[0].length != 0) {
 
-                    angular.forEach($scope.auxiliarContable, function(value, key) {
+                $scope.auxiliarContable = result.data[0];
+                $scope.gridAuxiliarContable.data = result.data[0];
+                //Suma del total monetario, abonos
+
+                angular.forEach($scope.auxiliarContable, function (value, key) {
                     $scope.totalAbonoContable += value.abono;
-                    });
+                });
 
-                     //Suma del total monetario cargos
+                //Suma del total monetario cargos
 
-                    angular.forEach($scope.auxiliarContable, function(value, key) {
+                angular.forEach($scope.auxiliarContable, function (value, key) {
                     $scope.totalCargoContable += value.cargo;
-                    });
+                });
 
 
-                    localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
-                    
-                     setTimeout(function() { $scope.prePunteo();}, 100); //LQMA 31
-                     $('#loading').modal('hide');
-                }
-            });
+                localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
+
+                setTimeout(function () { $scope.prePunteo(); }, 100); //LQMA 31
+                $('#loading').modal('hide');
+            }
+        });
     };
   
    //**********************************************************************************************

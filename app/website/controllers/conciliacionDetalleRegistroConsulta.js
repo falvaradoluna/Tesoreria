@@ -50,19 +50,20 @@ conciliacionDetalleRegistroConsulta.prototype.post_totalAbonoCargo = function (r
 };
 
 
-conciliacionDetalleRegistroConsulta.prototype.get_depositos = function (req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_depositos = function(req, res, next) {
 
     var self = this;
 
     var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.cuentaBancaria, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
+        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
-        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING } //LAGP 03052018
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-    
-    this.model.queryAllRecordSet('SEL_DEPOSITOS_REFERENCIADOS_SP_H', params, function (error, result) {
+
+    this.model.queryAllRecordSet('[dbo].[SEL_TODO_BANCARIO_SP_H]', params, function(error, result) {
         
         self.view.expositor(res, {
             error: error,
@@ -72,17 +73,19 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function (req, res
 };
 
 
-conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function (req, res, next) {
+conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function(req, res, next) {
 
     var self = this;
 
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.query.cuentaContable, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
-        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING }
     ];
     
-    this.model.queryAllRecordSet('SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H', params, function (error, result) {
+    this.model.queryAllRecordSet('[dbo].[SEL_TODO_CONTABLE_SP_H]', params, function(error, result) {
         
         self.view.expositor(res, {
             error: error,
@@ -118,10 +121,9 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT }
     ];
-    console.log( 'ParametrosAuxiliar', params );
+    
     this.model.query('SEL_PUNTEO_AUXILIAR_PADRES_SP_H', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
@@ -516,8 +518,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoBancarioConsulta = fun
     ];
     
     this.model.query('[dbo].[SEL_BANCARIO_TODO_SP_H]', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result
