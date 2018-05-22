@@ -77,6 +77,21 @@
         $scope.polizaPago = $scope.busqueda.PolizaPago;
     };
 
+    $scope.verDetallePunteoGet = function (detallepunteo, opcion) {
+        console.log('grupoGET', detallepunteo);
+        conciliacionDetalleRegistroConsultaRepository.detallePunteo(
+            detallepunteo,
+            JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
+        ).then(function (result) {
+            $('#punteoDetalleGet').modal('show');
+            $rootScope.detalleBancoGet = result.data[0];
+            $rootScope.detalleContableGet = result.data[1];
+            console.log( 'detalleBancoGet', $rootScope.detalleBancoGet );
+            console.log( 'detalleContableGet', $rootScope.detalleContableGet );
+            console.log( 'result', result.data );
+        });
+    };
+
     // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
     $scope.getAuxiliarPunteo = function (idempresa, cuenta, idHistorico) {

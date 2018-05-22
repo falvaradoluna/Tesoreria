@@ -195,23 +195,37 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 }
             });
         },
-        detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda, idHistorico) {
+        //Luis Antonio Garcia Perrusquia
+        detallePunteo: function (grupo, idHistorico) {
             return $http({
-                url: conciliacionDetalleRegistroConsultaURL + 'detallePunteo/',
+                url: conciliacionDetalleRegistroURL + 'detallePunteo/',
                 method: "POST",
                 data: {
-                    idPunteoAuxiliarBanco: idPunteo,
-                    idBanco: idBanco,
-                    noCuenta: noCuenta,
-                    cuentaContable: cuentaContable,
-                    accionBusqueda: accionBusqueda,
-                    idHistorico : idHistorico
+                    grupo: grupo,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
+        // detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda, idHistorico) {
+        //     return $http({
+        //         url: conciliacionDetalleRegistroConsultaURL + 'detallePunteo/',
+        //         method: "POST",
+        //         data: {
+        //             idPunteoAuxiliarBanco: idPunteo,
+        //             idBanco: idBanco,
+        //             noCuenta: noCuenta,
+        //             cuentaContable: cuentaContable,
+        //             accionBusqueda: accionBusqueda,
+        //             idHistorico : idHistorico
+        //         },
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        // },
         sendMail: function(filename, file, fileUrl,cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'sendMail/',
