@@ -234,7 +234,7 @@
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-    // $scope.bancoReferenciados = function () {
+    $scope.bancoReferenciados = function () {
         
     //     conciliacionDetalleRegistroConsultaRepository.getBancosRef(
     //         $scope.paramsHistory.IdBanco, 
@@ -261,7 +261,7 @@
     //         });
 
     //     });
-    // };
+    };
     //****************************************************************************************************
 
     //Función que obtiene los registros Bancarios Referenciados
