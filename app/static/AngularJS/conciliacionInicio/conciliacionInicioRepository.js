@@ -69,6 +69,18 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
             });
         },
 
+        addMovimientoBancario: function( parametros ) {
+            return $http({
+                url: conciliacionInicioURL + 'addMovimientoBancario/',
+                method: "GET",
+                params: parametros,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        }
+
 //Fin de la llave "return"
     };
 });

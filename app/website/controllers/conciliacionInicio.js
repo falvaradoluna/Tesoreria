@@ -86,4 +86,29 @@ conciliacionInicio.prototype.get_meses = function(req, res, next) {
     });
 };
 
+conciliacionInicio.prototype.get_addMovimientoBancario = function(req, res, next) {
+    var self = this;
+
+    var params = [
+                    { name: 'referencia',       value: req.query.referencia,      type: self.model.types.STRING },
+                    { name: 'concepto',         value: req.query.concepto,        type: self.model.types.STRING },
+                    { name: 'refAmpliada',      value: req.query.refAmpliada,     type: self.model.types.STRING },
+                    { name: 'noCuenta',         value: req.query.noCuenta,        type: self.model.types.STRING },
+                    { name: 'esCargo',          value: req.query.esCargo,         type: self.model.types.INT },
+                    { name: 'importe',          value: req.query.importe,         type: self.model.types.STRING },
+                    { name: 'fechaOperacion',   value: req.query.fechaOperacion,  type: self.model.types.STRING },
+                    { name: 'idUsuario',        value: req.query.idUsuario,       type: self.model.types.INT },
+                    { name: 'idEmpresa',        value: req.query.idEmpresa,       type: self.model.types.INT },
+                    { name: 'idBanco',          value: req.query.idBanco,         type: self.model.types.INT },
+                    { name: 'anio',             value: req.query.anio,            type: self.model.types.INT }
+                 ];
+
+    this.model.query('[dbo].[INT_CONCILIACION_ADDBANCOS_SP]', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result[0]
+        });
+    });
+};
+
 module.exports = conciliacionInicio;

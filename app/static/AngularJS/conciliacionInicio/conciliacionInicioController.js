@@ -456,5 +456,103 @@
 
     // };
 
+    $scope.openModalMovimiento = function(){
+        var mesName = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        var fecha = new Date();
+        var anio  = fecha.getFullYear();
+        var mes   = (fecha.getMonth()) + 1;
+        var dia   = fecha.getDate();
+
+        $scope.mMov = {
+            anio: anio,
+            mes: mes,
+            mesName: mesName[ mes ],
+            dia: dia
+        }
+        
+        $scope.frmMovimientoBancario = {
+            referencia:     '',
+            concepto:       '',
+            refAmpliada:    '',
+            esCargo:        '',
+            importe:        0,
+            dia:            1
+        }
+        $("#MovimientoBancario").modal('show');
+    }
+
+    $scope.frmMovimientoBancario = {
+        referencia:     '',
+        concepto:       '',
+        refAmpliada:    '',
+        esCargo:        '',
+        importe:        0,
+        dia:            1
+    }
+    $scope.saveMovimientoBancario = function(){
+        if( $scope.frmMovimientoBancario.referencia === '' && $scope.frmMovimientoBancario.concepto === '' && $scope.frmMovimientoBancario.refAmpliada === '' ){
+            swal("Nuevo Movimiento Bancario","Debes agregar al menos una descripción en referencia, concepto o referencia ampliada.");
+        }
+        else if( isNaN($scope.frmMovimientoBancario.importe) ){
+            swal("Nuevo Movimiento Bancario","Debes agregar un importe valido.");
+            $scope.frmMovimientoBancario.importe = 0;
+        }
+        else if( $scope.frmMovimientoBancario.importe === '' ){
+            swal("Nuevo Movimiento Bancario","Debes agregar un importe al movimiento bancario.");
+        }
+        else if( $scope.frmMovimientoBancario.importe === 0 ){
+            swal("Nuevo Movimiento Bancario","Debes agregar un importe mayor a cero.");
+        }
+        else if( $scope.frmMovimientoBancario.dia === 0 ){
+            swal("Nuevo Movimiento Bancario","Debes elegir un día para la fecha de operación del movimiento.");   
+        }
+        else{
+            swal({
+                title: "Nuevo Movimiento Bancario",
+                text: "¿Estas seguro de agregar el movimiento bancario.?",
+                showCancelButton: true,
+                confirmButtonColor: "#21B9BB",
+                confirmButtonText: "Si, estoy seguro",
+                closeOnConfirm: false
+            },
+            function() {
+                var parametros = {
+                    referencia:     $scope.frmMovimientoBancario.referencia,
+                    concepto:       $scope.frmMovimientoBancario.concepto,
+                    refAmpliada:    $scope.frmMovimientoBancario.refAmpliada,
+                    noCuenta:       $scope.cuentaActual.Cuenta != null ? $scope.cuentaActual.Cuenta : $scope.cuentaNumerica,
+                    esCargo:        $scope.frmMovimientoBancario.esCargo ? 1 : 0,
+                    importe:        $scope.frmMovimientoBancario.importe,
+                    fechaOperacion: $scope.mMov.anio
+                                    + '-' + 
+                                    ($scope.mMov.mes < 10 ? '0' + $scope.mMov.mes : $scope.mMov.mes)
+                                    + '-' + 
+                                    ($scope.frmMovimientoBancario.dia < 10 ? '0' + $scope.frmMovimientoBancario.dia : $scope.frmMovimientoBancario.dia),
+                    idUsuario:      $rootScope.userData.idUsuario,
+                    idEmpresa:      $scope.empresaActual.emp_idempresa,
+                    idBanco:        $scope.bancoActual,
+                    anio:           $scope.mMov.anio
+                }
+
+                conciliacionInicioRepository.addMovimientoBancario( parametros ).then(function(result) {
+                    // swal({
+                    //     title: "Traspaso entre Financieras",
+                    //     text: "Las unidades seleccionadas corresponden a más de una Financiera, asegurate de seleccionar unicamente de una sola."
+                    // }, function(){
+                    //     location.reload();
+                    // });
+
+                    swal({
+                        title:"Nuevo Movimiento Bancario", 
+                        text: "Se ha agregado con exito.", 
+                        type: "success"
+                    },function(){
+                        $("#MovimientoBancario").modal('hide');
+                        $scope.getTotalesAbonoCargo();
+                    });
+                });
+            });
+        }
+    }
 
 });
