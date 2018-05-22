@@ -94,7 +94,27 @@ conciliacionDetalleRegistroConsulta.prototype.get_auxiliarContable = function(re
     });
 };
 
+//Luis Anotnio Garcia Perrusquia
 conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, res, next) {
+
+    var self = this;
+    
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
+    ];
+
+    this.model.queryAllRecordSet('[DBO].[SEL_PUNTEO_DETALLE_SP_H]', params, function (error, result) {
+        console.log( 'error', error );
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+/*conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, res, next) {
 
     var self = this;
 
@@ -111,7 +131,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, r
             result: result
         });
     });
-};
+};*/
 
 conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req, res, next) {
     var self = this;

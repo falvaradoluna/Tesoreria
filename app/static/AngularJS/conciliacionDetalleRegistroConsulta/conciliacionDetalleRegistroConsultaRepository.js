@@ -96,14 +96,12 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_PUNTEO_DEPOSITOS_PADRES_SP_H
-        getBancoPunteo: function(idempresa, cuentaBancaria, idBanco, idHistorico) {
+        getBancoPunteo: function(idempresa, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
-                    cuentaBancaria: cuentaBancaria,
-                    idBanco: idBanco,
                     idHistorico: idHistorico
                 },
                 headers: {
