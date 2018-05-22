@@ -219,34 +219,34 @@
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-    $scope.bancoReferenciados = function () {
+    // $scope.bancoReferenciados = function () {
         
-        conciliacionDetalleRegistroConsultaRepository.getBancosRef(
-            $scope.paramsHistory.IdBanco, 
-            $scope.paramsHistory.Cuenta, 
-            $scope.paramsHistory.IdEmpresa, 
-            $scope.paramsHistory.HistoricoId)
-        .then(function (result) {
+    //     conciliacionDetalleRegistroConsultaRepository.getBancosRef(
+    //         $scope.paramsHistory.IdBanco, 
+    //         $scope.paramsHistory.Cuenta, 
+    //         $scope.paramsHistory.IdEmpresa, 
+    //         $scope.paramsHistory.HistoricoId)
+    //     .then(function (result) {
 
-            $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
-                return value.tipoMovimiento == 0;
-            });
-            $scope.bancoReferenciadosCargos = $filter('filter')(result.data, function (value) {
-                return value.tipoMovimiento == 1;
-            });
-            $scope.tablaSearch('bancoReferenciadoAbono');
-            $scope.tablaSearch('bancoReferenciadoCargo');
-            //Obtener la uma total de los registros
-            angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
-                $scope.bancoReferenciadosAbonosTotales += value.abono;
-            });
+    //         $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
+    //             return value.tipoMovimiento == 0;
+    //         });
+    //         $scope.bancoReferenciadosCargos = $filter('filter')(result.data, function (value) {
+    //             return value.tipoMovimiento == 1;
+    //         });
+    //         $scope.tablaSearch('bancoReferenciadoAbono');
+    //         $scope.tablaSearch('bancoReferenciadoCargo');
+    //         //Obtener la uma total de los registros
+    //         angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
+    //             $scope.bancoReferenciadosAbonosTotales += value.abono;
+    //         });
 
-            angular.forEach($scope.bancoReferenciadosCargos, function (value, key) {
-                $scope.bancoReferenciadosCargosTotales += value.cargo;
-            });
+    //         angular.forEach($scope.bancoReferenciadosCargos, function (value, key) {
+    //             $scope.bancoReferenciadosCargosTotales += value.cargo;
+    //         });
 
-        });
-    };
+    //     });
+    // };
     //****************************************************************************************************
 
     //Función que obtiene los registros Bancarios Referenciados
