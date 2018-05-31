@@ -263,15 +263,20 @@
         } else {
             console.log( 'En el else' );
             
+            localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
+            localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
+            localStorage.setItem('bancoActualInMemory', JSON.stringify($scope.bancoActual));
+            $scope.fechaElaboracion = JSON.parse( localStorage.getItem('paramBusqueda') ).fechaElaboracion.substr(0, 10);
+            $scope.fechaCorte = JSON.parse( localStorage.getItem('paramBusqueda') ).fechaCorte.substr(0, 10);
             conciliacionInicioRepository.getTotalAbonoCargo(
                 $scope.bancoId,
                 $scope.empresaId,
                 $scope.cuentaNumerica,
                 $scope.cuentaContable,
-                //$scope.fechaElaboracion,
-                JSON.parse( localStorage.getItem('paramBusqueda') ).fechaElaboracion,
-                //$scope.fechaCorte,
-                JSON.parse( localStorage.getItem('paramBusqueda') ).fechaCorte,
+                $scope.fechaElaboracion,
+                //JSON.parse( localStorage.getItem('paramBusqueda') ).fechaElaboracion.substr(0, 10),
+                $scope.fechaCorte,
+                //JSON.parse( localStorage.getItem('paramBusqueda') ).fechaCorte.substr(0, 10),
                 $scope.polizaPagos,
                 2,
                 $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario

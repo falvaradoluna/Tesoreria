@@ -42,6 +42,7 @@
 
    var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
+        console.log( 'paramsBusqueda', $scope.busqueda );
         $scope.difMonetaria = $scope.busqueda.DiferenciaMonetaria;
         $scope.polizaPago = $scope.busqueda.PolizaPago;
     };
@@ -142,6 +143,9 @@
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
         
         if (idestatus == 1) { 
+            console.log( 'Peticion' );
+            console.log( 'fElaboracion', fElaboracion );
+            console.log( 'fCorte', fCorte );
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
                     console.log( 'noPunteadosBancos', result.data );
