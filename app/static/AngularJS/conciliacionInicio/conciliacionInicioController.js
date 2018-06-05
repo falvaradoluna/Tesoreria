@@ -38,6 +38,7 @@
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
         $scope.getMeses();
+        $scope.getUltimoMes();
 
         $rootScope.mostrarMenu = 1;
         $scope.paramBusqueda = [];
@@ -125,17 +126,43 @@
     //Ing. LAGP 03052018
     $scope.getMeses = function () {
         conciliacionInicioRepository.getMeses().then(function (result) {
-            
-            if( result.data.length != 0 ){
-                $rootScope.mesSelect = result.data;
-                angular.forEach($rootScope.mesSelect, function( value, key ){
-                    if( value.ACTIVO == 1 ){
-                        $scope.mesActual = value;
-                    }
-                });
-            }
+            console.log( 'resultMESEST', result );
+            // if( result.data.length != 0 ){
+            //     $rootScope.mesSelect = result.data;
+            //     console.log( 'mesSelect', $rootScope.mesSelect );
+            //     angular.forEach($rootScope.mesSelect, function( value, key ){
+            //         if( value.ACTIVO == 1 ){
+            //             $scope.mesActual = value;
+            //         }
+            //     });
+            // }
         });
     };
+    
+    //Ing. LAGP 05062018
+    $scope.getUltimoMes = function(){
+        //Obetenemos el año actual
+        var d = new Date();
+        var year = d.getFullYear();
+
+        conciliacionInicioRepository.getUltimoMes( year ).then(function (result) {
+            if( result.data.length != 0 ){
+                const monthNames = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
+                                    "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];              
+                console.log( 'resultUltimo', result );
+                $scope.jsonMes = {
+                    ID: result.data[0].mec_idMes,
+                    PAR_IDENPARA: result.data[0].mec_anio + '0' + result.data[0].mec_numMes + '01',
+                    PAR_DESCRIP2: 'ABIERTO',
+                    MES: monthNames[ result.data[0].mec_idMes - 1 ],
+                    ACTIVO: 1,
+                };
+                $rootScope.nombreMes = monthNames[ result.data[0].mec_idMes - 1 ]
+                $scope.mesActualJUN = $scope.jsonMes;
+                
+            }
+        });
+    }
 
     $scope.getBancos = function (idEmpresa) {
         $scope.activaInputCuenta = true;
@@ -191,9 +218,10 @@
         if (!localStorage.getItem('comeBack')) {
 
             //Se coloca la fecha que se obtiene del dropdawn
-            $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
-            $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.lastDay( $scope.mesActual.PAR_IDENPARA.substr(0, 4), $scope.mesActual.PAR_IDENPARA.substr(4, 2) );
-
+            $scope.fechaElaboracion = $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActualJUN.PAR_IDENPARA.substr(6, 2);
+            $scope.fechaCorte = $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2) + '-' + $scope.lastDay( $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4), $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2) );
+            console.log( 'fOperacion',$scope.fechaElaboracion );
+            console.log( 'fechaCorte',$scope.fechaCorte );
             if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
                 alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
             }
