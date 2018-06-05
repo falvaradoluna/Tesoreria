@@ -125,7 +125,7 @@
     //Ing. LAGP 03052018
     $scope.getMeses = function () {
         conciliacionInicioRepository.getMeses().then(function (result) {
-            console.log( 'result', result );
+            
             if( result.data.length != 0 ){
                 $rootScope.mesSelect = result.data;
                 angular.forEach($rootScope.mesSelect, function( value, key ){
@@ -177,8 +177,14 @@
             });
         }
     }
+
+    //Funcion para obetener el ultimo dia del mes LGAP
+    $scope.lastDay = function(y,m){
+        return  new Date(y, m , 0).getDate();
+    }
     
     $scope.getTotalesAbonoCargo = function () {
+
         localStorage.removeItem('cuentaActualInMemory');
         localStorage.removeItem('empresaActualInMemory');
         localStorage.removeItem('bancoActualInMemory');
@@ -186,7 +192,8 @@
 
             //Se coloca la fecha que se obtiene del dropdawn
             $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
-            $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
+            $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.lastDay( $scope.mesActual.PAR_IDENPARA.substr(0, 4), $scope.mesActual.PAR_IDENPARA.substr(4, 2) );
+
             if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
                 alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
             }
@@ -210,7 +217,7 @@
                         $('#actualizarBD').modal('hide');
                         //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                         if (result.data.length > 0) {
-                            console.log('resultTotal', result.data);
+                            
                             $scope.totalesAbonosCargos = result.data[0];
                             $scope.mesActivo = result.data[0].mesActivo;
                             localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
@@ -261,7 +268,6 @@
             }
 
         } else {
-            console.log( 'En el else' );
             
             localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
             localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
