@@ -147,8 +147,8 @@
 
         conciliacionInicioRepository.getUltimoMes( year ).then(function (result) {
             if( result.data.length != 0 ){
-                const monthNames = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO",
-                                    "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];              
+                const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+                                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];              
                 console.log( 'resultUltimo', result );
                 $scope.jsonMes = {
                     ID: result.data[0].mec_idMes,
