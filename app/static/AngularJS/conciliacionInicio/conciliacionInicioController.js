@@ -252,9 +252,9 @@
 
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
-                            // if ($scope.mesActivo != 1) {
-                            //     alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
-                            // }
+                            if ($scope.mesActualJUN != 1) {
+                                alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                            }
 
                             $scope.paramBusqueda = [];
 
@@ -323,7 +323,7 @@
 
                         //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
-                        if ($scope.mesActivo != 1) {
+                        if ($scope.mesActualJUN != 1) {
                             alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
                         }
 
