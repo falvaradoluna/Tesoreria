@@ -14,8 +14,6 @@ registrationModule.factory('conciliacionInicioConsultaRepository', function($htt
             opcion,
             idUsuario, 
             tipoReporte) { //LQMA add 06032018 idUsuario
-            console.log( 'factoryE',  fechaE);
-            console.log( 'factoryC',  fechaC);
             return $http({
                 url: conciliacionInicioConsultaURL + 'totalAbonoCargo/',
                 method: "POST",
