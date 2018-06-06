@@ -151,7 +151,7 @@
                         $rootScope.mesesConsulta.push( monthNames[key] );
                     }
                 })
-                $rootScope.mesSelect = result.data;
+                $rootScope.mesSelect = $rootScope.mesesConsulta;
                 
                 // angular.forEach($rootScope.mesSelect, function( value, key ){
                 //     if( value.ACTIVO == 1 ){
@@ -213,24 +213,20 @@
         return  new Date(y, m , 0).getDate();
     }
 
-    // $scope.getTotalesAbonoCargo = function () {
-    //     console.log( 'AQUI EN CONSULTA' );
-    //     $scope.fechaElaboracion = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActual.PAR_IDENPARA.substr(6, 2);
-    //     $scope.fechaCorte = $scope.mesActual.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActual.PAR_IDENPARA.substr(4, 2) + '-' + '30';
-    //     console.log( '$scope.fechaElaboracion', $scope.fechaElaboracion );
-    //     console.log( '$scope.fechaCorte', $scope.fechaCorte );
+    // $scope.pruebaBtn = function () {
+    //     console.log( 'mesActual', $scope.mesActual );
     // }
     $scope.getTotalesAbonoCargo = function () {       
-
+        
             if (!localStorage.getItem('comeBackConsulta')) {
-
-                if ($scope.mesActualFoto == undefined) {
+                
+                if ($scope.mesActual == undefined) {
                     alertFactory.warning('Seleciona un mes');
                 } else {
                     
-                    $scope.fechaElaboracion = $scope.mesActualFoto.substr(0, 4) + '-' + $scope.mesActualFoto.substr(4, 2) + '-' + $scope.mesActualFoto.substr(6, 2);
-                    $scope.fechaCorte = $scope.mesActualFoto.substr(0, 4) + '-' + $scope.mesActualFoto.substr(4, 2) + '-' + $scope.lastDay($scope.mesActualFoto.substr(0, 4), $scope.mesActualFoto.substr(4, 2));
-                    //console.log( 'fecha', $scope.mesActualFoto );
+                    $scope.fechaElaboracion = $scope.mesActual.value.substr(0, 4) + '-' + $scope.mesActual.value.substr(4, 2) + '-' + $scope.mesActual.value.substr(6, 2);
+                    $scope.fechaCorte = $scope.mesActual.value.substr(0, 4) + '-' + $scope.mesActual.value.substr(4, 2) + '-' + $scope.lastDay($scope.mesActual.value.substr(0, 4), $scope.mesActual.value.substr(4, 2));
+                   
                     if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
                         alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
                     }else {
@@ -318,7 +314,24 @@
                 localStorage.setItem('bancoActualInMemory', JSON.stringify($scope.bancoActual));
                 $scope.fechaElaboracion = JSON.parse(localStorage.getItem('paramBusqueda')).fechaElaboracion.substr(0, 10);
                 $scope.fechaCorte = JSON.parse(localStorage.getItem('paramBusqueda')).fechaCorte.substr(0, 10);
-                
+                $scope.fechaElaboracionCombo = parseInt( JSON.parse(localStorage.getItem('paramBusqueda')).fechaElaboracion.substr(6, 1) );
+              
+                const monthNamesFoto = [
+                    {value: '20180101', nombre:"Enero"}, 
+                    {value: '20180201', nombre:"Febrero"}, 
+                    {value: '20180301', nombre:"Marzo"}, 
+                    {value: '20180401', nombre:"Abril"}, 
+                    {value: '20180501', nombre:"Mayo"}, 
+                    {value: '20180601', nombre:"Junio"},
+                    {value: '20180701', nombre:"Julio"}, 
+                    {value: '20180801', nombre:"Agosto"}, 
+                    {value: '20180901', nombre:"Septiembre"}, 
+                    {value: '20181001', nombre:"Octubre"}, 
+                    {value: '20181101', nombre:"Noviembre"}, 
+                    {value: '20181201', nombre:"Diciembre"}];
+                $scope.mesActual = monthNamesFoto[ $scope.fechaElaboracionCombo -1 ];
+                console.log( 'monthNamesFoto', monthNamesFoto[5] );
+                console.log( 'fechaElaboracionCombo', $scope.fechaElaboracionCombo );
                 conciliacionInicioConsultaRepository.getTotalAbonoCargo(
                     $scope.bancoId,
                     $scope.empresaId,

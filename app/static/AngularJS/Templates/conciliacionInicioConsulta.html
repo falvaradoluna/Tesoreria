@@ -69,13 +69,13 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="form-label text-main">Consulta:</label>
-                                <select class="form-control" ng-model="mesActualFoto">
+                                <!-- <select class="form-control" ng-model="mesActualFoto">
                                     <option value="0">Mes</option>
                                     <option ng-repeat="mes in mesesConsulta" value="{{mes.value}}">{{ mes.nombre }}</option>
-                                </select>
-                                <!-- <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES">
+                                </select> -->
+                                <select class="form-control" ng-model="mesActual" ng-options="mes.nombre for mes in mesSelect track by mes.nombre">
                                   <option value="">Mes</option>
-                                </select>   -->
+                                </select>  
                                 <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
                                     <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-hide="btnShow == 1" ng-disabled="activaBotonBuscar">
                                         <i class="ti-search"></i> Consultar historico</button>

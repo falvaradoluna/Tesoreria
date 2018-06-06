@@ -275,23 +275,23 @@
             $scope.paramsHistory.HistoricoId
         ).then(function (result) {
 
-            $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function (value) {
-                return value.tipoMovimiento == 0;
-            });
-            $scope.contableReferenciadosCargos = $filter('filter')(result.data, function (value) {
-                return value.tipoMovimiento == 1;
-            });
+            // $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function (value) {
+            //     return value.tipoMovimiento == 0;
+            // });
+            // $scope.contableReferenciadosCargos = $filter('filter')(result.data, function (value) {
+            //     return value.tipoMovimiento == 1;
+            // });
             $scope.tablaSearch('contableRefAbonos');
             $scope.tablaSearch('contableRefCargos');
 
             //Obtener la uma total de los registros
-            angular.forEach($scope.contableReferenciadosAbonos, function (value, key) {
-                $scope.contableReferenciadosAbonosTotales += value.abono;
-            });
+            // angular.forEach($scope.contableReferenciadosAbonos, function (value, key) {
+            //     $scope.contableReferenciadosAbonosTotales += value.abono;
+            // });
 
-            angular.forEach($scope.contableReferenciadosCargos, function (value, key) {
-                $scope.contableReferenciadosCargosTotales += value.cargo;
-            });
+            // angular.forEach($scope.contableReferenciadosCargos, function (value, key) {
+            //     $scope.contableReferenciadosCargosTotales += value.cargo;
+            // });
         });
     };
     //****************************************************************************************************
