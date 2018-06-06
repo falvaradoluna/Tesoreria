@@ -14,7 +14,7 @@
                                 <label class="form-label text-main">Tipo Consulta:</label>
                                 <select class="form-control" ng-model="tipoConsulta" ng-options="tipo.tipo for tipo in tiposConsultas
                                 track by tipo.tipo" ng-change="tipoConsultaF(tipoConsulta)">
-                                    <option ng-repeat="tipo in tiposConsultas" >Seleccione un rtipo de consulta</option>
+                                    <option ng-repeat="tipo in tiposConsultas" >Seleccione un tipo de consulta</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-2 pull-right">
@@ -69,11 +69,20 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="form-label text-main">Consulta:</label>
-                                <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES">
+                                <select class="form-control" ng-model="mesActualFoto">
+                                    <option value="0">Mes</option>
+                                    <option ng-repeat="mes in mesesConsulta" value="{{mes.value}}">{{ mes.nombre }}</option>
+                                </select>
+                                <!-- <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES">
                                   <option value="">Mes</option>
-                                </select>  
+                                </select>   -->
                                 <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
-                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar">
+                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-hide="btnShow == 1" ng-disabled="activaBotonBuscar">
+                                        <i class="ti-search"></i> Consultar historico</button>
+                                </div>
+
+                                <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
+                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-hide="btnShow != 1">
                                         <i class="ti-search"></i> Consultar historico</button>
                                 </div>
                             </div>
@@ -199,8 +208,8 @@
                                     <div class="row">
                                         <a class="btn btn-primary col-md-4" ng-click="go('/conciliacionDetalleConsulta')" ng-disabled="enableBottonReport">
                                             <i class="ti-agenda"></i> Detalle Punteo de registros</a>&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-danger col-md-4 col-md-offset-1" ng-click="go('/conciliacion')" ng-disabled="enableBottonReport">
-                                            <i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</a>
+                                        <button class="btn btn-danger col-md-4 col-md-offset-1" ng-click="go('/conciliacion')" disabled>
+                                            <i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</button>
                                     </div>
                                 </div>
                             </form>
