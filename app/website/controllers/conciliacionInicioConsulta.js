@@ -42,7 +42,7 @@ conciliacionInicioConsulta.prototype.post_totalAbonoCargo = function (req, res, 
     { name: 'opcion', value: req.body.opcion, type: self.model.types.INT },
     { name: 'tipoReporte', value: req.body.tipoReporte, type: self.model.types.INT } //LQMA ADD 06032018
     ];
-    
+    console.log( 'params', params );
     this.model.query('SEL_TOTAL_ABONOCARGO_SP_H', params, function (error, result) {
         
         self.view.expositor(res, {
