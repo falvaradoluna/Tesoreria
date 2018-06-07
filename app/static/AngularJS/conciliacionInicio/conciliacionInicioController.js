@@ -34,6 +34,10 @@
     //******************************************************************
 
     $scope.init = function () {
+        //Mostrar y ocultar le boton de cerrar mes
+        if( $rootScope.userData.idUsuario == 71 ){
+           $rootScope.showCloseBtn = 1
+        }
 
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
@@ -150,16 +154,26 @@
                 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                                     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];              
                 console.log( 'resultUltimo', result );
-                $scope.jsonMes = {
-                    ID: result.data[0].mec_idMes,
-                    PAR_IDENPARA: result.data[0].mec_anio + '0' + result.data[0].mec_numMes + '01',
-                    PAR_DESCRIP2: 'ABIERTO',
-                    MES: monthNames[ result.data[0].mec_idMes - 1 ],
-                    ACTIVO: 1,
-                };
-                $rootScope.nombreMes = monthNames[ result.data[0].mec_idMes - 1 ]
+                if( result.data[0].mec_numMes < 10 ){
+                    $scope.jsonMes = {
+                        ID: result.data[0].mec_numMes,
+                        PAR_IDENPARA: result.data[0].mec_anio + '0' + result.data[0].mec_numMes + '01',
+                        PAR_DESCRIP2: 'ABIERTO',
+                        MES: monthNames[ result.data[0].mec_numMes - 1 ],
+                        ACTIVO: 1
+                    };
+                }else{
+                    $scope.jsonMes = {
+                        ID: result.data[0].mec_numMes,
+                        PAR_IDENPARA: result.data[0].mec_anio + '' + result.data[0].mec_numMes + '01',
+                        PAR_DESCRIP2: 'ABIERTO',
+                        MES: monthNames[ result.data[0].mec_numMes - 1 ],
+                        ACTIVO: 1
+                    };
+                }
+                $rootScope.nombreMes = monthNames[ result.data[0].mec_numMes - 1 ]
                 $scope.mesActualJUN = $scope.jsonMes;
-                
+                console.log( 'mesActualJUN', $scope.mesActualJUN );
             }
         });
     }
@@ -494,6 +508,62 @@
     // });
 
     // };
+
+    $scope.closeMes = function () {
+        var d = new Date();
+        var dia = d.getDate();
+        var mes = parseInt($scope.mesActualJUN.PAR_IDENPARA.substr(4, 2));
+        
+        var months = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        var anioChange = $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4);
+        var mesChange = $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2);
+        console.log( 'anioChange', anioChange );
+        console.log( 'mesChange', mesChange );
+        swal({
+            title: '¿Deseas cerrar el mes de ' + months[mes] + '?',
+            text: 'Si cierras el mes de ' + months[mes] + ' se iniciara la conciliacion del mes de ' + months[mes + 1] + '.',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Cerrar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonClass: 'confirm-class',
+            cancelButtonClass: 'cancel-class',
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+            function (isConfirm) {
+                if (isConfirm) {
+                    conciliacionInicioRepository.getcloseMes(mesChange,anioChange )
+                    .then(function (result) {
+                        if( result.data[0].success == 1 ){
+                            $scope.getUltimoMes();
+                            swal(
+                                'Listo',
+                                result.data[0].msg,
+                                'success'
+                            );
+                        }else{
+                            swal(
+                                'Alto',
+                                result.data[0].msg,
+                                'error'
+                            );
+                        }
+                    });
+                    
+                } else {
+                    swal(
+                        'Cancelado',
+                        'No se cerro el mes de ' + months[mes] + '.',
+                        'error'
+                    );
+                }
+            });
+
+    }
 
     $scope.openModalMovimiento = function(){
         var mesName = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
