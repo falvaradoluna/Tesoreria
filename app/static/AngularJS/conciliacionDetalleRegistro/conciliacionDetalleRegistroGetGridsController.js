@@ -77,9 +77,10 @@ $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
+        console.log( 'paramsBusqueda', $scope.busqueda );
         $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
-        $scope.getBancoPunteo($scope.busqueda.IdEmpresa);
+        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
         $scope.bancoReferenciados();
         $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
@@ -145,12 +146,12 @@ $scope.init = function() {
     };
     //****************************************************************************************************
     //Ing. Luis Antonio Garcia Perrusquia
-    $scope.getBancoPunteo = function (idempresa) {
-        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa).then(function (result) {
+    $scope.getBancoPunteo = function (idempresa, idBanco, noCuenta, CuentaContable) {
+        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, idBanco, noCuenta, CuentaContable).then(function (result) {
 
             $scope.bancoPadre = result.data[0];
             $scope.auxiliarPadre = result.data[1];
-
+            console.log( 'todoResult', result );
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
 
