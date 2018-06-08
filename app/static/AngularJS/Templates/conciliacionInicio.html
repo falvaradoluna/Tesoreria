@@ -54,10 +54,19 @@
                                     <label>{{cuentaActual.CuentaContable != NULL ? cuentaActual.CuentaContable : cuentaContable}}</label>
                                 </div>
                             </div>                            
-                            <div class="form-group col-md-3">
+                            <!-- <div class="form-group col-md-3">
                                     <label class="form-label text-main">Consulta:</label>
                                     <select class="form-control" ng-model="mesActual" ng-options="mes.MES for mes in mesSelect track by mes.MES" disabled>
-                                      <option value="">Mes</option>
+                                      <option value="">{{ nombreMes }}</option>
+                                    </select>  
+                                <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
+                                    <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar"><i class="ti-search"></i> Buscar</button>
+                                </div>                                  
+                            </div> -->
+                            <div class="form-group col-md-3">
+                                    <label class="form-label text-main">Consulta:</label>
+                                    <select class="form-control" disabled>
+                                      <option value="">{{ nombreMes }}</option>
                                     </select>  
                                 <div class="form-group col-md-2 col-md-offset-10" style="margin-top: -32px">
                                     <button class="btn btn-primary" ng-click="getTotalesAbonoCargo()" ng-disabled="activaBotonBuscar"><i class="ti-search"></i> Buscar</button>
@@ -203,10 +212,16 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="row">
-                                        <a class="btn btn-primary col-md-4" ng-click="go('/conciliacionDetalleRegistros')" ng-disabled="enableBottonReport">
-                                            <i class="ti-agenda"></i> Detalle Punteo de registros</a>&nbsp;&nbsp;&nbsp;
-                                        <a class="btn btn-danger col-md-4 col-md-offset-1" ng-click="go('/conciliacion')" ng-disabled="enableBottonReport">
+                                        <a class="btn btn-primary col-md-5" ng-click="go('/conciliacionDetalleRegistros')" ng-disabled="enableBottonReport">
+                                            <i class="ti-agenda"></i> Detalle Punteo de registros</a>
+                                        <a class="btn btn-danger col-md-5 col-md-offset-1" ng-click="go('/conciliacion')" ng-disabled="enableBottonReport">
                                             <i class="ti-layout-list-thumb"></i> Ver detalle de diferencias</a>
+                                    </div>
+                                    <div class="row">
+                                        <br>
+                                        <a class="btn btn-default col-md-5" ng-click="openModalMovimiento()" ng-disabled="enableBottonReport">
+                                            <i class="ti-plus"></i> Agregar movimiento Bancario
+                                        </a>
                                     </div>
                                 </div>
                             </form>
@@ -278,3 +293,90 @@
 </div>
 <!--===================================================-->
 <!--End Modal actualizarBD-->
+
+<!--===================================================-->
+<div class="modal fade bs-example-modal" id="MovimientoBancario" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="panel-body">
+                <h3><i class="fa fa-money text-warning" aria-hidden="true"></i> Inserción de Movimiento Bancario</h3>
+                <br/>
+                <table class="table" id="frmMovimientoBancario">
+                    <tr>
+                        <td width="200">
+                            <b>Referencia</b>
+                        </td>
+                        <td> <input type="text" class="form-control" ng-model="frmMovimientoBancario.referencia"> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Concepto</b>
+                        </td>
+                        <td> <input type="text" class="form-control" ng-model="frmMovimientoBancario.concepto"> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Referencia Ampliada</b>
+                        </td>
+                        <td> <input type="text" class="form-control" ng-model="frmMovimientoBancario.refAmpliada"> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Numero de Cuenta</b>
+                        </td>
+                        <td> {{cuentaActual.Cuenta != NULL ? cuentaActual.Cuenta : cuentaNumerica}} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Es cargo</b>
+                        </td>
+                        <td> <input type="checkbox" name="" ng-model="frmMovimientoBancario.esCargo"> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Importe</b>
+                        </td>
+                        <td> <input type="text" class="form-control" ng-model="frmMovimientoBancario.importe"> </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Fecha de Operacion</b>
+                        </td>
+                        <td>
+                            {{ mMov.anio }} | {{ mMov.mesName }} | 
+                            <select ng-model="frmMovimientoBancario.dia">
+                                <option ng-repeat="n in [] | range: mMov.dia">{{ n + 1 }}</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Empresa</b>
+                        </td>
+                        <td> {{empresaActual.emp_nombre != NULL ? empresaActual.emp_nombre : empresaNombre}} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Banco</b>
+                        </td>
+                        <td> {{cuentaActual.NOMBRE != NULL ? cuentaActual.NOMBRE : bancoNombreT}} </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Año</b>
+                        </td>
+                        <td> {{ mMov.anio }} </td>
+                    </tr>
+                </table>
+
+                <br><br><br>
+                <a class="btn btn-default pull-left" data-dismiss="modal"> Cerrar </a>
+
+                <button class="btn btn-success pull-right" ng-click="saveMovimientoBancario();"> 
+                    <i class="fa fa-floppy-o"></i> Guardar Movimiento
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->

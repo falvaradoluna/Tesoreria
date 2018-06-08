@@ -36,7 +36,7 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
     $scope.init = function () {
         variablesLocalStorage();
         $rootScope.mostrarMenu = 1;
-        //console.log($scope.busqueda);
+        
         $scope.DameLaFechaHora();
         setTimeout(function () {
             $(".cargando").remove();
@@ -66,49 +66,62 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
 
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
-    $scope.verDetallePunteo = function (detallepunteo, opcion) {
 
-        console.log('detallepunteo: ', detallepunteo)
-
-        var accionBusqueda = 0;
-        var datoBusqueda = '';
-        if (opcion == 1) {
-
-            if (detallepunteo.idPAdre == 4) {
-                datoBusqueda = detallepunteo.idDepositoBanco;
-                accionBusqueda = 4;
-            }
-            else if (detallepunteo.idPAdre == 2) {
-
-                datoBusqueda = detallepunteo.idDepositoBanco;
-                accionBusqueda = 1;
-            }
-
-        } else {
-            if (detallepunteo.idPAdre == 3) {
-                datoBusqueda = detallepunteo.idAuxiliarContable;
-                accionBusqueda = 3;
-            } else if (detallepunteo.idPAdre == 2) {
-                datoBusqueda = detallepunteo.idAuxiliarContable;
-                accionBusqueda = 2;
-            }
-
-        }
-        conciliacionDetalleRegistroConsultaRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda,$scope.paramsHistory.HistoricoId).then(function (result) {
+    $scope.verDetallePunteoC = function (detallepunteo, opcion) {
+        console.log('grupoConsulta', detallepunteo);
+        //console.log( 'HIstorico', JSON.parse(localStorage.getItem('paramBusqueda')) );
+        conciliacionDetalleRegistroConsultaRepository.detallePunteo(
+            detallepunteo, 
+            JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
+        ).then(function (result) {
             $('#punteoDetalle').modal('show');
-
-            $scope.detallePunteo = result.data[0];
-            $scope.detallePunteoBanco = result.data[1];
-            if (result.data.length > 0) {
-                $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
-                datoBusqueda = '';
-            }
-            else {
-                alertFactory.error('No existen punteos en este detalle')
-            }
-
+            $scope.detalleBanco = result.data[0];
+            $scope.detalleContable = result.data[1];
+            console.log( 'result', result.data );
         });
     };
+    // $scope.verDetallePunteo = function (detallepunteo, opcion) {
+        
+
+    //     var accionBusqueda = 0;
+    //     var datoBusqueda = '';
+    //     if (opcion == 1) {
+
+    //         if (detallepunteo.idPAdre == 4) {
+    //             datoBusqueda = detallepunteo.idDepositoBanco;
+    //             accionBusqueda = 4;
+    //         }
+    //         else if (detallepunteo.idPAdre == 2) {
+
+    //             datoBusqueda = detallepunteo.idDepositoBanco;
+    //             accionBusqueda = 1;
+    //         }
+
+    //     } else {
+    //         if (detallepunteo.idPAdre == 3) {
+    //             datoBusqueda = detallepunteo.idAuxiliarContable;
+    //             accionBusqueda = 3;
+    //         } else if (detallepunteo.idPAdre == 2) {
+    //             datoBusqueda = detallepunteo.idAuxiliarContable;
+    //             accionBusqueda = 2;
+    //         }
+
+    //     }
+    //     conciliacionDetalleRegistroConsultaRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda,$scope.paramsHistory.HistoricoId).then(function (result) {
+    //         $('#punteoDetalle').modal('show');
+
+    //         $scope.detallePunteo = result.data[0];
+    //         $scope.detallePunteoBanco = result.data[1];
+    //         if (result.data.length > 0) {
+    //             $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
+    //             datoBusqueda = '';
+    //         }
+    //         else {
+    //             alertFactory.error('No existen punteos en este detalle')
+    //         }
+
+    //     });
+    // };
     //****************************************************************************************************
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************

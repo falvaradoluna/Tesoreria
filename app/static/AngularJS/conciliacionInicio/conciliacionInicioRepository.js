@@ -69,6 +69,33 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
             });
         },
 
+        //Ing. LAGP05062018
+        getUltimoMes: function( anio ) {
+            return $http({
+                url: conciliacionInicioURL + 'ultimoMes/',
+                method: "GET",
+                params: {
+                    anio: anio
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
+        addMovimientoBancario: function( parametros ) {
+            return $http({
+                url: conciliacionInicioURL + 'addMovimientoBancario/',
+                method: "GET",
+                params: parametros,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        }
+
 //Fin de la llave "return"
     };
 });

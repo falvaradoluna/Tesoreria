@@ -3,8 +3,17 @@ var conciliacionInicioConsultaURL = global_settings.urlCORS + 'api/conciliacionI
 registrationModule.factory('conciliacionInicioConsultaRepository', function($http) {
     return {
 
-    	getTotalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario, tipoReporte) { //LQMA add 06032018 idUsuario
-            console.log( 'factory', tipoReporte );
+    	getTotalAbonoCargo: function(
+            idBanco,
+            idEmpresa,
+            noCuenta,
+            cuentaContable,
+            fechaE,
+            fechaC,
+            polizaPago,
+            opcion,
+            idUsuario, 
+            tipoReporte) { //LQMA add 06032018 idUsuario
             return $http({
                 url: conciliacionInicioConsultaURL + 'totalAbonoCargo/',
                 method: "POST",

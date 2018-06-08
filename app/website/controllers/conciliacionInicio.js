@@ -42,9 +42,10 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function (req, res, next) {
         { name: 'idUsuario',        value: req.body.idUsuario, type: self.model.types.INT }, //LQMA ADD 06032018
         { name: 'idHistorico',      value: 0, type: self.model.types.INT } //LQMA ADD 06032018
     ];
-    
+    console.log( 'paramsJunio', params );
     this.model.query('SEL_TOTAL_ABONOCARGO_SP', params, function (error, result) {
-        
+        console.log( 'result', result );
+        console.log( 'error', error );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -82,6 +83,49 @@ conciliacionInicio.prototype.get_meses = function(req, res, next) {
         self.view.expositor(res, {
             error: error,
             result: result
+        });
+    });
+};
+
+//Ing. LAGP05062018
+//api/ultimoMes
+conciliacionInicio.prototype.get_ultimoMes = function(req, res, next) {
+    
+    var self = this;
+    var params = [
+        { name: 'anio', value: req.query.anio, type: self.model.types.INT }
+    ];
+    
+    this.model.query('[dbo].[SEL_ULTIMO_MES_ABIERTO]', params, function(error, result) {
+        
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
+conciliacionInicio.prototype.get_addMovimientoBancario = function(req, res, next) {
+    var self = this;
+
+    var params = [
+                    { name: 'referencia',       value: req.query.referencia,      type: self.model.types.STRING },
+                    { name: 'concepto',         value: req.query.concepto,        type: self.model.types.STRING },
+                    { name: 'refAmpliada',      value: req.query.refAmpliada,     type: self.model.types.STRING },
+                    { name: 'noCuenta',         value: req.query.noCuenta,        type: self.model.types.STRING },
+                    { name: 'esCargo',          value: req.query.esCargo,         type: self.model.types.INT },
+                    { name: 'importe',          value: req.query.importe,         type: self.model.types.STRING },
+                    { name: 'fechaOperacion',   value: req.query.fechaOperacion,  type: self.model.types.STRING },
+                    { name: 'idUsuario',        value: req.query.idUsuario,       type: self.model.types.INT },
+                    { name: 'idEmpresa',        value: req.query.idEmpresa,       type: self.model.types.INT },
+                    { name: 'idBanco',          value: req.query.idBanco,         type: self.model.types.INT },
+                    { name: 'anio',             value: req.query.anio,            type: self.model.types.INT }
+                 ];
+
+    this.model.query('[dbo].[INT_CONCILIACION_ADDBANCOS_SP]', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result[0]
         });
     });
 };

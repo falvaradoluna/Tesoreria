@@ -78,15 +78,16 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_AUXILIAR_CONTABLE_EMPRESA_CUENTA_SP_H
-        getAuxiliar: function(idEmpresa, idBanco, idHistorico, fechaElaboracion) {
+        getAuxiliar: function(idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'auxiliarContable/',
                 method: "GET",
                 params: {
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
-                    idHistorico: idHistorico, //LQMA 21042018    
-                    fechaElaboracion: fechaElaboracion //LAGP 03052018                
+                    cuentaContable: cuentaContable,  
+                    fechaElaboracion: fechaElaboracion, //LAGP 03052018  
+                    idHistorico: idHistorico //LQMA 21042018                
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -95,14 +96,12 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_PUNTEO_DEPOSITOS_PADRES_SP_H
-        getBancoPunteo: function(idempresa, cuentaBancaria, idBanco, idHistorico) {
+        getBancoPunteo: function(idempresa, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
-                    cuentaBancaria: cuentaBancaria,
-                    idBanco: idBanco,
                     idHistorico: idHistorico
                 },
                 headers: {
@@ -196,23 +195,37 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                 }
             });
         },
-        detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda, idHistorico) {
+        //Luis Antonio Garcia Perrusquia
+        detallePunteo: function (grupo, idHistorico) {
             return $http({
-                url: conciliacionDetalleRegistroConsultaURL + 'detallePunteo/',
+                url: conciliacionDetalleRegistroURL + 'detallePunteo/',
                 method: "POST",
                 data: {
-                    idPunteoAuxiliarBanco: idPunteo,
-                    idBanco: idBanco,
-                    noCuenta: noCuenta,
-                    cuentaContable: cuentaContable,
-                    accionBusqueda: accionBusqueda,
-                    idHistorico : idHistorico
+                    grupo: grupo,
+                    idHistorico: idHistorico
                 },
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
         },
+        // detallePunteo: function(idPunteo,idBanco,noCuenta,cuentaContable,accionBusqueda, idHistorico) {
+        //     return $http({
+        //         url: conciliacionDetalleRegistroConsultaURL + 'detallePunteo/',
+        //         method: "POST",
+        //         data: {
+        //             idPunteoAuxiliarBanco: idPunteo,
+        //             idBanco: idBanco,
+        //             noCuenta: noCuenta,
+        //             cuentaContable: cuentaContable,
+        //             accionBusqueda: accionBusqueda,
+        //             idHistorico : idHistorico
+        //         },
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     });
+        // },
         sendMail: function(filename, file, fileUrl,cuentaContable, nombreEmpresa, cuentaBancaria, nombreBanco, responsable) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'sendMail/',
@@ -396,7 +409,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //Ing. LAGPC
-        getUniversoContableConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, polizaPago) {
+        getUniversoContableConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, polizaPago, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'universoContableConsulta',
                 method: 'GET',
@@ -407,7 +420,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     noCuenta: noCuenta,
                     cuentaContable: cuentaContable,
                     fechaElaboracion: fechaElaboracion,
-                    polizaPago: polizaPago
+                    polizaPago: polizaPago,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -415,7 +429,7 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //Ing. LAGPC
-        getUniversoBancariosConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, fechaCorte, polizaPago) {
+        getUniversoBancariosConsulta: function (idEmpresa, idUsuario, idHistorico, noCuenta, cuentaContable, fechaElaboracion, fechaCorte, polizaPago, idBanco) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'universoBancarioConsulta',
                 method: 'GET',
@@ -427,7 +441,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     cuentaContable: cuentaContable,
                     fechaElaboracion: fechaElaboracion,
                     fechaCorte: fechaCorte,
-                    polizaPago: polizaPago
+                    polizaPago: polizaPago,
+                    idBanco: idBanco
                 },
                 headers: {
                     'Content-Type': 'application/json'
