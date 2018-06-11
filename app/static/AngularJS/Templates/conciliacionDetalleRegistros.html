@@ -481,7 +481,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in bancoReferenciadosAbonos">
+                        <tr ng-repeat="banco in uniAbonoBan">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
@@ -527,12 +527,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in registrosBancariosCargos">
-                            <td>{{banco.IDBanco}}</td>
+                        <tr ng-repeat="banco in uniCargoBan">
+                            <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
                             <td>{{banco.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.importe | currency}}</td>
+                            <td class="text-right text-success text-semibold" >{{banco.cargo | currency}}</td>
                             <td class="text-center">
                                 <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosCargosF(banco.IDCARGOSBANCOS, bancos)">
                                     <i class="ti-eye"></i>
@@ -598,10 +598,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="contableAbono in contableReferenciadosAbonos">
+                        <tr ng-repeat="contableAbono in uniAbonoCon">
                             <td>{{contableAbono.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{contableAbono.tipopol}}</td>
-                            <td>{{contableAbono.numPol}}</td>
+                            <td>{{contableAbono.tipoPoliza}}</td>
+                            <td>{{contableAbono.poliza}}</td>
                             <td>{{contableAbono.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                             <td class="text-center">
@@ -643,10 +643,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="contableCargo in contableReferenciadosCargos">
+                        <tr ng-repeat="contableCargo in uniCargoCon">
                             <td>{{contableCargo.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{contableCargo.tipopol}}</td>
-                            <td>{{contableCargo.numPol}}</td>
+                            <td>{{contableCargo.tipoPoliza}}</td>
+                            <td>{{contableCargo.poliza}}</td>
                             <td>{{contableCargo.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableCargo.cargo > 0}">{{contableCargo.cargo | currency}}</td>
                             <td class="text-center">
