@@ -488,7 +488,7 @@
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosAbonos(banco)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo, 1)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -534,7 +534,7 @@
                             <td>{{banco.concepto}}</td>
                             <td class="text-right text-success text-semibold" >{{banco.cargo | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosCargosF(banco.IDCARGOSBANCOS, bancos)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo, 1)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -605,7 +605,7 @@
                             <td>{{contableAbono.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(contableAbono.grupo, 2)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -623,7 +623,7 @@
                     </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
-                    <p class="text-info text-semibold">Total Abonos Bancarios Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p>
+                    <p class="text-info text-semibold">Total Abonos Contables Referenciados: {{contableReferenciadosAbonosTotales | currency}}</p>
                 </div>
             </div>
 
@@ -650,7 +650,7 @@
                             <td>{{contableCargo.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableCargo.cargo > 0}">{{contableCargo.cargo | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosContablesAbonos(contableCargo)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(contableCargo.grupo, 2)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
