@@ -99,7 +99,6 @@ $scope.init = function() {
     };
     
     $scope.verDetallePunteoGet = function (detallepunteo, opcion) {
-        
         conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
             $('#punteoDetalleGet').modal('show');
             $rootScope.detalleBancoGet = result.data[0];

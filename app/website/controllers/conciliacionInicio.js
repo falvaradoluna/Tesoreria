@@ -105,6 +105,23 @@ conciliacionInicio.prototype.get_ultimoMes = function(req, res, next) {
     });
 };
 
+//Ing. LAGP06062018
+//api/closeMes
+conciliacionInicio.prototype.get_closeMes = function(req, res, next) {
+    
+    var self = this;
+    var params = [
+    ];
+    console.log( 'AQUI EN PERRO' );
+    this.model.query('[dbo].[INS_NUEVO_MES_SP]', params, function(error, result) {
+        console.log( 'result', result );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 conciliacionInicio.prototype.get_addMovimientoBancario = function(req, res, next) {
     var self = this;
 

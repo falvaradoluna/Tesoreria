@@ -489,14 +489,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in bancoReferenciadosAbonos">
+                        <tr ng-repeat="banco in uniAbonoBan">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosAbonos(banco)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteoRefH(banco.grupo)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -535,14 +535,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in bancoReferenciadosCargos">
+                        <tr ng-repeat="banco in uniCargoBan">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosBancariosCargosF(banco.IDABONOSBANCOS_H, banco)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteoRefH(banco.grupo)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -605,14 +605,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="contableAbono in contableReferenciadosAbonos">
+                        <tr ng-repeat="contableAbono in uniAbonoCon">
                             <td>{{contableAbono.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{contableAbono.tipopol}}</td>
-                            <td>{{contableAbono.numPol}}</td>
+                            <td>{{contableAbono.tipoPoliza}}</td>
+                            <td>{{contableAbono.poliza}}</td>
                             <td>{{contableAbono.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableAbono.abono > 0}">{{contableAbono.abono | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosReferenciadosContablesAbono(contableAbono.idAuxiliar)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteoRefH(contableAbono.grupo)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -641,7 +641,7 @@
                 <table id="contableRefCargos" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Fechaq</th>
+                            <th>Fecha</th>
                             <th>Tipo de Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
@@ -650,14 +650,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="contableCargo in contableReferenciadosCargos">
+                        <tr ng-repeat="contableCargo in uniCargoCon">
                             <td>{{contableCargo.fecha | date:'yyyy-MM-dd'}}</td>
-                            <td>{{contableCargo.tipopol}}</td>
-                            <td>{{contableCargo.numPol}}</td>
+                            <td>{{contableCargo.tipoPoliza}}</td>
+                            <td>{{contableCargo.poliza}}</td>
                             <td>{{contableCargo.concepto }}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : contableCargo.cargo > 0}">{{contableCargo.cargo | currency}}</td>
                             <td class="text-center">
-                                <button class="btn btn-info btn-xs" ng-click="detalleRegistrosContablesAbonos(contableCargo)">
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteoRefH(contableCargo.grupo)">
                                     <i class="ti-eye"></i>
                                 </button>
                             </td>
@@ -665,7 +665,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Fechaq</th>
+                            <th>Fecha</th>
                             <th>Tipo de Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
@@ -1108,6 +1108,67 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="auxiliar in detalleContableGet | filter:{aplicado:1}">
+                            <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
+                            <td>{{auxiliar.tipoPoliza}}</td>
+                            <td>{{auxiliar.poliza}}</td>
+                            <td>{{auxiliar.concepto}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Modal para colocar el numero del punteo-->
+
+<!--Modal para colocar el numero del punteo-->
+<!--===================================================-->
+<div class="modal fade" id="punteoDetalleRef" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header label-mint">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="pci-cross pci-circle text-white"></i>
+                </button>
+                <h4 class="modal-title text-white">Detalle del Punteoq</h4>
+            </div>
+            <div class="modal-body">
+                <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleBanco.length == 0">
+                    <thead>
+                        <tr>
+                            <th>Banco</th>
+                            <th>Referencia</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th>Abono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="banco in detalleBancoRef | filter:{aplicado:2}">
+                            <td>{{banco.banco}}</td>
+                            <td>{{banco.referencia}}</td>
+                            <td>{{banco.concepto}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="auxiliarPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleContable.length == 0">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo Póliza</th>
+                            <th># Póliza</th>
+                            <th>Concepto</th>
+                            <th>Cargo</th>
+                            <th>Abono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="auxiliar in detalleContableRef | filter:{aplicado:2}">
                             <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
                             <td>{{auxiliar.tipoPoliza}}</td>
                             <td>{{auxiliar.poliza}}</td>

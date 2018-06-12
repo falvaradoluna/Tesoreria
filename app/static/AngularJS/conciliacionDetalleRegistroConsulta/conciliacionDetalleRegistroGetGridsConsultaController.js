@@ -78,7 +78,7 @@
     };
 
     $scope.verDetallePunteoGet = function (detallepunteo, opcion) {
-        console.log('grupoGET', detallepunteo);
+        
         conciliacionDetalleRegistroConsultaRepository.detallePunteo(
             detallepunteo,
             JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
@@ -86,9 +86,20 @@
             $('#punteoDetalleGet').modal('show');
             $rootScope.detalleBancoGet = result.data[0];
             $rootScope.detalleContableGet = result.data[1];
-            console.log( 'detalleBancoGet', $rootScope.detalleBancoGet );
-            console.log( 'detalleContableGet', $rootScope.detalleContableGet );
-            console.log( 'result', result.data );
+            
+        });
+    };
+
+    $scope.verDetallePunteoRefH = function (detallepunteo) {
+        console.log( 'verDetallePunteoRefH', detallepunteo )
+        conciliacionDetalleRegistroConsultaRepository.detallePunteo(
+            detallepunteo,
+            JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
+        ).then(function (result) {
+            $('#punteoDetalleRef').modal('show');
+            $rootScope.detalleBancoRef = result.data[0];
+            $rootScope.detalleContableRef = result.data[1];
+            
         });
     };
 
@@ -133,6 +144,47 @@
             
             $scope.bancoPadre = result.data[0];
             $scope.auxiliarPadre = result.data[1];
+
+            $scope.uniCargoBan = [];
+            $scope.uniAbonoBan = [];
+            $scope.uniCargoCon = [];
+            $scope.uniAbonoCon = [];
+
+            //console.log( 'resulPadre', result.data );
+
+            $scope.uniConciliadoBancario = $filter('filter')(result.data[0], function (value) {
+                return value.aplicado == 2;
+            });
+            
+            $scope.uniConciliadoContable = $filter('filter')(result.data[1], function (value) {
+                return value.aplicado == 2;
+            });
+            
+
+            angular.forEach( $scope.uniConciliadoBancario, function( valueBan, key ){
+                if( valueBan.abono != 0 ){
+                    $scope.uniAbonoBan.push(valueBan);
+                    $scope.bancoReferenciadosAbonosTotales += valueBan.abono;
+                }else{
+                    $scope.uniCargoBan.push(valueBan);
+                    $scope.bancoReferenciadosCargosTotales += valueBan.cargo
+                }
+            });
+
+            angular.forEach( $scope.uniConciliadoContable, function( valueCon, key ){
+                if( valueCon.cargo != 0 ){
+                    $scope.uniCargoCon.push(valueCon);
+                    $scope.contableReferenciadosCargosTotales += valueCon.cargo;
+                }else{
+                    $scope.uniAbonoCon.push(valueCon);
+                    $scope.contableReferenciadosAbonosTotales += valueCon.abono
+                }
+            });
+
+            $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
+                return value.idPAdre == 3;
+            });
+
 
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
@@ -182,6 +234,10 @@
             };
 
             $scope.tabla('bancoPunteo');
+            $scope.tabla('contableRefAbonos');
+            $scope.tabla('contableRefCargos');
+            $scope.tabla('bancoReferenciadoAbono');
+            $scope.tabla('bancoReferenciadoCargo');
         });
     };
 
