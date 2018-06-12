@@ -867,17 +867,34 @@
             $scope.limpiaVariables();
         }
         else {
-            if (($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)) {
-                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
-            }
-            else if ($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
+            console.log(  );
+            $scope.cargosTotal = parseFloat($scope.cargoAuxiliar) + parseFloat($scope.cargoBanco);
+            $scope.abonosTotal = parseFloat($scope.abonoAuxiliar) + parseFloat($scope.abonoBanco);
+            $scope.diferencia = $scope.cargosTotal - $scope.abonosTotal;
+            $scope.diferenciaNeg = $scope.difMonetaria * -1;
+            
+            if( $scope.diferencia >= $scope.diferenciaNeg && $scope.diferencia <= $scope.difMonetaria   ){
+            //if( $scope.diferencia >= (-1 * $scope.difMonetaria && $scope.diferencia <= $scope.difMonetaria ) ){
                 $('#alertaGuardarPunteoPrevio').modal('show');
                 $scope.punteoAuxiliar = [];
                 $scope.punteoBanco = [];
                 $scope.gridApiAuxiliar.selection.clearSelectedRows();
                 $scope.gridApiBancos.selection.clearSelectedRows();
                 $scope.limpiaVariables();
+            }else{
+                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
             }
+            // if (($scope.cargoAuxiliar != $scope.abonoBanco || $scope.cargoBanco != $scope.abonoAuxiliar) && ($scope.cargoAuxiliar != $scope.abonoAuxiliar || $scope.cargoBanco != $scope.abonoBanco)) {
+            //     alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
+            // }
+            // else if ($scope.cargoAuxiliar == $scope.abonoBanco || $scope.cargoBanco == $scope.abonoAuxiliar || $scope.cargoAuxiliar == $scope.abonoAuxiliar || $scope.cargoBanco == $scope.abonoBanco) {
+            //     $('#alertaGuardarPunteoPrevio').modal('show');
+            //     $scope.punteoAuxiliar = [];
+            //     $scope.punteoBanco = [];
+            //     $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            //     $scope.gridApiBancos.selection.clearSelectedRows();
+            //     $scope.limpiaVariables();
+            // }
         }
 
         localStorage.setItem("seleccionados", JSON.stringify( $scope.seleccionados));
