@@ -90,6 +90,19 @@
         });
     };
 
+    $scope.verDetallePunteoRefH = function (detallepunteo) {
+        console.log( 'verDetallePunteoRefH', detallepunteo )
+        conciliacionDetalleRegistroConsultaRepository.detallePunteo(
+            detallepunteo,
+            JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
+        ).then(function (result) {
+            $('#punteoDetalleRef').modal('show');
+            $rootScope.detalleBancoRef = result.data[0];
+            $rootScope.detalleContableRef = result.data[1];
+            
+        });
+    };
+
     // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
     $scope.getAuxiliarPunteo = function (idempresa, cuenta, idHistorico) {
@@ -146,8 +159,7 @@
             $scope.uniConciliadoContable = $filter('filter')(result.data[1], function (value) {
                 return value.aplicado == 2;
             });
-
-            console.log( 'uniConciliadoContable', $scope.uniConciliadoContable );
+            
 
             angular.forEach( $scope.uniConciliadoBancario, function( valueBan, key ){
                 if( valueBan.abono != 0 ){
