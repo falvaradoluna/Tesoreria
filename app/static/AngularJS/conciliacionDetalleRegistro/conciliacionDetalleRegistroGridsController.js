@@ -143,12 +143,10 @@
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
         
         if (idestatus == 1) { 
-            console.log( 'Peticion' );
-            console.log( 'fElaboracion', fElaboracion );
-            console.log( 'fCorte', fCorte );
+            
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function(result) {
                 if (result.data.length >= 0) {
-                    console.log( 'noPunteadosBancos', result.data );
+                    
                     $scope.depositosBancos = result.data[0];
                     
                     angular.forEach($scope.depositosBancos, function( value, key ){
