@@ -85,13 +85,11 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
         },
 
         //Ing. LAGP06062018
-        getcloseMes: function( mes, anio ) {
+        getcloseMes: function( ) {
             return $http({
                 url: conciliacionInicioURL + 'closeMes/',
                 method: "GET",
                 params: {
-                    mes: mes,
-                    anio: anio
                 },
                 headers: {
                     'Content-Type': 'application/json'

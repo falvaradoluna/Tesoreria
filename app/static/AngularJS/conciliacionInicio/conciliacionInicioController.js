@@ -510,16 +510,11 @@
     // };
 
     $scope.closeMes = function () {
-        var d = new Date();
-        var dia = d.getDate();
         var mes = parseInt($scope.mesActualJUN.PAR_IDENPARA.substr(4, 2));
         
         var months = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        var anioChange = $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4);
-        var mesChange = $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2);
-        console.log( 'anioChange', anioChange );
-        console.log( 'mesChange', mesChange );
+        
         swal({
             title: '¿Deseas cerrar el mes de ' + months[mes] + '?',
             text: 'Si cierras el mes de ' + months[mes] + ' se iniciara la conciliacion del mes de ' + months[mes + 1] + '.',
@@ -536,7 +531,7 @@
         },
             function (isConfirm) {
                 if (isConfirm) {
-                    conciliacionInicioRepository.getcloseMes(mesChange,anioChange )
+                    conciliacionInicioRepository.getcloseMes()
                     .then(function (result) {
                         if( result.data[0].success == 1 ){
                             $scope.getUltimoMes();

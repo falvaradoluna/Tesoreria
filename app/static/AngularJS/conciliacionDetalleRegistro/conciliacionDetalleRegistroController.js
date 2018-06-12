@@ -76,12 +76,24 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     //****************************************************************************************************
 
     $scope.verDetallePunteo = function (detallepunteo, opcion) {
-        console.log('grupo', detallepunteo);
+        console.log('grupo AQUI', detallepunteo);
         conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
             $('#punteoDetalle').modal('show');
             $scope.detalleBanco = result.data[0];
             $scope.detalleContable = result.data[1];
-            console.log( 'result', result.data );
+            console.log( 'detalleBanco', $scope.detalleBanco );
+            console.log( 'detalleContable', $scope.detalleContable );
+        });
+    };
+
+    $scope.verDetallePunteoRef = function (detallepunteo, opcion) {
+        
+        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
+            $('#punteoDetalleRef').modal('show');
+            $scope.detalleBancoRef = result.data[0];
+            $scope.detalleContableRef = result.data[1];
+            console.log( 'detalleBanco', $scope.detalleBancoRef );
+            console.log( 'detalleContable', $scope.detalleContableRef );
         });
     };
 

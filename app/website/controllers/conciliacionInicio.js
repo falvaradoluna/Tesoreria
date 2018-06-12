@@ -96,7 +96,7 @@ conciliacionInicio.prototype.get_ultimoMes = function(req, res, next) {
         { name: 'anio', value: req.query.anio, type: self.model.types.INT }
     ];
     
-    this.model.query('[dbo].[SEL_ULTIMO_MES_ABIERTO_PRUEBAS]', params, function(error, result) {
+    this.model.query('[dbo].[SEL_ULTIMO_MES_ABIERTO]', params, function(error, result) {
         
         self.view.expositor(res, {
             error: error,
@@ -111,12 +111,10 @@ conciliacionInicio.prototype.get_closeMes = function(req, res, next) {
     
     var self = this;
     var params = [
-        { name: 'mes', value: req.query.mes, type: self.model.types.INT },
-        { name: 'anio', value: req.query.anio, type: self.model.types.INT }
     ];
-    
+    console.log( 'AQUI EN PERRO' );
     this.model.query('[dbo].[INS_NUEVO_MES_SP]', params, function(error, result) {
-        
+        console.log( 'result', result );
         self.view.expositor(res, {
             error: error,
             result: result
