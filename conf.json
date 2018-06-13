@@ -3,6 +3,6 @@
 	"SQL_user": "sa",
     "SQL_password": "S0p0rt3",
     "SQL_server": "192.168.20.29",
-    "SQL_database": "Tesoreria",
+    "SQL_database": "Tesoreria_Pruebas",
     "SQL_connectionTimeout": 60000   
 }
