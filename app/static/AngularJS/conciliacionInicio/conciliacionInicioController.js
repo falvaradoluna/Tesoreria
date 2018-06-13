@@ -416,12 +416,13 @@
 
             //Obtengo los datos de detalles/diferencias del local storage
             var detalleDiferencias = JSON.parse(localStorage.getItem('DetalleDiferencias'));
-            if (detalleDiferencias.abonoContable.length == undefined) {
-                alertFactory.warning("Error de comunicación, por favor intente de nuevo!!");
-                $('#loading').modal('hide');
-            }
+            // if( 1 == 3 ){ // Se deja
+            // //if (detalleDiferencias.abonoContable.length == undefined) {
+            //     alertFactory.warning("Error de comunicación, por favor intente de nuevo!!");
+            //     $('#loading').modal('hide');
+            // }
 
-            else {
+            // else {
                 $('reproteModalPdf').modal('show');
                 //Genero la promesa para enviar la estructura del reporte 
                 new Promise(function (resolve, reject) {
@@ -488,7 +489,7 @@
                         $('#reproteModalPdf').modal('show');
                     });
                 });
-            }
+           // }
         }, 4000)
     };
 
