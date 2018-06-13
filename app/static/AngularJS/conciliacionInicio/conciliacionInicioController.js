@@ -256,7 +256,6 @@
                     $scope.empresaActual.polizaPago,
                     2,
                     $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                        $('#actualizarBD').modal('hide');
                         //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                         if (result.data.length > 0) {
                             
@@ -291,9 +290,10 @@
                                     "mensaje": result.data[0].mensaje
                                 };
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
-
+                                
+                                $('#actualizarBD').modal('hide');
                             }, 1000);
-
+                            
                             $scope.enableBottonReport = false;
                             $scope.InfoBusqueda = true;
                         } else {
@@ -310,7 +310,7 @@
             }
 
         } else {
-            
+            $('#actualizarBD').modal('show');
             localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
             localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
             localStorage.setItem('bancoActualInMemory', JSON.stringify($scope.bancoActual));
@@ -328,7 +328,6 @@
                 $scope.polizaPagos,
                 2,
                 $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                    $('#actualizarBD').modal('hide');
                     //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                     if (result.data.length > 0) {
                         $scope.totalesAbonosCargos = result.data[0];
@@ -362,9 +361,10 @@
                                 "mensaje": result.data[0].mensaje
                             };
                             localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
+                            $('#actualizarBD').modal('hide');
 
                         }, 1000);
-
+                        
                         $scope.enableBottonReport = false;
                         $scope.InfoBusqueda = true;
                     } else {
