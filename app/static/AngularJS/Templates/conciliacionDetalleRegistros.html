@@ -136,7 +136,7 @@
                                                                    ||
                                                                    cargoBanco > abonoBanco && abonoBanco > 0 && cargoBanco > 0
                                                                    )}">{{cargoBanco | currency}}</p>
-                                        <p class="text-muted mar-no">Cargo</p>
+                                        <p class="text-muted mar-no"> Cargo</p>
                                     </div>
                                 </div>
                                 <div class="media-body">
@@ -175,7 +175,15 @@
                                     </span>
                                 </div>
                                 <div class="media-body">
-                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : cargoAuxiliar > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0, 'text-danger text-semibold' : cargoBanco > 0 && cargoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{cargoAuxiliar | currency}}</p>
+                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : 
+                                                                                        cargoAuxiliar > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && 
+                                                                                        cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco 
+                                                                                        && abonoBanco <= (cargoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar 
+                                                                                        && abonoAuxiliar > 0 && cargoAuxiliar > 0, 
+                                                                                        'text-danger text-semibold' : 
+                                                                                        cargoBanco > 0 && cargoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && 
+                                                                                        cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">
+                                                                                        {{cargoAuxiliar | currency}}</p>
                                     <p class="text-muted mar-no">Cargo</p>
                                 </div>
                                 <div class="media-body">
