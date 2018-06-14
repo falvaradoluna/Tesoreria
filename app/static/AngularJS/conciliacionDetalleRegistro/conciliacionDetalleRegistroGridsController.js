@@ -5,6 +5,7 @@
 
       $scope.control = undefined;
       $scope.isDPI = undefined;
+      $scope.ocultarSave = false;
 
             $scope.abonoAuxiliar = 0;
             $scope.cargoAuxiliar = 0;
@@ -906,6 +907,7 @@
     };
 
     $scope.savePunteo = function(){
+        $scope.ocultarSave = true;
         $scope.save_seleccionados = JSON.parse( localStorage.getItem("seleccionados") );
         $scope.save_grupoHexadecimal = JSON.parse( localStorage.getItem("grupoHexadecimal") );
         
