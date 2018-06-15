@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGridsController', function ($scope, $log, $filter, $compile, localStorageService, filtrosRepository, alertFactory, uiGridConstants, uiGridGroupingConstants, filterFilter) {
+﻿registrationModule.controller('conciliacionDetalleRegistroGridsController', function ($scope, $log, $filter, $compile, localStorageService, filtrosRepository, uiGridConstants, uiGridGroupingConstants, filterFilter) {
 
     $scope.gridsInfo = [];
     $scope.depositosBancos = '';
@@ -414,7 +414,11 @@
             if ((($scope.cargoAuxiliar - $scope.difMonetaria) <= $scope.abonoAuxiliar && $scope.abonoAuxiliar <= ($scope.cargoAuxiliar + $scope.difMonetaria)) || (($scope.abonoAuxiliar - $scope.difMonetaria) <= $scope.cargoAuxiliar && $scope.cargoAuxiliar <= ($scope.abonoAuxiliar + $scope.difMonetaria))) {
                 $scope.control = 1;
             } else {
-                alertFactory.error('La cantidad de abono y cargo para conciliar Registros Contables no coinciden!!');
+                swal(
+                    'Alto',
+                    'La cantidad de abono y cargo para conciliar los registros contables no coinciden.',
+                    'warning'
+                );
                 $scope.control = undefined;
             }
 
@@ -425,7 +429,11 @@
             if ((($scope.cargoBanco - $scope.difMonetaria) <= $scope.abonoBanco && $scope.abonoBanco <= ($scope.cargoBanco + $scope.difMonetaria)) || (($scope.abonoBanco - $scope.difMonetaria) <= $scope.cargoBanco && $scope.cargoBanco <= ($scope.abonoBanco + $scope.difMonetaria))) {
                 $scope.control = 1;
             } else {
-                alertFactory.error('La cantidad de abono y cargo para conciliar Registros Bancarios no coinciden!!');
+                swal(
+                    'Alto',
+                    'La cantidad de abono y cargo para conciliar registros bancarios no coinciden.',
+                    'warning'
+                );
                 $scope.control = undefined;
             }
 
@@ -441,14 +449,22 @@
                     $scope.control = 1;
                 } else {
                     $scope.control = undefined;
-                    alertFactory.error('La cantidad de cargo y abono no coinciden');
+                    swal(
+                        'Alto',
+                        'La cantidad de cargo y abono no coinciden.',
+                        'warning'
+                    );
                 }
             } else if ($scope.abonoBanco != 0 && $scope.cargoAuxiliar != 0) {
                 if ((($scope.abonoBanco - $scope.difMonetaria) <= $scope.cargoAuxiliar && $scope.cargoAuxiliar <= ($scope.abonoBanco + $scope.difMonetaria)) || (($scope.cargoAuxiliar - $scope.difMonetaria) <= $scope.abonoBanco && $scope.abonoBanco <= ($scope.cargoAuxiliar + $scope.difMonetaria))) {
                     $scope.control = 1;
                 } else {
                     $scope.control = undefined;
-                    alertFactory.error('La cantidad de cargo y abono no coinciden');
+                    swal(
+                        'Alto',
+                        'La cantidad de cargo y abono no coinciden.',
+                        'warning'
+                    );
                 }
             }
 
@@ -457,15 +473,22 @@
             if ($scope.rowAuxiliarColor.length > 0 && $scope.rowBancoColor.length > 0) {
                 if ($scope.rowAuxiliarColor.length >= 1 || $scope.rowBancoColor.length >= 1) {
                     if ($scope.cargoBanco != 0 && $scope.cargoAuxiliar != 0 || $scope.abonoBanco != 0 && $scope.abonoAuxiliar != 0) {
-                        alertFactory.error('La relación de los registros debe ser cargo-abono, abono-cargo de los registros Bancarios y Contables, por favor verifique su selección');
+                        swal(
+                            'Alto',
+                            'La relación de los registros debe ser cargo-abono, abono-cargo de los registros bancarios y contables, por favor verifique su selección.',
+                            'warning'
+                        );
                         $scope.control = undefined;
                     } else {
-                        //$scope.verificaCantidades(2); //El numero 2 corresponde al punteo de cargos - abonos de Registros Bancarios y Contables 
                         $scope.control = 1;
                     }
                 }
             } else {
-                alertFactory.error('No ha seleccionado ninguna relación del grupo creado');
+                swal(
+                    'Alto',
+                    'No ha seleccionado ninguna relación del grupo creado.',
+                    'warning'
+                );
             }
 
             //Fin validación relaciones Registros Bancarios y Contables
@@ -797,25 +820,33 @@
             $scope.limpiaVariables();
         }
         else {
-            
-            $scope.cargosTotal = parseFloat($scope.cargoAuxiliar) + parseFloat($scope.cargoBanco);
-            $scope.abonosTotal = parseFloat($scope.abonoAuxiliar) + parseFloat($scope.abonoBanco);
-            $scope.diferencia = $scope.cargosTotal - $scope.abonosTotal;
-            $scope.diferenciaNeg = $scope.difMonetaria * -1;
-            console.log( $scope.cargoAuxiliar );
-            console.log( $scope.abonoAuxiliar );
-            console.log( $scope.cargoBanco );
-            console.log( $scope.abonoBanco );
-            if ($scope.diferencia >= $scope.diferenciaNeg && $scope.diferencia <= $scope.difMonetaria) {
-                $('#alertaGuardarPunteoPrevio').modal('show');
-                $scope.punteoAuxiliar = [];
-                $scope.punteoBanco = [];
-                $scope.gridApiAuxiliar.selection.clearSelectedRows();
-                $scope.gridApiBancos.selection.clearSelectedRows();
-            } else {
-                alertFactory.error('Tiene errores en los grupos creados para conciliar, por favor verifique su información!!');
+            if( $scope.cargoAuxiliar == 0 && $scope.abonoAuxiliar == 0 &&
+                $scope.cargoBanco == 0 && $scope.abonoBanco == 0){
+                    swal(
+                        'Alto',
+                        'Selecciona los cargos y abonos a conciliar.',
+                        'warning'
+                    );
+            }else{
+                $scope.cargosTotal = parseFloat($scope.cargoAuxiliar) + parseFloat($scope.cargoBanco);
+                $scope.abonosTotal = parseFloat($scope.abonoAuxiliar) + parseFloat($scope.abonoBanco);
+                $scope.diferencia = $scope.cargosTotal - $scope.abonosTotal;
+                $scope.diferenciaNeg = $scope.difMonetaria * -1;
+                
+                if ($scope.diferencia >= $scope.diferenciaNeg && $scope.diferencia <= $scope.difMonetaria) {
+                    $('#alertaGuardarPunteoPrevio').modal('show');
+                    $scope.punteoAuxiliar = [];
+                    $scope.punteoBanco = [];
+                    $scope.gridApiAuxiliar.selection.clearSelectedRows();
+                    $scope.gridApiBancos.selection.clearSelectedRows();
+                } else {
+                    swal(
+                        'Alto',
+                        'tiene errores en los gruos creados para conciliar, por favor verifique su información.',
+                        'warning'
+                    );
+                }
             }
-            
         }
         localStorage.setItem("seleccionados", JSON.stringify($scope.seleccionados));
         localStorage.setItem("grupoHexadecimal", JSON.stringify($scope.grupoHexadecimal))
@@ -836,7 +867,11 @@
 
     $scope.savePunteoDetalle = function (auxCont) {
         if (auxCont >= ($scope.save_grupoHexadecimal.length)) {
-            alertFactory.success('Punteo exitoso');
+            swal(
+                'Alto',
+                'Punteo éxitoso.',
+                'warning'
+            );
             $('#alertaGuardarPunteoPrevio').modal('hide');
             setTimeout(function () {
                 location.reload();
@@ -1016,8 +1051,11 @@
             //////////////////////////////////////////////////////////////////////////////
         }
         else {
-
-            alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
+            swal(
+                'Alto',
+                'Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información.',
+                'warning'
+            );
         }
     };
     ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
