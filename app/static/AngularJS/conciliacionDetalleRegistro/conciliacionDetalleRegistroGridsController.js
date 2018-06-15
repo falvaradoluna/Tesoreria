@@ -977,11 +977,7 @@
         }
         ///Finaliza la funcion que guarda cargos - abonos Contables
     };
-
-
-
-
-
+    
     $scope.cancelaPunteoPrevio = function () {
         //$scope.limpiaVariables();
         $('#alertaGuardarPunteoPrevio').modal('hide');
@@ -1024,7 +1020,6 @@
             alertFactory.error('Tiene errores en los grupos creados para el envío a DPI, por favor verifique su información!!');
         }
     };
-
     ////////////////////////////////////////////////////////////////////////////////Funsión para cancelar los punteos///////////////////////////////////
 
     $scope.cancelaPunteoDPI = function () {
