@@ -234,6 +234,9 @@ $scope.init = function() {
             $scope.tablaSearch('bancoReferenciadoAbono');
             $scope.tablaSearch('bancoReferenciadoCargo');
             $scope.tabla('bancoPunteo');
+            $scope.tabla('auxiliarPunteo');
+            $scope.tabla('bancoPunteoP');
+            $scope.tabla('auxiliarPunteoP');
         });
     };
 
