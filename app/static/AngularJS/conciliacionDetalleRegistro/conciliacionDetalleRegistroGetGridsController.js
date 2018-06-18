@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
+﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
 
      //Declaracion de variables locales
      $scope.bancoReferenciadosAbonos = '';
@@ -252,12 +252,20 @@ $scope.init = function() {
                         $('#DetalleRelacionCargos').modal('show');
                     }
                     else {
-                        alertFactory.warning('No existe relación para este registro');
+                        swal(
+                            'Alto',
+                            'No existe relación para este registro',
+                            'error'
+                        );
                     }
                 }
                 else if (registroConciliado.tipoReferencia == 4) {
                     $('#loading').modal('hide');
-                    alertFactory.warning('Función en desarrollo ...');
+                    swal(
+                        'Alto',
+                        'Función en desarrollo ...',
+                        'warning'
+                    );
                 }
             }
             else if (registroConciliado.tipoReferencia < 3) {
@@ -273,7 +281,11 @@ $scope.init = function() {
                     $('#DetalleRelacionAbonos').modal('show');
                 }
                 else {
-                    alertFactory.warning('No existe relación para este registro');
+                    swal(
+                        'Alto',
+                        'No existe relación para este registro',
+                        'warning'
+                    );
                 }
             }
 
@@ -299,7 +311,11 @@ $scope.init = function() {
                 $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
                 $('#regBancariosCargoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos.',
+                    'warning'
+                );
             }
         });
         
@@ -322,7 +338,6 @@ $scope.init = function() {
                 });
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
      //Ing. Luis Antonio García Perrusquía
     $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
@@ -339,10 +354,13 @@ $scope.init = function() {
                 
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos.',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.detalleRegistrosContablesAbonos = function (abonosData) {
@@ -359,7 +377,11 @@ $scope.init = function() {
                 
                 $('#regCargoAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos');
+                swal(
+                    'Alto',
+                    'No se encontraron datos.',
+                    'warning'
+                );
             }
            
             
@@ -397,7 +419,11 @@ $scope.init = function() {
 
                 $scope.tablaSearch('contableUniCargo');
             }else{
-                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo.',
+                    'warning'
+                );
             }
         });
     }
@@ -433,7 +459,11 @@ $scope.init = function() {
                     
                     $scope.tablaSearch('contableUniBancarioCargo');
                 } else {
-                    alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                    swal(
+                        'Alto',
+                        'No se encontraron datos, intentelo de nuevo.',
+                        'warning'
+                    );
                 }
             });
     }

@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsConsultaController', function ($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
+﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsConsultaController', function ($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
 
     //Declaracion de variables locales
     $scope.bancoReferenciadosAbonos = '';
@@ -349,12 +349,16 @@
                         $('#DetalleRelacionCargos').modal('show');
                     }
                     else {
-                        alertFactory.warning('No existe relación para este registro');
+                        swal(
+                            'Alto',
+                            'No existe relación para este registro',
+                            'warning'
+                        );
                     }
                 }
                 else if (registroConciliado.tipoReferencia == 4) {
                     $('#loading').modal('hide');
-                    alertFactory.warning('Función en desarrollo ...');
+                    
                 }
             }
             else if (registroConciliado.tipoReferencia < 3) {
@@ -370,20 +374,18 @@
                     $('#DetalleRelacionAbonos').modal('show');
                 }
                 else {
-                    alertFactory.warning('No existe relación para este registro');
+                    
+                    swal(
+                        'Alto',
+                        'No existe relación para este registro',
+                        'warning'
+                    );
                 }
             }
 
         });
     };
     //****************************************************************************************************
-
-    // $scope.detalleRegistrosReferenciadosContables = function (registroConciliado) {
-
-    //     alertFactory.warning('Función en desarrollo...');
-
-    // };
-
 
     $scope.detalleRegistrosReferenciadosContablesAbono = function (registroConciliado) {
         
@@ -403,7 +405,6 @@
                 });
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.getUniversoContableConsulta = function (registroConciliado) {
@@ -434,10 +435,13 @@
                 $scope.tablaSearch('contableUniCargo');
                 $scope.tablaSearch('contableUniAbonos');
             }else{
-                alertFactory.warning('No se encontraron datos, intentelo de nuevoAQUI.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.getUniversoBancariosConsulta = function (registroConciliado) {
@@ -470,10 +474,13 @@
                 $scope.tablaSearch('contableUniBancarioCargo');
                 $scope.tablaSearch('contableUniBancarioAbono');
             } else {
-                alertFactory.warning('No se encontraron datos, intentelo de nuevoQUI.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
@@ -493,7 +500,11 @@
                 $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
                 $('#regBancariosCargoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
         
@@ -512,10 +523,13 @@
                 $rootScope.totalAbonoBanco = result.data[1][0].ABONO_BANCO;
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
     //CLON LAGP
     $scope.detalleRegistrosContablesAbonos = function (abonosData) {
@@ -530,7 +544,11 @@
                 
                 $('#regCargoAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }  
         });
     }

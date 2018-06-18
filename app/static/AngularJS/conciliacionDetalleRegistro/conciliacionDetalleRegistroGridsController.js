@@ -87,7 +87,6 @@
                 }
 
             }
-            //filter: { term: ($scope.colorXXX.indexOf('') > -1)?term:'ooooooo' } 
         }
     ];
     $scope.gridAuxiliarContable.multiSelect = true;
@@ -868,9 +867,9 @@
     $scope.savePunteoDetalle = function (auxCont) {
         if (auxCont >= ($scope.save_grupoHexadecimal.length)) {
             swal(
-                'Alto',
+                'Listo',
                 'Punteo éxitoso.',
-                'warning'
+                'success'
             );
             $('#alertaGuardarPunteoPrevio').modal('hide');
             setTimeout(function () {
