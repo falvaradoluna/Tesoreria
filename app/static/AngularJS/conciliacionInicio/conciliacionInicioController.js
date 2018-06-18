@@ -470,7 +470,7 @@
                         $('#reproteModalPdf').modal('show');
                     });
                 });
-        }, 4000)
+        }, 6000)
     };
 
     $scope.go = function (path) {
