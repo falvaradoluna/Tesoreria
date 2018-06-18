@@ -207,7 +207,7 @@
         return  new Date(y, m , 0).getDate();
     }
     
-    $scope.getTotalesAbonoCargo = function () {
+    $scope.getLocalAbonoCargo = function () {
 
         localStorage.removeItem('cuentaActualInMemory');
         localStorage.removeItem('empresaActualInMemory');
@@ -371,7 +371,7 @@
         localStorage.removeItem('comeBack');
     };
 
-    $scope.getLocalAbonoCargo = function () {
+    $scope.getTotalesAbonoCargo = function () {
         localStorage.removeItem('cuentaActualInMemory');
         localStorage.removeItem('empresaActualInMemory');
         localStorage.removeItem('bancoActualInMemory');
