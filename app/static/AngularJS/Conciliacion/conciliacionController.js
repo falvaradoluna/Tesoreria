@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionController', function($scope, $rootScope, $location, localStorageService, alertFactory, conciliacionRepository) {
+registrationModule.controller('conciliacionController', function($scope, $rootScope, $location, localStorageService, conciliacionRepository) {
 
      $scope.variableControl = 0;
     $scope.init = function() {

@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',function($window ,$scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory){
+﻿registrationModule.controller('conciliacionDetalleRegistroSaveGridsController',function($window ,$scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository){
     
       $scope.tipoPunteo = 0;
 
@@ -25,9 +25,7 @@
             console.log(result.data[0].idEstatus)
             $('#alertaPunteo').modal('hide');
             if(result.data[0].idEstatus==1){
-                alertFactory.success(result.data[0].Descripcion)
             }else if(result.data[0].idEstatus==0){
-                alertFactory.error(result.data[0].Descripcion)
             }
             $scope.refreshGrids();
         });
@@ -79,7 +77,6 @@
 
            });
            $scope.refreshGrids();
-           alertFactory.success('Registros Contables guardados correctamente!!');
           }
 //*********************************************************Fin de la función que inserta el grupo de registros de Contabilidad cargos- abonos
       if($scope.abonoCargoBanco.length > 0){
@@ -110,7 +107,6 @@
        });
   
        $scope.refreshGrids();
-           alertFactory.success('Registros Bancarios guardados correctamente!!');
       }
 
 
@@ -209,7 +205,6 @@
         setTimeout(function(){
         $scope.refreshGrids();
             $('#loading').modal('hide');
-            alertFactory.success('Registros guardados correctamente!!');
           },10000);
 
        ///*********************QUEDA PENDIENTE PARA OBJETOS MAYORES A 150 ITEMS RO 2017-10-24
@@ -229,7 +224,6 @@
         var contRegAuxiliar = 0; 
 
         if($scope.punteoAuxiliar != null){
-         alertFactory.warning('Acción incorrecta, no es posible enviar a DPI los Abonos o Cargos Contables seleccionados');
          } else {
         if($scope.DPIdata.length > 0){
           
@@ -244,10 +238,8 @@
             });
                 if(contRegBancos > 0){
                 $scope.refreshGrids();
-                alertFactory.success('Los registros seleccionados se han modificado correctamente!');
                 }
                 if(contRegAuxiliar > 0){
-                alertFactory.warning('No es posible enviar cargos bancarios a DPI, por favor verifique su selección');
                 }
                 
     }
@@ -267,7 +259,6 @@
         if ($scope.bancoPadre.length > 0 || $scope.auxiliarPadre.length > 0) {
             $('#alertaPunteo').modal('show');
         } else {
-            alertFactory.error('No existen punteos')
         }
     };
     //****************************************************************************************************

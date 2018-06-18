@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionInicioConsultaController', function ($window, $filter, $scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
+﻿registrationModule.controller('conciliacionInicioConsultaController', function ($window, $filter, $scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioConsultaRepository, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
 
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
@@ -153,11 +153,6 @@
                 })
                 $rootScope.mesSelect = $rootScope.mesesConsulta;
                 
-                // angular.forEach($rootScope.mesSelect, function( value, key ){
-                //     if( value.ACTIVO == 1 ){
-                //         $scope.mesActual = value;
-                //     }
-                // });
             }
         });
     };
@@ -168,7 +163,11 @@
         $scope.bancoActual = '';
         $scope.cuentaActual = '';
         if (idEmpresa == undefined || idEmpresa == null || idEmpresa == '') {
-            alertFactory.warning('Seleccione una Empresa');
+            swal(
+                'Alto',
+                'Seleccione una Empresa',
+                'warning'
+            );
             $scope.activaInputBanco = true;
         } else {
             $scope.empresaId = idEmpresa;
@@ -191,7 +190,11 @@
     $scope.getCuenta = function (idBanco, idEmpresa) {
         $scope.activaBotonBuscar = true;
         if (idBanco == undefined || idBanco == null || idBanco == '') {
-            alertFactory.warning('Seleccioné un Banco');
+            swal(
+                'Alto',
+                'Seleccione una Banco',
+                'warning'
+            );
             $scope.activaInputCuenta = true;
         } else {
             $scope.bancoId = idBanco;
@@ -221,14 +224,22 @@
             if (!localStorage.getItem('comeBackConsulta')) {
                 
                 if ($scope.mesActual == undefined) {
-                    alertFactory.warning('Seleciona un mes');
+                    swal(
+                        'Alto',
+                        'Seleccione un mes',
+                        'warning'
+                    );
                 } else {
                     
                     $scope.fechaElaboracion = $scope.mesActual.value.substr(0, 4) + '-' + $scope.mesActual.value.substr(4, 2) + '-' + $scope.mesActual.value.substr(6, 2);
                     $scope.fechaCorte = $scope.mesActual.value.substr(0, 4) + '-' + $scope.mesActual.value.substr(4, 2) + '-' + $scope.lastDay($scope.mesActual.value.substr(0, 4), $scope.mesActual.value.substr(4, 2));
                    
                     if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
-                        alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
+                        swal(
+                            'Alto',
+                            'El rango de fechas seleccionado debe pertenecer al mismo mes',
+                            'warning'
+                        );
                     }else {
                         localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
                         localStorage.setItem('empresaActualInMemory', JSON.stringify($scope.empresaActual));
@@ -254,7 +265,11 @@
 
                             if (result.data.length > 0) {
                                 if (result.data[0].resultado == 0) {
-                                    alertFactory.error(result.data[0].mensaje);
+                                    swal(
+                                        'Alto',
+                                        result.data[0].mensaje,
+                                        'warning'
+                                    );
                                     $scope.totalesAbonosCargos = [];
                                 } else {
                                     $scope.totalesAbonosCargos = result.data[0];
@@ -353,10 +368,6 @@
                         $rootScope.fechaHistorico = result.data[0].fecha;
                         //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
-                        // if ($scope.mesActivo != 1) {
-                        //     alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
-                        // }
-
                         $scope.paramBusqueda = [];
 
                         setTimeout(function () {
@@ -438,7 +449,11 @@
             //Obtengo los datos de detalles/diferencias del local storage
             var detalleDiferencias = JSON.parse(localStorage.getItem('DetalleDiferencias'));
             if (detalleDiferencias.abonoContable.length == undefined) {
-                alertFactory.warning("Error de comunicación, por favor intente de nuevo!!");
+                swal(
+                    'Alto',
+                    'Error de comunicación, por favor intente de nuevo!',
+                    'warning'
+                );
                 $('#loading').modal('hide');
             }
 

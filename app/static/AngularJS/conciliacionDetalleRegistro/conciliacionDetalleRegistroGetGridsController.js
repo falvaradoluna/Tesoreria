@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
+﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsController',function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter){
 
      //Declaracion de variables locales
      $scope.bancoReferenciadosAbonos = '';
@@ -78,13 +78,11 @@ $scope.init = function() {
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
         
-        $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+        //$scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
-        $scope.bancoReferenciados();
-        $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
-        $scope.getRegistrosBancariosCargos();
+        
         $scope.getTotalUniverso();
         $scope.getTotalUniversoBancario();
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
@@ -109,39 +107,7 @@ $scope.init = function() {
 
      // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
-   $scope.getAuxiliarPunteo = function(idempresa, cuenta, fechaElaboracion, fechaCorte) {
-        // conciliacionDetalleRegistroRepository.getAuxiliarPunteo(idempresa, cuenta, fechaElaboracion, fechaCorte).then(function(result) {
-            
-        //     $scope.auxiliarPadre = result.data;
-        //    // localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
-        //     $scope.AuxiliarPunteado = $filter('filter')(result.data, function(value){
-        //     return value.idEstatus == 3;
-        //     });
-            
-        //    //Obtener la uma total de los registros
-        //     // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
-        //     //     $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-        //     // });
-
-        //     // angular.forEach($scope.AuxiliarPunteado, function (value, key) {
-        //     //     $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-        //     // });
-
-        //     if( $rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0 ){
-        //         angular.forEach(result.data, function( value, key ){
-        //             if( value.idPunteoFinalBancos == 3 ){
-        //                 $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-        //                 $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-        //             }
-        //         });
-        //     }
-            
-
-        //     $scope.tabla('auxiliarPunteo');
-        // });
-        // $scope.conteoAuxiliar++;
-    };
-    //****************************************************************************************************
+    
     //Ing. Luis Antonio Garcia Perrusquia
     $scope.getBancoPunteo = function (idempresa, idBanco, noCuenta, CuentaContable) {
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, idBanco, noCuenta, CuentaContable).then(function (result) {
@@ -240,40 +206,6 @@ $scope.init = function() {
         });
     };
 
-    // INICIA Obtengo los padres del Banco punteado
-    //****************************************************************************************************
-     /*$scope.getBancoPunteo = function(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte) {
-        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, fechaElaboracion, fechaCorte).then(function(result) {
-            $scope.bancoPadre = result.data;
-            localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-            
-            $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function(value){
-            return value.idPAdre == 3;
-            });
-            
-           //Obtener la uma total de los registros
-            // angular.forEach($scope.BancoPunteado, function (value, key) {
-            //     $rootScope.BancoPunteadoAbonosTotales += value.abono;
-            // });
-
-            // angular.forEach($scope.BancoPunteado, function (value, key) {
-            //     $rootScope.BancoPunteadoCargosTotales += value.cargo;
-            // });
-
-            if( $rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0 ){
-                angular.forEach(result.data, function( value, key ){
-                    if(value.idPunteoFinalBancos == 3){
-                        $rootScope.BancoPunteadoAbonosTotales += value.abono;
-                        $rootScope.BancoPunteadoCargosTotales += value.cargo;
-                    }
-                });
-            }
-            
-            $scope.tabla('bancoPunteo');
-        });
-    };*/
-    //****************************************************************************************************
-
      // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************
     $scope.getBancoDPI = function(idempresa, cuentaBanco) {
@@ -288,68 +220,7 @@ $scope.init = function() {
             $scope.tabla('bancodpi');
         });
     };
-    //****************************************************************************************************
-
-    //Función que obtiene los registros Bancarios Referenciados
-    //****************************************************************************************************
-    $scope.bancoReferenciados = function () {
-        conciliacionDetalleRegistroRepository.getBancosRef($scope.idBanco, $scope.cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa).then(function (result) {
-
-            // $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
-            //     return value.tipoMovimiento == 0;
-            // });
-
-            // $scope.tablaSearch('bancoReferenciadoAbono');
-            // $scope.tablaSearch('bancoReferenciadoCargo');
-            //Obtener la uma total de los registros
-            
-
-            // angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
-            //     $scope.bancoReferenciadosAbonosTotales += value.abono;
-            // });
-        });
-    };
-
-    
-
-    $scope.getRegistrosBancariosCargos = function () {
-        conciliacionDetalleRegistroRepository.getRegistrosBancariosCargos()
-        .then(function (result) {
-            // $rootScope.registrosBancariosCargos = result.data
-            // if ($rootScope.bancoReferenciadosCargosTotales == 0) {
-            //     angular.forEach(result.data, function (value, key) {
-            //         $rootScope.bancoReferenciadosCargosTotales += value.importe;
-            //     });
-            // }
-        });
-    };
-    //****************************************************************************************************
-    
-    //Función que obtiene los registros Bancarios Referenciados
-    //****************************************************************************************************
-     $scope.contablesReferenciados = function(polizaPago, cuentaBanco){
-        conciliacionDetalleRegistroRepository.getContablesRef($scope.busqueda.CuentaContable, cuentaBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, polizaPago, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
-
-    //     $scope.contableReferenciadosAbonos = $filter('filter')(result.data, function(value){
-    //      return value.tipoMovimiento == 0;
-    //     });
-    //     $scope.contableReferenciadosCargos = $filter('filter')(result.data, function(value){
-    //      return value.tipoMovimiento == 1;
-    //     });
-    //     $scope.tablaSearch('contableRefAbonos');
-    //     $scope.tablaSearch('contableRefCargos');
-
-    //     //Obtener la uma total de los registros
-    //          angular.forEach($scope.contableReferenciadosAbonos, function(value, key) {
-    //                 $scope.contableReferenciadosAbonosTotales += value.abono;
-    //                 });
-             
-    //          angular.forEach($scope.contableReferenciadosCargos, function(value, key) {
-    //                 $scope.contableReferenciadosCargosTotales += value.cargo;
-    //                 });  
-      });
-    };
-    //****************************************************************************************************
+    //****************************************************************************************************    
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
@@ -381,12 +252,20 @@ $scope.init = function() {
                         $('#DetalleRelacionCargos').modal('show');
                     }
                     else {
-                        alertFactory.warning('No existe relación para este registro');
+                        swal(
+                            'Alto',
+                            'No existe relación para este registro',
+                            'error'
+                        );
                     }
                 }
                 else if (registroConciliado.tipoReferencia == 4) {
                     $('#loading').modal('hide');
-                    alertFactory.warning('Función en desarrollo ...');
+                    swal(
+                        'Alto',
+                        'Función en desarrollo ...',
+                        'warning'
+                    );
                 }
             }
             else if (registroConciliado.tipoReferencia < 3) {
@@ -402,7 +281,11 @@ $scope.init = function() {
                     $('#DetalleRelacionAbonos').modal('show');
                 }
                 else {
-                    alertFactory.warning('No existe relación para este registro');
+                    swal(
+                        'Alto',
+                        'No existe relación para este registro',
+                        'warning'
+                    );
                 }
             }
 
@@ -410,9 +293,7 @@ $scope.init = function() {
     };
     
     //********************************* Ing. Luis Antonio García Perrusquía 27/03/2018
-    // Get Registros bancarios cargos
-    //*/
-
+    
     $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
         
         conciliacionDetalleRegistroRepository.detalleRegistrosBancariosCargos( idCargo )
@@ -430,7 +311,11 @@ $scope.init = function() {
                 $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
                 $('#regBancariosCargoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos.',
+                    'warning'
+                );
             }
         });
         
@@ -453,7 +338,6 @@ $scope.init = function() {
                 });
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
      //Ing. Luis Antonio García Perrusquía
     $scope.detalleRegistrosBancariosAbonos = function (abonosData) {
@@ -470,10 +354,13 @@ $scope.init = function() {
                 
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos.',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.detalleRegistrosContablesAbonos = function (abonosData) {
@@ -490,7 +377,11 @@ $scope.init = function() {
                 
                 $('#regCargoAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos');
+                swal(
+                    'Alto',
+                    'No se encontraron datos.',
+                    'warning'
+                );
             }
            
             
@@ -528,7 +419,11 @@ $scope.init = function() {
 
                 $scope.tablaSearch('contableUniCargo');
             }else{
-                alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo.',
+                    'warning'
+                );
             }
         });
     }
@@ -564,7 +459,11 @@ $scope.init = function() {
                     
                     $scope.tablaSearch('contableUniBancarioCargo');
                 } else {
-                    alertFactory.warning('No se encontraron datos, intentelo de nuevo.');
+                    swal(
+                        'Alto',
+                        'No se encontraron datos, intentelo de nuevo.',
+                        'warning'
+                    );
                 }
             });
     }

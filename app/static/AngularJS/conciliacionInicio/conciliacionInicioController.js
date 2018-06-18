@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionInicioController', function ($window, $filter, $scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
+﻿registrationModule.controller('conciliacionInicioController', function ($window, $filter, $scope, $rootScope, $location, $timeout, $log, $uibModal, localStorageService, filtrosRepository, conciliacionInicioRepository, uiGridConstants, i18nService, uiGridGroupingConstants, $sce) {
 
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
@@ -25,11 +25,6 @@
     $scope.elementState = {}
     $scope.elementState.show = false;
     //***********************************************************
-
-    //*****Cambio del formato en fechas predeterminadas para la búsqueda -- Se coloca la fecha del mes en curso
-    // $scope.fechaCorte = $filter('date')(new Date($scope.fechaCorte), 'yyyy-MM-dd');
-    // $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
-
     
     //******************************************************************
 
@@ -41,7 +36,6 @@
 
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
-        $scope.getMeses();
         $scope.getUltimoMes();
 
         $rootScope.mostrarMenu = 1;
@@ -57,7 +51,6 @@
         $scope.mesesSelect = n + 1;
 
         if (localStorage.getItem('comeBack')) {
-            $scope.getMeses();
             $scope.empresaNombre = JSON.parse(localStorage.getItem('empresaActualInMemory')).emp_nombre;
             $scope.bancoNombreT = JSON.parse(localStorage.getItem('cuentaActualInMemory')).NOMBRE;
             $scope.bancoId = JSON.parse(localStorage.getItem('cuentaActualInMemory')).IdBanco;
@@ -126,22 +119,6 @@
                 }
             });
     }
-
-    //Ing. LAGP 03052018
-    $scope.getMeses = function () {
-        conciliacionInicioRepository.getMeses().then(function (result) {
-            console.log( 'resultMESEST', result );
-            // if( result.data.length != 0 ){
-            //     $rootScope.mesSelect = result.data;
-            //     console.log( 'mesSelect', $rootScope.mesSelect );
-            //     angular.forEach($rootScope.mesSelect, function( value, key ){
-            //         if( value.ACTIVO == 1 ){
-            //             $scope.mesActual = value;
-            //         }
-            //     });
-            // }
-        });
-    };
     
     //Ing. LAGP 05062018
     $scope.getUltimoMes = function(){
@@ -152,8 +129,7 @@
         conciliacionInicioRepository.getUltimoMes( year ).then(function (result) {
             if( result.data.length != 0 ){
                 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-                                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];              
-                console.log( 'resultUltimo', result );
+                                    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];  
                 if( result.data[0].mec_numMes < 10 ){
                     $scope.jsonMes = {
                         ID: result.data[0].mec_numMes,
@@ -173,7 +149,6 @@
                 }
                 $rootScope.nombreMes = monthNames[ result.data[0].mec_numMes - 1 ]
                 $scope.mesActualJUN = $scope.jsonMes;
-                console.log( 'mesActualJUN', $scope.mesActualJUN );
             }
         });
     }
@@ -184,7 +159,11 @@
         $scope.bancoActual = '';
         $scope.cuentaActual = '';
         if (idEmpresa == undefined || idEmpresa == null || idEmpresa == '') {
-            alertFactory.warning('Seleccione una Empresa');
+            swal(
+                'Alto',
+                'Seleccione una Empresa',
+                'warning'
+            );
             $scope.activaInputBanco = true;
         } else {
             filtrosRepository.getBancos(idEmpresa).then(function (result) {
@@ -205,7 +184,11 @@
     $scope.getCuenta = function (idBanco, idEmpresa) {
         $scope.activaBotonBuscar = true;
         if (idBanco == undefined || idBanco == null || idBanco == '') {
-            alertFactory.warning('Seleccioné un Banco');
+            swal(
+                'Alto',
+                'Seleccioné una Banco',
+                'warning'
+            );
             $scope.activaInputCuenta = true;
         } else {
             $scope.paramBusqueda = [];
@@ -234,10 +217,12 @@
             //Se coloca la fecha que se obtiene del dropdawn
             $scope.fechaElaboracion = $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2) + '-' + $scope.mesActualJUN.PAR_IDENPARA.substr(6, 2);
             $scope.fechaCorte = $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4) + '-' + $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2) + '-' + $scope.lastDay( $scope.mesActualJUN.PAR_IDENPARA.substr(0, 4), $scope.mesActualJUN.PAR_IDENPARA.substr(4, 2) );
-            console.log( 'fOperacion',$scope.fechaElaboracion );
-            console.log( 'fechaCorte',$scope.fechaCorte );
             if ($scope.fechaElaboracion.substr(-5, 2) != $scope.fechaCorte.substr(-5, 2)) {
-                alertFactory.warning('El rango de fechas seleccionado debe pertenecer al mismo mes');
+                swal(
+                    'Alto',
+                    'El rango de fechas seleccionado debe pertenecer al mismo mes',
+                    'warning'
+                );
             }
             else {
                 localStorage.setItem('cuentaActualInMemory', JSON.stringify($scope.cuentaActual));
@@ -256,7 +241,6 @@
                     $scope.empresaActual.polizaPago,
                     2,
                     $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                        //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                         if (result.data.length > 0) {
                             
                             $scope.totalesAbonosCargos = result.data[0];
@@ -264,9 +248,12 @@
                             localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
 
                             //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
-
                             if ($scope.mesActualJUN.ACTIVO != 1) {
-                                alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                                swal(
+                                    'Alto',
+                                    'El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información',
+                                    'warning'
+                                );
                             }
 
                             $scope.paramBusqueda = [];
@@ -322,13 +309,10 @@
                 $scope.cuentaNumerica,
                 $scope.cuentaContable,
                 $scope.fechaElaboracion,
-                //JSON.parse( localStorage.getItem('paramBusqueda') ).fechaElaboracion.substr(0, 10),
                 $scope.fechaCorte,
-                //JSON.parse( localStorage.getItem('paramBusqueda') ).fechaCorte.substr(0, 10),
                 $scope.polizaPagos,
                 2,
                 $rootScope.userData.idUsuario).then(function (result) { //LQMA add 06032018 idUsuario
-                    //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
                     if (result.data.length > 0) {
                         $scope.totalesAbonosCargos = result.data[0];
                         $scope.mesActivo = result.data[0].mesActivo;
@@ -337,7 +321,11 @@
                         //Mensaje de alerta que corrobora la disponibilidad para conciliar registro del mes consultado
 
                         if ($scope.mesActualJUN.ACTIVO != 1) {
-                            alertFactory.error("El mes consultado se  encuentra inactivo para conciliar registros, solo podrá consultar información!!!");
+                            swal(
+                                'Alto',
+                                'El mes consultado se encuentra inactivo para conciliar registros, solo podrá consultar información',
+                                'warning'
+                            );
                         }
 
                         $scope.paramBusqueda = [];
@@ -416,13 +404,6 @@
 
             //Obtengo los datos de detalles/diferencias del local storage
             var detalleDiferencias = JSON.parse(localStorage.getItem('DetalleDiferencias'));
-            // if( 1 == 3 ){ // Se deja
-            // //if (detalleDiferencias.abonoContable.length == undefined) {
-            //     alertFactory.warning("Error de comunicación, por favor intente de nuevo!!");
-            //     $('#loading').modal('hide');
-            // }
-
-            // else {
                 $('reproteModalPdf').modal('show');
                 //Genero la promesa para enviar la estructura del reporte 
                 new Promise(function (resolve, reject) {
@@ -489,7 +470,6 @@
                         $('#reproteModalPdf').modal('show');
                     });
                 });
-           // }
         }, 4000)
     };
 
@@ -498,17 +478,6 @@
             $location.path(path);
         }
     };
-
-    //Cancelación del modal para exportar datos a excel
-    // $scope.excelExportModal = function(){
-    //  var modalInstance = $uibModal.open({
-    //     templateUrl: '../AngularJS/ExportarExcel/Template/ExcelExport.html',
-    //     controller: 'excelExportController',
-    //     backdrop: 'static',
-    //     size: 500
-    // });
-
-    // };
 
     $scope.closeMes = function () {
         var mes = parseInt($scope.mesActualJUN.PAR_IDENPARA.substr(4, 2));
@@ -640,13 +609,6 @@
                 }
 
                 conciliacionInicioRepository.addMovimientoBancario( parametros ).then(function(result) {
-                    // swal({
-                    //     title: "Traspaso entre Financieras",
-                    //     text: "Las unidades seleccionadas corresponden a más de una Financiera, asegurate de seleccionar unicamente de una sola."
-                    // }, function(){
-                    //     location.reload();
-                    // });
-
                     swal({
                         title:"Nuevo Movimiento Bancario", 
                         text: "Se ha agregado con exito.", 

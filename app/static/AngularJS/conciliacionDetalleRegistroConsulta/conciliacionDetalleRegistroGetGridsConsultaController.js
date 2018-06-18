@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsConsultaController', function ($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
+﻿registrationModule.controller('conciliacionDetalleRegistroGetGridsConsultaController', function ($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
 
     //Declaracion de variables locales
     $scope.bancoReferenciadosAbonos = '';
@@ -64,7 +64,7 @@
         $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.paramsHistory.HistoricoId);
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.paramsHistory.HistoricoId);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.paramsHistory.HistoricoId);
-        $scope.bancoReferenciados();
+        
         $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
@@ -290,38 +290,6 @@
 
     //Función que obtiene los registros Bancarios Referenciados
     //****************************************************************************************************
-    $scope.bancoReferenciados = function () {
-        
-    //     conciliacionDetalleRegistroConsultaRepository.getBancosRef(
-    //         $scope.paramsHistory.IdBanco, 
-    //         $scope.paramsHistory.Cuenta, 
-    //         $scope.paramsHistory.IdEmpresa, 
-    //         $scope.paramsHistory.HistoricoId)
-    //     .then(function (result) {
-
-    //         $scope.bancoReferenciadosAbonos = $filter('filter')(result.data, function (value) {
-    //             return value.tipoMovimiento == 0;
-    //         });
-    //         $scope.bancoReferenciadosCargos = $filter('filter')(result.data, function (value) {
-    //             return value.tipoMovimiento == 1;
-    //         });
-    //         $scope.tablaSearch('bancoReferenciadoAbono');
-    //         $scope.tablaSearch('bancoReferenciadoCargo');
-    //         //Obtener la uma total de los registros
-    //         angular.forEach($scope.bancoReferenciadosAbonos, function (value, key) {
-    //             $scope.bancoReferenciadosAbonosTotales += value.abono;
-    //         });
-
-    //         angular.forEach($scope.bancoReferenciadosCargos, function (value, key) {
-    //             $scope.bancoReferenciadosCargosTotales += value.cargo;
-    //         });
-
-    //     });
-    };
-    //****************************************************************************************************
-
-    //Función que obtiene los registros Bancarios Referenciados
-    //****************************************************************************************************
     $scope.contablesReferenciados = function (polizaPago, cuentaBanco) {
         conciliacionDetalleRegistroConsultaRepository.getContablesRef(
             $scope.paramsHistory.CuentaContable,
@@ -381,12 +349,16 @@
                         $('#DetalleRelacionCargos').modal('show');
                     }
                     else {
-                        alertFactory.warning('No existe relación para este registro');
+                        swal(
+                            'Alto',
+                            'No existe relación para este registro',
+                            'warning'
+                        );
                     }
                 }
                 else if (registroConciliado.tipoReferencia == 4) {
                     $('#loading').modal('hide');
-                    alertFactory.warning('Función en desarrollo ...');
+                    
                 }
             }
             else if (registroConciliado.tipoReferencia < 3) {
@@ -402,20 +374,18 @@
                     $('#DetalleRelacionAbonos').modal('show');
                 }
                 else {
-                    alertFactory.warning('No existe relación para este registro');
+                    
+                    swal(
+                        'Alto',
+                        'No existe relación para este registro',
+                        'warning'
+                    );
                 }
             }
 
         });
     };
     //****************************************************************************************************
-
-    // $scope.detalleRegistrosReferenciadosContables = function (registroConciliado) {
-
-    //     alertFactory.warning('Función en desarrollo...');
-
-    // };
-
 
     $scope.detalleRegistrosReferenciadosContablesAbono = function (registroConciliado) {
         
@@ -435,7 +405,6 @@
                 });
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.getUniversoContableConsulta = function (registroConciliado) {
@@ -466,10 +435,13 @@
                 $scope.tablaSearch('contableUniCargo');
                 $scope.tablaSearch('contableUniAbonos');
             }else{
-                alertFactory.warning('No se encontraron datos, intentelo de nuevoAQUI.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.getUniversoBancariosConsulta = function (registroConciliado) {
@@ -502,10 +474,13 @@
                 $scope.tablaSearch('contableUniBancarioCargo');
                 $scope.tablaSearch('contableUniBancarioAbono');
             } else {
-                alertFactory.warning('No se encontraron datos, intentelo de nuevoQUI.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
 
     $scope.detalleRegistrosBancariosCargosF = function ( idCargo, banco ) {
@@ -525,7 +500,11 @@
                 $rootScope.detalleRegistrosBancariosCargosAbono         = result.data[0].Abono;
                 $('#regBancariosCargoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
         
@@ -544,10 +523,13 @@
                 $rootScope.totalAbonoBanco = result.data[1][0].ABONO_BANCO;
                 $('#regBancariosAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos.');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }
         });
-        //alertFactory.warning('Función en desarrollo...');
     };
     //CLON LAGP
     $scope.detalleRegistrosContablesAbonos = function (abonosData) {
@@ -562,7 +544,11 @@
                 
                 $('#regCargoAbonoDetalle').modal('show');
             }else{
-                alertFactory.warning('No se encontraron datos');
+                swal(
+                    'Alto',
+                    'No se encontraron datos, intentelo de nuevo',
+                    'warning'
+                );
             }  
         });
     }
