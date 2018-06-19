@@ -17,6 +17,11 @@
     $scope.totalAbonoContable = 0;
     $scope.totalCargoContable = 0;
 
+    //Punteo especial
+    $scope.checkboxEspecial = {
+        value : false
+      };
+
     //LQMA add 22082017
     $scope.hexPicker = { color: '#c9dde1' };
 
@@ -36,6 +41,7 @@
 
         variablesLocalStorage();
         $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
+        $scope.diferenciaNeg = $scope.difMonetaria * -1;
         //LQMA comment 17082017
         //$scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
     };
@@ -221,6 +227,9 @@
                 $scope.abonoAuxiliar = $scope.abonoAuxiliar + row.entity.abono;
                 $scope.cargoAuxiliar = $scope.cargoAuxiliar + row.entity.cargo;
 
+                $scope.aboConCarBan = $scope.abonoAuxiliar - $scope.cargoBanco;
+                $scope.carConAboBan = $scope.cargoAuxiliar - $scope.abonoBanco;
+
                 //LQMA 23082017    
                 row.entity.color = $scope.hexPicker.color;//$scope.currentColor;
                 $scope.agregaDiv($scope.hexPicker.color);
@@ -228,6 +237,9 @@
             } else if (row.isSelected == false) {
                 $scope.abonoAuxiliar = $scope.abonoAuxiliar - row.entity.abono;
                 $scope.cargoAuxiliar = $scope.cargoAuxiliar - row.entity.cargo;
+
+                $scope.aboConCarBan = $scope.abonoAuxiliar - $scope.cargoBanco;
+                $scope.carConAboBan = $scope.cargoAuxiliar - $scope.abonoBanco;
 
                 //LQMA add 24082018            
                 if (row.entity.indexPrePunteo != 99999 && row.entity.indexPrePunteo != -1) {
@@ -276,6 +288,9 @@
                 $scope.cargoBanco = parseFloat( $scope.cargoBanco );
                 $scope.abonoBanco = parseFloat( $scope.abonoBanco );
                 
+                $scope.aboConCarBan = $scope.abonoAuxiliar - $scope.cargoBanco;
+                $scope.carConAboBan = $scope.cargoAuxiliar - $scope.abonoBanco;
+                
                 //LQMA add 24082018
                 row.entity.color = $scope.hexPicker.color;//$scope.currentColor;
                 $scope.agregaDiv($scope.hexPicker.color);
@@ -287,6 +302,8 @@
                 $scope.abonoBanco = $scope.abonoBanco - row.entity.abono;
                 $scope.cargoBanco = $scope.cargoBanco - row.entity.cargo;
 
+                $scope.aboConCarBan = $scope.abonoAuxiliar - $scope.cargoBanco;
+                $scope.carConAboBan = $scope.cargoAuxiliar - $scope.abonoBanco;
                 //LQMA add 24082018 
                 if (row.entity.indexPrePunteo != 99999 && row.entity.indexPrePunteo != -1) {
                     var aux = 0; //LQMA 31
@@ -318,7 +335,6 @@
                 $scope.punteoBanco[key] = value.entity;
             });
         });
-
     };
 
     //Color Grids////////////////////////////////////////////////////////
@@ -763,7 +779,7 @@
         //Limpiamos variables de guardado
         $scope.seleccionados = [];
         $scope.grupoHexadecimal = [];
-        console.log( 'ShowAlertPunteo' );
+        
         //Obtengo los registros seleccionados y agrupados por color
         var auxiSel = 0, depoSel = 0; auxiTot = 0, depoTot = 0;
         var deSel = [], auSel = []; // variables en las que se almacenan los registros seleccionados
@@ -812,7 +828,7 @@
         //Registro el grupo de arrays del grid original ya seleccionado en local storage para obtenerlos en un controlller distinto
         
         if ($scope.control != undefined) {
-            console.log( 'ifControl' );
+            
             $('#alertaGuardarPunteoPrevio').modal('show');
             $scope.gridApiAuxiliar.selection.clearSelectedRows();
             $scope.gridApiBancos.selection.clearSelectedRows();
@@ -827,11 +843,11 @@
                         'warning'
                     );
             }else{
+                
                 $scope.cargosTotal = parseFloat($scope.cargoAuxiliar) + parseFloat($scope.cargoBanco);
                 $scope.abonosTotal = parseFloat($scope.abonoAuxiliar) + parseFloat($scope.abonoBanco);
                 $scope.diferencia = $scope.cargosTotal - $scope.abonosTotal;
-                $scope.diferenciaNeg = $scope.difMonetaria * -1;
-                
+
                 if ($scope.diferencia >= $scope.diferenciaNeg && $scope.diferencia <= $scope.difMonetaria) {
                     $('#alertaGuardarPunteoPrevio').modal('show');
                     $scope.punteoAuxiliar = [];
@@ -844,7 +860,7 @@
                         'tiene errores en los gruos creados para conciliar, por favor verifique su información.',
                         'warning'
                     );
-                }
+                } 
             }
         }
         localStorage.setItem("seleccionados", JSON.stringify($scope.seleccionados));
@@ -909,8 +925,6 @@
         }
     }
     
-
-
     $scope.crearArrayGrupos = function (deSel, auSel) {
         var coloresUsados = [];
 
