@@ -17,6 +17,10 @@
     $scope.totalAbonoContable = 0;
     $scope.totalCargoContable = 0;
 
+    //Variables para la sumatoria por grupo
+    $scope.bancoGrupo = 0;
+    $scope.contableGrupo = 0;
+
     //Punteo especial
     $scope.checkboxEspecial = {
         value : false
