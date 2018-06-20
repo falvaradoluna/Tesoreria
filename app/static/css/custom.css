@@ -116,3 +116,20 @@ div.bhoechie-tab div.bhoechie-tab-content:not(.active) {
     font-weight: bold;
     cursor: pointer;
 }
+
+.divGrupoPunteoColor {
+    width: 30px;
+    height: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    float: left;
+    margin-right: 5px;
+}
+
+.divGrupoPunteoColorShadow{
+    width: 24px;
+    height: 44px;
+    margin: 3px 3px 3px 3px;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1)
+}

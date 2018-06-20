@@ -70,22 +70,25 @@
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row">
-                                    <div class="col-sm-1" id="panelGrupos">
+                                    <!-- <div class="col-sm-1" id="panelGrupos">
                                         <input colorpicker class="form-control" ng-model="hexPicker.color" type="text" />
                                     </div>
                                     <div class="col-sm-1">
-                                        <div style="background-color: {{hexPicker.color}};  border: 1px solid #0920B4; border-radius: 7px; font-size: 11px; font-weight: bold; height: 30px;">
+                                        <div style="background-color: {{hexPicker.color}};  
+                                                    border: 1px solid #0920B4; 
+                                                    border-radius: 7px; font-size: 11px; 
+                                                    font-weight: bold; height: 30px;">
                                             Grupo Actual
                                         </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <a class="btn btn-success pull-right" ng-click="mostrarTodos()">
+                                    </div> -->
+                                    <div class="col-sm-6" id="divGrupos">
+                                        <!-- <a class="btn btn-success pull-right" ng-click="mostrarTodos()">
                                             <i class="ti-control-shuffle"></i>Todos</a>&nbsp;&nbsp;
                                         <a class="btn btn-primary pull-right" ng-click="mostrarNoPunteados()">
-                                            <i class="ti-control-shuffle"></i>No punteados</a>
+                                            <i class="ti-control-shuffle"></i>No punteados</a> -->
                                     </div>
                                     <div class="col-sm-6" id="panelGrupos">
-                                        <div id="divGrupos" class="divContainerGrupoPunteo">
+                                        <div  class="divContainerGrupoPunteo">
                                             <button ng-click="guardarHistorico()" class="btn btn-primary pull-right" style="height: 50px;" ng-disabled="guardaDisable">
                                                 Guardar estatus de la conciliacion
                                             </button>
@@ -113,6 +116,20 @@
                             <div style="padding-left: 64%;">
                                 <p class="text-info text-semibold">Total Cargos Bancarios: {{totalCargoBancario | currency}}</p>
                             </div>
+                            <div class="media-body">
+                                   <small> <p class="text-2x text-semibold pull-right" ng-class="{'text-info text-semibold': info, 
+                                                                                                    'text-danger text-semibold': !info}">
+                                    {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}} <!-- Banco -->
+                                    </p></small>
+                                    &nbsp;
+                                    <div style="background-color: {{hexPicker.color}};  
+                                                border: 1px solid #0920B4; 
+                                                border-radius: 7px; width: 20px; height: 30px; margin-right: 8px;" class="pull-right">
+                                    </div>
+                            </div>
+                            <div>
+                                <p class="text-muted mar-no pull-right">{{bancoText}}</p>
+                            </div>
                             <div class="media middle pad-all">
                                 <div class="media-left">
                                     <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
@@ -121,42 +138,24 @@
                                 </div>
                                 <div class="media-body">
                                     <div class="media-body">
-                                        <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : 
-                                                                   cargoBanco > 0 
-                                                                   && 
-                                                                   (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) 
-                                                                   || 
-                                                                   ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria)))
-                                                                   ||
-                                                                   abonoBanco == cargoBanco && abonoBanco > 0 && cargoBanco > 0
-                                                                   ,'text-danger text-semibold' : 
-                                                                   (cargoBanco > 0 && cargoAuxiliar > 0
-                                                                   ||
-                                                                   cargoBanco < abonoBanco && abonoBanco > 0 && cargoBanco > 0
-                                                                   ||
-                                                                   cargoBanco > abonoBanco && abonoBanco > 0 && cargoBanco > 0
-                                                                   )}">{{cargoBanco | currency}}</p>
-                                        <p class="text-muted mar-no"> Cargo</p>
+                                        <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
+                                                                                        'text-danger text-semibold': !info}">
+                                                                                {{cargoBanco | currency}}
+                                        </p>
+                                        <p class="text-muted mar-no">Cargo</p>
                                     </div>
                                 </div>
                                 <div class="media-body">
-                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoBanco > 0 
-                                                                 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && cargoAuxiliar <= (abonoBanco + difMonetaria)) 
-                                                                 || 
-                                                                 ((cargoAuxiliar - difMonetaria) <= abonoBanco && abonoBanco <= (cargoAuxiliar + difMonetaria)))
-                                                                 ||
-                                                                 abonoBanco == cargoBanco && abonoBanco > 0 && cargoBanco > 0
-                                                                 ,'text-danger text-semibold' : 
-                                                                 (abonoBanco > 0 && abonoAuxiliar > 0
-                                                                 || abonoBanco < cargoBanco && abonoBanco > 0 && cargoBanco > 0
-                                                                 || abonoBanco > cargoBanco && abonoBanco > 0 && cargoBanco > 0
-                                                                 )}">{{abonoBanco | currency}}</p>
+                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
+                                                                                        'text-danger text-semibold' : !info}">
+                                                                                        {{abonoBanco | currency}}
+                                    </p>
                                     <p class="text-muted mar-no">Abono</p>
                                 </div>
                                 <br>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" style="padding-top: 3px;">
                             <div class="text-main">
                                 <h4>Abono Contable</h4>
                                 <label></label>
@@ -168,6 +167,23 @@
                             <div style="padding-right: 64%;">
                                 <p class="text-info text-semibold">Total Cargos Contables: {{totalCargoContable | currency}}</p>
                             </div>
+                            <div class="media-body">
+                                <small> <p class="text-2x mar-no text-semibold pull-left" ng-class="{
+                                        'text-info text-semibold': info, 
+                                        'text-danger text-semibold': !info}">
+                                    {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}} <!-- Contable -->
+                                </p></small>
+                                <div style="background-color: {{hexPicker.color}};  
+                                            border: 1px solid #0920B4; 
+                                            border-radius: 7px; width: 20px; height: 30px; margin-left: 8px;" class="pull-left">
+                                </div>
+                                <button class="btn btn-warning pull-right" ng-click="nuevoGrupo();">
+                                    Nuevo Grupo
+                                </button>
+                            </div>
+                            <div>
+                                <p class="text-muted mar-no">{{contableText}}</p>
+                            </div>
                             <div class="media middle pad-all">
                                 <div class="media-left">
                                     <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
@@ -175,19 +191,16 @@
                                     </span>
                                 </div>
                                 <div class="media-body">
-                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : 
-                                                                                        cargoAuxiliar > 0 && (((abonoBanco - difMonetaria) <= cargoAuxiliar && 
-                                                                                        cargoAuxiliar <= (abonoBanco + difMonetaria)) || ((cargoAuxiliar - difMonetaria) <= abonoBanco 
-                                                                                        && abonoBanco <= (cargoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar 
-                                                                                        && abonoAuxiliar > 0 && cargoAuxiliar > 0, 
-                                                                                        'text-danger text-semibold' : 
-                                                                                        cargoBanco > 0 && cargoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && 
-                                                                                        cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">
-                                                                                        {{cargoAuxiliar | currency}}</p>
-                                    <p class="text-muted mar-no">Cargo</p>
+                                <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
+                                                                                    'text-danger text-semibold': !info}">
+                                                                                        {{cargoAuxiliar | currency}}
+                                </p>                                             
+                                <p class="text-muted mar-no">Cargo</p>
                                 </div>
                                 <div class="media-body">
-                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : abonoAuxiliar > 0 && (((cargoBanco - difMonetaria) <= abonoAuxiliar && abonoAuxiliar <= (cargoBanco + difMonetaria)) || ((abonoAuxiliar - difMonetaria) <= cargoBanco && cargoBanco <= (abonoAuxiliar + difMonetaria))) || abonoAuxiliar == cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0, 'text-danger text-semibold' : abonoBanco > 0 && abonoAuxiliar > 0 || abonoAuxiliar < cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0 || abonoAuxiliar > cargoAuxiliar && abonoAuxiliar > 0 && cargoAuxiliar > 0}">{{abonoAuxiliar | currency}}</p>
+                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
+                                                                                       'text-danger text-semibold': !info}">
+                                                                                        {{abonoAuxiliar | currency}}</p>
                                     <p class="text-muted mar-no">Abono</p>
                                 </div>
                                 <div class="media-body">
