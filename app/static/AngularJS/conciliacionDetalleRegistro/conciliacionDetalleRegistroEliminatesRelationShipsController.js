@@ -9,9 +9,9 @@ registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShip
             $('#alertaEliminacionPunteo').modal('hide');
             if( result.data[0].success == 1 ){
                 swal(
-                    'Alto',
+                    'Listo',
                     result.data[0].msg,
-                    'error'
+                    'success'
                 );
             }else{
                 swal(
