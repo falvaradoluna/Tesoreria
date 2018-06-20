@@ -64,8 +64,8 @@
                     </button>
                 </div>
                 <!--Inicio del primer Tab Detalle de Registros no Punteados-->
-                <div id="CargosSinPuntear" class="tabcontent" style="display: block;">
-                    <div ng-controller="conciliacionDetalleRegistroGridsController">
+                <div ng-controller="conciliacionDetalleRegistroGridsController">
+                    <div id="CargosSinPuntear" class="tabcontent" style="display: block;">
                         <!--LQMA add 24082017 colorpicker y grupos de colores BEGIN-->
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -88,7 +88,7 @@
                                             <i class="ti-control-shuffle"></i>No punteados</a> -->
                                     </div>
                                     <div class="col-sm-6" id="panelGrupos">
-                                        <div  class="divContainerGrupoPunteo">
+                                        <div class="divContainerGrupoPunteo">
                                             <button ng-click="guardarHistorico()" class="btn btn-primary pull-right" style="height: 50px;" ng-disabled="guardaDisable">
                                                 Guardar estatus de la conciliacion
                                             </button>
@@ -97,225 +97,246 @@
                                 </div>
                             </div>
                         </div>
-                        <!--LQMA add 24082017 colorpicker y grupos de colores END-->
+                    </div>
+                    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="text-main" ng-init="init()">
+                                    <h4>Cargo Bancario</h4>
+                                    <label class="divGrupoPunteo">
+                                        <input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Todo</label>
+                                    <label class="divGrupoPunteo">
+                                        <input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Cargo</label>
+                                    <label class="divGrupoPunteo">
+                                        <input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
+                                </div>
+                                <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
+                                <div>
+                                    <p class="text-info text-semibold text-right">Total Abonos Bancarios: {{totalAbonoBancario | currency}}</p>
+                                </div>
+                                <div>
+                                    <p class="text-info text-semibold text-right">Total Cargos Bancarios: {{totalCargoBancario | currency}}</p>
+                                </div>
+                            </div>
 
-                        <div class="col-md-6">
-                            <div class="text-main" ng-init="init()">
-                                <h4>Cargo Bancario</h4>
-                                <label class="divGrupoPunteo">
-                                    <input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Todo</label>
-                                <label class="divGrupoPunteo">
-                                    <input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Cargo</label>
-                                <label class="divGrupoPunteo">
-                                    <input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
-                            </div>
-                            <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
-                            <div style="padding-left: 64%;">
-                                <p class="text-info text-semibold">Total Abonos Bancarios: {{totalAbonoBancario | currency}}</p>
-                            </div>
-                            <div style="padding-left: 64%;">
-                                <p class="text-info text-semibold">Total Cargos Bancarios: {{totalCargoBancario | currency}}</p>
-                            </div>
-                            <div class="media-body">
-                                   <small> <p class="text-2x text-semibold pull-right" ng-class="{'text-info text-semibold': info, 
-                                                                                                    'text-danger text-semibold': !info}">
-                                    {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}} <!-- Banco -->
-                                    </p></small>
-                                    &nbsp;
-                                    <div style="background-color: {{hexPicker.color}};  
-                                                border: 1px solid #0920B4; 
-                                                border-radius: 7px; width: 20px; height: 30px; margin-right: 8px;" class="pull-right">
-                                    </div>
-                            </div>
-                            <div>
-                                <p class="text-muted mar-no pull-right">{{bancoText}}</p>
-                            </div>
-                            <div class="media middle pad-all">
-                                <div class="media-left">
-                                    <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
-                                        <i class="demo-pli-coin icon-2x"></i>
-                                    </span>
+                            <div class="col-md-6" style="padding-top: 3px;">
+                                    <button class="btn btn-warning pull-right" style="margin-top: 10px" ng-click="nuevoGrupo();">
+                                        Nuevo Grupo
+                                    </button>
+                                <div class="text-main">
+                                    <h4>Abono Contable</h4>
+                                    <label></label>
+                                    
                                 </div>
-                                <div class="media-body">
-                                    <div class="media-body">
-                                        <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
-                                                                                        'text-danger text-semibold': !info}">
-                                                                                {{cargoBanco | currency}}
-                                        </p>
-                                        <p class="text-muted mar-no">Cargo</p>
-                                    </div>
+                                <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
+                                <div>
+                                    <p class="text-info text-semibold">Total Abonos Contables: {{totalAbonoContable | currency}}</p>
                                 </div>
-                                <div class="media-body">
-                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
-                                                                                        'text-danger text-semibold' : !info}">
-                                                                                        {{abonoBanco | currency}}
+                                <div>
+                                    <p class="text-info text-semibold">Total Cargos Contables: {{totalCargoContable | currency}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style = "margin-top: 1.5%;">
+                            <div class="col-6 media-body">
+                                <small>
+                                    <p class="text-2x text-semibold pull-right" ng-class="{'text-info text-semibold': info, 
+                                                                                                                                                                                        'text-danger text-semibold': !info}">
+                                        {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}}
+                                        <!-- Banco -->
                                     </p>
-                                    <p class="text-muted mar-no">Abono</p>
-                                </div>
-                                <br>
+                                    
+                                </small>
+                                &nbsp;
+                                <div style="background-color: {{hexPicker.color}};  
+                                                            border: 1px; 
+                                                            width: 20px; height: 30px; margin-right: 8px;"
+                                    class="pull-right">
+                                </div><br> <br>
+                                <!-- <div class="pull-right"> -->
+                                    <p class="text-muted mar-no pull-right">{{bancoText}}</p>
+                                <!-- </div> -->
+                            </div>
+                            <div class="col-6 media-body">
+                                <small>
+                                    <p class="text-2x mar-no text-semibold pull-left" ng-class="{
+                                                                    'text-info text-semibold': info, 
+                                                                    'text-danger text-semibold': !info}">
+                                        {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}}
+                                        <!-- Contable -->
+                                    </p>
+                                </small>
+                                <div style="background-color: {{hexPicker.color}};  
+                                                            border: 1px; 
+                                                            width: 20px; height: 30px; margin-left: 8px;" class="pull-left">
+                                </div><br> <br>
+                                <div>
+                                        <p class="text-muted mar-no">{{contableText}}</p>
+                                    </div>
                             </div>
                         </div>
-                        <div class="col-md-6" style="padding-top: 3px;">
-                            <div class="text-main">
-                                <h4>Abono Contable</h4>
-                                <label></label>
-                            </div>
-                            <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
-                            <div style="padding-right: 64%;">
-                                <p class="text-info text-semibold">Total Abonos Contables: {{totalAbonoContable | currency}}</p>
-                            </div>
-                            <div style="padding-right: 64%;">
-                                <p class="text-info text-semibold">Total Cargos Contables: {{totalCargoContable | currency}}</p>
-                            </div>
-                            <div class="media-body">
-                                <small> <p class="text-2x mar-no text-semibold pull-left" ng-class="{
-                                        'text-info text-semibold': info, 
-                                        'text-danger text-semibold': !info}">
-                                    {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}} <!-- Contable -->
-                                </p></small>
-                                <div style="background-color: {{hexPicker.color}};  
-                                            border: 1px solid #0920B4; 
-                                            border-radius: 7px; width: 20px; height: 30px; margin-left: 8px;" class="pull-left">
-                                </div>
-                                <button class="btn btn-warning pull-right" ng-click="nuevoGrupo();">
-                                    Nuevo Grupo
-                                </button>
-                            </div>
-                            <div>
-                                <p class="text-muted mar-no">{{contableText}}</p>
-                            </div>
-                            <div class="media middle pad-all">
-                                <div class="media-left">
+                        <div class=" row" style="margin-top: 1%">
+                            <div class="col-md-4">
+                                <div class="pull-left">
                                     <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
                                         <i class="demo-pli-coin icon-2x"></i>
                                     </span>
                                 </div>
-                                <div class="media-body">
-                                <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
-                                                                                    'text-danger text-semibold': !info}">
-                                                                                        {{cargoAuxiliar | currency}}
-                                </p>                                             
-                                <p class="text-muted mar-no">Cargo</p>
+                                <div>
+                                    <div class="pull-left" style="padding-left:20px;">
+                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
+                                                                                                'text-danger text-semibold': !info}">
+                                            {{cargoBanco | currency}}
+                                        </label><br>
+                                        <label class="text-muted mar-no">Cargo Bancario</label>
+                                    </div>
+                                    <div class="pull-left" style="padding-left:40px;">
+                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
+                                                                                                'text-danger text-semibold' : !info}">
+                                            {{abonoBanco | currency}}
+                                        </label><br>
+                                        <label class="text-muted mar-no">Abono Bancario</label>
+                                    </div>
                                 </div>
-                                <div class="media-body">
-                                    <p class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
-                                                                                       'text-danger text-semibold': !info}">
-                                                                                        {{abonoAuxiliar | currency}}</p>
-                                    <p class="text-muted mar-no">Abono</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <p class="text-2x mar-no text-semibold">
+                                    <label class="text-danger mar-no">+-</label>&nbsp;{{difMonetaria | currency}}</p>
+                                <p class="mar-no">Diferencia monetaria permitida</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="pull-right">
+                                    <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
+                                        <i class="demo-pli-coin icon-2x"></i>
+                                    </span>
                                 </div>
-                                <div class="media-body">
-                                    <div class="text-center">
-                                        <p class="text-2x mar-no text-semibold">
-                                            <label class="text-danger mar-no">+-</label>&nbsp;{{difMonetaria | currency}}</p>
-                                        <p class="text-danger mar-no">Diferencia monetaria permitida</p>
+                                <div>
+                                    <div class="pull-right" style="padding-left:20px;">
+                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
+                                                                                                'text-danger text-semibold': !info}">
+                                            {{cargoAuxiliar | currency}}
+                                        </label><br>
+                                        <label class="text-muted mar-no">Cargo Contable</label>
+                                    </div>
+                                    <div class="pull-right" style="padding-left:40px;">
+                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
+                                                                                                'text-danger text-semibold' : !info}">
+                                            {{abonoAuxiliar | currency}}
+                                        </label><br>
+                                        <label class="text-muted mar-no">Abono Contable</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12" ng-show="mesActivo">
-                            <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
-                                <i class="ti-layout-list-thumb"></i> Envíar a DPI </button>
-                            &nbsp;&nbsp;
-                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
-                                <i class="ti-control-shuffle"> </i>Punteo</button>
-                            <br>
-                            <br/> &nbsp;
+                        <div class="row" style="margin-top: 2%;">
+                            <div class="col-md-12" ng-show="mesActivo">
+                                <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
+                                    <i class="ti-layout-list-thumb"></i> Envíar a DPI 
+                                </button>
+                                &nbsp;&nbsp;
+                                <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
+                                    <i class="ti-control-shuffle"> </i>Punteo
+                                </button>
+                                <br>
+                                <br/> &nbsp;
+                            </div>
                         </div>
                     </div>
-                    <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController">
-                        <br>
-                        <br>
-                        <div class="col-md-12" ng-init="init()">
-                            <div class="text-main">
-                                <h4>Banco Punteado</h4>
+                    <div class="row">
+                        <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController">
+                            <br>
+                            <br>
+                            <div class="col-md-12" ng-init="init()">
+                                <div class="text-main">
+                                    <h4>Banco Punteado</h4>
+                                </div>
+                                <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Banco</th>
+                                            <th>Referencia</th>
+                                            <th>Concepto</th>
+                                            <th>Cargo</th>
+                                            <th>Abono</th>
+                                            <th data-sort-ignore="true" class="min-width"></th>
+                                            <th data-sort-ignore="true" class="min-width"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="banco in bancoPadre | filter:{aplicado:0}">
+                                            <td>{{banco.banco}}</td>
+                                            <td>{{banco.referencia}}</td>
+                                            <td>{{banco.concepto}}</td>
+                                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
+                                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
+                                            <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                                                <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco.grupo,1)" ng-show="mesActivo">
+                                                    <i class="demo-pli-cross"></i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,1)">
+                                                    <i class="ti-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="padding-left: 74%;">
+                                    <p class="text-info text-semibold">Total Cargos Bancarios : {{BancoPrePunteadoCargosTotales | currency}}</p>
+                                </div>
+
+                                <div style="padding-left: 74%;">
+                                    <p class="text-info text-semibold">Total Abonos Bancarios : {{BancoPrePunteadoAbonosTotales | currency}}</p>
+                                </div>
                             </div>
-                            <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Banco</th>
-                                        <th>Referencia</th>
-                                        <th>Concepto</th>
-                                        <th>Cargo</th>
-                                        <th>Abono</th>
-                                        <th data-sort-ignore="true" class="min-width"></th>
-                                        <th data-sort-ignore="true" class="min-width"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="banco in bancoPadre | filter:{aplicado:0}">
-                                        <td>{{banco.banco}}</td>
-                                        <td>{{banco.referencia}}</td>
-                                        <td>{{banco.concepto}}</td>
-                                        <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
-                                        <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                                        <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
-                                            <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco.grupo,1)" ng-show="mesActivo">
-                                                <i class="demo-pli-cross"></i>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,1)">
-                                                <i class="ti-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Cargos Bancarios : {{BancoPrePunteadoCargosTotales | currency}}</p>
-                            </div>
-            
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Abonos Bancarios : {{BancoPrePunteadoAbonosTotales | currency}}</p>
+                            <div class="col-md-12">
+                                <div class="text-main">
+                                    <h4>Auxiliar Contable Punteado</h4>
+                                </div>
+                                <table id="auxiliarPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Tipo Póliza</th>
+                                            <th># Póliza</th>
+                                            <th>Concepto</th>
+                                            <th>Cargo</th>
+                                            <th>Abono</th>
+                                            <th data-sort-ignore="true" class="min-width"></th>
+                                            <th data-sort-ignore="true" class="min-width"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:0}">
+                                            <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
+                                            <td>{{auxiliar.tipoPoliza}}</td>
+                                            <td>{{auxiliar.poliza}}</td>
+                                            <td>{{auxiliar.concepto}}</td>
+                                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
+                                            <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
+                                            <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                                                <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(auxiliar.grupo,2)" ng-show="mesActivo">
+                                                    <i class="demo-pli-cross"></i>
+                                                </button>
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar.grupo,2)">
+                                                    <i class="ti-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div style="padding-left: 74%;">
+                                    <p class="text-info text-semibold">Total Cargos Contables : {{AuxiliarPrePunteadoCargosTotales | currency}}</p>
+                                </div>
+
+                                <div style="padding-left: 74%;">
+                                    <p class="text-info text-semibold">Total Abonos Contables : {{AuxiliarPrePunteadoAbonosTotales | currency}}</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="text-main">
-                                <h4>Auxiliar Contable Punteado</h4>
-                            </div>
-                            <table id="auxiliarPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Fecha</th>
-                                        <th>Tipo Póliza</th>
-                                        <th># Póliza</th>
-                                        <th>Concepto</th>
-                                        <th>Cargo</th>
-                                        <th>Abono</th>
-                                        <th data-sort-ignore="true" class="min-width"></th>
-                                        <th data-sort-ignore="true" class="min-width"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:0}">
-                                        <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
-                                        <td>{{auxiliar.tipoPoliza}}</td>
-                                        <td>{{auxiliar.poliza}}</td>
-                                        <td>{{auxiliar.concepto}}</td>
-                                        <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
-                                        <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
-                                        <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
-                                            <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(auxiliar.grupo,2)" ng-show="mesActivo">
-                                                <i class="demo-pli-cross"></i>
-                                            </button>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(auxiliar.grupo,2)">
-                                                <i class="ti-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Cargos Contables : {{AuxiliarPrePunteadoCargosTotales | currency}}</p>
-                            </div>
-
-                            <div style="padding-left: 74%;">
-                                <p class="text-info text-semibold">Total Abonos Contables : {{AuxiliarPrePunteadoAbonosTotales | currency}}</p>
-                            </div>
-                        </div>
-
                     </div>
                     <div class="col-md-12">
                         <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
@@ -328,7 +349,7 @@
                         <br>
                         <br/> &nbsp;
                     </div>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </div>
@@ -433,7 +454,7 @@
                     <button class="btn btn-warning" ng-click="comeBack()">
                         <i class="ti-back-right"></i> Regresar
                     </button> &nbsp;
-                    
+
                 </div>
                 <br>
                 <br/>
@@ -475,7 +496,7 @@
                     <button class="btn btn-warning" ng-click="comeBack()">
                         <i class="ti-back-right"></i> Regresar
                     </button> &nbsp;
-                    
+
                 </div>
                 <br>
                 <br/>
@@ -553,7 +574,7 @@
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
                             <td>{{banco.concepto}}</td>
-                            <td class="text-right text-success text-semibold" >{{banco.cargo | currency}}</td>
+                            <td class="text-right text-success text-semibold">{{banco.cargo | currency}}</td>
                             <td class="text-center">
                                 <button class="btn btn-info btn-xs" ng-click="verDetallePunteoRef(banco.grupo, 1)">
                                     <i class="ti-eye"></i>
@@ -584,7 +605,7 @@
                     <button class="btn btn-warning" ng-click="comeBack()">
                         <i class="ti-back-right"></i> Regresar
                     </button> &nbsp;
-                    
+
                 </div>
                 <br>
                 <br/>
@@ -700,7 +721,7 @@
                     <button class="btn btn-warning" ng-click="comeBack()">
                         <i class="ti-back-right"></i> Regresar
                     </button> &nbsp;
-                    
+
                 </div>
                 <br>
                 <br/>
@@ -750,29 +771,30 @@
                 </table>
                 <div class="pull-right">
                     <br>
-                    <label class='text-bold'> 
-                        Total registros contables cargos: 
+                    <label class='text-bold'>
+                        Total registros contables cargos:
                     </label>
                     <label class="text-success text-semibold">
-                        {{ universoTotalMovimientoContableCargo | currency}} 
+                        {{ universoTotalMovimientoContableCargo | currency}}
                     </label>
                     <br>
-                    <label class='text-bold'> 
-                        Total registros contables abonos: 
+                    <label class='text-bold'>
+                        Total registros contables abonos:
                     </label>
-                    <label class="text-info text-semibold"> 
-                        {{ universoTotalMovimientoContableAbono | currency}} 
+                    <label class="text-info text-semibold">
+                        {{ universoTotalMovimientoContableAbono | currency}}
                     </label>
-                    <br><br>
+                    <br>
+                    <br>
                 </div>
             </div>
-    
+
             <div class="col-md-12">
                 <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
                     <button class="btn btn-warning" ng-click="comeBack()">
                         <i class="ti-back-right"></i> Regresar
                     </button> &nbsp;
-                    
+
                 </div>
                 <br>
                 <br/>
@@ -784,7 +806,7 @@
     <!--Inicio del septimo Tab / Registros Universo Total-->
     <div id="totalUniversoBancarios" class="tabcontent">
         <div class="panel col-md-12">
-    
+
             <div class="col-md-12">
                 <div class="text-main">
                     <h4>Total Registros Bancarios (Cargos y Abonos)</h4>
@@ -839,14 +861,14 @@
                     <br>
                     <br>
                 </div>
-    
+
             </div>
             <div class="col-md-12">
                 <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
                     <button class="btn btn-warning" ng-click="comeBack()">
                         <i class="ti-back-right"></i> Regresar
                     </button> &nbsp;
-                    
+
                 </div>
                 <br>
                 <br/>
@@ -1414,7 +1436,7 @@
                     <tfoot>
                         <tr>
                             <!-- <td class="text-info text-semibold text-right"> -->
-                                <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
+                            <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
                             <!-- </td> -->
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span>
@@ -1461,7 +1483,7 @@
 <!--End Modal para colocar abono-->
 
 
- <!--Modal para colocar cargo bancario-->
+<!--Modal para colocar cargo bancario-->
 <!--===================================================-->
 <div class="modal fade" id="regBancariosCargoDetalle" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -1606,7 +1628,7 @@
                     <tfoot>
                         <tr>
                             <!-- <td class="text-info text-semibold text-right"> -->
-                                <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
+                            <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
                             <!-- </td> -->
                             <td class="text-info text-semibold text-right">
                                 <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
@@ -1688,9 +1710,9 @@
                     <tfoot>
                         <tr>
                             <td class="text-info text-semibold text-right">
-                            </td> 
+                            </td>
                             <td class="text-info text-semibold text-right">
-                                </td> 
+                            </td>
                             <td class="text-bold text-right text-info">Total</td>
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="totalHijosCargos > 0">{{ totalHijosCargos | currency}}</span>
