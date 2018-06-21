@@ -222,7 +222,7 @@
             if (row.isSelected == true) {
                 $scope.abonoAuxiliar = $scope.abonoAuxiliar + row.entity.abono;
                 $scope.cargoAuxiliar = $scope.cargoAuxiliar + row.entity.cargo;
-
+                console.log( 'check', $scope.checkboxEspecial.value );
                 //LQMA 23082017    
                 row.entity.color = $scope.hexPicker.color;//$scope.currentColor;
                 $scope.agregaDiv($scope.hexPicker.color);
