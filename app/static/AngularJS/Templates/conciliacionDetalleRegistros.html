@@ -463,6 +463,8 @@
                             <th>Referencia</th>
                             <th>Concepto</th>
                             <th>Abono</th>
+                            <th width="70">&nbsp;</th>
+                            <th width="70">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -471,6 +473,16 @@
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
+                            <td>
+                                <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
+                                    <i class="demo-pli-cross"></i> Quitar DPI
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,2)">
+                                    <i class="ti-eye"></i>
+                                </button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -1046,7 +1058,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in detalleBanco | filter:{aplicado:0}">
+                        <tr ng-repeat="banco in detalleBanco">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
@@ -1067,7 +1079,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="auxiliar in detalleContable | filter:{aplicado:0}">
+                        <tr ng-repeat="auxiliar in detalleContable">
                             <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
                             <td>{{auxiliar.tipoPoliza}}</td>
                             <td>{{auxiliar.poliza}}</td>
@@ -1287,12 +1299,12 @@
                     <h4 class="text-title">Los datos se habilitarán de nuevo, ¿Desea continuar?
                         <span>
                             <span>
-                                <button class="btn btn-danger pull-right" type="button" ng-click="cancelaEliminacionDPI()">
+                                <button class="btn btn-danger pull-right" type="button" ng-click="closeDPI()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
                             <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <span>
-                                <button class="btn btn-success pull-right" ng-click="EliminaDPI()">
+                                <button class="btn btn-success pull-right" ng-click="cancelaDPI()">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
                         </span>
