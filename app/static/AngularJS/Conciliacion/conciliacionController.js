@@ -2,7 +2,6 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
      $scope.variableControl = 0;
     $scope.init = function() {
-
         // ****************** Se guarda la información del usuario en variable userData
         $rootScope.userData = localStorageService.get('userData');
 
@@ -43,20 +42,7 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
         localStorage.removeItem('DetalleDiferencias');
         
         $scope.getAbonoContable(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable, busqueda.PolizaPago);
-        $scope.getAbonoBancario(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable);
-        $scope.getCargoContable(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable);
-        $scope.getCargoBancario(busqueda.IdEmpresa,busqueda.fechaElaboracion,busqueda.fechaCorte,1,busqueda.IdBanco, busqueda.Cuenta,busqueda.CuentaContable);
         
-        setTimeout(function(){
-            localStorage.setItem('DetalleDiferencias', JSON.stringify(
-                                                                        {
-                                                                            "abonoContable": $scope.abonosContables, 
-                                                                            "abonoBancario": $scope.abonosBancarios,
-                                                                            "cargoContable": $scope.cargosContables, 
-                                                                            "cargoBancario": $scope.cargosBancarios
-                                                                        }
-                                                                    ));
-        } ,4000)
     }
 
     //****************************************************************************************************
@@ -182,7 +168,6 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
     $scope.getAbonoContable = function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable, polizaPago) {
         conciliacionRepository.getAbonoContable(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable, polizaPago)
         .then(function(result) {
-            console.log( 'ResultgetAbonoContable', result.data );
             if (result.data.length > 0) {
 
                 if (opcion == 1) {  
@@ -195,18 +180,18 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.resumenDPI = result.data;
                     $scope.idTipoAuxiliar = result.data[0].idTipoAuxiliar;
                 }
-
             } else {
                 $scope.gridAbonosContables.data = [];
                 $scope.totalAbonoContable = 0;
             }
+            $scope.getAbonoBancario(idEmpresa, fInicial, fFinal, opcion, idBanco, noCuenta, cuentaContable);
+            
         });
     }
 
     $scope.getAbonoBancario = function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable) {
         conciliacionRepository.getAbonoBancario(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable)
         .then(function(result) {
-            console.log( 'ResultgetAbonoBancario', result.data );
             if (result.data.length > 0) {
                 if (opcion == 1) {
                     $scope.abonosBancarios = result.data;
@@ -218,13 +203,13 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
 
                 }
             }
+            $scope.getCargoContable(idEmpresa, fInicial, fFinal, opcion, idBanco, noCuenta, cuentaContable);
         });
     }
 
     $scope.getCargoContable = function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable) {
         conciliacionRepository.getCargoContable(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable)
         .then(function(result) {
-            console.log( 'ResultgetCargoContable', result.data );
             if (result.data.length > 0) {
                 if (opcion == 1) {
                     $scope.gridCargosContables.data = result.data;
@@ -240,13 +225,13 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                 $scope.gridCargosContables.data = [];
                 $scope.totalCargoContable = 0;
             }
+                $scope.getCargoBancario(idEmpresa, fInicial, fFinal, opcion, idBanco, noCuenta, cuentaContable);
         });
     }
 
     $scope.getCargoBancario = function(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable) {
         conciliacionRepository.getCargoBancario(idEmpresa, fInicial, fFinal, opcion,idBanco,noCuenta,cuentaContable)
         .then(function(result) {
-            console.log( 'ResultgetCargoBancario', result.data );
             if (result.data.length > 0) {
                 if (opcion == 1) {
                     $scope.gridCargosBancarios.data = result.data;
@@ -259,6 +244,14 @@ registrationModule.controller('conciliacionController', function($scope, $rootSc
                     $scope.idTipoAuxiliar = result.data[0].idTipoAuxiliar;
                 }
             }
+            localStorage.setItem('DetalleDiferencias', JSON.stringify(
+                {
+                    "abonoContable": $scope.abonosContables, 
+                    "abonoBancario": $scope.abonosBancarios,
+                    "cargoContable": $scope.cargosContables, 
+                    "cargoBancario": $scope.cargosBancarios
+                }
+            ));
         });
     }
 

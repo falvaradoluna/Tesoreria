@@ -567,6 +567,7 @@
 
             //Obtengo los datos de detalles/diferencias del local storage
             var detalleDiferencias = JSON.parse(localStorage.getItem('DetalleDiferencias'));
+            console.log( 'detalleDiferencias', detalleDiferencias );
                 $('reproteModalPdf').modal('show');
                 //Genero la promesa para enviar la estructura del reporte 
                 new Promise(function (resolve, reject) {
@@ -633,7 +634,7 @@
                         $('#reproteModalPdf').modal('show');
                     });
                 });
-        }, 6000)
+        }, 7000)
     };
 
     $scope.go = function (path) {

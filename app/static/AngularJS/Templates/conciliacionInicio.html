@@ -77,9 +77,11 @@
                                     
                                 </div>
                                 <br><br>
-                                <button class="btn btn-success col-md-5" ng-click="generaInfoReport()" ng-disabled="enableBottonReport">
-                                        <i class="ti-search"></i> Ver Reporte
-                                </button>
+                                <div class="col-md-5" ng-controller="conciliacionController">
+                                    <button class="btn btn-success" ng-click="generaInfoReport()" ng-mouseover="init()" ng-disabled="enableBottonReport">
+                                            <i class="ti-search"></i> Ver Reporte
+                                    </button>
+                                </div>
                                 <div class="col-md-1">&nbsp;</div>
                                 <button class="btn btn-warning col-md-5" ng-click="getLocalAbonoCargo()" ng-disabled="activaBotonBuscar">
                                     <i class="fa fa-refresh" aria-hidden="true"></i> Actualizar registros
