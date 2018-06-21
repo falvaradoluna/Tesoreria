@@ -84,19 +84,14 @@
         { name: 'cargo', displayName: 'Cargo', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abono', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
         { name: 'movFechaOpe', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.movFechaOpe.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.movFechaOpe.substr(0, 10)}}</span></div>' },//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''
-        { name: 'MES', displayName: 'Periodo', width: 100 },
-        // { name: 'anio', displayName: 'Año', width:100 },
-        //{ name: 'movFechaOpe', displayName: 'Fecha', width: 100, cellFilter: 'date:\'yyyy-MM-dd\'', cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.movFechaOpe  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.movFechaOpe | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''
         { name: 'polTipo', displayName: 'Referencia', width: 200 },
-        { name: 'movConcepto', displayName: 'Concepto', width: 600 },
-        //LQMA 07092017                  
+        { name: 'movConcepto', displayName: 'Concepto', width: 600 }, 
         { name: 'referenciaAuxiliar', displayName: 'Referencia', width: 100 },
-        //LQMA 21082017
+        { name: 'MES', displayName: 'Periodo', width: 100 },       
         { name: 'indexPrePunteo', displayName: 'Index', width: 0, show: false }
         , {
             name: 'color', field: 'color', displayName: 'Color', cellClass: 'gridCellRight', enableFiltering: true, width: 100, visible: false
-            , filter: {  //LQMA 05092017    
-                //term: '#c9dde1',
+            , filter: {
                 noTerm: true,
                 condition: function (searchTerm, cellValue) {
 
@@ -122,21 +117,15 @@
         showGridFooter: true,
         enableFiltering: true,
         rowTemplate: '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>'
-        //LQMA 21082017
-        //,rowTemplate : '<div ng-class="{\'myEstilo1\':row.isSelected,\'myEstilo2\': !row.isSelected}"> <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>'
     };
     $scope.gridDepositosBancos.columnDefs = [
+        { name: 'MES', displayName: 'Periodo', width: 100 },
+        { name: 'concepto', displayName: 'Concepto', width: 300 },
+        { name: 'referencia', displayName: 'Referencia', width: 200 },
+        { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{ row.entity.fechaOperacion.substr(0, 10) }}</span></div>' },
+        { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
         { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
-        { name: 'concepto', displayName: 'Concepto', width: 300 },
-        { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{ row.entity.fechaOperacion.substr(0, 10) }}</span></div>' },//, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.fechaOperacion | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''//},
-        { name: 'referencia', displayName: 'Referencia', width: 200 },
-        { name: 'MES', displayName: 'Periodo', width: 100 },
-        // { name: 'anio', displayName: 'Año', width:100 },
-        //LQMA 07092017                  
-        //{ name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
-        { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
-        
         { name: 'indexPrePunteo', displayName: 'Index', width: 0, show: false },
         {
             name: 'color', field: 'color', displayName: 'Color', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100, visible: false
