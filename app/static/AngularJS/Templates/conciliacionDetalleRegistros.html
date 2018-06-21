@@ -140,8 +140,7 @@
                         <div class="row" style = "margin-top: 1.5%;">
                             <div class="col-6 media-body">
                                 <small>
-                                    <p class="text-2x text-semibold pull-right" ng-class="{'text-info text-semibold': info, 
-                                                                                                                                                                                        'text-danger text-semibold': !info}">
+                                    <p class="text-info text-2x text-semibold pull-right">
                                         {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}}
                                         <!-- Banco -->
                                     </p>
@@ -159,9 +158,7 @@
                             </div>
                             <div class="col-6 media-body">
                                 <small>
-                                    <p class="text-2x mar-no text-semibold pull-left" ng-class="{
-                                                                    'text-info text-semibold': info, 
-                                                                    'text-danger text-semibold': !info}">
+                                    <p class="text-info text-2x mar-no text-semibold pull-left">
                                         {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}}
                                         <!-- Contable -->
                                     </p>
@@ -201,7 +198,7 @@
                             </div>
                             <div class="col-md-4 text-center">
                                 <p class="text-2x mar-no text-semibold">
-                                    <label class="text-danger mar-no">+-</label>&nbsp;{{difMonetaria | currency}}</p>
+                                    <label class="text-success mar-no">&plusmn;</label>&nbsp;{{difMonetaria | currency}}</p>
                                 <p class="mar-no">Diferencia monetaria permitida</p>
                             </div>
                             <div class="col-md-4">
