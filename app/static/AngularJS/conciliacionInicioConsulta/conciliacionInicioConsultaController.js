@@ -473,14 +473,14 @@
                             "bancoCuenta": $scope.busqueda.Cuenta,
                             "clabe": $scope.busqueda.Cuenta,
                             "cuentaContable": $scope.busqueda.CuentaContable,
-                            "estadoCuenta": $scope.totalesAbonosCargos[0].saldoBanco,
-                            "aCNB": $scope.totalesAbonosCargos[0].tAbonoContable,
-                            "aBNC": $scope.totalesAbonosCargos[0].tAbonoBancario,
-                            "cCNB": $scope.totalesAbonosCargos[0].tCargoContable,
-                            "cBNC": $scope.totalesAbonosCargos[0].tCargoBancario,
-                            "saldoConciliacion": $scope.totalesAbonosCargos[0].sConciliacion,
-                            "saldoContabilidad": $scope.totalesAbonosCargos[0].sContabilidad,
-                            "diferencia": $scope.totalesAbonosCargos[0].diferencia,
+                            "estadoCuenta": $scope.totalesAbonosCargos.saldoBanco,
+                            "aCNB": $scope.totalesAbonosCargos.tAbonoContable,
+                            "aBNC": $scope.totalesAbonosCargos.tAbonoBancario,
+                            "cCNB": $scope.totalesAbonosCargos.tCargoContable,
+                            "cBNC": $scope.totalesAbonosCargos.tCargoBancario,
+                            "saldoConciliacion": $scope.totalesAbonosCargos.sConciliacion,
+                            "saldoContabilidad": $scope.totalesAbonosCargos.sContabilidad,
+                            "diferencia": $scope.totalesAbonosCargos.diferencia,
                             //Detalle de Diferencias
                             "DetalleAbonosContables": [detalleDiferencias.abonoContable][0],
                             "DetalleAbonosBancarios": [detalleDiferencias.abonoBancario][0],
@@ -516,7 +516,7 @@
                     }
                     resolve(jsonData);
                 }).then(function (jsonData) {
-                    conciliacionInicioRepository.getReporteTesoreria(jsonData).then(function (result) {
+                    conciliacionInicioConsultaRepository.getReporteTesoreria(jsonData).then(function (result) {
                         var file = new Blob([result.data], { type: 'application/pdf' });
                         var fileURL = URL.createObjectURL(file);
                         $scope.rptResumenConciliacion = $sce.trustAsResourceUrl(fileURL);
