@@ -64,29 +64,13 @@
                     </button>
                 </div>
                 <!--Inicio del primer Tab Detalle de Registros no Punteados-->
-                <div ng-controller="conciliacionDetalleRegistroGridsController">
-                    <div id="CargosSinPuntear" class="tabcontent" style="display: block;">
+                <div id="CargosSinPuntear" class="tabcontent" ng-controller="conciliacionDetalleRegistroGridsController" style="display: block;">
+                    <div >
                         <!--LQMA add 24082017 colorpicker y grupos de colores BEGIN-->
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row">
-                                    <!-- <div class="col-sm-1" id="panelGrupos">
-                                        <input colorpicker class="form-control" ng-model="hexPicker.color" type="text" />
-                                    </div>
-                                    <div class="col-sm-1">
-                                        <div style="background-color: {{hexPicker.color}};  
-                                                    border: 1px solid #0920B4; 
-                                                    border-radius: 7px; font-size: 11px; 
-                                                    font-weight: bold; height: 30px;">
-                                            Grupo Actual
-                                        </div>
-                                    </div> -->
-                                    <div class="col-sm-6" id="divGrupos">
-                                        <!-- <a class="btn btn-success pull-right" ng-click="mostrarTodos()">
-                                            <i class="ti-control-shuffle"></i>Todos</a>&nbsp;&nbsp;
-                                        <a class="btn btn-primary pull-right" ng-click="mostrarNoPunteados()">
-                                            <i class="ti-control-shuffle"></i>No punteados</a> -->
-                                    </div>
+                                    <div class="col-sm-6" id="divGrupos"></div>
                                     <div class="col-sm-6" id="panelGrupos">
                                         <div class="divContainerGrupoPunteo">
                                             <button ng-click="guardarHistorico()" class="btn btn-primary pull-right" style="height: 50px;" ng-disabled="guardaDisable">
@@ -98,147 +82,144 @@
                             </div>
                         </div>
                     </div>
-                    
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="text-main" ng-init="init()">
-                                    <h4>Cargo Bancario</h4>
-                                    <label class="divGrupoPunteo">
-                                        <input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Todo</label>
-                                    <label class="divGrupoPunteo">
-                                        <input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Cargo</label>
-                                    <label class="divGrupoPunteo">
-                                        <input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
-                                </div>
-                                <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
-                                <div>
-                                    <p class="text-info text-semibold text-right">Total Abonos Bancarios: {{totalAbonoBancario | currency}}</p>
-                                </div>
-                                <div>
-                                    <p class="text-info text-semibold text-right">Total Cargos Bancarios: {{totalCargoBancario | currency}}</p>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-main" ng-init="init()">
+                                <h4>Cargo Bancario</h4>
+                                <label class="divGrupoPunteo">
+                                    <input type="radio" value="0" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Todo</label>
+                                <label class="divGrupoPunteo">
+                                    <input type="radio" value="1" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Cargo</label>
+                                <label class="divGrupoPunteo">
+                                    <input type="radio" value="2" name="bancoCargoAbono" ng-change='filtraBanco(filtroBancoCarAbo)' ng-model="filtroBancoCarAbo">Abono</label>
                             </div>
+                            <div ui-grid="gridDepositosBancos" ui-grid-selection ui.grid.moveColumns ui-grid-pinning class="grid"></div>
+                            <div>
+                                <p class="text-info text-semibold text-right">Total Abonos Bancarios: {{totalAbonoBancario | currency}}</p>
+                            </div>
+                            <div>
+                                <p class="text-info text-semibold text-right">Total Cargos Bancarios: {{totalCargoBancario | currency}}</p>
+                            </div>
+                        </div>
 
-                            <div class="col-md-6" style="padding-top: 3px;">
-                                    <button class="btn btn-warning pull-right" style="margin-top: 10px" ng-click="nuevoGrupo();">
-                                        Nuevo Grupo
-                                    </button>
-                                <div class="text-main">
-                                    <h4>Abono Contable</h4>
-                                    <label></label>
-                                    
-                                </div>
-                                <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
-                                <div>
-                                    <p class="text-info text-semibold">Total Abonos Contables: {{totalAbonoContable | currency}}</p>
-                                </div>
-                                <div>
-                                    <p class="text-info text-semibold">Total Cargos Contables: {{totalCargoContable | currency}}</p>
-                                </div>
+                        <div class="col-md-6" style="padding-top: 3px;">
+                            <button class="btn btn-warning pull-right" style="margin-top: 10px" ng-click="nuevoGrupo();">
+                                Nuevo Grupo
+                            </button>
+                            <div class="text-main">
+                                <h4>Abono Contable</h4>
+                                <label></label>
+                                
                             </div>
-                        </div>
-                        <div class="row" style = "margin-top: 1.5%;">
-                            <div class="col-6 media-body">
-                                <small>
-                                    <p class="text-info text-2x text-semibold pull-right">
-                                        {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}}
-                                        <!-- Banco -->
-                                    </p>
-                                    
-                                </small>
-                                &nbsp;
-                                <div style="background-color: {{hexPicker.color}};  
-                                                            border: 1px; 
-                                                            width: 20px; height: 30px; margin-right: 8px;"
-                                    class="pull-right">
-                                </div><br> <br>
-                                <!-- <div class="pull-right"> -->
-                                    <p class="text-muted mar-no pull-right">{{bancoText}}</p>
-                                <!-- </div> -->
+                            <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
+                            <div>
+                                <p class="text-info text-semibold">Total Abonos Contables: {{totalAbonoContable | currency}}</p>
                             </div>
-                            <div class="col-6 media-body">
-                                <small>
-                                    <p class="text-info text-2x mar-no text-semibold pull-left">
-                                        {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}}
-                                        <!-- Contable -->
-                                    </p>
-                                </small>
-                                <div style="background-color: {{hexPicker.color}};  
-                                                            border: 1px; 
-                                                            width: 20px; height: 30px; margin-left: 8px;" class="pull-left">
-                                </div><br> <br>
-                                <div>
-                                        <p class="text-muted mar-no">{{contableText}}</p>
-                                    </div>
-                            </div>
-                        </div>
-                        <div class=" row" style="margin-top: 1%">
-                            <div class="col-md-4">
-                                <div class="pull-left">
-                                    <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
-                                        <i class="demo-pli-coin icon-2x"></i>
-                                    </span>
-                                </div>
-                                <div>
-                                    <div class="pull-left" style="padding-left:20px;">
-                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
-                                                                                                'text-danger text-semibold': !info}">
-                                            {{cargoBanco | currency}}
-                                        </label><br>
-                                        <label class="text-muted mar-no">Cargo Bancario</label>
-                                    </div>
-                                    <div class="pull-left" style="padding-left:40px;">
-                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
-                                                                                                'text-danger text-semibold' : !info}">
-                                            {{abonoBanco | currency}}
-                                        </label><br>
-                                        <label class="text-muted mar-no">Abono Bancario</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <p class="text-2x mar-no text-semibold">
-                                    <label class="text-success mar-no">&plusmn;</label>&nbsp;{{difMonetaria | currency}}</p>
-                                <p class="mar-no">Diferencia monetaria permitida</p>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="pull-right">
-                                    <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
-                                        <i class="demo-pli-coin icon-2x"></i>
-                                    </span>
-                                </div>
-                                <div>
-                                    <div class="pull-right" style="padding-left:20px;">
-                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
-                                                                                                'text-danger text-semibold': !info}">
-                                            {{cargoAuxiliar | currency}}
-                                        </label><br>
-                                        <label class="text-muted mar-no">Cargo Contable</label>
-                                    </div>
-                                    <div class="pull-right" style="padding-left:40px;">
-                                        <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
-                                                                                                'text-danger text-semibold' : !info}">
-                                            {{abonoAuxiliar | currency}}
-                                        </label><br>
-                                        <label class="text-muted mar-no">Abono Contable</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 2%;">
-                            <div class="col-md-12" ng-show="mesActivo">
-                                <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
-                                    <i class="ti-layout-list-thumb"></i> Envíar a DPI 
-                                </button>
-                                &nbsp;&nbsp;
-                                <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
-                                    <i class="ti-control-shuffle"> </i>Punteo
-                                </button>
-                                <br>
-                                <br/> &nbsp;
+                            <div>
+                                <p class="text-info text-semibold">Total Cargos Contables: {{totalCargoContable | currency}}</p>
                             </div>
                         </div>
                     </div>
+                    <div class="row" style = "margin-top: 1.5%;">
+                        <div class="col-6 media-body">
+                            <small>
+                                <p class="text-info text-2x text-semibold pull-right">
+                                    {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}}
+                                    <!-- Banco -->
+                                </p>
+                                
+                            </small>
+                            &nbsp;
+                            <div style="background-color: {{hexPicker.color}};  
+                                                        border: 1px; 
+                                                        width: 20px; height: 30px; margin-right: 8px;"
+                                class="pull-right">
+                            </div><br> <br>
+                            <p class="text-muted mar-no pull-right">{{bancoText}}</p>
+                        </div>
+                        <div class="col-6 media-body">
+                            <small>
+                                <p class="text-info text-2x mar-no text-semibold pull-left">
+                                    {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}}
+                                    <!-- Contable -->
+                                </p>
+                            </small>
+                            <div style="background-color: {{hexPicker.color}};  
+                                                        border: 1px; 
+                                                        width: 20px; height: 30px; margin-left: 8px;" class="pull-left">
+                            </div><br> <br>
+                            <div>
+                                <p class="text-muted mar-no">{{contableText}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" row" style="margin-top: 1%">
+                        <div class="col-md-4">
+                            <div class="pull-left">
+                                <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
+                                    <i class="demo-pli-coin icon-2x"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <div class="pull-left" style="padding-left:20px;">
+                                    <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
+                                                                                            'text-danger text-semibold': !info}">
+                                        {{cargoBanco | currency}}
+                                    </label><br>
+                                    <label class="text-muted mar-no">Cargo Bancario</label>
+                                </div>
+                                <div class="pull-left" style="padding-left:40px;">
+                                    <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
+                                                                                            'text-danger text-semibold' : !info}">
+                                        {{abonoBanco | currency}}
+                                    </label><br>
+                                    <label class="text-muted mar-no">Abono Bancario</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <p class="text-2x mar-no text-semibold">
+                                <label class="text-success mar-no">&plusmn;</label>&nbsp;{{difMonetaria | currency}}</p>
+                            <p class="mar-no">Diferencia monetaria permitida</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="pull-right">
+                                <span class="icon-wrap icon-wrap-sm icon-circle bg-mint">
+                                    <i class="demo-pli-coin icon-2x"></i>
+                                </span>
+                            </div>
+                            <div>
+                                <div class="pull-right" style="padding-left:20px;">
+                                    <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold': info, 
+                                                                                            'text-danger text-semibold': !info}">
+                                        {{cargoAuxiliar | currency}}
+                                    </label><br>
+                                    <label class="text-muted mar-no">Cargo Contable</label>
+                                </div>
+                                <div class="pull-right" style="padding-left:40px;">
+                                    <label class="text-2x mar-no text-semibold" ng-class="{'text-info text-semibold' : info,
+                                                                                            'text-danger text-semibold' : !info}">
+                                        {{abonoAuxiliar | currency}}
+                                    </label><br>
+                                    <label class="text-muted mar-no">Abono Contable</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 2%;">
+                        <div class="col-md-12" ng-show="mesActivo">
+                            <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
+                                <i class="ti-layout-list-thumb"></i> Envíar a DPI 
+                            </button>
+                            &nbsp;&nbsp;
+                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
+                                <i class="ti-control-shuffle"> </i>Punteo
+                            </button>
+                            <br>
+                            <br/> &nbsp;
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController">
                             <br>
@@ -346,7 +327,7 @@
                         <br>
                         <br/> &nbsp;
                     </div>
-                <!-- </div> -->
+                </div>
             </div>
         </div>
     </div>
