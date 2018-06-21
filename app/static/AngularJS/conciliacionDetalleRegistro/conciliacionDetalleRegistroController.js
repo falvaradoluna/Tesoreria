@@ -165,7 +165,7 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
         else if (document.getElementById)
         document.getElementById("liveclock").innerHTML=myclock
         setTimeout($scope.DameLaFechaHora,1000);
-} 
+}
 
 
     //****************************************************************************************************
@@ -178,7 +178,7 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
             $rootScope.userData.idUsuario,
             $rootScope.paramsSaveHistori.IdBanco,
             $rootScope.paramsSaveHistori.IdEmpresa,
-            $rootScope.paramsSaveHistori.Cuenta,    
+            $rootScope.paramsSaveHistori.Cuenta,
             $rootScope.paramsSaveHistori.CuentaContable,
             $rootScope.paramsSaveHistori.fechaElaboracion,
             $rootScope.paramsSaveHistori.fechaCorte,
@@ -206,4 +206,22 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
             });
 
     };
+
+    $scope.grupoDPI = 0;
+    $scope.alertaEliminaDPI = function (dpi){
+        $scope.grupoDPI = dpi;
+        $('#alertaEliminacionDPI').modal('show');
+    };
+
+    $scope.closeDPI = function(){
+        $scope.grupoDPI = 0;
+        $('#alertaEliminacionDPI').modal('hide');
+    }
+
+    $scope.cancelaDPI = function(){
+        conciliacionDetalleRegistroRepository.getCancelaDPI( $scope.grupoDPI ).then(function (result) {
+            location.reload();
+        });
+    }
+    
 });

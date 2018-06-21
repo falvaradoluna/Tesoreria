@@ -15,6 +15,19 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function ($h
             });
         },
 
+        getCancelaDPI: function (grupo) {
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'cancelaDPI/',
+                method: "POST",
+                data: {
+                    grupo: grupo
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        },
+
         insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario, esCargoBanco, esCargoContable){ //LQMA 01042018
             console.log('insertPuntoDeposito')
             return $http({

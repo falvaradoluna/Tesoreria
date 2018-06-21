@@ -665,4 +665,20 @@ conciliacionDetalleRegistro.prototype.get_guardarHistorico = function (req, res,
     });
 };
 
+conciliacionDetalleRegistro.prototype.post_cancelaDPI = function (req, res, next) {
+    var self = this;
+
+    var params = [
+        { name: 'rpun_grupoPunteo', value: req.body.grupo, type: self.model.types.INT }
+    ];
+    
+    this.model.queryAllRecordSet('CancelarDPI_INS', params, function (error, result) {
+        self.view.expositor(res, {
+
+            error: error,
+            result: result
+        });
+    });
+};
+
 module.exports = conciliacionDetalleRegistro;
