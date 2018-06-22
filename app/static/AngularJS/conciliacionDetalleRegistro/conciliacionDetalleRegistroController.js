@@ -1,5 +1,5 @@
-registrationModule.controller('conciliacionDetalleRegistroController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository,$filter) {
-   
+registrationModule.controller('conciliacionDetalleRegistroController', function($scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioRepository, $filter, utils) {
+
     // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $rootScope.showBotones = JSON.parse(localStorage.getItem('ShowBtns'));
@@ -24,11 +24,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.difMonetaria = 0;
     $scope.mesActivo = false;
     $scope.guardaDisable = false;
-     
+
     //**************Variables para paginación**********************************
-      $scope.currentPage = 0;
-      $scope.pageSize = 10;
-      $scope.pages = [];
+    $scope.currentPage = 0;
+    $scope.pageSize = 10;
+    $scope.pages = [];
     //*************************************************************************
     // INICIA 
     //****************************************************************************************************
@@ -37,9 +37,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.showBtns();
         $rootScope.mostrarMenu = 1;
         $scope.DameLaFechaHora();
-        setTimeout( function(){
-                $(".cargando").remove();
-                }, 1500 );
+        setTimeout(function() {
+            $(".cargando").remove();
+        }, 1500);
     };
     var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
@@ -52,11 +52,10 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.nombreBanco = $scope.busqueda.Banco;
         $scope.nombreGerente = $scope.busqueda.gerente;
         $scope.nombreContador = $scope.busqueda.contador;
-        
+
         if ($scope.busqueda.MesActivo != 1) {
             $scope.mesActivo = true
-        }
-        else {
+        } else {
             $scope.mesActivo = true;
         }
 
@@ -65,20 +64,112 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA consigue los detalles de los punteos
     //****************************************************************************************************
 
-    $scope.verDetallePunteo = function (detallepunteo, opcion) {
-        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
+    $rootScope.NohayPdf = undefined;
+
+    $scope.tableRowExpanded = false;
+    $scope.tableRowIndexExpandedCurr = "";
+    $scope.tableRowIndexExpandedPrev = "";
+    $scope.storeIdExpanded = "";
+    $scope.mostrar = 0;
+    $scope.dayDataCollapseFn = function() {
+        $scope.dayDataCollapse = [];
+        for (var i = 0; i < $scope.detalleContable.length; i += 1) {
+            $scope.dayDataCollapse.push(false);
+        }
+    };
+
+
+    $scope.selectTableRow = function(index, storeId) {
+        if (typeof $scope.dayDataCollapse === 'undefined') {
+            $scope.dayDataCollapseFn();
+        }
+        /////Obtener pdf
+        $scope.buscaRecibos(storeId.tipoPoliza, storeId.anio, storeId.mes, storeId.poliza, storeId.idEmpresa);
+        if ($scope.tableRowExpanded === false && $scope.tableRowIndexExpandedCurr === "" && $scope.storeIdExpanded === "") {
+            $scope.tableRowIndexExpandedPrev = "";
+            $scope.tableRowExpanded = true;
+            $scope.tableRowIndexExpandedCurr = index;
+            $scope.storeIdExpanded = storeId;
+            $scope.dayDataCollapse[index] = true;
+        } else if ($scope.tableRowExpanded === true) {
+            if ($scope.tableRowIndexExpandedCurr === index && $scope.storeIdExpanded === storeId) {
+                $scope.tableRowExpanded = false;
+                $scope.tableRowIndexExpandedCurr = "";
+                $scope.storeIdExpanded = "";
+                $scope.dayDataCollapse[index] = false;
+            } else {
+                $scope.tableRowIndexExpandedPrev = $scope.tableRowIndexExpandedCurr;
+                $scope.tableRowIndexExpandedCurr = index;
+                $scope.storeIdExpanded = storeId;
+                $scope.dayDataCollapse[$scope.tableRowIndexExpandedPrev] = false;
+                $scope.dayDataCollapse[$scope.tableRowIndexExpandedCurr] = true;
+            }
+        }
+
+    };
+
+    $scope.buscaRecibos = function(tipo, anio, mes, folio, idEmpresa) {
+
+        var folioEmpresaSucursal = ''
+        var arregloBytes = [];
+        $rootScope.pdf = [];
+        $scope.contador = 1;
+
+        var param = {
+
+            tipo: tipo,
+            anio: anio,
+            mes: mes,
+            folio: folio,
+            idEmpresa: idEmpresa
+        }
+        console.log('Entre a busqueda por numero de factura', $scope.folio + '/' + $scope.empresa + '/' + $scope.sucursal);
+        conciliacionDetalleRegistroRepository.getArchivoPdf(param).then(function(result) {
+            console.log(result);
+            arregloBytes = result.data.arrayBits;
+            console.log(arregloBytes, 'Solo los arreglos');
+            if (arregloBytes.length == 0) {
+                $rootScope.NohayPdf = 1;
+            } else {
+                $rootScope.NohayPdf = undefined;
+                $rootScope.pdf = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/pdf"));
+            }
+            //$scope.pdf[key] = URL.createObjectURL(utils.b64toBlob(value, "application/pdf"));
+            // $('#reciboCaja').modal('show');
+
+
+            setTimeout(function() {
+
+                $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").appendTo('#pdfArchivo');
+
+            }, 100);
+            $('#loading').modal('hide');
+
+
+            console.log($scope.pdf, 'Soy el arreglo ')
+
+        });
+
+
+    };
+    $scope.verDetallePunteo = function(detallepunteo, opcion) {
+        $rootScope.NohayPdf = undefined;
+        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function(result) {
             $('#punteoDetalle').modal('show');
-            $scope.detalleBanco = result.data[0];
-            $scope.detalleContable = result.data[1];
+            $rootScope.detalleBanco = result.data[0];
+            $rootScope.detalleContable = result.data[1];
         });
     };
 
-    $scope.verDetallePunteoRef = function (detallepunteo, opcion) {
-        
-        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function (result) {
-            $('#punteoDetalleRef').modal('show');
-            $scope.detalleBancoRef = result.data[0];
-            $scope.detalleContableRef = result.data[1];
+    $scope.verDetallePunteoRef = function(detallepunteo, opcion) {
+        $rootScope.NohayPdf = undefined;
+        conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function(result) {
+            $('#punteoDetalle').modal('show');
+            $rootScope.detalleBanco = result.data[0];
+            $rootScope.detalleContable = result.data[1];
+            // $('#punteoDetalleRef').modal('show');
+            // $scope.detalleBancoRef = result.data[0];
+            // $scope.detalleContableRef = result.data[1];
         });
     };
 
@@ -90,19 +181,19 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         $scope.cargoTotalBanco = 0;
         $scope.abonoTotalAuxiliar = 0;
         $scope.cargoTotalAuxiliar = 0;
-        
+
         angular.forEach(detallePunteo, function(value, key) {
 
             $scope.abonoTotalAuxiliar += value.abono;
             $scope.cargoTotalAuxiliar += value.cargo;
-            
-       
+
+
         });
         angular.forEach(detallePunteoBanco, function(value, key) {
-            
+
             $scope.abonoTotalBanco += value.abonoBanco;
             $scope.cargoTotalBanco += value.cargoBanco;
-       
+
         });
 
     };
@@ -112,80 +203,87 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************
     $scope.showBtns = function() {
-        
+
     };
     //****************************************************************************************************
 
     //Inicia la función que me retorna la fecha y hora actual
     //****************************************************************************************************
-     $scope.DameLaFechaHora = function() {
-/////////////////////////////////////////////////////////////////////////////Obtiene la fecha actual   
-var hora = new Date() 
-var hrs = hora.getHours(); 
-var min = hora.getMinutes(); 
-var hoy = new Date(); 
-var m = new Array(); 
-var d = new Array() 
-var an= hoy.getFullYear(); 
-m[0]="Enero"; m[1]="Febrero"; m[2]="Marzo"; 
-m[3]="Abril"; m[4]="Mayo"; m[5]="Junio"; 
-m[6]="Julio"; m[7]="Agosto"; m[8]="Septiembre"; 
-m[9]="Octubre"; m[10]="Noviembre"; m[11]="Diciembre";
+    $scope.DameLaFechaHora = function() {
+        /////////////////////////////////////////////////////////////////////////////Obtiene la fecha actual   
+        var hora = new Date()
+        var hrs = hora.getHours();
+        var min = hora.getMinutes();
+        var hoy = new Date();
+        var m = new Array();
+        var d = new Array()
+        var an = hoy.getFullYear();
+        m[0] = "Enero";
+        m[1] = "Febrero";
+        m[2] = "Marzo";
+        m[3] = "Abril";
+        m[4] = "Mayo";
+        m[5] = "Junio";
+        m[6] = "Julio";
+        m[7] = "Agosto";
+        m[8] = "Septiembre";
+        m[9] = "Octubre";
+        m[10] = "Noviembre";
+        m[11] = "Diciembre";
 
-$scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " " + an;
-/////////////////////////////////////////////////////////////////////////////////////////////
+        $scope.FechahoraActual = hoy.getDate() + " " + m[hoy.getMonth()] + " " + "del" + " " + an;
+        /////////////////////////////////////////////////////////////////////////////////////////////
 
-        if (!document.layers&&!document.all&&!document.getElementById)
+        if (!document.layers && !document.all && !document.getElementById)
 
-        return
+            return
 
-         var Digital=new Date()
-         var hours=Digital.getHours()
-         var minutes=Digital.getMinutes()
-         var seconds=Digital.getSeconds()
+        var Digital = new Date()
+        var hours = Digital.getHours()
+        var minutes = Digital.getMinutes()
+        var seconds = Digital.getSeconds()
 
-        var dn="PM"
-        if (hours<12)
-        dn="AM"
-        if (hours>12)
-        hours=hours-12
-        if (hours==0)
-        hours=12
+        var dn = "PM"
+        if (hours < 12)
+            dn = "AM"
+        if (hours > 12)
+            hours = hours - 12
+        if (hours == 0)
+            hours = 12
 
-         if (minutes<=9)
-         minutes="0"+minutes
-         if (seconds<=9)
-         seconds="0"+seconds
-        
-        myclock= hours+":"+minutes+":"+seconds+" "+dn ;
-        if (document.layers){
-        document.layers.liveclock.document.write(myclock)
-        document.layers.liveclock.document.close()
-        }
-        else if (document.getElementById)
-        document.getElementById("liveclock").innerHTML=myclock
-        setTimeout($scope.DameLaFechaHora,1000);
-}
+        if (minutes <= 9)
+            minutes = "0" + minutes
+        if (seconds <= 9)
+            seconds = "0" + seconds
+
+        myclock = hours + ":" + minutes + ":" + seconds + " " + dn;
+        if (document.layers) {
+            document.layers.liveclock.document.write(myclock)
+            document.layers.liveclock.document.close()
+        } else if (document.getElementById)
+            document.getElementById("liveclock").innerHTML = myclock
+        setTimeout($scope.DameLaFechaHora, 1000);
+    }
 
 
     //****************************************************************************************************
 
     //LAGP
-    $scope.guardarHistorico = function () {
+    $scope.guardarHistorico = function() {
         $scope.guardaDisable = true;
         $('#loading').modal('show');
         conciliacionDetalleRegistroRepository.guardarHistorico(
-            $rootScope.userData.idUsuario,
-            $rootScope.paramsSaveHistori.IdBanco,
-            $rootScope.paramsSaveHistori.IdEmpresa,
-            $rootScope.paramsSaveHistori.Cuenta,
-            $rootScope.paramsSaveHistori.CuentaContable,
-            $rootScope.paramsSaveHistori.fechaElaboracion,
-            $rootScope.paramsSaveHistori.fechaCorte,
-            $rootScope.paramsSaveHistori.PolizaPago,
-            1,
-        )
-            .then(function (result) {
+                $rootScope.userData.idUsuario,
+                $rootScope.paramsSaveHistori.IdBanco,
+                $rootScope.paramsSaveHistori.IdEmpresa,
+                $rootScope.paramsSaveHistori.Cuenta,
+                $rootScope.paramsSaveHistori.CuentaContable,
+                $rootScope.paramsSaveHistori.fechaElaboracion,
+                $rootScope.paramsSaveHistori.fechaCorte,
+                $rootScope.paramsSaveHistori.PolizaPago,
+                1,
+            )
+            .then(function(result) {
                 if (result.data[1][0].estatus == 0) {
                     swal(
                         'Listo',
@@ -208,20 +306,20 @@ $scope.FechahoraActual = hoy.getDate() +" "+m[hoy.getMonth()]+ " " + "del" + " "
     };
 
     $scope.grupoDPI = 0;
-    $scope.alertaEliminaDPI = function (dpi){
+    $scope.alertaEliminaDPI = function(dpi) {
         $scope.grupoDPI = dpi;
         $('#alertaEliminacionDPI').modal('show');
     };
 
-    $scope.closeDPI = function(){
+    $scope.closeDPI = function() {
         $scope.grupoDPI = 0;
         $('#alertaEliminacionDPI').modal('hide');
     }
 
-    $scope.cancelaDPI = function(){
-        conciliacionDetalleRegistroRepository.getCancelaDPI( $scope.grupoDPI ).then(function (result) {
+    $scope.cancelaDPI = function() {
+        conciliacionDetalleRegistroRepository.getCancelaDPI($scope.grupoDPI).then(function(result) {
             location.reload();
         });
     }
-    
+
 });
