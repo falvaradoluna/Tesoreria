@@ -3,6 +3,35 @@ var excelExportURL =   global_settings.urlCORS + 'api/excelExport/';
 registrationModule.factory('excelExportRepository', function($http){
 	return{
 
+        sendExcelDataLayout: function(noCuenta, fecha, descripcion, referencia, desAmpliada, tipoMovimiento, cargo, abono){
+            console.log(noCuenta);
+            console.log(fecha);
+            console.log(descripcion);
+            console.log(referencia);
+            console.log(desAmpliada);
+            console.log(tipoMovimiento);
+            console.log(cargo);
+            console.log(abono);
+            return $http({
+                       url: excelExportURL + 'insExcelLayout/',
+                       method: "GET",
+                       params: {
+                           noCuenta: noCuenta,
+                           fecha: fecha,
+                           descripcion: descripcion,
+                           referencia: referencia,
+                           desAmpliada: desAmpliada,
+                           tipoMovimiento: tipoMovimiento,
+                           cargo: cargo,
+                           abono: abono
+                       },
+                       headers: {
+                           'Content-Type': 'application/json'
+                       }
+
+            }); 
+         },
+
         sendExcelDataScotibank: function(idBanco, NoCuenta, Fecha, Referencia_Numerica, Cargo, Abono, Tipo, Transaccion, Leyenda1, Leyenda2, claveLayout){
              return $http({
                         url: excelExportURL + 'insExcelScotiabank/',
