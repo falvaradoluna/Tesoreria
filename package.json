@@ -14,7 +14,9 @@
     "multer": "^1.1.0",
     "phantom": "^2.1.21",
     "serve-favicon": "^2.1.6",
+    "soap": "^0.24.0",
     "socket.io": "^1.2.0",
-    "swig": "^1.4.2"
+    "swig": "^1.4.2",
+    "webpage": "^0.3.0"
   }
 }

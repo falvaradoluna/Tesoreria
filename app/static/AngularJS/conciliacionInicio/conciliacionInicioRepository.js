@@ -25,6 +25,28 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
 
             });
         },
+        getLocalAbonoCargo: function(idBanco,idEmpresa,noCuenta,cuentaContable,fechaE,fechaC,polizaPago,opcion,idUsuario) { //LQMA add 06032018 idUsuario
+            
+            return $http({
+                url: conciliacionInicioURL + 'localAbonoCargo/',
+                method: "POST",
+                data: {                    
+                    idBanco: idBanco,                    
+                    idEmpresa: idEmpresa,
+                    noCuenta: noCuenta, 
+                    cuentaContable: cuentaContable,
+                    fechaElaboracion: fechaE,
+                    fechaCorte: fechaC,
+                    polizaPago: polizaPago,
+                    opcion: opcion,
+                    idUsuario: idUsuario //LQMA add 06032018
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
         getGerenteContador: function(idUsuario, idEmpresa) {
             return $http({
                 url: conciliacionInicioURL + 'gerenteContador/',
@@ -76,6 +98,20 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
                 method: "GET",
                 params: {
                     anio: anio
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
+        //Ing. LAGP06062018
+        getcloseMes: function( ) {
+            return $http({
+                url: conciliacionInicioURL + 'closeMes/',
+                method: "GET",
+                params: {
                 },
                 headers: {
                     'Content-Type': 'application/json'

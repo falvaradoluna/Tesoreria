@@ -1,4 +1,4 @@
-registrationModule.controller('conciliacionDetalleRegistroConsultaController', function ($window, $scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, alertFactory, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
+registrationModule.controller('conciliacionDetalleRegistroConsultaController', function ($window, $scope, $rootScope, $location, $timeout, $log, localStorageService, filtrosRepository, conciliacionDetalleRegistroConsultaRepository, uiGridConstants, i18nService, uiGridGroupingConstants, conciliacionRepository, conciliacionInicioConsultaRepository, $filter) {
        // ****************** Se guarda la información del usuario en variable userData
     $rootScope.userData = localStorageService.get('userData');
     $scope.nodoPadre = [];
@@ -55,11 +55,9 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
         $scope.nombreContador = $scope.busqueda.contador;
         if ($scope.busqueda.MesActivo != 1) {
             $scope.mesActivo = false;
-            // alertFactory.error($scope.busqueda.mensaje);
         }
         else {
             $scope.mesActivo = true;
-            // alertFactory.success($scope.busqueda.mensaje);
         }
 
     };
@@ -80,48 +78,7 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
             console.log( 'result', result.data );
         });
     };
-    // $scope.verDetallePunteo = function (detallepunteo, opcion) {
-        
-
-    //     var accionBusqueda = 0;
-    //     var datoBusqueda = '';
-    //     if (opcion == 1) {
-
-    //         if (detallepunteo.idPAdre == 4) {
-    //             datoBusqueda = detallepunteo.idDepositoBanco;
-    //             accionBusqueda = 4;
-    //         }
-    //         else if (detallepunteo.idPAdre == 2) {
-
-    //             datoBusqueda = detallepunteo.idDepositoBanco;
-    //             accionBusqueda = 1;
-    //         }
-
-    //     } else {
-    //         if (detallepunteo.idPAdre == 3) {
-    //             datoBusqueda = detallepunteo.idAuxiliarContable;
-    //             accionBusqueda = 3;
-    //         } else if (detallepunteo.idPAdre == 2) {
-    //             datoBusqueda = detallepunteo.idAuxiliarContable;
-    //             accionBusqueda = 2;
-    //         }
-
-    //     }
-    //     conciliacionDetalleRegistroConsultaRepository.detallePunteo(datoBusqueda, $scope.idBanco, $scope.cuentaBanco, $scope.cuenta, accionBusqueda,$scope.paramsHistory.HistoricoId).then(function (result) {
-    //         $('#punteoDetalle').modal('show');
-
-    //         $scope.detallePunteo = result.data[0];
-    //         $scope.detallePunteoBanco = result.data[1];
-    //         if (result.data.length > 0) {
-    //             $scope.calculaTotal($scope.detallePunteo, $scope.detallePunteoBanco);
-    //             datoBusqueda = '';
-    //         }
-    //         else {
-    //             alertFactory.error('No existen punteos en este detalle')
-    //         }
-
-    //     });
-    // };
+    
     //****************************************************************************************************
     // INICIA funcion para mostrar el total de cargos y abonos en la modal de Detalle punteo
     //****************************************************************************************************

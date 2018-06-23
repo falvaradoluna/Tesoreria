@@ -1,69 +1,37 @@
-registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShipsController', function($window,$scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository, alertFactory){
+registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShipsController', function($window,$scope, $rootScope, localStorageService, filtrosRepository, conciliacionDetalleRegistroRepository){
   
    // INICIA elimina los punteos ya realizados
     //****************************************************************************************************
     //Ing. Luis Antonio Garcia
     $scope.eliminarPunteo = function() {
-         
         $scope.datosPunteo = parseInt(localStorage.getItem('datosPunteo'));
-        console.log( 'datosPunteoAQUI', $scope.datosPunteo) ;
         conciliacionDetalleRegistroRepository.eliminarPunteo($scope.datosPunteo).then(function(result) {
             $('#alertaEliminacionPunteo').modal('hide');
             if( result.data[0].success == 1 ){
-                alertFactory.error(result.data[0].msg);
+                swal(
+                    'Listo',
+                    result.data[0].msg,
+                    'success'
+                );
             }else{
-                alertFactory.error(result.data[0].msg);
+                swal(
+                    'Alto',
+                    result.data[0].msg,
+                    'error'
+                );
             }
              localStorage.removeItem('datosPunteo');
             $scope.refreshGrids();
         });
     };
-    // $scope.eliminarPunteo = function() {
-         
-    //     $scope.datosPunteo = JSON.parse(localStorage.getItem('datosPunteo'));
-    //     $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
-
-    //     var datoBusqueda = '';
-    //     if($scope.datosPunteo.accion == 1){
-    //        datoBusqueda = $scope.datosPunteo.Datos.idDepositoBanco;
-    //        if($scope.datosPunteo.idPAdre == 4){
-    //          $scope.datoBusqueda.accion = 4;
-    //        }
-    //     }else{
-    //        if($scope.datosPunteo.idPAdre == 3){
-    //         $scope.datosPunteo.accion = 3;
-    //        }
-    //        datoBusqueda = $scope.datosPunteo.Datos.idAuxiliarContable;
-    //     }
-    //     conciliacionDetalleRegistroRepository.eliminarPunteo(datoBusqueda,$scope.datosPunteo.accion, $scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco).then(function(result) {
-    //         console.log(result, 'Resultado cuando elimino');
-    //         $scope.datosPunteo = '';
-    //         $scope.accionElimina = '';
-    //         $('#alertaEliminacionPunteo').modal('hide');
-    //          localStorage.removeItem('datosPunteo');
-    //         $scope.refreshGrids();
-    //     });
-    // };
-    //****************************************************************************************************
-
 
      ////////Muestra mensaje de alerta para aceptar o rechazar la eliminación de punteos relacionados
     //Luis Antonio Garcia Perrusquia
      $scope.alertaEliminaPunteos = function (datosPunteo){
-        console.log( 'eliminar', datosPunteo );
         localStorage.setItem('datosPunteo', datosPunteo);
-  
-       $('#alertaEliminacionPunteo').modal('show');
+        $('#alertaEliminacionPunteo').modal('show');
       };
       
-
-    // $scope.alertaEliminaPunteos = function (datosPunteo,accionElimina){
-
-    //   localStorage.setItem('datosPunteo', JSON.stringify({"Datos": datosPunteo, "accion": accionElimina}));
-
-    //  $('#alertaEliminacionPunteo').modal('show');
-    // };
-
     $scope.cancelaEliminacionPunteo = function(){
         $scope.datosPunteo = '';
         $scope.accionElimina = '';
