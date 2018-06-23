@@ -65,7 +65,7 @@
                 </div>
                 <!--Inicio del primer Tab Detalle de Registros no Punteados-->
                 <div id="CargosSinPuntear" class="tabcontent" ng-controller="conciliacionDetalleRegistroGridsController" style="display: block;">
-                    <div >
+                    <div>
                         <!--LQMA add 24082017 colorpicker y grupos de colores BEGIN-->
                         <div class="panel panel-default">
                             <div class="panel-body">
@@ -104,7 +104,7 @@
 
                         <div class="col-md-6" style="padding-top: 3px;">
                             <!-- <div> -->
-                                
+
                             <!-- </div> -->
                             <div class="pull-right" style="width: 30%;">
                                 <button class="btn btn-warning pull-right" style="margin-top: 10px" ng-click="nuevoGrupo();">
@@ -121,7 +121,7 @@
                             <div class="text-main">
                                 <h4>Abono Contable</h4>
                                 <label></label>
-                                
+
                             </div>
                             <div ui-grid="gridAuxiliarContable" ui-grid-selection ui-grid-move-columns ui-grid-pinning class="grid"></div>
                             <div>
@@ -132,19 +132,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style = "margin-top: 1.5%;">
+                    <div class="row" style="margin-top: 1.5%;">
                         <div class="col-6 media-body">
                             <small>
                                 <p class="text-info text-2x text-semibold pull-right">
                                     {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}}
                                 </p>
                                 
-                            </small>
-                            &nbsp;
+                            </small> &nbsp;
                             <div style="background-color: {{hexPicker.color}};  
                                                         border: 1px; 
-                                                        width: 20px; height: 30px; margin-right: 8px;"
-                                class="pull-right">
+                                                        width: 20px; height: 30px; margin-right: 8px;" class="pull-right">
                             </div><br> <br>
                             <p class="text-muted mar-no pull-right">{{bancoText == 0 ? 'Cargo': 'Abono' }}</p>
                         </div>
@@ -218,11 +216,10 @@
                     </div>
                     <div class="row" style="margin-top: 2%;">
                         <div class="col-md-12" ng-show="mesActivo">
-                            <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
+                            <!-- <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
                                 <i class="ti-layout-list-thumb"></i> Envíar a DPI 
-                            </button>
-                            &nbsp;&nbsp;
-                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
+                            </button> &nbsp;&nbsp; -->
+                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()" style="padding: 15px 40px; font-size: 16px;">
                                 <i class="ti-control-shuffle"> </i>Punteo
                             </button>
                             <br>
@@ -1068,8 +1065,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <table id="auxiliarPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%" ng-hide="detalleContable.length == 0">
-                    <thead>
+                <table id="auxiliarPunteo" class="table table-hover table-bordered table-striped" cellspacing="0" width="100%" ng-hide="detalleContable.length == 0">
+                    <thead class="levelOne">
                         <tr>
                             <th>Fecha</th>
                             <th>Tipo Póliza</th>
@@ -1079,14 +1076,34 @@
                             <th>Abono</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr ng-repeat="auxiliar in detalleContable">
+                    <tbody data-ng-repeat="auxiliar in detalleContable" data-ng-switch on="dayDataCollapse[$index]">
+                        <tr class="clickableRow" title="Click to toggle collapse/expand day summaries for this store." data-ng-click="selectTableRow($index, auxiliar)">
                             <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
                             <td>{{auxiliar.tipoPoliza}}</td>
                             <td>{{auxiliar.poliza}}</td>
                             <td>{{auxiliar.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.cargo > 0}">{{auxiliar.cargo | currency}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : auxiliar.abono > 0}">{{auxiliar.abono | currency}}</td>
+                        </tr>
+                        <tr data-ng-switch-when="true">
+                            <td colspan="9">
+                                <div>
+
+                                    <div id="pdfArchivo" ng-show="pdf!=undefined">
+
+                                    </div>
+                                    <div ng-show="NohayPdf!=undefined">
+                                        <div class="alert alert-danger" role="alert" style="top: -400px;">
+                                            El archivo de la poliza no existe fisicamente.!
+                                        </div>
+                                    </div>
+                                    <div class="spinner" ng-show="pdf===undefined" style="background-color: black;height: 60px;width: 60px; opacity: .7 important;">
+                                        <div class="cube1"></div>
+                                        <div class="cube2"></div>
+                                    </div>
+                                    <!-- </div> -->
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -1236,8 +1253,8 @@
                                 <button class="btn btn-danger pull-right" type="button" data-dismiss="modal">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
-                            <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
                                 <button class="btn btn-success pull-right" ng-click="generaPunteo()">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
@@ -1270,8 +1287,8 @@
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaEliminacionPunteo()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
-                            <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span>
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>
                                 <button class="btn btn-success pull-right" ng-click="eliminarPunteo()">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
@@ -1303,8 +1320,8 @@
                                 <button class="btn btn-danger pull-right" type="button" ng-click="closeDPI()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
-                            <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span>
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span>
                                 <button class="btn btn-success pull-right" ng-click="cancelaDPI()">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
@@ -1336,8 +1353,8 @@
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaPunteoPrevio()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
-                            <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span ng-controller="conciliacionDetalleRegistroGridsController">
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span ng-controller="conciliacionDetalleRegistroGridsController">
                                 <button class="btn btn-success pull-right" ng-click="savePunteo()" ng-disabled="ocultarSave">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
@@ -1369,8 +1386,8 @@
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaPunteoDPI()">
                                     <i class="ti-close"></i> Cancelar</button>
                             </span>
-                            <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
+                        <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <span ng-controller="conciliacionDetalleRegistroSaveGridsController">
                                 <button class="btn btn-success pull-right" ng-click="guardaDPIs()">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
