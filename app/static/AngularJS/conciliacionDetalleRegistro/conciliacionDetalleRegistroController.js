@@ -112,7 +112,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
         var folioEmpresaSucursal = ''
         var arregloBytes = [];
-        $rootScope.pdf = [];
+        $rootScope.pdf = undefined;
         $scope.contador = 1;
 
         var param = {
@@ -130,6 +130,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
             console.log(arregloBytes, 'Solo los arreglos');
             if (arregloBytes.length == 0) {
                 $rootScope.NohayPdf = 1;
+                $rootScope.pdf = [];
             } else {
                 $rootScope.NohayPdf = undefined;
                 $rootScope.pdf = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/pdf"));
