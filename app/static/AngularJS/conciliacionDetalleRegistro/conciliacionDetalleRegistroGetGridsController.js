@@ -92,6 +92,8 @@
     };
     $rootScope.Llenatablas = function() {
         $scope.getTotalUniverso();
+    }
+    $rootScope.LlenatablasBancario = function() {
         $scope.getTotalUniversoBancario();
     }
     var variablesLocalStorage = function() {
