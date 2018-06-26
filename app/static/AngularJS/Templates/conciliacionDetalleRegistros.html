@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="css/tesoreria.css">
 <div ng-init="init()">
-    <div class="panel col-md-12">
+    <div class="panel col-md-12" ng-controller="conciliacionDetalleRegistroGetGridsController">
         <br/>
         <div class="ibox float-e-margins">
             <div class="ibox-title" style="text-align:center">
@@ -52,12 +52,12 @@
                             Registros Contables Referenciados
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'totalUniversoContables')">
+                    <button class="tablinks" onclick="openCity(event, 'totalUniversoContables');" ng-click="Llenatablas();">
                         <span style="color:white; font-weight: bold;">
                             Total Movimientos Contables
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'totalUniversoBancarios')">
+                    <button class="tablinks" onclick="openCity(event, 'totalUniversoBancarios');" ng-click="Llenatablas();">
                         <span style="color:white; font-weight: bold;">
                             Total Movimientos Bancarios
                         </span>

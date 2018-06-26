@@ -41,6 +41,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
             $(".cargando").remove();
         }, 1500);
     };
+
     var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
         $scope.idEmpresa = $scope.busqueda.IdEmpresa;
