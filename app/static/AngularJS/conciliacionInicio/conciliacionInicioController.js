@@ -29,11 +29,10 @@
     //******************************************************************
 
     $scope.init = function () {
-        //Mostrar y ocultar le boton de cerrar mes
         if( $rootScope.userData.idUsuario == 71 ){
-           $rootScope.showCloseBtn = 1
-        }
-
+            $rootScope.showCloseBtn = 1
+         }
+        
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
         $scope.getUltimoMes();
@@ -120,6 +119,17 @@
             });
     }
     
+    // $scope.getCloseBtnUsers = function(){
+        // conciliacionInicioRepository.getCloseBtnUsers()
+        // .then(function (result) {
+        //     console.log( 'result', result );
+        // });
+        //Mostrar y ocultar le boton de cerrar mes
+        // if( $rootScope.userData.idUsuario == 71 ){
+        //     $rootScope.showCloseBtn = 1
+        //  }
+    // };
+
     //Ing. LAGP 05062018
     $scope.getUltimoMes = function(){
         //Obetenemos el año actual
@@ -586,8 +596,8 @@
                             "estadoCuenta": $scope.totalesAbonosCargos.saldoBanco,
                             "aCNB": $scope.totalesAbonosCargos.tAbonoContable,
                             "aBNC": $scope.totalesAbonosCargos.tAbonoBancario,
-                            "cCNB": $scope.totalesAbonosCargos.tCargoBancario,
-                            "cBNC": $scope.totalesAbonosCargos.tCargoContable,
+                            "cCNB": $scope.totalesAbonosCargos.tCargoContable,
+                            "cBNC": $scope.totalesAbonosCargos.tCargoBancario,
                             "saldoConciliacion": $scope.totalesAbonosCargos.sConciliacion,
                             "saldoContabilidad": $scope.totalesAbonosCargos.sContabilidad,
                             "diferencia": $scope.totalesAbonosCargos.diferencia,
