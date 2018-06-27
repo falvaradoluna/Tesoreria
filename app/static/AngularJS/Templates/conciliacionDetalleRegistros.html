@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="css/tesoreria.css">
 <div ng-init="init()">
-    <div class="panel col-md-12">
+    <div class="panel col-md-12" ng-controller="conciliacionDetalleRegistroGetGridsController">
         <br/>
         <div class="ibox float-e-margins">
             <div class="ibox-title" style="text-align:center">
@@ -52,12 +52,12 @@
                             Registros Contables Referenciados
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'totalUniversoContables')">
+                    <button class="tablinks" onclick="openCity(event, 'totalUniversoContables');" ng-click="Llenatablas();">
                         <span style="color:white; font-weight: bold;">
                             Total Movimientos Contables
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'totalUniversoBancarios')">
+                    <button class="tablinks" onclick="openCity(event, 'totalUniversoBancarios');" ng-click="LlenatablasBancario();">
                         <span style="color:white; font-weight: bold;">
                             Total Movimientos Bancarios
                         </span>
@@ -110,10 +110,13 @@
                                 <button class="btn btn-warning pull-right" style="margin-top: 10px" ng-click="nuevoGrupo();">
                                     Nuevo Grupo
                                 </button>
-                                <label class="switch" style="margin-top: 6%;">
-                                    <input type="checkbox" ng-model="checkboxEspecial.value">
-                                    <span class="slider round"></span>
-                                </label>
+                                <!-- <div class="text-center">
+                                    <span><small> Sugerir punteo </small></span>
+                                    <label class="switch">
+                                        <input type="checkbox" ng-model="checkboxEspecial.value">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div> -->
                             </div>
                             <div class="text-main">
                                 <h4>Abono Contable</h4>
@@ -134,7 +137,6 @@
                             <small>
                                 <p class="text-info text-2x text-semibold pull-right">
                                     {{bancoGrupo > 0 ? bancoGrupo : bancoGrupo * -1 | currency}}
-                                    <!-- Banco -->
                                 </p>
                                 
                             </small> &nbsp;
@@ -142,13 +144,12 @@
                                                         border: 1px; 
                                                         width: 20px; height: 30px; margin-right: 8px;" class="pull-right">
                             </div><br> <br>
-                            <p class="text-muted mar-no pull-right">{{bancoText}}</p>
+                            <p class="text-muted mar-no pull-right">{{bancoText == 0 ? 'Cargo': 'Abono' }}</p>
                         </div>
                         <div class="col-6 media-body">
                             <small>
                                 <p class="text-info text-2x mar-no text-semibold pull-left">
                                     {{ contableGrupo > 0 ? contableGrupo : contableGrupo * -1 | currency}}
-                                    <!-- Contable -->
                                 </p>
                             </small>
                             <div style="background-color: {{hexPicker.color}};  
@@ -156,7 +157,7 @@
                                                         width: 20px; height: 30px; margin-left: 8px;" class="pull-left">
                             </div><br> <br>
                             <div>
-                                <p class="text-muted mar-no">{{contableText}}</p>
+                                <p class="text-muted mar-no">{{contableText == 0 ? 'Cargo': 'Abono'}}</p>
                             </div>
                         </div>
                     </div>
@@ -218,7 +219,7 @@
                             <!-- <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
                                 <i class="ti-layout-list-thumb"></i> Envíar a DPI 
                             </button> &nbsp;&nbsp; -->
-                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()">
+                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()" style="padding: 15px 40px; font-size: 16px;">
                                 <i class="ti-control-shuffle"> </i>Punteo
                             </button>
                             <br>

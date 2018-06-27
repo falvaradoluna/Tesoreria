@@ -83,14 +83,19 @@
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
 
-        $scope.getTotalUniverso();
-        $scope.getTotalUniversoBancario();
+        // $scope.getTotalUniverso();
+        //$scope.getTotalUniversoBancario();
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
         localStorage.removeItem('totalesGrids');
     };
-
+    $rootScope.Llenatablas = function() {
+        $scope.getTotalUniverso();
+    }
+    $rootScope.LlenatablasBancario = function() {
+        $scope.getTotalUniversoBancario();
+    }
     var variablesLocalStorage = function() {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
         $scope.polizaPago = $scope.busqueda.PolizaPago;
@@ -386,7 +391,7 @@
     };
     //Ing. Luis Antonio García Perrusquía
     $scope.getTotalUniverso = function() {
-
+            $('#loading').modal('show');
             conciliacionDetalleRegistroRepository.getTotalUniverso(
                     $scope.busquedaUniverso.IdEmpresa,
                     $scope.busquedaUniverso.IdBanco,
@@ -415,17 +420,21 @@
                         $scope.universoContable = result.data;
 
                         $scope.tablaSearch('contableUniCargo');
+                        $('#loading').modal('hide');
                     } else {
+                        $('#loading').modal('hide');
                         swal(
                             'Alto',
                             'No se encontraron datos, intentelo de nuevo.',
                             'warning'
                         );
+
                     }
                 });
         }
         //Ing. Luis Antonio García Perrusquía
     $scope.getTotalUniversoBancario = function() {
+        $('#loading').modal('show');
         conciliacionDetalleRegistroRepository.getTotalUniversoBancario(
                 $scope.busquedaUniverso.IdEmpresa,
                 $scope.busquedaUniverso.IdBanco,
@@ -455,12 +464,16 @@
                     $scope.universoBancario = result.data;
 
                     $scope.tablaSearch('contableUniBancarioCargo');
+                    //  $scope.$apply();
+                    $('#loading').modal('hide');
                 } else {
+                    $('#loading').modal('hide');
                     swal(
                         'Alto',
                         'No se encontraron datos, intentelo de nuevo.',
                         'warning'
                     );
+
                 }
             });
     }

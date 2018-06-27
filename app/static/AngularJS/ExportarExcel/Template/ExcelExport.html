@@ -1,39 +1,43 @@
-
 <div class="modal-content" ng-init="init()">
-<div class="modal-header" style="background-color:#1f897f;">
-                <h4 class="modal-title text-center" id="myLargeModalLabel" style="color:#fff;">Migrar información a la Base de Datos</h4>
-</div>
-           <div class="panel-body">
-           <div class="panel col-md-8 text-center" style="margin: 71px auto; margin-left: 247px; margin-bottom: 98px; margin-right: 100px">
-           
+    <div class="modal-header" style="background-color:#1f897f;">
+        <h4 class="modal-title text-center" id="myLargeModalLabel" style="color:#fff;">Migrar información a la Base de Datos</h4>
+    </div>
+    <div class="panel-body">
+        <div class="panel col-md-8 text-center" style="margin: 71px auto; margin-left: 247px; margin-bottom: 98px; margin-right: 100px">
 
-           <div class="form-group col-md-10 text-center">
-           <label class="form-label text-main"><h3>Descarga el Template del Banco</h3></label>
-            <div ng-show="showComboEmpresas">
-            <select class="form-control" ng-model="empresaActual" ng-options="empresa.emp_nombre for empresa in empresaUsuario
-                                 track by empresa.emp_nombre" name="txtTipoContrato" ng-change="getBancos(empresaActual.emp_idempresa)" ng-disabled="timbradoPendiente">
-                                    <option value="">Seleccioné Empresa</option>
-                                </select>
-            </div>
-           <select class="form-control" ng-model="bancoActual" ng-options="banco.Nombre for banco in bancoLayout
+
+            <div class="form-group col-md-10 text-center">
+                <label class="form-label text-main">
+                    <h3>Descarga el Template del Banco</h3>
+                </label>
+                <!-- <div ng-show="showComboEmpresas">
+                    <select class="form-control" ng-model="empresaActual" ng-options="empresa.emp_nombre for empresa in empresaUsuario
+                                 track by empresa.emp_nombre" name="txtTipoContrato" ng-change="getBancos(empresaActual.emp_idempresa)"
+                        ng-disabled="timbradoPendiente">
+                        <option value="">Seleccioné Empresa</option>
+                    </select>
+                </div> -->
+                <!-- <select class="form-control" ng-model="bancoActual" ng-options="banco.Nombre for banco in bancoLayout
                                  track by banco.Nombre" ng-change="downloadLayout(bancoActual.Nombre, bancoActual.IdBanco)">
-                                    <option value="">Seleccioné un Banco</option>
-           </select>
+                    <option value="">Seleccioné un Banco</option>
+                </select> -->
+            </div>
 
 
-           </div>
-
-
-                                        <div class="form-group col-md-10 text-center">
-                                            <input type="file" class="form-control" name="file" id="inputFile"
-                                            onchange="angular.element(this).scope().leerExcel(this.files)">
-                                            <br>
-                                            <div class="form col-md-3n text-right">
-			                                <button class="btn btn-primary" ng-click="ParseExcelDataAndSave()"><i class="ti-export"></i> Importar datos</button>
-			                                </div>
-                                        </div>
-           </div>
-           </div>
+            <div class="form-group col-md-10 text-center">
+                <input type="file" class="form-control" name="file" id="inputFile" onchange="angular.element(this).scope().leerExcel(this.files)">
+                <br>
+                <div class="form col-md-3n text-right">
+                    <button class="btn btn-primary" ng-click="newParseExcelDataAndSave()">
+                        <i class="ti-export"></i> Importar datos
+                    </button>
+                    <a target="_blank" href="../../../layout/movimientosBancariosLayout.xlsx" class="btn btn-success pull-left">
+                        <i class="fa fa-download"></i> Descargar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="loading" class="modal fade" tabindex="-1">

@@ -120,6 +120,20 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
             });
         },
 
+        //Ing. LAGP26062018
+        getCloseBtnUsers: function() {
+            return $http({
+                url: conciliacionInicioURL + 'showBtnMes/',
+                method: "GET",
+                params: {
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
         addMovimientoBancario: function( parametros ) {
             return $http({
                 url: conciliacionInicioURL + 'addMovimientoBancario/',

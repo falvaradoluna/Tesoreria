@@ -57,6 +57,79 @@
         });
    };
 
+    $scope.newParseExcelDataAndSave = function () {
+        var file = $scope.selectedFile;
+        if (file != null) {
+            $scope.enableButton = true;
+            var reader = new FileReader();
+            reader.onload = function (e) {//Inicio de la funcion antes de leer el archivo
+                $scope.bandera = 0;
+                var data = e.target.result;
+                //XLSX from js-xlsx library , which I will add in page view page
+                var workbook = XLSX.read(data, { type: 'binary' });
+                var excelObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+                //console.log( excelObject['Descripcion ampliada'] );
+                angular.forEach(excelObject, function (value) {
+                    excelExportRepository.sendExcelDataLayout(
+                        value.NoCuenta, 
+                        value.Fecha, 
+                        value.Descripcion, 
+                        value.Referencia, 
+                        value.DescripcionAmpliada,
+                        value.TipoMovimiento,
+                        value.Cargo,
+                        value.Abono
+                    )
+                    .then(function(result){
+                        console.log(result);
+                        }, function(error){
+                            alertFactory.warning(error);
+                            $('#loading').modal('hide');
+                        });
+                });
+
+                setTimeout(function(){
+                    swal('LISTO', 'Se cargo con éxito', 'success');
+                },1500);
+                //Inicio de la validacion del archivo                                                  
+                //1 es la acción dentro de SP para validar si exste el archivo en curso registrado 
+                // excelExportRepository.historyLayout(" ", workbook.Strings[1].h, workbook.Strings[0].h, 1).then(function (result) {
+                //     if (result.data[0].Resultado == 1) {
+                //         $scope.bandera = 0;
+                //         var sheetName = workbook.SheetNames[0];
+                //         var excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                //         if (excelData.length > 0) {
+                //             if ($scope.bandera == 0) {
+                //                 alertFactory.success("Base de datos Actualizada	 correctamente!");
+                //                 //$scope.enableButton = false;
+                //                 setTimeout(function () {
+                //                     $scope.reload();
+                //                 }, 2000);
+                //             }
+                //         }
+                //         else {
+                //             alertFactory.error("El archivo que intenta migrar no contiene datos, por favor verifique el contenido del archivo!");
+                //         }
+
+                //     } else {
+                //         alertFactory.error("El documento que intenta migrar no esta registrado en el sistema, verifique su selección o descargue la plantilla correspondiente.");
+                //     }
+                // }, function (error) {
+                //     console.log("Error", error);
+                // });
+                //Fin de la validacion del archivo
+
+            }//Fin de la función antes de leer el archivo
+            reader.onerror = function (ex) {
+                console.log(ex);
+            }
+
+            reader.readAsBinaryString(file);
+        } else {
+            alertFactory.warning("No has seleccionado un archivo!");
+        }
+    }
+
        //Parse Excel Data 
     $scope.ParseExcelDataAndSave = function () {
         var file = $scope.selectedFile;

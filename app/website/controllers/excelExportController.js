@@ -41,6 +41,29 @@ excelExport.prototype.get_insExcelScotiabank = function(req,res,next){
     });
 };
 
+excelExport.prototype.get_insExcelLayout = function(req,res,next){
+	var self = this;
+ 
+    var params = [
+        { name: "noCuenta", value: req.query.noCuenta, type: self.model.types.STRING },
+        { name: "fecha", value: req.query.fecha, type: self.model.types.STRING },
+        { name: "descripcion", value: req.query.descripcion, type: self.model.types.STRING },
+        { name: "referencia", value: req.query.referencia, type: self.model.types.STRING },
+        { name: "desAmpliada", value: req.query.desAmpliada, type: self.model.types.STRING },
+        { name: "tipoMovimiento", value: req.query.tipoMovimiento, type: self.model.types.STRING },
+        { name: "cargo", value: req.query.cargo, type: self.model.types.DECIMAL },
+        { name: "abono", value: req.query.abono, type: self.model.types.DECIMAL },
+    ];
+    console.log( 'params', params );
+
+    this.model.query('[DBO].[INS_LAYOUT_SP]', params, function(error, result){
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 excelExport.prototype.get_insExcelBanamex = function(req,res,next){
     var self = this;
  
