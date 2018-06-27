@@ -106,7 +106,6 @@
             , filter: {
                 noTerm: true,
                 condition: function (searchTerm, cellValue) {
-
                     return ($scope.arrayColors.indexOf(cellValue) > -1)
 
                 }
@@ -208,6 +207,7 @@
                     }
                 });
             };
+
             // Suma de los que ya estan prepunteados CARGOS
             if ($rootScope.AuxiliarPrePunteadoAbonosTotales == 0 && $rootScope.AuxiliarPrePunteadoCargosTotales == 0) {
                 angular.forEach(result.data[1], function(value, key) {
