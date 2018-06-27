@@ -32,7 +32,7 @@
                             Registros sin Puntear
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'CargosPunteados')">
+                    <button class="tablinks" onclick="openCity(event, 'CargosPunteados')" ng-click="getBancoPunteo();">
                         <span style="color:white; font-weight: bold;">
                             Registros Punteados
                         </span>
@@ -228,9 +228,9 @@
                     </div>
 
                     <div class="row">
-                        <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController">
-                            <br>
-                            <br>
+                        <!-- <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController"> -->
+                            <!-- <br>
+                            <br> -->
                             <div class="col-md-12" ng-init="init()">
                                 <div class="text-main">
                                     <h4>Banco Punteado</h4>
@@ -321,7 +321,7 @@
                                     <p class="text-info text-semibold">Total Abonos Contables : {{AuxiliarPrePunteadoAbonosTotales | currency}}</p>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
                     </div>
                     <div class="col-md-12">
                         <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
@@ -361,7 +361,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="banco in bancoPadre | filter:{aplicado:1}">
+                        <tr ng-repeat="banco in bancoPadrePun | filter:{aplicado:1}">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
@@ -406,7 +406,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="auxiliar in auxiliarPadre | filter:{aplicado:1}">
+                        <tr ng-repeat="auxiliar in auxiliarPadrePun | filter:{aplicado:1}">
                             <td>{{auxiliar.fecha | date:'yyyy-MM-dd'}}</td>
                             <td>{{auxiliar.tipoPoliza}}</td>
                             <td>{{auxiliar.poliza}}</td>

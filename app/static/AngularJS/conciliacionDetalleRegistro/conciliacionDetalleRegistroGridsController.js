@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGridsController', function ($scope, $log, $filter, $compile, localStorageService, filtrosRepository, uiGridConstants, uiGridGroupingConstants, filterFilter) {
+﻿registrationModule.controller('conciliacionDetalleRegistroGridsController', function ($scope, $rootScope, $log, $filter, $compile, localStorageService, filtrosRepository, uiGridConstants, uiGridGroupingConstants, filterFilter, conciliacionDetalleRegistroRepository) {
 
     $scope.gridsInfo = [];
     $scope.depositosBancos = '';
@@ -29,6 +29,18 @@
     $scope.bancoText = 0;
     $scope.contableText = 0;
 
+    //Variables PrePunteado
+    $rootScope.BancoPrePunteadoCargosTotales = 0;
+    $rootScope.BancoPrePunteadoAbonosTotales = 0;
+    $rootScope.AuxiliarPrePunteadoCargosTotales = 0;
+    $rootScope.AuxiliarPrePunteadoAbonosTotales = 0;
+
+    //Variables Punteados
+    $rootScope.AuxiliarPunteadoAbonosTotales = 0;
+    $rootScope.AuxiliarPunteadoCargosTotales = 0;
+    $rootScope.BancoPunteadoAbonosTotales = 0;
+    $rootScope.BancoPunteadoCargosTotales = 0;
+
     //Punteo especial
     $scope.checkboxEspecial = {
         value : false
@@ -50,6 +62,8 @@
 
     $scope.init = function () {
         $('#loading').modal('show');
+
+        $scope.getPrePunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
 
         variablesLocalStorage();
         $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
@@ -178,6 +192,39 @@
         }
     };
     //**********************************************************************************************
+
+    //============================METODO PARA LLENAR LOS PRE PUNTEPOS Ing. Luis Antonio Garcia Perrusquia
+    $scope.getPrePunteo = function(idempresa, idBanco, noCuenta, CuentaContable) {
+        conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, idBanco, noCuenta, CuentaContable, 0).then(function(result) {
+            $scope.bancoPadre = result.data[0];
+            $scope.auxiliarPadre = result.data[1];
+
+            // Suma de los que estan prepumteados BANCOS
+            if ($rootScope.BancoPrePunteadoAbonosTotales == 0 && $rootScope.BancoPrePunteadoCargosTotales == 0) {
+                angular.forEach(result.data[0], function(value, key) {
+                    if (value.aplicado == 0) {
+                        $rootScope.BancoPrePunteadoAbonosTotales += value.abono;
+                        $rootScope.BancoPrePunteadoCargosTotales += value.cargo;
+                    }
+                });
+            };
+            // Suma de los que ya estan prepunteados CARGOS
+            if ($rootScope.AuxiliarPrePunteadoAbonosTotales == 0 && $rootScope.AuxiliarPrePunteadoCargosTotales == 0) {
+                angular.forEach(result.data[1], function(value, key) {
+                    if (value.aplicado == 0) {
+                        $rootScope.AuxiliarPrePunteadoAbonosTotales += value.abono;
+                        $rootScope.AuxiliarPrePunteadoCargosTotales += value.cargo;
+                    }
+                });
+            };
+
+            // $scope.tabla('bancoPunteo');
+            // $scope.tabla('auxiliarPunteo');
+            localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
+            localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
+        });
+    };
+    //========================================================================================
 
     //********************Función para llenar el grid Auxiliar Contable*****************************
 
@@ -742,8 +789,6 @@
     }
     //LQMA 05092017 todo
     $scope.mostrarNoPunteados = function () {
-
-
         $scope.cargoBanco = 0;
         $scope.abonoBanco = 0;
         $scope.cargoAuxiliar = 0;
@@ -938,8 +983,10 @@
         $scope.gridApiBancos.grid.api.grid.queueGridRefresh();
 
     }
+
     $scope.seleccionados = [];
     $scope.grupoHexadecimal = [];
+
     $scope.ShowAlertPunteo = function () {
         //Limpiamos variables de guardado
         $scope.seleccionados = [];
@@ -967,7 +1014,6 @@
                 if ($scope.grupoHexadecimal.indexOf(value.color) == -1) {
                     $scope.grupoHexadecimal.push(value.color);
                 }
-
             }
         }
 
@@ -1000,8 +1046,6 @@
             $scope.limpiaVariables();
         }
         else {
-            console.log( 'seleccionados', $scope.seleccionados );
-            console.log( 'grupoHexadecimal', $scope.grupoHexadecimal );
             if( $scope.cargoAuxiliar == 0 && $scope.abonoAuxiliar == 0 &&
                 $scope.cargoBanco == 0 && $scope.abonoBanco == 0 && $scope.grupoHexadecimal.length == 0 ){
                     swal(
@@ -1032,8 +1076,6 @@
         }
         localStorage.setItem("seleccionados", JSON.stringify($scope.seleccionados));
         localStorage.setItem("grupoHexadecimal", JSON.stringify($scope.grupoHexadecimal))
-        
-
     };
 
     $scope.savePunteo = function () {
