@@ -105,12 +105,8 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
         { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
         { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
         { name: 'rpun_idAplicado', value: req.query.rpun_idAplicado, type: self.model.types.INT }
-<<<<<<< HEAD
-
-=======
->>>>>>> Integracion
     ];
-    console.log( 'params', params );
+    
     this.model.queryAllRecordSet('[DBO].[SEL_PUNTEO_DETALLE_SP]', params, function(error, result) {
 
         self.view.expositor(res, {
