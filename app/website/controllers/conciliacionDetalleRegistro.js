@@ -44,8 +44,6 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
     ];
     console.log('ParametrosPuntoDeposito', params);
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
-        console.log('error', error);
-        console.log('result', result);
         self.view.expositor(res, {
             error: error,
             result: result
@@ -69,10 +67,7 @@ conciliacionDetalleRegistro.prototype.post_insertPunteoBancoAC = function(req, r
         { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
         { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-    console.log('insertPunteoBancoACPARAMS', params);
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
-        console.log('errorPunetoBanco', error);
-        console.log('resultPunetoBanco', result);
         self.view.expositor(res, {
             error: error,
             result: result
@@ -102,16 +97,16 @@ conciliacionDetalleRegistro.prototype.get_auxiliarPunteo = function(req, res, ne
 };
 //Luis Anotnio Garcia Perrusquia
 conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next) {
-
     var self = this;
 
     var params = [
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING },
-        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING }
+        { name: 'cuentaContable', value: req.query.cuentaContable, type: self.model.types.STRING },
+        { name: 'rpun_idAplicado', value: req.query.rpun_idAplicado, type: self.model.types.INT }
     ];
-
+    console.log( 'params', params );
     this.model.queryAllRecordSet('[DBO].[SEL_PUNTEO_DETALLE_SP]', params, function(error, result) {
 
         self.view.expositor(res, {
@@ -120,28 +115,6 @@ conciliacionDetalleRegistro.prototype.get_bancoPunteo = function(req, res, next)
         });
     });
 };
-
-/*conciliacionDetalleRegistro.prototype.get_bancoPunteo = function (req, res, next) {
-
-    var self = this;
-
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-    { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
-    { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-    { name: 'fechaelaboracion', value: req.query.fechaInicio, type: self.model.types.STRING },
-    { name: 'fechaCorte', value: req.query.fechaCorte, type: self.model.types.STRING }
-    ];
-
-    this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP', params, function (error, result) {
-
-
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-};*/
 
 conciliacionDetalleRegistro.prototype.get_bancoDPI = function(req, res, next) {
 
@@ -199,25 +172,6 @@ conciliacionDetalleRegistro.prototype.post_detallePunteo = function(req, res, ne
     });
 };
 
-// conciliacionDetalleRegistro.prototype.post_detallePunteo = function (req, res, next) {
-
-//     var self = this;
-
-//     var params = [{ name: 'idDatoBusqueda', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT },
-//     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-//     { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
-//     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-//     { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT }
-//     ];
-
-//     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP', params, function (error, result) {
-
-//         self.view.expositor(res, {
-//             error: error,
-//             result: result
-//         });
-//     });
-// };
 conciliacionDetalleRegistro.prototype.post_reportePdf = function(req, res, next) {
     var filename = guid();
     var filePath = path.dirname(require.main.filename) + "\\pdf\\" + filename + ".pdf";
