@@ -57,14 +57,13 @@
     //Variables para obtener los valores para el stored de total
     $scope.busquedaUniverso = JSON.parse(localStorage.getItem("paramBusqueda"));
     $scope.usuarioData = JSON.parse(localStorage.getItem("ls.userData"));
-    //$scope.universoAbono = [];
+    
     $scope.universoContable = [];
     $scope.universoBancario = [];
     $rootScope.universoTotalMovimientoContableCargo = 0;
     $rootScope.universoTotalMovimientoContableAbono = 0;
     $rootScope.universoTotalMovimientoBancarioCargo = 0;
     $rootScope.universoTotalMovimientoBancarioAbono = 0;
-    //$scope.universoBancarioCargo = [];
 
     //Variables PrePunteado
     $rootScope.BancoPrePunteadoCargosTotales = 0;
@@ -77,14 +76,10 @@
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
-
-        //$scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
-        //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
+        
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
-
-        // $scope.getTotalUniverso();
-        //$scope.getTotalUniversoBancario();
+        
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
@@ -464,7 +459,6 @@
                     $scope.universoBancario = result.data;
 
                     $scope.tablaSearch('contableUniBancarioCargo');
-                    //  $scope.$apply();
                     $('#loading').modal('hide');
                 } else {
                     $('#loading').modal('hide');
