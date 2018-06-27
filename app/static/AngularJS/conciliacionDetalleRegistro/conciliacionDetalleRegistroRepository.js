@@ -111,7 +111,7 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getBancoPunteo: function(idempresa, idBanco, noCuenta, cuentaContable) {
+        getBancoPunteo: function(idempresa, idBanco, noCuenta, cuentaContable, rpun_idAplicado) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
                 method: "GET",
@@ -119,7 +119,8 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
                     idEmpresa: idempresa,
                     idBanco: idBanco,
                     noCuenta: noCuenta,
-                    cuentaContable: cuentaContable
+                    cuentaContable: cuentaContable,
+                    rpun_idAplicado: rpun_idAplicado
                 },
                 headers: {
                     'Content-Type': 'application/json'

@@ -80,8 +80,8 @@
 
         //$scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
-        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
-        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+        //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
+        //  $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
 
         // $scope.getTotalUniverso();
         //$scope.getTotalUniversoBancario();
@@ -90,6 +90,10 @@
         localStorage.removeItem('infoGridBanco');
         localStorage.removeItem('totalesGrids');
     };
+
+    $rootScope.LlenaDPI = function() {
+        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+    }
     $rootScope.Llenatablas = function() {
         $scope.getTotalUniverso();
     }
@@ -215,14 +219,14 @@
     // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************
     $scope.getBancoDPI = function(idempresa, cuentaBanco) {
-
+        $('#loading').modal('show');
         conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco).then(function(result) {
             $scope.bancoDPI = result.data;
             //Obtener la suma total de los registros
             angular.forEach($scope.bancoDPI, function(value, key) {
                 $scope.bancoDPITotal += value.abono;
             });
-
+            $('#loading').modal('hide');
             $scope.tabla('bancodpi');
         });
     };

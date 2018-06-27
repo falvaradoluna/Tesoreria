@@ -37,12 +37,12 @@
                             Registros Punteados
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'DepositosDPI')">
+                    <button class="tablinks" onclick="openCity(event, 'DepositosDPI')" ng-click="LlenaDPI();">
                         <span style="color:white; font-weight: bold;">
                             Depositos por Identificar
                         </span>
                     </button>
-                    <button class="tablinks" onclick="openCity(event, 'BancoReferenciados')">
+                    <button class="tablinks" onclick="openCity(event, 'BancoReferenciados')" ng-click="LlenaBancoPunteo();">
                         <span style="color:white; font-weight: bold;">
                             Registros Bancarios Referenciados
                         </span>
@@ -216,9 +216,9 @@
                     </div>
                     <div class="row" style="margin-top: 2%;">
                         <div class="col-md-12" ng-show="mesActivo">
-                            <!-- <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
+                            <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()">
                                 <i class="ti-layout-list-thumb"></i> Envíar a DPI 
-                            </button> &nbsp;&nbsp; -->
+                            </button> &nbsp;&nbsp;
                             <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()" style="padding: 15px 40px; font-size: 16px;">
                                 <i class="ti-control-shuffle"> </i>Punteo
                             </button>
