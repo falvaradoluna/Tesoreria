@@ -48,13 +48,13 @@
     $scope.contableReferenciadosCargosTotales = 0;
     $scope.BancoReferenciadoCargosTotales = 0;
     $scope.BancoReferenciadoAbonosTotales = 0;
-   
+
     $scope.bancoDPITotal = 0;
 
     //Variables para obtener los valores para el stored de total
     $scope.busquedaUniverso = JSON.parse(localStorage.getItem("paramBusqueda"));
     $scope.usuarioData = JSON.parse(localStorage.getItem("ls.userData"));
-    
+
     $scope.universoContable = [];
     $scope.universoBancario = [];
     $rootScope.universoTotalMovimientoContableCargo = 0;
@@ -67,15 +67,16 @@
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
-        
-        //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
-        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
-        
+
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
         localStorage.removeItem('totalesGrids');
     };
+
+    $rootScope.LlenaDPI = function() {
+        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+    }
     $rootScope.Llenatablas = function() {
         $scope.getTotalUniverso();
     }
@@ -105,41 +106,41 @@
     $scope.getBancoPunteo = function() {
         $('#loading').modal('show');
         conciliacionDetalleRegistroRepository.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable, 1)
-        .then(function(result) {
+            .then(function(result) {
 
-            $rootScope.bancoPadrePun = result.data[0];
-            $rootScope.auxiliarPadrePun = result.data[1];
-            console.log( 'bancoPadreNO', $scope.bancoPadrePun );
-            console.log( 'auxiliarPadreNO', $scope.auxiliarPadrePun );
-            
-            //Suma de los que ya estan punteados BANCOS
-            if ($rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0) {
-                angular.forEach(result.data[0], function(value, key) {
-                    if (value.aplicado == 1) {
-                        $rootScope.BancoPunteadoAbonosTotales += value.abono;
-                        $rootScope.BancoPunteadoCargosTotales += value.cargo;
-                    }
-                });
-            };
-            //Suma de los que ya estan punteados CARGOS
-            if ($rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0) {
-                angular.forEach(result.data[1], function(value, key) {
-                    if (value.aplicado == 1) {
-                        $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
-                        $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
-                    }
-                });
-            };
+                $rootScope.bancoPadrePun = result.data[0];
+                $rootScope.auxiliarPadrePun = result.data[1];
+                console.log('bancoPadreNO', $scope.bancoPadrePun);
+                console.log('auxiliarPadreNO', $scope.auxiliarPadrePun);
 
-            $scope.tabla('bancoPunteoP');
-            $scope.tabla('auxiliarPunteoP');
+                //Suma de los que ya estan punteados BANCOS
+                if ($rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0) {
+                    angular.forEach(result.data[0], function(value, key) {
+                        if (value.aplicado == 1) {
+                            $rootScope.BancoPunteadoAbonosTotales += value.abono;
+                            $rootScope.BancoPunteadoCargosTotales += value.cargo;
+                        }
+                    });
+                };
+                //Suma de los que ya estan punteados CARGOS
+                if ($rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0) {
+                    angular.forEach(result.data[1], function(value, key) {
+                        if (value.aplicado == 1) {
+                            $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+                            $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+                        }
+                    });
+                };
 
-            setTimeout(function(){
-                $('#loading').modal('hide');
-            }, 500);
-            // localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-            // localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
-        });
+                $scope.tabla('bancoPunteoP');
+                $scope.tabla('auxiliarPunteoP');
+
+                setTimeout(function() {
+                    $('#loading').modal('hide');
+                }, 500);
+                // localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
+                // localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
+            });
     };
 
     //==================================================================================
@@ -222,14 +223,14 @@
     // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************
     $scope.getBancoDPI = function(idempresa, cuentaBanco) {
-
+        $('#loading').modal('show');
         conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco).then(function(result) {
             $scope.bancoDPI = result.data;
             //Obtener la suma total de los registros
             angular.forEach($scope.bancoDPI, function(value, key) {
                 $scope.bancoDPITotal += value.abono;
             });
-
+            $('#loading').modal('hide');
             $scope.tabla('bancodpi');
         });
     };
