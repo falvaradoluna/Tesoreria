@@ -29,10 +29,8 @@
     //******************************************************************
 
     $scope.init = function () {
-        if( $rootScope.userData.idUsuario == 71 ){
-            $rootScope.showCloseBtn = 1
-         }
-        
+        $scope.getCloseBtnUsers();
+                
         $scope.getEmpresa($rootScope.userData.idUsuario);
         $scope.calendario();
         $scope.getUltimoMes();
@@ -119,16 +117,20 @@
             });
     }
     
-    // $scope.getCloseBtnUsers = function(){
-        // conciliacionInicioRepository.getCloseBtnUsers()
-        // .then(function (result) {
-        //     console.log( 'result', result );
-        // });
-        //Mostrar y ocultar le boton de cerrar mes
-        // if( $rootScope.userData.idUsuario == 71 ){
-        //     $rootScope.showCloseBtn = 1
-        //  }
-    // };
+    $scope.getCloseBtnUsers = function () {
+        conciliacionInicioRepository.getCloseBtnUsers()
+        .then(function (result) {
+            if( result.data.length > 0 ){
+                angular.forEach(result.data, function(value){
+                    console.log(value.seg_idUsuario);
+                    // Mostrar y ocultar le boton de cerrar mes
+                    if( $rootScope.userData.idUsuario == value.seg_idUsuario ){
+                        $rootScope.showCloseBtn = 1
+                        }
+                });
+            }
+        });
+    };
 
     //Ing. LAGP 05062018
     $scope.getUltimoMes = function(){

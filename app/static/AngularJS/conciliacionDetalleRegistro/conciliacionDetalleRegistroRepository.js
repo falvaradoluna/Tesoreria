@@ -129,24 +129,6 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        /* getBancoPunteo: function (idempresa, cuentaBancaria, idBanco, fechaInicio, fechaCorte) {
-             return $http({
-                 url: conciliacionDetalleRegistroURL + 'bancoPunteo/',
-                 method: "GET",
-                 params: {
-                     idEmpresa: idempresa,
-                     cuentaBancaria: cuentaBancaria,
-                     idBanco: idBanco,
-                     fechaInicio: fechaInicio,
-                     fechaCorte: fechaCorte
-                 },
-                 headers: {
-                     'Content-Type': 'application/json'
-                 }
-
-             });
-         },*/
-
         getBancoDPI: function(idempresa, cuentaBancaria) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoDPI/',

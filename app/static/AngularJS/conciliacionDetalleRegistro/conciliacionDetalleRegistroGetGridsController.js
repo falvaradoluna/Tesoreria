@@ -48,35 +48,26 @@
     $scope.contableReferenciadosCargosTotales = 0;
     $scope.BancoReferenciadoCargosTotales = 0;
     $scope.BancoReferenciadoAbonosTotales = 0;
-    $rootScope.AuxiliarPunteadoAbonosTotales = 0;
-    $rootScope.AuxiliarPunteadoCargosTotales = 0;
-    $rootScope.BancoPunteadoAbonosTotales = 0;
-    $rootScope.BancoPunteadoCargosTotales = 0;
+   
     $scope.bancoDPITotal = 0;
 
     //Variables para obtener los valores para el stored de total
     $scope.busquedaUniverso = JSON.parse(localStorage.getItem("paramBusqueda"));
     $scope.usuarioData = JSON.parse(localStorage.getItem("ls.userData"));
-    //$scope.universoAbono = [];
+    
     $scope.universoContable = [];
     $scope.universoBancario = [];
     $rootScope.universoTotalMovimientoContableCargo = 0;
     $rootScope.universoTotalMovimientoContableAbono = 0;
     $rootScope.universoTotalMovimientoBancarioCargo = 0;
     $rootScope.universoTotalMovimientoBancarioAbono = 0;
-    //$scope.universoBancarioCargo = [];
-
-    //Variables PrePunteado
-    $rootScope.BancoPrePunteadoCargosTotales = 0;
-    $rootScope.BancoPrePunteadoAbonosTotales = 0;
-    $rootScope.AuxiliarPrePunteadoCargosTotales = 0;
-    $rootScope.AuxiliarPrePunteadoAbonosTotales = 0;
 
 
     $scope.init = function() {
         localStorage.removeItem('auxiliarPadre');
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
+<<<<<<< HEAD
 
         //$scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
         //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.IdBanco, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
@@ -85,6 +76,12 @@
 
         // $scope.getTotalUniverso();
         //$scope.getTotalUniversoBancario();
+=======
+        
+        //$scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
+        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+        
+>>>>>>> Integracion
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
         localStorage.removeItem('infoGridBanco');
@@ -118,8 +115,52 @@
     // INICIA Obtengo los padres del Auxiliar contable punteado
     //****************************************************************************************************
 
+    //=========================METODO PARA LLENAR LOS PUNTEPOS Ing. Luis Antonio Garcia Perrusquia
+
+    $scope.getBancoPunteo = function() {
+        $('#loading').modal('show');
+        conciliacionDetalleRegistroRepository.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable, 1)
+        .then(function(result) {
+
+            $rootScope.bancoPadrePun = result.data[0];
+            $rootScope.auxiliarPadrePun = result.data[1];
+            console.log( 'bancoPadreNO', $scope.bancoPadrePun );
+            console.log( 'auxiliarPadreNO', $scope.auxiliarPadrePun );
+            
+            //Suma de los que ya estan punteados BANCOS
+            if ($rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0) {
+                angular.forEach(result.data[0], function(value, key) {
+                    if (value.aplicado == 1) {
+                        $rootScope.BancoPunteadoAbonosTotales += value.abono;
+                        $rootScope.BancoPunteadoCargosTotales += value.cargo;
+                    }
+                });
+            };
+            //Suma de los que ya estan punteados CARGOS
+            if ($rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0) {
+                angular.forEach(result.data[1], function(value, key) {
+                    if (value.aplicado == 1) {
+                        $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
+                        $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
+                    }
+                });
+            };
+
+            $scope.tabla('bancoPunteoP');
+            $scope.tabla('auxiliarPunteoP');
+
+            setTimeout(function(){
+                $('#loading').modal('hide');
+            }, 500);
+            // localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
+            // localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
+        });
+    };
+
+    //==================================================================================
+
     //Ing. Luis Antonio Garcia Perrusquia
-    $scope.getBancoPunteo = function(idempresa, idBanco, noCuenta, CuentaContable) {
+    $scope.getBancoPunteo1 = function(idempresa, idBanco, noCuenta, CuentaContable) {
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, idBanco, noCuenta, CuentaContable).then(function(result) {
 
             $scope.bancoPadre = result.data[0];
@@ -165,27 +206,6 @@
                 return value.idPAdre == 3;
             });
 
-
-            //Suma de los que estan prepumteados BANCOS
-            if ($rootScope.BancoPrePunteadoAbonosTotales == 0 && $rootScope.BancoPrePunteadoCargosTotales == 0) {
-                angular.forEach(result.data[0], function(value, key) {
-                    if (value.aplicado == 0) {
-                        $rootScope.BancoPrePunteadoAbonosTotales += value.abono;
-                        $rootScope.BancoPrePunteadoCargosTotales += value.cargo;
-                    }
-                });
-            };
-            //Suma de los que ya estan prepunteados CARGOS
-            if ($rootScope.AuxiliarPrePunteadoAbonosTotales == 0 && $rootScope.AuxiliarPrePunteadoCargosTotales == 0) {
-                angular.forEach(result.data[1], function(value, key) {
-                    if (value.aplicado == 0) {
-
-                        $rootScope.AuxiliarPrePunteadoAbonosTotales += value.abono;
-                        $rootScope.AuxiliarPrePunteadoCargosTotales += value.cargo;
-                    }
-                });
-            };
-
             //Suma de los que ya estan punteados BANCOS
             if ($rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0) {
                 angular.forEach(result.data[0], function(value, key) {
@@ -209,8 +229,6 @@
             $scope.tablaSearch('contableRefCargos');
             $scope.tablaSearch('bancoReferenciadoAbono');
             $scope.tablaSearch('bancoReferenciadoCargo');
-            $scope.tabla('bancoPunteo');
-            $scope.tabla('auxiliarPunteo');
             $scope.tabla('bancoPunteoP');
             $scope.tabla('auxiliarPunteoP');
         });
@@ -468,7 +486,6 @@
                     $scope.universoBancario = result.data;
 
                     $scope.tablaSearch('contableUniBancarioCargo');
-                    //  $scope.$apply();
                     $('#loading').modal('hide');
                 } else {
                     $('#loading').modal('hide');
