@@ -487,7 +487,6 @@
                 autoFill: false,
                 fixedColumns: true
             });
-
         }, 1000);
     };
 
