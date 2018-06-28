@@ -89,8 +89,6 @@
         showGridFooter: true,
         enableFiltering: true,
         rowTemplate: '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>'
-        //LQMA 21082017
-        //,rowTemplate : '<div ng-style="{\'background-color\': \'#c00\'}"> <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>'
     };
     $scope.gridAuxiliarContable.columnDefs = [
         { name: 'cargo', displayName: 'Cargo', width: 100, type: 'number', cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo != 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
@@ -140,15 +138,12 @@
         { name: 'indexPrePunteo', displayName: 'Index', width: 0, show: false },
         {
             name: 'color', field: 'color', displayName: 'Color', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100, visible: false
-            , filter: {  //LQMA 05092017    
-                //term: '#c9dde1',
+            , filter: {
                 noTerm: true,
                 condition: function (searchTerm, cellValue) {
                     return ($scope.arrayColors.indexOf(cellValue) > -1) 
                 }
-
-            }
-            //filter: { term: ($scope.colorXXX.indexOf('') > -1)?term:'ooooooo' }                           
+            }                          
         }
     ];
     $scope.gridDepositosBancos.multiSelect = true;
@@ -392,7 +387,6 @@
         
         if( $scope.validaBan.length == 0 && $scope.validaCon.length != 0 ){
             if( $scope.contableText == 1 ){
-                console.log( '$scope.contableGrupo', $scope.contableGrupo );
                 var auxNeg = ($scope.contableGrupo - $scope.difMonetaria);
                 var auxPos = ($scope.contableGrupo + $scope.difMonetaria);
                 
@@ -691,8 +685,6 @@
 
             }, 1000);
 
-
-
             $scope.cargoBanco = 0;
             $scope.abonoBanco = 0;
             $scope.cargoAuxiliar = 0;
@@ -714,9 +706,6 @@
                     }
                     
                     $scope.validaSaldos();
-                    
-                    console.log( 'value.cargo', value.cargo );
-                    console.log( 'value.abono', value.abono );
                 }
             });
 
@@ -727,9 +716,6 @@
                     $scope.validaSaldos();
                 }
             });
-
-            console.log( '$scope.cargoBanco', $scope.cargoBanco );
-            console.log( '$scope.abonoBanco', $scope.abonoBanco );
         }
         else{
             swal("Alto","El grupo actual no esta punteado correctamentre","warning");
@@ -1244,8 +1230,6 @@
     $scope.ShowAlertDPI = function () {
 
         $scope.isDPI = 1;
-
-
         var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
 
         angular.forEach($scope.gridApiBancos.grid.options.data, function (value, key) {
