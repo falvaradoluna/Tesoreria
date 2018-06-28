@@ -42,10 +42,9 @@ conciliacionInicio.prototype.post_totalAbonoCargo = function (req, res, next) {
         { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT }, //LQMA ADD 06032018
         { name: 'idHistorico', value: 0, type: self.model.types.INT } //LQMA ADD 06032018
     ];
-    console.log('paramsJunio', params);
+
     this.model.query('SEL_TOTAL_ABONOCARGO_SP', params, function (error, result) {
-        console.log('result', result);
-        console.log('error', error);
+
         self.view.expositor(res, {
             error: error,
             result: result
@@ -71,8 +70,7 @@ conciliacionInicio.prototype.post_localAbonoCargo = function (req, res, next) {
     ];
 
     this.model.query('SEL_LOCAL_ABONOCARGO_SP', params, function (error, result) {
-        console.log('result', result);
-        console.log('error', error);
+
         self.view.expositor(res, {
             error: error,
             result: result
@@ -141,7 +139,7 @@ conciliacionInicio.prototype.get_closeMes = function (req, res, next) {
     ];
 
     this.model.query('[dbo].[INS_NUEVO_MES_SP]', params, function (error, result) {
-        console.log('result', result);
+        
         self.view.expositor(res, {
             error: error,
             result: result

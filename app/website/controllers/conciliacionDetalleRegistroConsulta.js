@@ -105,33 +105,13 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, r
     ];
 
     this.model.queryAllRecordSet('[DBO].[SEL_PUNTEO_DETALLE_SP_H]', params, function (error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
-
-/*conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, res, next) {
-
-    var self = this;
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
-        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
-    ];
-
-    this.model.query('SEL_PUNTEO_DEPOSITOS_PADRES_SP_H', params, function (error, result) {
-
-        self.view.expositor(res, {
-            error: error,
-            result: result
-        });
-    });
-};*/
 
 conciliacionDetalleRegistroConsulta.prototype.get_auxiliarPunteo = function (req, res, next) {
     var self = this;

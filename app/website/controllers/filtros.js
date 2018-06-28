@@ -311,8 +311,7 @@ Filtros.prototype.get_saveParametros = function(req, res, next) {
     ];
 
     this.model.query('[dbo].[INS_PUNTEO_MANUALES_SP]', params, function(error, result) {
-        console.log( 'error', error );
-        console.log( 'result', result );
+        
         self.view.expositor(res, {
             error: error,
             result: result

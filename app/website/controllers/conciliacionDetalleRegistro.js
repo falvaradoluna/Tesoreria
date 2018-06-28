@@ -42,7 +42,7 @@ conciliacionDetalleRegistro.prototype.post_insertPuntoDeposito = function(req, r
         { name: 'esCargoBanco', value: req.body.esCargoBanco, type: self.model.types.INT }, //LQMA 01042018
         { name: 'esCargoContable', value: req.body.esCargoContable, type: self.model.types.INT } //LQMA 01042018
     ];
-    console.log('ParametrosPuntoDeposito', params);
+
     this.model.query('INS_PUNTEO_DEPOSITO_AUXILIAR_SP', params, function(error, result) {
         self.view.expositor(res, {
             error: error,
@@ -146,8 +146,7 @@ conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function(req, res, n
     ];
 
     this.model.query('[dbo].[DEL_PUNTEO_SP]', params, function(error, result) {
-        console.log('error', error);
-        console.log('resultr', result);
+
         self.view.expositor(res, {
             error: error,
             result: result
@@ -305,32 +304,13 @@ conciliacionDetalleRegistro.prototype.post_generaPunteo = function(req, res, nex
     var params = [];
 
     this.model.query('[dbo].[UPD_PUNTEO_APLICAR_SP]', params, function(error, result) {
-        console.log('error', error);
-        console.log('result', result);
+
         self.view.expositor(res, {
             error: error,
             result: result
         });
     });
 };
-
-// conciliacionDetalleRegistro.prototype.post_generaPunteo = function (req, res, next) {
-
-//     var self = this;
-
-//     var params = [{ name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.INT },
-//     { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-//     { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-//     { name: 'cuentaBancaria', value: req.body.cuentaBancaria, type: self.model.types.STRING }
-//     ];
-
-//     this.model.query('UPD_GUARDAR_PUNTEO_FINAL_MES_SP', params, function (error, result) {
-//         self.view.expositor(res, {
-//             error: error,
-//             result: result
-//         });
-//     });
-// };
 
 
 conciliacionDetalleRegistro.prototype.post_insertDPI = function(req, res, next) {

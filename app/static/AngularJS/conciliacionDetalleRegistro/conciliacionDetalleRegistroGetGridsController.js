@@ -479,7 +479,7 @@
 
         setTimeout(function() {
 
-            var table = $('#' + idtabla).DataTable({
+            $('#' + idtabla).DataTable({
                 destroy: true,
                 "responsive": true,
                 searching: true,
@@ -487,7 +487,6 @@
                 autoFill: false,
                 fixedColumns: true
             });
-
         }, 1000);
     };
 
