@@ -213,8 +213,8 @@
                 });
             };
 
-            // $scope.tabla('bancoPunteo');
-            // $scope.tabla('auxiliarPunteo');
+            $scope.tablaPre('bancoPunteo');
+            $scope.tablaPre('auxiliarPunteo');
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
         });
@@ -1276,5 +1276,22 @@
         $scope.cargoAuxiliar = 0;
         $scope.abonoBanco = 0;
         $scope.cargoBanco = 0;
+    };
+
+    $scope.tablaPre = function(idtabla) {
+        console.log( 'Pre' );
+        $('#' + idtabla).DataTable().destroy();
+
+        setTimeout(function() {
+
+            $('#' + idtabla).DataTable({
+                destroy: true,
+                "responsive": true,
+                searching: true,
+                paging: true,
+                autoFill: false,
+                fixedColumns: true
+            });
+        }, 1000);
     };
 });
