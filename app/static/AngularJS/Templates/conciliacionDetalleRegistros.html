@@ -461,8 +461,8 @@
                             <th>Referencia</th>
                             <th>Concepto</th>
                             <th>Abono</th>
-                            <th width="70">&nbsp;</th>
-                            <th width="70">&nbsp;</th>
+                            <!-- <th width="70">&nbsp;</th> -->
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -472,9 +472,9 @@
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
                             <td>
-                                <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
+                                <!-- <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i> Quitar DPI
-                                </button>
+                                </button> -->
                             </td>
                             <td>
                                 <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,2)">
