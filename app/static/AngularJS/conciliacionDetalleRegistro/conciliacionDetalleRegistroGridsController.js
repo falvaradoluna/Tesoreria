@@ -152,23 +152,25 @@
 
     //******************Función para llenar el grid Depositos Bancos********************************
     $scope.getDepositosBancos = function (idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
-
+        console.log( '1' );
         if (idestatus == 1) {
 
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function (result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
-                    
-                    angular.forEach($scope.depositosBancos, function (value, key) {
-                        if (value.esCargo == 1) {
-                            $scope.depositosBancos[key]['cargo'] = value.importe;
-                            $scope.totalCargoBancario += value.importe;
-                        } else if (value.esCargo == 0) {
-                            $scope.depositosBancos[key]['abono'] = value.importe;
-                            $scope.totalAbonoBancario += value.importe;
-                        }
-                    });
-
+                    console.log('lengt', $scope.depositosBancos.length );
+                    if( $scope.totalCargoBancario == 0 && $scope.totalAbonoBancario == 0 ){
+                        angular.forEach($scope.depositosBancos, function (value, key) {
+                            if (value.esCargo == 1) {
+                                $scope.depositosBancos[key]['cargo'] = value.importe;
+                                $scope.totalCargoBancario += value.importe;
+                            } else if (value.esCargo == 0) {
+                                $scope.depositosBancos[key]['abono'] = value.importe;
+                                $scope.totalAbonoBancario += value.importe;
+                            }
+                        });
+                    };
+                   
                     $scope.gridDepositosBancos.data = result.data[0];
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
@@ -230,22 +232,19 @@
             if (result.data[0].length != 0) {
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
-                //Suma del total monetario, abonos
                 
-                angular.forEach($scope.auxiliarContable, function (value, key) {
-                    $scope.totalAbonoContable += value.abono;
-                });
-
-                //Suma del total monetario cargos
-
-                angular.forEach($scope.auxiliarContable, function (value, key) {
-                    $scope.totalCargoContable += value.cargo;
-                });
-
-
+                if( $scope.totalAbonoContable == 0 && $scope.totalCargoContable == 0 ){
+                    //Suma del total monetario, abonos
+                    angular.forEach($scope.auxiliarContable, function (value, key) {
+                        $scope.totalAbonoContable += value.abono;
+                    });
+                    //Suma del total monetario cargos
+                    angular.forEach($scope.auxiliarContable, function (value, key) {
+                        $scope.totalCargoContable += value.cargo;
+                    });
+                };
                 localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
-               
-            }
+            };
 
             setTimeout(function () { $scope.prePunteo(); }, 800); //LQMA 31
             $('#loading').modal('hide');
