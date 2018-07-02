@@ -159,7 +159,9 @@
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
                     console.log('lengt', $scope.depositosBancos.length );
-                    if( $scope.totalCargoBancario == 0 && $scope.totalAbonoBancario == 0 ){
+                    // if( $scope.totalCargoBancario == 0 && $scope.totalAbonoBancario == 0 ){
+                        $scope.totalCargoBancario = 0;
+                        $scope.totalAbonoBancario = 0;
                         angular.forEach($scope.depositosBancos, function (value, key) {
                             if (value.esCargo == 1) {
                                 $scope.depositosBancos[key]['cargo'] = value.importe;
@@ -169,7 +171,7 @@
                                 $scope.totalAbonoBancario += value.importe;
                             }
                         });
-                    };
+                    // };
                    
                     $scope.gridDepositosBancos.data = result.data[0];
 
@@ -233,8 +235,10 @@
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
                 
-                if( $scope.totalAbonoContable == 0 && $scope.totalCargoContable == 0 ){
+                // if( $scope.totalAbonoContable == 0 && $scope.totalCargoContable == 0 ){
                     //Suma del total monetario, abonos
+                    $scope.totalAbonoContable = 0;
+                    $scope.totalCargoContable = 0;
                     angular.forEach($scope.auxiliarContable, function (value, key) {
                         $scope.totalAbonoContable += value.abono;
                     });
@@ -242,7 +246,7 @@
                     angular.forEach($scope.auxiliarContable, function (value, key) {
                         $scope.totalCargoContable += value.cargo;
                     });
-                };
+                // };
                 localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
             };
 
