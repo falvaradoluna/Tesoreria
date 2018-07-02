@@ -95,7 +95,7 @@
                     //console.log( excelObject[$scope.count].NoCuenta);
                     $scope.count = $scope.count + 1;
                     $scope.newParseExcelDataAndSave();
-                }
+                };
                 /*angular.forEach(excelObject, function (value) {
                     excelExportRepository.sendExcelDataLayout(
                         value.NoCuenta, 

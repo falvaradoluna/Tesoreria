@@ -55,7 +55,7 @@ excelExport.prototype.get_insExcelLayout = function(req,res,next){
         { name: "abono", value: req.query.abono, type: self.model.types.DECIMAL },
         { name: "grupoIns", value: req.query.grupoIns, type: self.model.types.INT }
     ];
-    
+    console.log( 'parms', params );
     this.model.query('[DBO].[INS_LAYOUT_SP_P]', params, function(error, result){
         self.view.expositor(res, {
             error: error,
