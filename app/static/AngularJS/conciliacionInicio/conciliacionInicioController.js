@@ -573,7 +573,13 @@
     $scope.generaInfoReport = function () {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
         $('#loading').modal('show');
-
+        var d = new Date();
+        var n = d.getMonth() + 1;
+        if( parseInt($scope.mesActualJUN.PAR_IDENPARA.substr(4, 2)) == n ){
+            $scope.fechaReporteConcilio = $scope.fechaReporte;
+        }else{
+            $scope.fechaReporteConcilio = $scope.fechaCorte;
+        }
         setTimeout(function () {
 
             //Obtengo los datos de detalles/diferencias del local storage
@@ -590,7 +596,7 @@
                             "empresa": $scope.busqueda.Empresa,
                             "fechaElaboracion": $scope.fechaReporte,
                             "conciliacionBancaria": $scope.busqueda.Banco,
-                            "chequera": $scope.fechaReporte,
+                            "chequera": $scope.fechaReporteConcilio,
                             "bancoCuenta": $scope.busqueda.Cuenta,
                             "clabe": $scope.busqueda.Cuenta,
                             "cuentaContable": $scope.busqueda.CuentaContable,
