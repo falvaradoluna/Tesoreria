@@ -122,7 +122,6 @@
         .then(function (result) {
             if( result.data.length > 0 ){
                 angular.forEach(result.data, function(value){
-                    console.log(value.seg_idUsuario);
                     // Mostrar y ocultar le boton de cerrar mes
                     if( $rootScope.userData.idUsuario == value.seg_idUsuario ){
                         $rootScope.showCloseBtn = 1
