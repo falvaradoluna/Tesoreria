@@ -103,24 +103,22 @@
 
     //=========================METODO PARA LLENAR LOS PUNTEPOS Ing. Luis Antonio Garcia Perrusquia
 
-    $scope.getBancoPunteo = function() {
+    $scope.getBancoPunteo = function () {
         $('#loading').modal('show');
         conciliacionDetalleRegistroRepository.getBancoPunteo(
-            $scope.busqueda.IdEmpresa, 
-            $scope.busqueda.IdBanco, 
-            $scope.busqueda.Cuenta, 
-            $scope.busqueda.CuentaContable, 
+            $scope.busqueda.IdEmpresa,
+            $scope.busqueda.IdBanco,
+            $scope.busqueda.Cuenta,
+            $scope.busqueda.CuentaContable,
             1)
-            .then(function(result) {
+            .then(function (result) {
 
                 $rootScope.bancoPadrePun = result.data[0];
                 $rootScope.auxiliarPadrePun = result.data[1];
-                console.log('bancoPadreNO', $scope.bancoPadrePun);
-                console.log('auxiliarPadreNO', $scope.auxiliarPadrePun);
 
                 //Suma de los que ya estan punteados BANCOS
                 if ($rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0) {
-                    angular.forEach(result.data[0], function(value, key) {
+                    angular.forEach(result.data[0], function (value, key) {
                         if (value.aplicado == 1) {
                             $rootScope.BancoPunteadoAbonosTotales += value.abono;
                             $rootScope.BancoPunteadoCargosTotales += value.cargo;
@@ -129,7 +127,7 @@
                 };
                 //Suma de los que ya estan punteados CARGOS
                 if ($rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0) {
-                    angular.forEach(result.data[1], function(value, key) {
+                    angular.forEach(result.data[1], function (value, key) {
                         if (value.aplicado == 1) {
                             $rootScope.AuxiliarPunteadoAbonosTotales += value.abono;
                             $rootScope.AuxiliarPunteadoCargosTotales += value.cargo;
@@ -137,14 +135,28 @@
                     });
                 };
 
-                $scope.tabla('bancoPunteoP');
-                $scope.tabla('auxiliarPunteoP');
-
-                setTimeout(function() {
+                $('#bancoPunteoP').DataTable().destroy();
+                $('#auxiliarPunteoP').DataTable().destroy();
+                setTimeout(function () {
+                    $('#bancoPunteoP').DataTable({
+                        destroy: true,
+                        "responsive": true,
+                        searching: true,
+                        paging: true,
+                        autoFill: false,
+                        fixedColumns: true
+                    });
+                    $('#auxiliarPunteoP').DataTable({
+                        destroy: true,
+                        "responsive": true,
+                        searching: true,
+                        paging: true,
+                        autoFill: false,
+                        fixedColumns: true
+                    });
+                    
                     $('#loading').modal('hide');
-                }, 500);
-                // localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-                // localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
+                }, 300);
             });
     };
 
@@ -213,8 +225,18 @@
             angular.forEach($scope.bancoDPI, function(value, key) {
                 $scope.bancoDPITotal += value.abono;
             });
-            $('#loading').modal('hide');
-            $scope.tabla('bancodpi');
+            $('#bancodpi').DataTable().destroy();
+            setTimeout(function () {
+                $('#bancodpi').DataTable({
+                    destroy: true,
+                    "responsive": true,
+                    searching: true,
+                    paging: true,
+                    autoFill: false,
+                    fixedColumns: true
+                });
+                $('#loading').modal('hide');
+            }, 300);
         });
     };
     //****************************************************************************************************    
@@ -470,21 +492,21 @@
 
     // INICIA inicio la tabla para los distintos casos
     //****************************************************************************************************
-    $scope.tabla = function(idtabla) {
-        $('#' + idtabla).DataTable().destroy();
+    // $scope.tabla = function(idtabla) {
+    //     $('#' + idtabla).DataTable().destroy();
 
-        setTimeout(function() {
+    //     setTimeout(function() {
 
-            $('#' + idtabla).DataTable({
-                destroy: true,
-                "responsive": true,
-                searching: true,
-                paging: true,
-                autoFill: false,
-                fixedColumns: true
-            });
-        }, 1000);
-    };
+    //         $('#' + idtabla).DataTable({
+    //             destroy: true,
+    //             "responsive": true,
+    //             searching: true,
+    //             paging: true,
+    //             autoFill: false,
+    //             fixedColumns: true
+    //         });
+    //     }, 1000);
+    // };
 
     $scope.tablaSearch = function(idtabla) {
         $('#' + idtabla).DataTable().destroy();

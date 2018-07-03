@@ -214,9 +214,28 @@
                     }
                 });
             };
-
-            $scope.tablaPre('bancoPunteo');
-            $scope.tablaPre('auxiliarPunteo');
+            $('#bancoPunteo').DataTable().destroy();
+            $('#auxiliarPunteo').DataTable().destroy();
+            setTimeout(function() {
+                $('#bancoPunteo').DataTable({
+                    destroy: true,
+                    "responsive": true,
+                    searching: true,
+                    paging: true,
+                    autoFill: false,
+                    fixedColumns: true
+                });
+                $('#auxiliarPunteo').DataTable({
+                    destroy: true,
+                    "responsive": true,
+                    searching: true,
+                    paging: true,
+                    autoFill: false,
+                    fixedColumns: true
+                });
+            }, 300);
+            // $scope.tablaPre('bancoPunteo');
+            // $scope.tablaPre('auxiliarPunteo');
             localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
             localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
         });
@@ -1277,17 +1296,17 @@
         $scope.cargoBanco = 0;
     };
 
-    $scope.tablaPre = function(idtabla) {
-        $('#' + idtabla).DataTable().destroy();
-        setTimeout(function() {
-            $('#' + idtabla).DataTable({
-                destroy: true,
-                "responsive": true,
-                searching: true,
-                paging: true,
-                autoFill: false,
-                fixedColumns: true
-            });
-        }, 1000);
-    };
+    // $scope.tablaPre = function(idtabla) {
+    //     $('#' + idtabla).DataTable().destroy();
+    //     setTimeout(function() {
+    //         $('#' + idtabla).DataTable({
+    //             destroy: true,
+    //             "responsive": true,
+    //             searching: true,
+    //             paging: true,
+    //             autoFill: false,
+    //             fixedColumns: true
+    //         });
+    //     }, 1000);
+    // };
 });

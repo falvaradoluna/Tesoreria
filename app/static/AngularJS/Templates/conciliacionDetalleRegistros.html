@@ -367,10 +367,11 @@
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                            <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController">
+                            <td ng-controller="conciliacionDetalleRegistroEliminatesRelationShipsController" class="text-center">
                                 <button class="btn btn-danger btn-xs" ng-click="alertaEliminaPunteos(banco.grupo,1)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i>
                                 </button>
+                                
                             </td>
                             <td>
                                 <button class="btn btn-info btn-xs" ng-click="verDetallePunteoGet(banco.grupo,1)">
@@ -471,11 +472,11 @@
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                            <td>
+                            <!-- <td> -->
                                 <!-- <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i> Quitar DPI
                                 </button> -->
-                            </td>
+                            <!-- </td> -->
                             <td>
                                 <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,2)">
                                     <i class="ti-eye"></i>
