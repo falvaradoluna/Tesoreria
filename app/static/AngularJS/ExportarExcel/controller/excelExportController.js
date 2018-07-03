@@ -59,9 +59,11 @@
    $scope.count = 0;
    $scope.grupoIns = 0;
    $scope.errores = [];
+   $scope.countInsert = 0;
+   $scope.totalIns = 0;
     $scope.newParseExcelDataAndSave = function () {
+        $('#loading').modal('show');
         var file = $scope.selectedFile;
-        console.log( 'file', file );
         if (file != null) {
             $scope.enableButton = true;
             var reader = new FileReader();
@@ -71,12 +73,22 @@
                 //XLSX from js-xlsx library , which I will add in page view page
                 var workbook = XLSX.read(data, { type: 'binary' });
                 var excelObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+                $scope.totalIns = excelObject.length; 
+                $scope.nombreExcel = file.name;
                 if( $scope.count == excelObject.length ){
-                    setTimeout(function(){
-                        swal('LISTO', 'Se cargo con éxito', 'success');
-                    },1500);
+                    console.log( 'errores', $scope.errores );
+                    if( $scope.countInsert == excelObject.length ){
+                        setTimeout(function(){
+                            $('#loading').modal('hide');
+                            swal('LISTO', 'Se cargo con éxito', 'success');
+                        },1500);
+                    }else{
+                        $('#loading').modal('hide');
+                        $("#errorInsert").modal("show");
+                    }
                     $scope.count = 0;
                     $scope.grupoIns = 0;
+                    $scope.countInsert = 0;
                 }else{
                     excelExportRepository.sendExcelDataLayout(
                         excelObject[$scope.count].NoCuenta, 
@@ -92,16 +104,17 @@
                     .then(function(result){
                         if( result.data[0].success == 1 ){
                             $scope.grupoIns = result.data[0].grupo;
-                            $scope.count = $scope.count + 1;
-                            $scope.newParseExcelDataAndSave();
+                            $scope.countInsert = $scope.countInsert + 1;
                         }else{
-                            $scope.errores.push(result.data[0])
+                            excelObject[$scope.count]['error'] = result.data[0].msg;
+                            $scope.errores.push(excelObject[$scope.count])
                         }
+                        $scope.count = $scope.count + 1;
+                        $scope.newParseExcelDataAndSave();
                     }, function(error){
                         alertFactory.warning(error);
                         $('#loading').modal('hide');
                     });
-                    //console.log( excelObject[$scope.count].NoCuenta);
                 };
             }//Fin de la función antes de leer el archivo
             reader.onerror = function (ex) {
