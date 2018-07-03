@@ -160,17 +160,16 @@
             $scope.busqueda.CuentaContable, 
             2)
         .then(function(result) {
-            console.log( 'getConciliados', result.data );
             $scope.uniConciliadoBancario = result.data[0];
             $scope.uniConciliadoContable = result.data[1];
-            // console.log( '$scope.uniConciliadoBancario', $scope.uniConciliadoBancario );
-            // console.log( '$scope.uniConciliadoContable', $scope.uniConciliadoContable );
-
+            
             $rootScope.uniAbonoBan = [];
             $rootScope.uniCargoCon = [];
             $rootScope.uniCargoBan = [];
             $rootScope.uniAbonoCon = [];
 
+            $rootScope.bancoReferenciadosAbonosTotales = 0;
+            $rootScope.bancoReferenciadosCargosTotales = 0;
             angular.forEach($scope.uniConciliadoBancario, function(valueBan, key) {
                 if (valueBan.abono != 0) {
                     $rootScope.uniAbonoBan.push(valueBan);
@@ -181,6 +180,8 @@
                 }
             });
 
+            $rootScope.contableReferenciadosCargosTotales = 0;
+            $rootScope.contableReferenciadosAbonosTotales = 0;
             angular.forEach($scope.uniConciliadoContable, function(valueCon, key) {
                 if (valueCon.cargo != 0) {
                     $rootScope.uniCargoCon.push(valueCon);
@@ -190,11 +191,6 @@
                     $rootScope.contableReferenciadosAbonosTotales += valueCon.abono
                 }
             });
-
-            console.log( 'bancoReferenciadosAbonosTotales', $rootScope.bancoReferenciadosAbonosTotales );
-            console.log( 'bancoReferenciadosCargosTotales', $rootScope.bancoReferenciadosCargosTotales );
-            console.log( 'contableReferenciadosCargosTotales', $rootScope.contableReferenciadosCargosTotales );
-            console.log( 'contableReferenciadosAbonosTotales', $rootScope.contableReferenciadosAbonosTotales );
 
             $scope.tablaSearch('contableRefAbonos');
             $scope.tablaSearch('contableRefCargos');
