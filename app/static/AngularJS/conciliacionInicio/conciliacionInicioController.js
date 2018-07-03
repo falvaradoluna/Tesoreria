@@ -572,6 +572,7 @@
 
     $scope.generaInfoReport = function () {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
+        $('#loading').modal('show');
         var d = new Date();
         var n = d.getMonth() + 1;
         if( parseInt($scope.mesActualJUN.PAR_IDENPARA.substr(4, 2)) == n ){
