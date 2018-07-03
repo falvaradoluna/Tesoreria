@@ -579,7 +579,7 @@
                             </td>
                         </tr>
                     </tbody>
-                    <thead>
+                    <tfoot>
                         <tr>
                             <th>Banco</th>
                             <th>Referencia</th>
@@ -588,7 +588,7 @@
                             <th>Cargo</th>
                             <th data-sort-ignore="true" class="min-width">Detalle</th>
                         </tr>
-                    </thead>
+                    </tfoot>
                 </table>
                 <div style="padding-left: 64%;">
                     <p class="text-info text-semibold">Total Cargos Bancarios Referenciados: {{bancoReferenciadosCargosTotales | currency}}</p>
@@ -737,7 +737,7 @@
                 <table id="contableUniCargo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Fecha aqui</th>
+                            <th>Fecha</th>
                             <th>Tipo de Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
@@ -754,16 +754,16 @@
                             <td>{{ unicontable.cargo | currency}}</td>
                             <td>{{ unicontable.abono | currency}}</td>
                         </tr>
-                        <tf>
+                        <tfoot>
                             <tr>
-                                <th>Fecha aqui</th>
+                                <th>Fecha</th>
                                 <th>Tipo de Póliza</th>
                                 <th># de Póliza</th>
                                 <th>Concepto</th>
                                 <th>Abono</th>
                                 <th>Cargo</th>
                             </tr>
-                        </tf>
+                        </tfoot>
                     </tbody>
                 </table>
                 <div class="pull-right">
