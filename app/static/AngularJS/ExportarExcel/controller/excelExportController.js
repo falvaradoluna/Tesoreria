@@ -58,8 +58,10 @@
    };
    $scope.count = 0;
    $scope.grupoIns = 0;
+   $scope.errores = [];
     $scope.newParseExcelDataAndSave = function () {
         var file = $scope.selectedFile;
+        console.log( 'file', file );
         if (file != null) {
             $scope.enableButton = true;
             var reader = new FileReader();
@@ -74,6 +76,7 @@
                         swal('LISTO', 'Se cargo con éxito', 'success');
                     },1500);
                     $scope.count = 0;
+                    $scope.grupoIns = 0;
                 }else{
                     excelExportRepository.sendExcelDataLayout(
                         excelObject[$scope.count].NoCuenta, 
@@ -87,47 +90,28 @@
                         $scope.grupoIns
                     )
                     .then(function(result){
-                        console.log(result);
+                        if( result.data[0].success == 1 ){
+                            $scope.grupoIns = result.data[0].grupo;
+                            $scope.count = $scope.count + 1;
+                            $scope.newParseExcelDataAndSave();
+                        }else{
+                            $scope.errores.push(result.data[0])
+                        }
                     }, function(error){
                         alertFactory.warning(error);
                         $('#loading').modal('hide');
                     });
                     //console.log( excelObject[$scope.count].NoCuenta);
-                    $scope.count = $scope.count + 1;
-                    $scope.newParseExcelDataAndSave();
                 };
-                /*angular.forEach(excelObject, function (value) {
-                    excelExportRepository.sendExcelDataLayout(
-                        value.NoCuenta, 
-                        value.Fecha, 
-                        value.Descripcion, 
-                        value.Referencia, 
-                        value.DescripcionAmpliada,
-                        value.TipoMovimiento,
-                        value.Cargo,
-                        value.Abono
-                    )
-                    .then(function(result){
-                        console.log(result);
-                        }, function(error){
-                            alertFactory.warning(error);
-                            $('#loading').modal('hide');
-                        });
-                });
-
-                setTimeout(function(){
-                    swal('LISTO', 'Se cargo con éxito', 'success');
-                },1500);*/
-
             }//Fin de la función antes de leer el archivo
             reader.onerror = function (ex) {
                 console.log(ex);
-            }
+            };
 
             reader.readAsBinaryString(file);
         } else {
             alertFactory.warning("No has seleccionado un archivo!");
-        }
+        };
     };
 
        //Parse Excel Data 
