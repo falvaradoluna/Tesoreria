@@ -53,9 +53,10 @@ excelExport.prototype.get_insExcelLayout = function(req,res,next){
         { name: "tipoMovimiento", value: req.query.tipoMovimiento, type: self.model.types.STRING },
         { name: "cargo", value: req.query.cargo, type: self.model.types.DECIMAL },
         { name: "abono", value: req.query.abono, type: self.model.types.DECIMAL },
+        { name: "grupoIns", value: req.query.grupoIns, type: self.model.types.INT }
     ];
     
-    this.model.query('[DBO].[INS_LAYOUT_SP]', params, function(error, result){
+    this.model.query('[DBO].[INS_LAYOUT_SP_P]', params, function(error, result){
         self.view.expositor(res, {
             error: error,
             result: result

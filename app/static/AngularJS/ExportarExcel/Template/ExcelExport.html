@@ -25,7 +25,9 @@
 
 
             <div class="form-group col-md-10 text-center">
-                <input type="file" class="form-control" name="file" id="inputFile" onchange="angular.element(this).scope().leerExcel(this.files)">
+                <input type="file" class="form-control" name="file" id="inputFile" 
+                        onchange="angular.element(this).scope().leerExcel(this.files)"
+                        accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                 <br>
                 <div class="form col-md-3n text-right">
                     <button class="btn btn-primary" ng-click="newParseExcelDataAndSave()">
@@ -39,6 +41,50 @@
         </div>
     </div>
 </div>
+
+<!--===================================================-->
+<div class="modal fade bs-example-modal" id="errorInsert" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog" role="document" style="width: 60%">
+        <div class="modal-content">
+            <div class="panel-body">
+                <h3><i class="fa fa-exclamation-circle text-warning" aria-hidden="true"></i> Se insertaron {{countInsert}} de {{totalIns}} registros.</h3>
+                <br/>
+                <table class="table table-striped table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <td><b>NoCuenta</b></td>
+                            <td><b>Fecha</b></td>
+                            <td><b>Descripcion</b></td>
+                            <td><b>Referencia</b></td>
+                            <td><b>Descripción Ampliada</b></td>
+                            <td><b>Tipo Movimiento</b></td>
+                            <td><b>Cargo</b></td>
+                            <td><b>Abono</b></td>
+                            <td><b>Problema</b></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="error in errores">
+                            <td> {{error.NoCuenta}}</td>
+                            <td> {{error.Fecha}}</td>
+                            <td> {{error.Descripcion}}</td>
+                            <td> {{error.Referencia}}</td>
+                            <td> {{error.DescripcionAmpliada}}</td>
+                            <td> {{error.TipoMovimiento}}</td>
+                            <td> {{error.Cargo}}</td>
+                            <td> {{error.Abono}}</td>
+                            <td> {{error.error}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <label class="text-warning"> <strong> Archivo: {{nombreExcel}}</strong> </label>
+                <br><br><br>
+                <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
 
 <div id="loading" class="modal fade" tabindex="-1">
     <div class="modal-dialog modal-lg">

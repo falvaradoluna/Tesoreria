@@ -3,15 +3,7 @@ var excelExportURL =   global_settings.urlCORS + 'api/excelExport/';
 registrationModule.factory('excelExportRepository', function($http){
 	return{
 
-        sendExcelDataLayout: function(noCuenta, fecha, descripcion, referencia, desAmpliada, tipoMovimiento, cargo, abono){
-            console.log(noCuenta);
-            console.log(fecha);
-            console.log(descripcion);
-            console.log(referencia);
-            console.log(desAmpliada);
-            console.log(tipoMovimiento);
-            console.log(cargo);
-            console.log(abono);
+        sendExcelDataLayout: function(noCuenta, fecha, descripcion, referencia, desAmpliada, tipoMovimiento, cargo, abono, grupoIns){
             return $http({
                        url: excelExportURL + 'insExcelLayout/',
                        method: "GET",
@@ -23,7 +15,8 @@ registrationModule.factory('excelExportRepository', function($http){
                            desAmpliada: desAmpliada,
                            tipoMovimiento: tipoMovimiento,
                            cargo: cargo,
-                           abono: abono
+                           abono: abono,
+                           grupoIns: grupoIns
                        },
                        headers: {
                            'Content-Type': 'application/json'
