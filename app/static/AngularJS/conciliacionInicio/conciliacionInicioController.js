@@ -713,10 +713,11 @@
 
     $scope.openModalMovimiento = function(){
         var mesName = ["", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        var fecha = new Date();
-        var anio  = fecha.getFullYear();
-        var mes   = (fecha.getMonth()) + 1;
-        var dia   = fecha.getDate();
+        
+        var fecha = $scope.fechaCorte.split('-');
+        var anio  = parseInt(fecha[0]);
+        var mes   = parseInt(fecha[1]);
+        var dia   = parseInt(fecha[2])
 
         $scope.mMov = {
             anio: anio,
