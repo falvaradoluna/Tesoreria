@@ -19,12 +19,7 @@
     $scope.init = function () {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
         $scope.enableButton = false;
-        if ($scope.busqueda == undefined || $scope.busqueda == null) {
-            $scope.showComboEmpresas = true;
-            $scope.getEmpresa($rootScope.userData.idUsuario);
-        } else {
-            $scope.getBancos($scope.busqueda.IdEmpresa);
-        }
+        
         setTimeout(function () {
             $(".cargando").remove();
         }, 1500);
