@@ -32,16 +32,16 @@
                 }, 1500 );
     };
 
-    $scope.getEmpresa = function(idUsuario) {
-                    filtrosRepository.getEmpresas(idUsuario).then(
-                        function(result) {
-                            $scope.activaInputCuenta = true;
-                            $scope.activaBotonBuscar = true;
-                            if (result.data.length > 0) {
-                                $scope.empresaUsuario = result.data;
-                            }
-                        });
+    $scope.getEmpresa = function (idUsuario) {
+        filtrosRepository.getEmpresas(idUsuario).then(
+            function (result) {
+                $scope.activaInputCuenta = true;
+                $scope.activaBotonBuscar = true;
+                if (result.data.length > 0) {
+                    $scope.empresaUsuario = result.data;
                 }
+            });
+    };
      
    $scope.leerExcel = function(files){
       $scope.$apply(function () { 
@@ -50,17 +50,19 @@
            //Valido la extención del archivo 
             var ext = $scope.selectedFile.name.substr($scope.selectedFile.name.lastIndexOf('.')+1);
             if(ext != "xlsx"){
-                alertFactory.warning("El archivo seleccionado es incorrecto, por favor verifique su selección.");
+                swal('Alto', 'El archivo seleccionado es incorrecto, por favor verifique su selección.', 'warning');
             	return;
             }
 
         });
    };
+
    $scope.count = 0;
    $scope.grupoIns = 0;
    $scope.errores = [];
    $scope.countInsert = 0;
    $scope.totalIns = 0;
+
     $scope.newParseExcelDataAndSave = function () {
         $('#loading').modal('show');
         var file = $scope.selectedFile;
@@ -76,7 +78,6 @@
                 $scope.totalIns = excelObject.length; 
                 $scope.nombreExcel = file.name;
                 if( $scope.count == excelObject.length ){
-                    console.log( 'errores', $scope.errores );
                     if( $scope.countInsert == excelObject.length ){
                         setTimeout(function(){
                             $('#loading').modal('hide');
@@ -112,7 +113,7 @@
                         $scope.count = $scope.count + 1;
                         $scope.newParseExcelDataAndSave();
                     }, function(error){
-                        alertFactory.warning(error);
+                        swal('ALTO', error, 'warning');
                         $('#loading').modal('hide');
                     });
                 };
@@ -123,7 +124,7 @@
 
             reader.readAsBinaryString(file);
         } else {
-            alertFactory.warning("No has seleccionado un archivo!");
+            swal('ALTO', 'No has seleccionado un archivo!', 'warning');
         };
     };
 
@@ -155,7 +156,7 @@
                     if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
                          if ($scope.bandera == 0){
                          $scope.bandera = 1;
-                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         swal('ALTO', 'El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...', 'warning');
                          setTimeout(function() {
                             
                             }, 2000);
@@ -165,9 +166,9 @@
                       excelExportRepository.sendExcelDataScotibank( workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Referencia_Numerica, value.Cargo, value.Abono, value.Tipo, value.Transaccion, value.Leyenda_1, value.Leyenda_2, workbook.Strings[0].h).then(function(result){
                         console.log(result.data);
                       }, function(error){
-                            alertFactory.warning(error);
-                						$('#loading').modal('hide');
-    					         });
+                            swal('ALTO', error, 'warning');
+                            $('#loading').modal('hide');
+                        });
                       }
                     });
                     //Fin para el registro de datos Scotiabank
@@ -181,7 +182,7 @@
                        if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
                          if ($scope.bandera == 0){
                          $scope.bandera = 1;
-                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         swal('ALTO', 'El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...', 'error');
                          setTimeout(function() {
                             
                             }, 2000);
@@ -194,7 +195,7 @@
                       	excelExportRepository.sendExcelDataBanamex(workbook.Strings[1].h,value.No_Cuenta, value.Fecha, value.Descripcion, value.Sucursal, value.Tipo_Transaccion,value.Referencia_Numerica, value.Referencia_Alfanumerica, value.Autorizacion, (dep != undefined)?dep.replace(',',''):dep,(ret != undefined)?ret.replace(',',''):ret, workbook.Strings[0].h).then(function(result){
                         console.log(result);
                       }, function(error){
-                            alertFactory.warning(error);
+                            swal('ALTO', error, 'warning');
                             $('#loading').modal('hide');
                        });
                       }
@@ -211,7 +212,7 @@
                       if(value.Fecha.length < 10 || value.Fecha.indexOf('/') == 0){
                          if ($scope.bandera == 0){
                          $scope.bandera = 1;
-                         alertFactory.error('El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...');
+                         swal('ALTO', 'El formato de fecha del documento es erroneo, por favor verifique el formato "(dd/MM/yyyy)"...', 'error');
                          setTimeout(function() {
                             
                             }, 2000);
@@ -358,21 +359,21 @@
         $scope.password = passwordArray.join("");
     }
 
-    $scope.getBancos = function(idEmpresa) {
-                    
-                    if (idEmpresa == undefined || idEmpresa == null || idEmpresa == '') {
-                        alertFactory.warning('Seleccione una Empresa');
-                    } else {
-                        filtrosRepository.getBancos(idEmpresa).then(function(result) {
-                            if (result.data.length > 0) {
-                                $scope.bancoLayout = $filter('filter')(result.data, function(value){    
-                                                              return value.Layout == 1  });;
-                            } else {
-                                $scope.bancoLayout = [];
-                            }
-                        });
-                    }
+    $scope.getBancos = function (idEmpresa) {
+        if (idEmpresa == undefined || idEmpresa == null || idEmpresa == '') {
+            alertFactory.warning('Seleccione una Empresa');
+        } else {
+            filtrosRepository.getBancos(idEmpresa).then(function (result) {
+                if (result.data.length > 0) {
+                    $scope.bancoLayout = $filter('filter')(result.data, function (value) {
+                        return value.Layout == 1
+                    });;
+                } else {
+                    $scope.bancoLayout = [];
                 }
+            });
+        }
+    }
 
 
     $scope.reload = function(){
