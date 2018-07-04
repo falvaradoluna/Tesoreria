@@ -125,6 +125,7 @@
             reader.readAsBinaryString(file);
         } else {
             swal('ALTO', 'No has seleccionado un archivo!', 'warning');
+            $('#loading').modal('hide');
         };
     };
 
