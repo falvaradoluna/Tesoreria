@@ -1,4 +1,4 @@
-﻿registrationModule.controller('conciliacionDetalleRegistroGridsController', function ($scope, $rootScope, $log, $filter, $compile, localStorageService, filtrosRepository, uiGridConstants, uiGridGroupingConstants, filterFilter, conciliacionDetalleRegistroRepository) {
+﻿registrationModule.controller('conciliacionDetalleRegistroGridsController', function ($scope, $rootScope, $log, $filter, $compile, localStorageService, filtrosRepository, uiGridConstants, uiGridGroupingConstants, filterFilter, conciliacionDetalleRegistroRepository, DTOptionsBuilder, DTColumnDefBuilder, $resource) {
 
     $scope.gridsInfo = [];
     $scope.depositosBancos = '';
@@ -64,7 +64,7 @@
         $('#loading').modal('show');
 
         $scope.getPrePunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
-
+        
         variablesLocalStorage();
         $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
         $scope.diferenciaNeg = $scope.difMonetaria * -1;
@@ -190,54 +190,33 @@
     //**********************************************************************************************
 
     //============================METODO PARA LLENAR LOS PRE PUNTEPOS Ing. Luis Antonio Garcia Perrusquia
-    $scope.getPrePunteo = function(idempresa, idBanco, noCuenta, CuentaContable) {
+    $scope.getPrePunteo = function(idempresa, idBanco, noCuenta, CuentaContable){
         conciliacionDetalleRegistroRepository.getBancoPunteo(idempresa, idBanco, noCuenta, CuentaContable, 0).then(function(result) {
-            $scope.bancoPadre = result.data[0];
-            $scope.auxiliarPadre = result.data[1];
-
+            $rootScope.bancoPadrePre = result.data[0];
+            $rootScope.auxiliarPadrePre = result.data[1];
+            
             // Suma de los que estan prepumteados BANCOS
-            if ($rootScope.BancoPrePunteadoAbonosTotales == 0 && $rootScope.BancoPrePunteadoCargosTotales == 0) {
-                angular.forEach(result.data[0], function(value, key) {
-                    if (value.aplicado == 0) {
-                        $rootScope.BancoPrePunteadoAbonosTotales += value.abono;
-                        $rootScope.BancoPrePunteadoCargosTotales += value.cargo;
-                    }
-                });
-            };
+            $rootScope.BancoPrePunteadoAbonosTotales = 0;
+            $rootScope.BancoPrePunteadoCargosTotales = 0;
+            angular.forEach(result.data[0], function(value, key) {
+                if (value.aplicado == 0) {
+                    $rootScope.BancoPrePunteadoAbonosTotales += value.abono;
+                    $rootScope.BancoPrePunteadoCargosTotales += value.cargo;
+                }
+            });
 
             // Suma de los que ya estan prepunteados CARGOS
-            if ($rootScope.AuxiliarPrePunteadoAbonosTotales == 0 && $rootScope.AuxiliarPrePunteadoCargosTotales == 0) {
-                angular.forEach(result.data[1], function(value, key) {
-                    if (value.aplicado == 0) {
-                        $rootScope.AuxiliarPrePunteadoAbonosTotales += value.abono;
-                        $rootScope.AuxiliarPrePunteadoCargosTotales += value.cargo;
-                    }
-                });
-            };
-            $('#bancoPunteo').DataTable().destroy();
-            $('#auxiliarPunteo').DataTable().destroy();
-            setTimeout(function() {
-                $('#bancoPunteo').DataTable({
-                    destroy: true,
-                    "responsive": true,
-                    searching: true,
-                    paging: true,
-                    autoFill: false,
-                    fixedColumns: true
-                });
-                $('#auxiliarPunteo').DataTable({
-                    destroy: true,
-                    "responsive": true,
-                    searching: true,
-                    paging: true,
-                    autoFill: false,
-                    fixedColumns: true
-                });
-            }, 300);
-            // $scope.tablaPre('bancoPunteo');
-            // $scope.tablaPre('auxiliarPunteo');
-            localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-            localStorage.setItem('auxiliarPadre', JSON.stringify($scope.auxiliarPadre));
+            $rootScope.AuxiliarPrePunteadoAbonosTotales = 0;
+            $rootScope.AuxiliarPrePunteadoCargosTotales = 0;
+            angular.forEach(result.data[1], function(value, key) {
+                if (value.aplicado == 0) {
+                    $rootScope.AuxiliarPrePunteadoAbonosTotales += value.abono;
+                    $rootScope.AuxiliarPrePunteadoCargosTotales += value.cargo;
+                }
+            });
+        
+            localStorage.setItem('bancoPadre', JSON.stringify($rootScope.bancoPadrePre));
+            localStorage.setItem('auxiliarPadre', JSON.stringify($rootScope.auxiliarPadrePre));
         });
     };
     //========================================================================================
@@ -643,10 +622,7 @@
                 'warning'
             );
         }
-    }
-
-    //Color Grids////////////////////////////////////////////////////////
-
+    };
 
     //LQMA 05092017  todo  
     $scope.setColorGrupo = function (div) {
@@ -1101,9 +1077,8 @@
                 'success'
             );
             $('#alertaGuardarPunteoPrevio').modal('hide');
-            setTimeout(function () {
-                location.reload();
-            }, 2500);
+            
+            $scope.getPrePunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
         }
         else {
             var item = $scope.save_grupoHexadecimal[auxCont];
@@ -1294,6 +1269,42 @@
         $scope.cargoAuxiliar = 0;
         $scope.abonoBanco = 0;
         $scope.cargoBanco = 0;
+    };
+
+    //Luis Antonio Garcia Perrusquia
+    $scope.alertaEliminaPunteos = function (datosPunteo){
+        localStorage.setItem('datosPunteo', datosPunteo);
+        $('#alertaEliminacionPunteo').modal('show');
+      };
+      
+    $scope.cancelaEliminacionPunteo = function(){
+        $scope.datosPunteo = '';
+        $scope.accionElimina = '';
+      $('#alertaEliminacionPunteo').modal('hide');
+    };
+
+    //Ing. Luis Antonio Garcia
+    $scope.eliminarPunteo = function() {
+        $scope.datosPunteo = parseInt(localStorage.getItem('datosPunteo'));
+        conciliacionDetalleRegistroRepository.eliminarPunteo($scope.datosPunteo).then(function(result) {
+            $('#alertaEliminacionPunteo').modal('hide');
+            if( result.data[0].success == 1 ){
+                swal(
+                    'Listo',
+                    result.data[0].msg,
+                    'success'
+                );
+                $scope.getPrePunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
+            }else{
+                swal(
+                    'Alto',
+                    result.data[0].msg,
+                    'error'
+                );
+            }
+             localStorage.removeItem('datosPunteo');
+            $scope.refreshGrids();
+        });
     };
 
     // $scope.tablaPre = function(idtabla) {

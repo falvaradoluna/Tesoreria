@@ -3,40 +3,40 @@ registrationModule.controller('conciliacionDetalleRegistroEliminatesRelationShip
    // INICIA elimina los punteos ya realizados
     //****************************************************************************************************
     //Ing. Luis Antonio Garcia
-    $scope.eliminarPunteo = function() {
-        $scope.datosPunteo = parseInt(localStorage.getItem('datosPunteo'));
-        conciliacionDetalleRegistroRepository.eliminarPunteo($scope.datosPunteo).then(function(result) {
-            $('#alertaEliminacionPunteo').modal('hide');
-            if( result.data[0].success == 1 ){
-                swal(
-                    'Listo',
-                    result.data[0].msg,
-                    'success'
-                );
-            }else{
-                swal(
-                    'Alto',
-                    result.data[0].msg,
-                    'error'
-                );
-            }
-             localStorage.removeItem('datosPunteo');
-            $scope.refreshGrids();
-        });
-    };
+    // $scope.eliminarPunteo = function() {
+    //     $scope.datosPunteo = parseInt(localStorage.getItem('datosPunteo'));
+    //     conciliacionDetalleRegistroRepository.eliminarPunteo($scope.datosPunteo).then(function(result) {
+    //         $('#alertaEliminacionPunteo').modal('hide');
+    //         if( result.data[0].success == 1 ){
+    //             swal(
+    //                 'Listo',
+    //                 result.data[0].msg,
+    //                 'success'
+    //             );
+    //         }else{
+    //             swal(
+    //                 'Alto',
+    //                 result.data[0].msg,
+    //                 'error'
+    //             );
+    //         }
+    //          localStorage.removeItem('datosPunteo');
+    //         $scope.refreshGrids();
+    //     });
+    // };
 
      ////////Muestra mensaje de alerta para aceptar o rechazar la eliminación de punteos relacionados
     //Luis Antonio Garcia Perrusquia
-     $scope.alertaEliminaPunteos = function (datosPunteo){
-        localStorage.setItem('datosPunteo', datosPunteo);
-        $('#alertaEliminacionPunteo').modal('show');
-      };
+    //  $scope.alertaEliminaPunteos = function (datosPunteo){
+    //     localStorage.setItem('datosPunteo', datosPunteo);
+    //     $('#alertaEliminacionPunteo').modal('show');
+    //   };
       
-    $scope.cancelaEliminacionPunteo = function(){
-        $scope.datosPunteo = '';
-        $scope.accionElimina = '';
-      $('#alertaEliminacionPunteo').modal('hide');
-    };
+    // $scope.cancelaEliminacionPunteo = function(){
+    //     $scope.datosPunteo = '';
+    //     $scope.accionElimina = '';
+    //   $('#alertaEliminacionPunteo').modal('hide');
+    // };
     //****************************************************************************************************
 
     
