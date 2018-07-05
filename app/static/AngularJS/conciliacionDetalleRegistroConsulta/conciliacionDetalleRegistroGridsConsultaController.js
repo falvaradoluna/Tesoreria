@@ -149,7 +149,7 @@
             
             conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion).then(function(result) {
                 if (result.data.length >= 0) {
-                    
+                    console.log( 'resultBancos', result.data[0] );
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
                      //Suma del total monetario, abonos
@@ -172,6 +172,27 @@
                     // $scope.totalCargoBancario += value.cargo;
                     // });
 
+                    $('#auxiliarPunteoPun').DataTable().destroy();
+                    $('#bancoPunteoPun').DataTable().destroy();
+                    setTimeout(function() {
+                        $('#auxiliarPunteoPun').DataTable({
+                            destroy: true,
+                            "responsive": true,
+                            searching: true,
+                            paging: true,
+                            autoFill: false,
+                            fixedColumns: true
+                        });
+                        $('#bancoPunteoPun').DataTable({
+                            destroy: true,
+                            "responsive": true,
+                            searching: true,
+                            paging: true,
+                            autoFill: false,
+                            fixedColumns: true
+                        });
+                    }, 300);
+
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                      //LQMA 17082017 add
@@ -191,11 +212,11 @@
    //********************Función para llenar el grid Auxiliar Contable*****************************
     
     $scope.getAuxiliarContable = function (idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico) {
-        console.log('paramsBusqueda', $scope.paramHistory);
+        
         conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico).then(function (result) {
 
             if (result.data[0].length != 0) {
-
+                console.log( 'auxiliarContable', result.data[0] );
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
                 //Suma del total monetario, abonos
@@ -214,9 +235,10 @@
                 localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
 
                 setTimeout(function () { $scope.prePunteo(); }, 100); //LQMA 31
-                $('#loading').modal('hide');
+                
             }
         });
+        setTimeout(function(){$('#loading').modal('hide');},2500)
     };
   
    //**********************************************************************************************
@@ -273,10 +295,7 @@
             angular.forEach(rows, function(value, key) {
                 $scope.punteoAuxiliar[key] = value.entity;
             });
-            // localStorage.setItem('infoGridAuxiliar', JSON.stringify($scope.punteoAuxiliar));
-            // localStorage.setItem('totalesGrids', JSON.stringify(
-            //     {"abonoAuxiliar": $scope.abonoAuxiliar,"cargoAuxiliar": $scope.cargoAuxiliar, "abonoBanco": $scope.abonoBanco,"cargoBanco": $scope.cargoBanco, "diferenciaMonetaria": $scope.difMonetaria}
-            //     ));
+            
         });
     };
     //****************************************************************************************************
