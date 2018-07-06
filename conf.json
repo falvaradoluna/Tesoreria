@@ -3,7 +3,7 @@
     "SQL_user": "sa",
     "SQL_password": "S0p0rt3",
     "SQL_server": "192.168.20.29",
-    "SQL_database": "Tesoreria_Pruebas",
+    "SQL_database": "Tesoreria",
     "SQL_connectionTimeout": 60000,
     "WSDetallePoliza": "http://192.168.20.89:8091/WS_Gen_Pdf.asmx?WSDL"
 }
