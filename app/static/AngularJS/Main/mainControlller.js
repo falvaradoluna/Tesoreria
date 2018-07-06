@@ -6,6 +6,7 @@ registrationModule.controller('mainController', function($scope, $rootScope, $lo
     $scope.init = function() {
          $rootScope.datosUsuario = localStorageService.get('empleadoDatos');
             $rootScope.mostrarMenu = 1;
+            console.log( '$rootScope.datosUsuario', $rootScope.datosUsuario );
             if ($rootScope.userData.idPerfil == 4) {
             	$rootScope.controlDepositosAcceso = 0;
                 $rootScope.conciliacionAccesso = 1;          

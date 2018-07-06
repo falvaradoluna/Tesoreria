@@ -66,9 +66,18 @@
                             swal('LISTO', 'Se cargo con éxito', 'success');
                         }, 1500);
                     } else {
-                        $('#loading').modal('hide');
-                        $("#errorInsert").modal("show");
-                    }
+                        console.log( 'grupoIns', $scope.grupoIns );
+                        excelExportRepository.deleteDataLayout( $scope.grupoIns )
+                            .then(function (result) {
+                                if (result.data[0].success == 1) {
+                                    $('#loading').modal('hide');
+                                    $("#errorInsert").modal("show");
+                                } 
+                            }, function (error) {
+                                swal('ALTO', error, 'warning');
+                                $('#loading').modal('hide');
+                            });
+                        }
                     $scope.count = 0;
                     $scope.grupoIns = 0;
                     $scope.countInsert = 0;
