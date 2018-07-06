@@ -5,21 +5,28 @@ registrationModule.controller('mainController', function($scope, $rootScope, $lo
 
     $scope.init = function() {
          $rootScope.datosUsuario = localStorageService.get('empleadoDatos');
+        var btns = localStorage.getItem('ShowBtns');
+        btns = JSON.parse(btns);
             $rootScope.mostrarMenu = 1;
             console.log( '$rootScope.datosUsuario', $rootScope.datosUsuario );
-            if ($rootScope.userData.idPerfil == 4) {
-            	$rootScope.controlDepositosAcceso = 0;
-                $rootScope.conciliacionAccesso = 1;          
-                console.log('Administrador Control Depositos')
-            } else {
-                if ($rootScope.userData.idPerfil == 5) {
-                    $rootScope.controlDepositosAcceso = 1;
-                    $rootScope.conciliacionAccesso = 1;
-                }else{
-                    $rootScope.controlDepositosAcceso = 1;
-                    $rootScope.conciliacionAccesso = 0;
+            if(btns[0].Consulta == 1 ){
+                $rootScope.controlDepositosAcceso = 0;
+                $rootScope.conciliacionAccesso = 0;
+            }else{
+                if ($rootScope.userData.idPerfil == 4) {
+                    $rootScope.controlDepositosAcceso = 0;
+                    $rootScope.conciliacionAccesso = 1;          
+                    console.log('Administrador Control Depositos')
+                } else {
+                    if ($rootScope.userData.idPerfil == 5) {
+                        $rootScope.controlDepositosAcceso = 1;
+                        $rootScope.conciliacionAccesso = 1;
+                    }else{
+                        $rootScope.controlDepositosAcceso = 1;
+                        $rootScope.conciliacionAccesso = 0;
+                    }
+                    
                 }
-                
             }
         }
         

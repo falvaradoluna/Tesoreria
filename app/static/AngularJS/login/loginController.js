@@ -35,36 +35,46 @@ console.log($rootScope.currentEmployee)
         loginRepository.getPermisos(usuario).then(function(result) {
             console.log( 'result', result );
             localStorage.setItem( 'ShowBtns', JSON.stringify( result.data[1] ) );
-            if (result.data.length > 0) {
+            if( result.data[1][0].Consulta == 1 ){
                 $scope.login = result.data[0][0];
                 $scope.getEmpleado(usuario);
-                if ($scope.login.idPerfil == 4) {
-                    $rootScope.controlDepositosAcceso = 1;
-                    $rootScope.conciliacionAccesso = 0;
-                    alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
-                    location.href = '/conciliacionInicio';
-                    localStorageService.set('userData', $scope.login);
-                } else {
-                    if ($scope.login.idPerfil == 5) {
+                $rootScope.controlDepositosAcceso = 1;
+                $rootScope.conciliacionAccesso = 0;
+                alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
+                location.href = '/conciliacionInicioConsulta';
+                localStorageService.set('userData', $scope.login);
+            }else{
+                if (result.data.length > 0) {
+                    $scope.login = result.data[0][0];
+                    $scope.getEmpleado(usuario);
+                    if ($scope.login.idPerfil == 4) {
                         $rootScope.controlDepositosAcceso = 1;
-                        $rootScope.conciliacionAccesso = 1;
+                        $rootScope.conciliacionAccesso = 0;
                         alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
-                        location.href = '/controlDepositos';
+                        location.href = '/conciliacionInicio';
                         localStorageService.set('userData', $scope.login);
                     } else {
-                        $rootScope.controlDepositosAcceso = 0;
-                        $rootScope.conciliacionAccesso = 1;
-                        alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
-                        location.href = '/controlDepositos';
-                        localStorageService.set('userData', $scope.login);
-
+                        if ($scope.login.idPerfil == 5) {
+                            $rootScope.controlDepositosAcceso = 1;
+                            $rootScope.conciliacionAccesso = 1;
+                            alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
+                            location.href = '/controlDepositos';
+                            localStorageService.set('userData', $scope.login);
+                        } else {
+                            $rootScope.controlDepositosAcceso = 0;
+                            $rootScope.conciliacionAccesso = 1;
+                            alertFactory.warning('Bienvenido a Tesorería: ' + result.data[0][0].nombreUsuario);
+                            location.href = '/controlDepositos';
+                            localStorageService.set('userData', $scope.login);
+    
+                        }
                     }
+    
+                } else {
+                    alertFactory.info('Valide el usuario y/o contraseña');
                 }
-
-            } else {
-                alertFactory.info('Valide el usuario y/o contraseña');
             }
-
+            
         });
     }
 
