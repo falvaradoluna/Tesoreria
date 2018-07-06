@@ -92,13 +92,11 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
         },
 
         //Ing. LAGP05062018
-        getUltimoMes: function( anio ) {
+        getUltimoMes: function( parametrosMes ) {
             return $http({
                 url: conciliacionInicioURL + 'ultimoMes/',
                 method: "GET",
-                params: {
-                    anio: anio
-                },
+                params: parametrosMes,
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -107,12 +105,11 @@ registrationModule.factory('conciliacionInicioRepository', function($http) {
         },
 
         //Ing. LAGP06062018
-        getcloseMes: function( ) {
+        getcloseMes: function( parametros ) {
             return $http({
                 url: conciliacionInicioURL + 'closeMes/',
                 method: "GET",
-                params: {
-                },
+                params: parametros,
                 headers: {
                     'Content-Type': 'application/json'
                 }

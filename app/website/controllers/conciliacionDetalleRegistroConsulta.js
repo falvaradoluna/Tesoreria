@@ -28,20 +28,22 @@ conciliacionDetalleRegistroConsulta.prototype.post_totalAbonoCargo = function (r
 
     var self = this;
 
-    var params = [{ name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
+    var params = [
         { name: 'idEmpresa', value: req.body.idEmpresa, type: self.model.types.STRING },
+        { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
         { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.STRING },
         { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
         { name: 'fechaElaboracion', value: req.body.fechaElaboracion, type: self.model.types.STRING },
         { name: 'fechaCorte', value: req.body.fechaCorte, type: self.model.types.STRING },
         { name: 'polizaPago', value: req.body.polizaPago, type: self.model.types.STRING },
         { name: 'opcion', value: req.body.opcion, type: self.model.types.INT },
-        { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT } //LQMA ADD 06032018
+        { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT },
+        { name: 'tipoReporte', value: req.body.tipoReporte, type: self.model.types.INT }
     ];
-
-
+    console.log( 'params', params );
     this.model.query('SEL_TOTAL_ABONOCARGO_SP_H', params, function (error, result) {
-
+        console.log( 'result', result );
+        console.log( 'error', error );
         self.view.expositor(res, {
             error: error,
             result: result
