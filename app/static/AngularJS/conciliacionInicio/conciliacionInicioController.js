@@ -63,6 +63,7 @@
             $scope.getCuenta($scope.bancoId, $scope.empresaId);
             $scope.cuentaActual = JSON.parse(localStorage.getItem('cuentaActualInMemory'));
             $scope.getTotalesAbonoCargo();
+            $scope.getUltimoMes($scope.empresaId, $scope.bancoId, $scope.cuentaNumerica)
         }
     }
 
