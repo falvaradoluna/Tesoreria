@@ -198,7 +198,19 @@ sendExcelDataCargaInicial: function(NoCuenta, Fecha, Concepto, Sucursal, Referen
                 'Content-Type': 'application/json'
               }
          });
-        }
+        },
+        deleteDataLayout : function(grupo){
+            return $http({
+                 url: excelExportURL + 'deleteDataLayout/',
+                 method: "GET",
+                 params: {
+                          grupo: grupo
+                 },
+                 headers: {
+                   'Content-Type': 'application/json'
+                 }
+            });
+           }
         
     //Fin de la llave Return  
 	 };

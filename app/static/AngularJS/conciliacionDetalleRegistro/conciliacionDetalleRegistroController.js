@@ -286,10 +286,11 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 1,
             )
             .then(function(result) {
-                if (result.data[1][0].estatus == 0) {
+                console.log( 'resultH', result.data );
+                if (result.data[0].estatus == 0) {
                     swal(
                         'Listo',
-                        result.data[1][0].mensaje,
+                        result.data[0].mensaje,
                         'success'
                     );
                     $scope.guardaDisable = false;
@@ -297,7 +298,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 } else {
                     swal(
                         'Listo',
-                        result.data[1][0].mensaje,
+                        result.data[0].mensaje,
                         'success'
                     );
                     $scope.guardaDisable = true;

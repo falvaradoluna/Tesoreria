@@ -150,8 +150,6 @@
             $scope.uniCargoCon = [];
             $scope.uniAbonoCon = [];
 
-            //console.log( 'resulPadre', result.data );
-
             $scope.uniConciliadoBancario = $filter('filter')(result.data[0], function (value) {
                 return value.aplicado == 2;
             });
@@ -233,45 +231,15 @@
                 });
             };
 
-            $scope.tabla('bancoPunteo');
+            // $scope.tabla('bancoPunteo');
             $scope.tabla('contableRefAbonos');
             $scope.tabla('contableRefCargos');
             $scope.tabla('bancoReferenciadoAbono');
             $scope.tabla('bancoReferenciadoCargo');
+            $scope.tabla('bancoPunteoPun');
+            $scope.tabla('auxiliarPunteoPun');
         });
     };
-
-    // $scope.getBancoPunteo = function (idempresa, cuentaBanco, idBanco, idHistorico) {
-    //     conciliacionDetalleRegistroConsultaRepository.getBancoPunteo(idempresa, cuentaBanco, idBanco, idHistorico).then(function (result) {
-            
-    //         $scope.bancoPadre = result.data;
-    //         localStorage.setItem('bancoPadre', JSON.stringify($scope.bancoPadre));
-    //         $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
-    //             return value.idPAdre == 3;
-    //         });
-
-    //         //Obtener la uma total de los registros
-    //         // angular.forEach($scope.BancoPunteado, function (value, key) {
-    //         //     $rootScope.BancoPunteadoAbonosTotales += value.abono;
-    //         // });
-
-    //         // angular.forEach($scope.BancoPunteado, function (value, key) {
-    //         //     $rootScope.BancoPunteadoCargosTotales += value.cargo;
-    //         // });
-
-    //         if( $rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0 ){
-    //             angular.forEach(result.data, function( value, key ){
-    //                 if(value.idPunteoFinalBancos == 3){
-    //                     $rootScope.BancoPunteadoAbonosTotales += value.abono;
-    //                     $rootScope.BancoPunteadoCargosTotales += value.cargo;
-    //                 }
-    //             });
-    //         }
-
-    //         $scope.tabla('bancoPunteo');
-    //     });
-    // };
-    //****************************************************************************************************
 
     // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************

@@ -118,10 +118,13 @@ conciliacionInicio.prototype.get_ultimoMes = function (req, res, next) {
 
     var self = this;
     var params = [
-        { name: 'anio', value: req.query.anio, type: self.model.types.INT }
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'cuentaBanco', value: req.query.cuentaBanco, type: self.model.types.STRING },
+        { name: 'fechaActual', value: req.query.fechaActual, type: self.model.types.STRING }
     ];
-
-    this.model.query('[dbo].[SEL_ULTIMO_MES_ABIERTO]', params, function (error, result) {
+    
+    this.model.query('[dbo].[PER_APERTURAPERIODO_SP]', params, function (error, result) {
 
         self.view.expositor(res, {
             error: error,
@@ -136,9 +139,13 @@ conciliacionInicio.prototype.get_closeMes = function (req, res, next) {
 
     var self = this;
     var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'cuentaBanco', value: req.query.cuentaBanco, type: self.model.types.STRING },
+        { name: 'fechaInicio', value: req.query.fechaInicio, type: self.model.types.STRING }
     ];
 
-    this.model.query('[dbo].[INS_NUEVO_MES_SP]', params, function (error, result) {
+    this.model.query('[dbo].[PER_CIERREPERIODO_SP]', params, function (error, result) {
         
         self.view.expositor(res, {
             error: error,

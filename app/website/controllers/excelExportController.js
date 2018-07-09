@@ -56,7 +56,7 @@ excelExport.prototype.get_insExcelLayout = function(req,res,next){
         { name: "grupoIns", value: req.query.grupoIns, type: self.model.types.INT }
     ];
     
-    this.model.query('[DBO].[INS_LAYOUT_SP_P]', params, function(error, result){
+    this.model.query('[DBO].[INS_LAYOUT_SP]', params, function(error, result){
         self.view.expositor(res, {
             error: error,
             result: result
@@ -146,7 +146,21 @@ excelExport.prototype.get_insExcelCargaInicial = function(req,res,next){
 
 
 
-
+excelExport.prototype.get_deleteDataLayout = function (req, res, next) {
+    var self = this;
+    var params = [
+        { name: "idGrupoIns", value: req.query.grupo, type: self.model.types.STRING }
+    ];
+    console.log( 'params', params );
+    this.model.query('[DBO].[DEL_MOVIMIENTOLAYOUT_SP]', params, function (error, result) {
+        console.log( 'result', result );
+        console.log( 'error', error );
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
 
 
 excelExport.prototype.get_insHistoryLayout = function(req, res, next){

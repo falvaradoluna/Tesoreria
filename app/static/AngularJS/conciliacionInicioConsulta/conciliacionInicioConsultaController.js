@@ -128,35 +128,71 @@
 
     //Ing. LAGP 03052018
     $scope.getMeses = function () {
-        conciliacionInicioConsultaRepository.getMeses().then(function (result) {
-            $rootScope.mesesConsulta = [];
-            if( result.data.length != 0 ){
-                var d = new Date();
-                
-                const monthNames = [
-                    {value: '20180101', nombre:"Enero"}, 
-                    {value: '20180201', nombre:"Febrero"}, 
-                    {value: '20180301', nombre:"Marzo"}, 
-                    {value: '20180401', nombre:"Abril"}, 
-                    {value: '20180501', nombre:"Mayo"}, 
-                    {value: '20180601', nombre:"Junio"},
-                    {value: '20180701', nombre:"Julio"}, 
-                    {value: '20180801', nombre:"Agosto"}, 
-                    {value: '20180901', nombre:"Septiembre"}, 
-                    {value: '20181001', nombre:"Octubre"}, 
-                    {value: '20181101', nombre:"Noviembre"}, 
-                    {value: '20181201', nombre:"Diciembre"}];
-                angular.forEach(monthNames, function( value, key ){
-                    if( key < d.getMonth() + 1 ){
-                        $rootScope.mesesConsulta.push( monthNames[key] );
-                    }
-                })
-                $rootScope.mesSelect = $rootScope.mesesConsulta;
-                
+        var d = new Date();
+        $rootScope.mesesConsulta = [];
+        const monthNames = [
+            {value: '20180101', nombre:"Enero"}, 
+            {value: '20180201', nombre:"Febrero"}, 
+            {value: '20180301', nombre:"Marzo"}, 
+            {value: '20180401', nombre:"Abril"}, 
+            {value: '20180501', nombre:"Mayo"}, 
+            {value: '20180601', nombre:"Junio"},
+            {value: '20180701', nombre:"Julio"}, 
+            {value: '20180801', nombre:"Agosto"}, 
+            {value: '20180901', nombre:"Septiembre"}, 
+            {value: '20181001', nombre:"Octubre"}, 
+            {value: '20181101', nombre:"Noviembre"}, 
+            {value: '20181201', nombre:"Diciembre"}];
+        angular.forEach(monthNames, function( value, key ){
+            if( key < d.getMonth() + 1 ){
+                $rootScope.mesesConsulta.push( monthNames[key] );
             }
-        });
+        })
+        $rootScope.mesSelect = $rootScope.mesesConsulta;
     };
 
+    $scope.getUltimoMes = function( idEmpresa, idBanco, noCuenta ){
+        //Obetenemos el año actual
+        var d = new Date();
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        var day = d.getDay();
+        console.log( idEmpresa + '-' + idBanco + '-' + noCuenta );
+        console.log( 'y', year );
+        console.log( 'm', month );
+        console.log( 'dd', day );
+        if( month < 10 ){
+            var date = year.toString() + '0' + month.toString() + '0' + day.toString();
+        }else{
+            var date = year.toString() + month.toString() + day.toString();
+        }
+        console.log( date );
+        // conciliacionInicioRepository.getUltimoMes( year ).then(function (result) {
+            // if( result.data.length != 0 ){
+            //     const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            //                         "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];  
+            //     if( result.data[0].mec_numMes < 10 ){
+            //         $scope.jsonMes = {
+            //             ID: result.data[0].mec_numMes,
+            //             PAR_IDENPARA: result.data[0].mec_anio + '0' + result.data[0].mec_numMes + '01',
+            //             PAR_DESCRIP2: 'ABIERTO',
+            //             MES: monthNames[ result.data[0].mec_numMes - 1 ],
+            //             ACTIVO: 1
+            //         };
+            //     }else{
+            //         $scope.jsonMes = {
+            //             ID: result.data[0].mec_numMes,
+            //             PAR_IDENPARA: result.data[0].mec_anio + '' + result.data[0].mec_numMes + '01',
+            //             PAR_DESCRIP2: 'ABIERTO',
+            //             MES: monthNames[ result.data[0].mec_numMes - 1 ],
+            //             ACTIVO: 1
+            //         };
+            //     }
+            //     $rootScope.nombreMes = monthNames[ result.data[0].mec_numMes - 1 ]
+            //     $scope.mesActualJUN = $scope.jsonMes;
+            // }
+        // });
+    }
     $scope.getBancos = function (idEmpresa) {
         $scope.activaInputCuenta = true;
         $scope.activaBotonBuscar = true;
@@ -246,7 +282,7 @@
                         localStorage.setItem('bancoActualInMemory', JSON.stringify($scope.bancoActual));
 
                         $('#actualizarBD').modal('show');
-
+                        console.log( 'tipoConsulta', $scope.tipoConsulta.value );
                         conciliacionInicioConsultaRepository.getTotalAbonoCargo(
                             $scope.cuentaActual.IdBanco,
                             $scope.cuentaActual.IdEmpresa,
@@ -260,9 +296,6 @@
                             $scope.tipoConsulta.value
                         ).then(function (result) { //LQMA add 06032018 idUsuario
                             $('#actualizarBD').modal('hide');
-                            //localStorage.setItem( 'dataSearch', JSON.parse(result.data[0]) );
-                            console.log('resultSinLocalSotrage', result.data);
-
                             if (result.data.length > 0) {
                                 if (result.data[0].resultado == 0) {
                                     swal(
@@ -345,8 +378,6 @@
                     {value: '20181101', nombre:"Noviembre"}, 
                     {value: '20181201', nombre:"Diciembre"}];
                 $scope.mesActual = monthNamesFoto[ $scope.fechaElaboracionCombo -1 ];
-                console.log( 'monthNamesFoto', monthNamesFoto[5] );
-                console.log( 'fechaElaboracionCombo', $scope.fechaElaboracionCombo );
                 conciliacionInicioConsultaRepository.getTotalAbonoCargo(
                     $scope.bancoId,
                     $scope.empresaId,

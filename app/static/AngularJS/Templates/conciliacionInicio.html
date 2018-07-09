@@ -231,7 +231,7 @@
                                         <button class="btn btn-default col-md-5" ng-click="openModalMovimiento()" ng-disabled="enableBottonReport">
                                             <i class="ti-plus"></i> Agregar movimiento Bancario
                                         </button>
-                                        <button class="btn btn-success col-md-5 col-md-offset-1" ng-click="closeMes()" ng-hide="showCloseBtn != 1">
+                                        <button class="btn btn-success col-md-5 col-md-offset-1" ng-click="closeMes()" ng-hide="showCloseBtn != 1" ng-disabled="cuentaActual.Cuenta == ''">
                                             <i class="ti-lock"></i> Cerrar Mes
                                         </button>
                                     </div>
