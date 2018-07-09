@@ -322,7 +322,7 @@
     // INICIO la configuración del GRID BANCOS
     //**************************************************************************************************** 
     $scope.gridDepositosBancos.onRegisterApi = function (gridApi) {
-        $rootScope.gridApiBancos = gridApi;
+        $scope.gridApiBancos = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function (row) {
             var msg = 'row selected ' + row.isSelected;
             if (row.isSelected == true) {
