@@ -1303,7 +1303,7 @@
                 );
             }
              localStorage.removeItem('datosPunteo');
-            $scope.refreshGrids();
+            //$scope.refreshGrids();
         });
     };
 
