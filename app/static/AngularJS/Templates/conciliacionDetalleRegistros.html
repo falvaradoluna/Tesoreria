@@ -66,6 +66,7 @@
                 <!--Inicio del primer Tab Detalle de Registros no Punteados-->
                 <div id="CargosSinPuntear" class="tabcontent" ng-controller="conciliacionDetalleRegistroGridsController" style="display: block;">
                     <div>
+                        <!--LQMA add 24082017 colorpicker y grupos de colores BEGIN-->
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="row">
@@ -105,7 +106,9 @@
                         </div>
 
                         <div class="col-md-6" style="padding-top: 3px;">
-                            
+                            <!-- <div> -->
+
+                            <!-- </div> -->
                             <div class="pull-right" style="width: 30%;">
                                 <button class="btn btn-warning pull-right" style="margin-top: 10px" ng-click="nuevoGrupo();">
                                     Nuevo Grupo
@@ -228,6 +231,9 @@
                     </div>
 
                     <div class="row">
+                        <!-- <div class="panel col-md-12" id="divGetGrids" ng-controller="conciliacionDetalleRegistroGetGridsController"> -->
+                            <!-- <br>
+                            <br> -->
                             <div class="col-md-12" ng-init="init()">
                                 <div class="text-main">
                                     <h4>Banco Punteado</h4>
@@ -318,6 +324,7 @@
                                     <p class="text-info text-semibold">Total Abonos Contables : {{AuxiliarPrePunteadoAbonosTotales | currency}}</p>
                                 </div>
                             </div>
+                        <!-- </div> -->
                     </div>
                     <div class="col-md-12">
                         <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
@@ -458,6 +465,7 @@
                             <th>Referencia</th>
                             <th>Concepto</th>
                             <th>Abono</th>
+                            <!-- <th width="70">&nbsp;</th> -->
                             <th></th>
                         </tr>
                     </thead>
@@ -608,6 +616,12 @@
     </div>
     <!--Fin del cuarto Tab / Registros Bancarios Referenciados-->
 
+
+
+
+
+
+
     <!--Inicio del quinto Tab / Registros Contables Referenciados-->
     <div id="ContablesReferenciados" class="tabcontent">
         <div class="panel col-md-12">
@@ -700,6 +714,8 @@
                     <p class="text-info text-semibold">Total Cargos Contables Referenciados: {{contableReferenciadosCargosTotales | currency}}</p>
                 </div>
             </div>
+
+
 
             <div class="col-md-12">
                 <div class="text-right" ng-controller="conciliacionDetalleRegistroSaveGridsController">
@@ -1089,6 +1105,7 @@
                                         <div class="cube1"></div>
                                         <div class="cube2"></div>
                                     </div>
+                                    <!-- </div> -->
                                 </div>
                             </td>
                         </tr>
@@ -1301,7 +1318,7 @@
             <div class="media-body pad-lft">
                 <div class="modal-body">
                     <br>
-                    <h4 class="text-title">¿Esta seguro de eliminar esta relación de registros punteados?
+                    <h4 class="text-title">¿Esta seguro de eliminar esta relación de registros punteadosGET?
                         <span>
                             <span>
                                 <button class="btn btn-danger pull-right" type="button" ng-click="cancelaEliminacionPunteo()">
@@ -1456,6 +1473,7 @@
                             <th>Tipo Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
+                            <!-- <th>Cargo</th> -->
                             <th>Abono</th>
                         </tr>
                     </thead>
@@ -1465,11 +1483,15 @@
                             <td>{{abonoPadre.MOV_TIPOPOL}}</td>
                             <td>{{abonoPadre.MOV_CONSPOL}}</td>
                             <td>{{abonoPadre.MOV_CONCEPTO}}</td>
-                             <td class="text-right text-success">{{abonoPadre.MOV_HABER | currency}}</td>
+                            <!-- <td class="text-right" ng-class="{'text-success text-semibold' : abonoPadre.cargoBanco > 0}">{{abonoPadre.cargoBanco | currency}}</td> -->
+                            <td class="text-right text-success">{{abonoPadre.MOV_HABER | currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
+                            <!-- <td class="text-info text-semibold text-right"> -->
+                            <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
+                            <!-- </td> -->
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span>
                             </td>
@@ -1535,6 +1557,7 @@
                             <th># de Póliza</th>
                             <th>Concepto</th>
                             <th>Cargo</th>
+                            <!-- <th>Abono</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -1544,16 +1567,21 @@
                             <td>{{detalleRegistrosBancariosCargosconsPoliza}}</td>
                             <td>{{detalleRegistrosBancariosCargosconcepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosAbono > 0}">{{detalleRegistrosBancariosCargosAbono | currency}}</td>
-                           </tr>
+                            <!-- <td class="text-right" ng-class="{'text-success text-semibold' : detalleRegistrosBancariosCargosconcepto > 0}">{{detalleRegistrosBancariosCargosconcepto | currency}}</td> -->
+                        </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td class="text-info text-semibold text-right">
+                                <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
                             </td>
                             <td colspan="3" class="text-bold text-right text-info">Total</td>
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span>
                             </td>
+                            <!-- <td class="text-info text-semibold text-right">
+                                <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{abonoTotalBanco | currency}}</span>
+                            </td> -->
                         </tr>
                     </tfoot>
                 </table>
@@ -1575,7 +1603,8 @@
                     <tfoot>
                         <tr>
                             <td class="text-info text-semibold text-right">
-                             </td>
+                                <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
+                            </td>
                             <td class="text-bold text-right text-info">Total</td>
                             <td class="text-info text-semibold text-right">
                                 <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span>
@@ -1624,6 +1653,7 @@
                     <tfoot>
                         <tr>
                             <td class="text-info text-semibold text-right">
+                                <!-- <span ng-if="cargoTotalBanco > 0">{{cargoTotalBanco | currency}}</span> -->
                             </td>
                             <td colspan="3" class="text-bold text-right text-info">Total</td>
                             <td class="text-info text-semibold text-right">
@@ -1638,6 +1668,7 @@
                             <th>Concepto</th>
                             <th>Numero de Cuenta</th>
                             <th>Cargo</th>
+                            <!-- <th>Abono</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -1645,12 +1676,17 @@
                             <td>{{ detAbono.MOV_CONCEPTO }}</td>
                             <td>{{ detAbono.noCuenta }}</td>
                             <td class="text-info text-semibold text-right">{{ detAbono.rap_importeC | currency }}</td>
+                            <!-- <td class="text-info text-semibold text-right">{{ detAbono.rap_importe | currency}}</td> -->
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
+                            <!-- <td class="text-info text-semibold text-right"> -->
+                            <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
+                            <!-- </td> -->
                             <td class="text-info text-semibold text-right">
-                             </td>
+                                <!-- <span ng-if="detalleRegistrosBancariosCargosTotal > 0">{{detalleRegistrosBancariosCargosTotal | currency}}</span> -->
+                            </td>
                             <td class="text-bold text-right text-info">Total</td>
                             <td class="text-success text-semibold text-right">
                                 <span>{{totalAbonoBanco | currency}}</span>
