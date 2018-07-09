@@ -245,10 +245,10 @@
                 if($rootScope.refreshInt == 1){
                     console.log( 'refresh' );
                    setTimeout(function(){
-                    $rootScope.gridApiAuxiliar.grid.refresh();
-                    $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-                    $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-                    $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+                    $scope.gridApiAuxiliar.grid.refresh();
+                    $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+                    $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                    $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
                     $rootScope.gridApiBancos.grid.refresh();
                     $rootScope.gridApiBancos.grid.api.core.raise.filterChanged();
@@ -270,7 +270,7 @@
 
     $scope.gridAuxiliarContable.onRegisterApi = function (gridApi) {
         //set gridApi on scope
-        $rootScope.gridApiAuxiliar = gridApi;
+        $scope.gridApiAuxiliar = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function (row) {
             var msg = 'row selected ' + row.isSelected;
             if (row.isSelected == true) {
@@ -341,9 +341,9 @@
                 
                 if (row.entity.indexPrePunteo != 99999 && row.entity.indexPrePunteo != -1) {
                     var aux = 0;
-                    angular.forEach($rootScope.gridApiAuxiliar.grid.rows, function (value, key) {
+                    angular.forEach($scope.gridApiAuxiliar.grid.rows, function (value, key) {
                         if (value.entity.indexPrePunteo == row.entity.indexPrePunteo && value.entity.color == row.entity.color) {
-                            $rootScope.gridApiAuxiliar.grid.api.selection.unSelectRow($rootScope.gridApiAuxiliar.grid.options.data[aux]); //LQMA 31
+                            $scope.gridApiAuxiliar.grid.api.selection.unSelectRow($scope.gridApiAuxiliar.grid.options.data[aux]); //LQMA 31
                             value.isSelected = false;
                             value.entity.color = '';
                             value.entity.indexPrePunteo = 99999;
@@ -383,14 +383,14 @@
             return value.color != '';  
         });
 
-        $scope.validaCon = $filter('filter')($rootScope.gridApiAuxiliar.grid.options.data, function (value) {
+        $scope.validaCon = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function (value) {
             return value.color != '';  
         });
             
-        $rootScope.gridApiAuxiliar.grid.refresh();
-        $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-        $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-        $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+        $scope.gridApiAuxiliar.grid.refresh();
+        $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+        $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
         $rootScope.gridApiBancos.grid.refresh();
         $rootScope.gridApiBancos.grid.api.core.raise.filterChanged();
@@ -459,14 +459,14 @@
             return value.color != ''; //|| value.assignee.id === 'ak';   
         });
 
-        $scope.validaCon = $filter('filter')($rootScope.gridApiAuxiliar.grid.options.data, function (value) {
+        $scope.validaCon = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function (value) {
             return value.color != ''; //|| value.assignee.id === 'ak';   
         });
             
-        $rootScope.gridApiAuxiliar.grid.refresh();
-        $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-        $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-        $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+        $scope.gridApiAuxiliar.grid.refresh();
+        $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+        $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
         $rootScope.gridApiBancos.grid.refresh();
         $rootScope.gridApiBancos.grid.api.core.raise.filterChanged();
@@ -475,7 +475,7 @@
         
         if( $scope.validaBan.length != 0 && $scope.validaCon.length == 0 ){
             if( $scope.bancoText == 1 ){
-                angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function(value){
+                angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value){
                     if( ( (value.cargo >= $scope.bancoGrupo - $scope.difMonetaria && value.cargo <= $scope.bancoGrupo + $scope.difMonetaria)) ){
                         value.indexPrePunteo = -1;
                     }else{
@@ -484,7 +484,7 @@
                 });
             }else{
                 if( Math.sign($scope.bancoGrupo) == 1 ){
-                    angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function(value){
+                    angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value){
                         if( ( (value.abono >= $scope.bancoGrupo - $scope.difMonetaria && value.abono <= $scope.bancoGrupo + $scope.difMonetaria)) ){
                             value.indexPrePunteo = -1;
                         }else{
@@ -494,7 +494,7 @@
                 }else{
                    var aux = ($scope.bancoGrupo * -1);
                    
-                    angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function(value){
+                    angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value){
                         if( ( (value.abono >= aux - $scope.difMonetaria && value.abono <= aux + $scope.difMonetaria)) ){
                             value.indexPrePunteo = -1;
                         }else{
@@ -505,22 +505,22 @@
                 
             }
             setTimeout(function(){
-                $rootScope.gridApiAuxiliar.grid.api.core.scrollTo($rootScope.gridApiAuxiliar.grid.options.data[0], $rootScope.gridApiAuxiliar.grid.options.columnDefs[0]);
-                $rootScope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($rootScope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
-                $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
+                $scope.gridApiAuxiliar.grid.api.core.scrollTo($scope.gridApiAuxiliar.grid.options.data[0], $scope.gridApiAuxiliar.grid.options.columnDefs[0]);
+                $scope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($scope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
+                $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
             },200)
         }else{
-            angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function(value){
+            angular.forEach($scope.gridApiAuxiliar.grid.options.data, function(value){
                 if( ( (value.cargo >= $scope.bancoGrupo - $scope.difMonetaria && value.cargo <= $scope.bancoGrupo + $scope.difMonetaria)) ){
                     value.indexPrePunteo = -1;
                 }else{
                     value.indexPrePunteo = 99999;
                 }
             });
-            $rootScope.gridApiAuxiliar.grid.api.core.scrollTo($rootScope.gridApiAuxiliar.grid.options.data[0], $rootScope.gridApiAuxiliar.grid.options.columnDefs[0]);
+            $scope.gridApiAuxiliar.grid.api.core.scrollTo($scope.gridApiAuxiliar.grid.options.data[0], $scope.gridApiAuxiliar.grid.options.columnDefs[0]);
 
-            $rootScope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($rootScope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
-            $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
+            $scope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($scope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
+            $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
         }
     };
 
@@ -574,11 +574,11 @@
             $scope.arrayColors.push($scope.hexPicker.color);
             $scope.arrayColors.push("");
 
-            $rootScope.gridApiAuxiliar.grid.refresh()
+            $scope.gridApiAuxiliar.grid.refresh()
 
-            $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-            $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-            $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+            $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+            $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
             $rootScope.gridApiBancos.grid.refresh()
 
@@ -586,7 +586,7 @@
             $rootScope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
             $rootScope.gridApiBancos.grid.api.grid.queueGridRefresh();
 
-            angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {
+            angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
                 if (value.color != undefined) {
                     if (value.color == $scope.hexPicker.color)
                         value.indexPrePunteo = -1;
@@ -611,11 +611,11 @@
             setTimeout(function () {
                 $rootScope.gridApiBancos.grid.api.core.scrollTo($rootScope.gridApiBancos.grid.options.data[0], $rootScope.gridApiBancos.grid.options.columnDefs[0]);
 
-                $rootScope.gridApiAuxiliar.grid.api.core.scrollTo($rootScope.gridApiAuxiliar.grid.options.data[0], $rootScope.gridApiAuxiliar.grid.options.columnDefs[0]);
+                $scope.gridApiAuxiliar.grid.api.core.scrollTo($scope.gridApiAuxiliar.grid.options.data[0], $scope.gridApiAuxiliar.grid.options.columnDefs[0]);
 
 
-                $rootScope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($rootScope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
-                $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
+                $scope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($scope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
+                $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
 
                 $rootScope.gridApiBancos.grid.options.data = $filter('orderBy')($rootScope.gridApiBancos.grid.options.data, "indexPrePunteo", false)
                 $rootScope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
@@ -648,11 +648,11 @@
             $scope.arrayColors.push($scope.hexPicker.color);
             $scope.arrayColors.push("");
 
-            $rootScope.gridApiAuxiliar.grid.refresh()
+            $scope.gridApiAuxiliar.grid.refresh()
 
-            $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-            $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-            $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+            $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+            $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+            $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
             $rootScope.gridApiBancos.grid.refresh()
 
@@ -660,7 +660,7 @@
             $rootScope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
             $rootScope.gridApiBancos.grid.api.grid.queueGridRefresh();
 
-            angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {
+            angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
                 if (value.color != undefined) {
                     if (value.color == $scope.hexPicker.color)
                         value.indexPrePunteo = -1;
@@ -684,10 +684,10 @@
 
             setTimeout(function () {
                 $rootScope.gridApiBancos.grid.api.core.scrollTo($rootScope.gridApiBancos.grid.options.data[0], $rootScope.gridApiBancos.grid.options.columnDefs[0]);//$rootScope.gridApiBancos.grid.options.columnDefs[0]);
-                $rootScope.gridApiAuxiliar.grid.api.core.scrollTo($rootScope.gridApiAuxiliar.grid.options.data[0], $rootScope.gridApiAuxiliar.grid.options.columnDefs[0]);
+                $scope.gridApiAuxiliar.grid.api.core.scrollTo($scope.gridApiAuxiliar.grid.options.data[0], $scope.gridApiAuxiliar.grid.options.columnDefs[0]);
 
-                $rootScope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($rootScope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
-                $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
+                $scope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($scope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
+                $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
 
                 $rootScope.gridApiBancos.grid.options.data = $filter('orderBy')($rootScope.gridApiBancos.grid.options.data, "indexPrePunteo", false)
                 $rootScope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
@@ -718,7 +718,7 @@
                 }
             });
 
-            angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {        
+            angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {        
                 if (value.color == $scope.hexPicker.color) {
                     $scope.cargoAuxiliar = parseFloat( $scope.cargoAuxiliar ) + parseFloat( value.cargo );
                     $scope.abonoAuxiliar = parseFloat( $scope.abonoAuxiliar ) + parseFloat( value.abono );
@@ -742,7 +742,7 @@
 
         $scope.arrayColors = [];
 
-        angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {
+        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
             if ($scope.arrayColors.indexOf(value.color) == -1)
                 $scope.arrayColors.push(value.color)
 
@@ -769,13 +769,13 @@
         });
 
 
-        $rootScope.gridApiAuxiliar.grid.refresh()
+        $scope.gridApiAuxiliar.grid.refresh()
 
-        $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-        $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-        $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+        $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+        $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
-        $rootScope.gridApiAuxiliar.grid.refresh()
+        $scope.gridApiAuxiliar.grid.refresh()
 
         $rootScope.gridApiBancos.grid.api.core.raise.filterChanged();
         $rootScope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
@@ -793,11 +793,11 @@
         $scope.arrayColors = [];
         $scope.arrayColors.push("");
 
-        $rootScope.gridApiAuxiliar.grid.refresh()
+        $scope.gridApiAuxiliar.grid.refresh()
 
-        $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-        $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-        $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+        $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+        $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
         $rootScope.gridApiBancos.grid.refresh()
 
@@ -814,7 +814,7 @@
             return value.color == color; //|| value.assignee.id === 'ak';   
         });
 
-        var colorAuxiliar = $filter('filter')($rootScope.gridApiAuxiliar.grid.options.data, function (value) {
+        var colorAuxiliar = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function (value) {
             return value.color == color; //|| value.assignee.id === 'ak';                    
         });
 
@@ -847,7 +847,7 @@
         var indexBanco = 0, fechaOperacionBanco = '', cargoBanco = 0, abonoBanco = 0, esCargo = 0;
         var indicePrePunteo = 0;
 
-        angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {
+        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
             value.indexPrePunteo = 99999;
         });
 
@@ -875,7 +875,7 @@
 
             if (filtradosBancos.length == 1) {
 
-                var filtradosAuxiliar = $filter('filter')($rootScope.gridApiAuxiliar.grid.options.data, function (value) {
+                var filtradosAuxiliar = $filter('filter')($scope.gridApiAuxiliar.grid.options.data, function (value) {
                     if (esCargo == 0)
                         //LQMA 07092017
                         return value.cargo == abonoBanco && value.movFechaOpe == fechaOperacionBanco && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar); //|| value.assignee.id === 'ak';
@@ -889,17 +889,17 @@
                 if (filtradosAuxiliar.length == 1) {
 
 
-                    angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {
+                    angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
 
                         if (esCargo == 0) {   //LQMA 07092017
                             if (value.movFechaOpe == fechaOperacionBanco && abonoBanco == value.cargo && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar)) {
-                                $rootScope.gridApiAuxiliar.grid.api.selection.selectRow($rootScope.gridApiAuxiliar.grid.options.data[indexAuxiliar]);
+                                $scope.gridApiAuxiliar.grid.api.selection.selectRow($scope.gridApiAuxiliar.grid.options.data[indexAuxiliar]);
                                 value.indexPrePunteo = indicePrePunteo;
                             }
                         }
                         else//LQMA 07092017
                             if (value.movFechaOpe == fechaOperacionBanco && cargoBanco == value.abono && (referenciaAuxiliar != '' && referenciaAuxiliar == value.referenciaAuxiliar)) {
-                                $rootScope.gridApiAuxiliar.grid.api.selection.selectRow($rootScope.gridApiAuxiliar.grid.options.data[indexAuxiliar]);
+                                $scope.gridApiAuxiliar.grid.api.selection.selectRow($scope.gridApiAuxiliar.grid.options.data[indexAuxiliar]);
                                 value.indexPrePunteo = indicePrePunteo;
                             }
 
@@ -917,14 +917,14 @@
             indexBanco++;
         });
 
-        $rootScope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($rootScope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
-        $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
+        $scope.gridApiAuxiliar.grid.options.data = $filter('orderBy')($scope.gridApiAuxiliar.grid.options.data, "indexPrePunteo", false)
+        $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
 
         $rootScope.gridApiBancos.grid.options.data = $filter('orderBy')($rootScope.gridApiBancos.grid.options.data, "indexPrePunteo", false)
         $rootScope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.EDIT);
 
         //LQMA 28082017
-        $scope.auxiliarContableOriginal = $rootScope.gridApiAuxiliar.grid.options.data;
+        $scope.auxiliarContableOriginal = $scope.gridApiAuxiliar.grid.options.data;
         $scope.depositoBancosOriginal = $rootScope.gridApiBancos.grid.options.data;
 
     }
@@ -933,13 +933,13 @@
         
         switch ($scope.filtroBancoCarAbo) {
             case '0':
-                $rootScope.gridApiAuxiliar.grid.columns[0].filters[0] = {}
+                $scope.gridApiAuxiliar.grid.columns[0].filters[0] = {}
                 $rootScope.gridApiBancos.grid.columns[4].filters[0] = {}
 
                 break;
 
             case '1':
-                $rootScope.gridApiAuxiliar.grid.columns[0].filters[0] = {
+                $scope.gridApiAuxiliar.grid.columns[0].filters[0] = {
                     condition: uiGridConstants.filter.LESS_THAN_OR_EQUAL,
                     term: 0
                 }
@@ -951,7 +951,7 @@
                 break;
 
             case '2':
-                $rootScope.gridApiAuxiliar.grid.columns[0].filters[0] = {
+                $scope.gridApiAuxiliar.grid.columns[0].filters[0] = {
                     condition: uiGridConstants.filter.GREATER_THAN,
                     term: 0
                 }
@@ -964,11 +964,11 @@
         }
 
 
-        $rootScope.gridApiAuxiliar.grid.refresh()
+        $scope.gridApiAuxiliar.grid.refresh()
 
-        $rootScope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-        $rootScope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-        $rootScope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+        $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+        $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+        $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
 
 
         $rootScope.gridApiBancos.grid.refresh()
@@ -1012,7 +1012,7 @@
             }
         }
 
-        angular.forEach($rootScope.gridApiAuxiliar.grid.options.data, function (value, key) {
+        angular.forEach($scope.gridApiAuxiliar.grid.options.data, function (value, key) {
             if (value.color != undefined && value.color != '') {
                 auxiTot++;
                 auSel.push(value);
@@ -1036,7 +1036,7 @@
         if ($scope.control != undefined) {
             
             $('#alertaGuardarPunteoPrevio').modal('show');
-            $rootScope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
             $rootScope.gridApiBancos.selection.clearSelectedRows();
             $scope.limpiaVariables();
         }
@@ -1058,7 +1058,7 @@
                     $('#alertaGuardarPunteoPrevio').modal('show');
                     $scope.punteoAuxiliar = [];
                     $scope.punteoBanco = [];
-                    $rootScope.gridApiAuxiliar.selection.clearSelectedRows();
+                    $scope.gridApiAuxiliar.selection.clearSelectedRows();
                     $rootScope.gridApiBancos.selection.clearSelectedRows();
                 } else {
                     swal(
@@ -1259,7 +1259,7 @@
             $scope.punteoAuxiliar = [];
             $scope.punteoBanco = [];
             $rootScope.gridApiBancos.selection.clearSelectedRows();
-            $rootScope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
             $scope.limpiaVariables();
             //////////////////////////////////////////////////////////////////////////////
         }
