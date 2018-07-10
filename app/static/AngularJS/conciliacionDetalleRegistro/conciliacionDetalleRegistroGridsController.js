@@ -23,6 +23,9 @@
     $scope.totalAbonoContable = 0;
     $scope.totalCargoContable = 0;
 
+    //Variable para saber si se deben refresacar los grid
+    $rootScope.refreshInt = 0;
+
     //Variables para la sumatoria por grupo
     $scope.bancoGrupo = 0;
     $scope.contableGrupo = 0;
@@ -157,6 +160,9 @@
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function (result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
+                    $scope.gridDepositosBancos.data = result.data[0];
+                    console.log( 'Total de datos del bancario', $scope.gridDepositosBancos.data.length );
+                    console.log( 'gridApiAuxiliar', $scope.gridApiBancos );
                     // if( $scope.totalCargoBancario == 0 && $scope.totalAbonoBancario == 0 ){
                         $scope.totalCargoBancario = 0;
                         $scope.totalAbonoBancario = 0;
@@ -171,9 +177,18 @@
                         });
                     // };
                    
-                    $scope.gridDepositosBancos.data = result.data[0];
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
+                    if ($rootScope.refreshInt == 1) {
+                        setTimeout(function () {
+                            console.log('Antes del apiBancos');
+                            // $scope.gridApiBancos.grid.refresh();
+                            // $scope.gridApiBancos.grid.api.core.raise.filterChanged();
+                            // $scope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                            // $scope.gridApiBancos.grid.api.grid.queueGridRefresh();
+                            console.log( 'gridApiBancos', $scope.gridApiBancos );
+                        }, 500);
+                    }
 
                     //LQMA 17082017 add
                     $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.polizaPago, $scope.busqueda.Cuenta);
@@ -188,6 +203,47 @@
         }
     };
     //**********************************************************************************************
+
+    //********************Función para llenar el grid Auxiliar Contable*****************************
+
+    $scope.getAuxiliarContable = function (idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
+
+        filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function (result) {
+
+            if (result.data[0].length != 0) {
+                $scope.auxiliarContable = result.data[0];
+                $scope.gridAuxiliarContable.data = result.data[0];
+                console.log( 'Total de datos del contable', $scope.gridAuxiliarContable.data.length );
+                console.log( 'gridApiAuxiliar', $scope.gridApiAuxiliar );
+                //Suma del total monetario, abonos
+                $scope.totalAbonoContable = 0;
+                $scope.totalCargoContable = 0;
+                angular.forEach($scope.auxiliarContable, function (value, key) {
+                    $scope.totalAbonoContable += value.abono;
+                });
+                //Suma del total monetario cargos
+                angular.forEach($scope.auxiliarContable, function (value, key) {
+                    $scope.totalCargoContable += value.cargo;
+                });
+                localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
+                if ($rootScope.refreshInt == 1) {
+                    console.log('En el refresh CONTABLE');
+                    setTimeout(function () {
+                        console.log('Antes del apiAuxiliar');
+                        // $scope.gridApiAuxiliar.grid.refresh();
+                        // $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
+                        // $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
+                        // $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
+                        console.log( 'gridApiAuxiliar', $scope.gridApiAuxiliar );
+                    }, 500);
+                }
+            };
+
+            setTimeout(function () { $scope.prePunteo(); }, 800);
+            $('#loading').modal('hide');
+            $rootScope.refreshInt = 0;
+        });
+    };
 
     //============================METODO PARA LLENAR LOS PRE PUNTEPOS Ing. Luis Antonio Garcia Perrusquia
     $scope.getPrePunteo = function(idempresa, idBanco, noCuenta, CuentaContable){
@@ -220,49 +276,6 @@
         });
     };
     //========================================================================================
-
-    //********************Función para llenar el grid Auxiliar Contable*****************************
-
-    $scope.getAuxiliarContable = function (idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
-
-        filtrosRepository.getAuxiliar(idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria).then(function (result) {
-
-            if (result.data[0].length != 0) {
-                $scope.auxiliarContable = result.data[0];
-                $scope.gridAuxiliarContable.data = result.data[0];
-
-                //Suma del total monetario, abonos
-                $scope.totalAbonoContable = 0;
-                $scope.totalCargoContable = 0;
-                angular.forEach($scope.auxiliarContable, function (value, key) {
-                    $scope.totalAbonoContable += value.abono;
-                });
-                //Suma del total monetario cargos
-                angular.forEach($scope.auxiliarContable, function (value, key) {
-                    $scope.totalCargoContable += value.cargo;
-                });
-                localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
-                if($rootScope.refreshInt == 1){
-                    console.log( 'refresh' );
-                   setTimeout(function(){
-                    $scope.gridApiAuxiliar.grid.refresh();
-                    $scope.gridApiAuxiliar.grid.api.core.raise.filterChanged();
-                    $scope.gridApiAuxiliar.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-                    $scope.gridApiAuxiliar.grid.api.grid.queueGridRefresh();
-
-                    $scope.gridApiBancos.grid.refresh();
-                    $scope.gridApiBancos.grid.api.core.raise.filterChanged();
-                    $scope.gridApiBancos.grid.api.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-                    $scope.gridApiBancos.grid.api.grid.queueGridRefresh();
-                   },500);
-                }
-            };
-
-            setTimeout(function () { $scope.prePunteo(); }, 800);
-            $('#loading').modal('hide');
-            $rootScope.refreshInt = 0;
-        });
-    };
 
     //**********************************************************************************************
     // INICIA la configuración del GRID AUXILIAR CONTABLE
@@ -1093,6 +1106,8 @@
             );
             $('#alertaGuardarPunteoPrevio').modal('hide');
             $scope.getPrePunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
+            $scope.getPrePunteo($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta, $scope.busqueda.CuentaContable);
+            $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte, $scope.busqueda.IdEmpresa);
             $rootScope.refreshInt = 1;
         }
         else {
