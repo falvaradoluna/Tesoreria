@@ -141,7 +141,8 @@
         var day = d.getDate();
         
         if( month < 10 ){
-            var date = year.toString() + '0' + month.toString() + '0' + day.toString();
+            // var date = year.toString() + '0' + month.toString() + '0' + day.toString();
+            var date = year.toString() + '0' + month.toString() +  day.toString();
         }else{
             var date = year.toString() + month.toString() + day.toString();
         }
