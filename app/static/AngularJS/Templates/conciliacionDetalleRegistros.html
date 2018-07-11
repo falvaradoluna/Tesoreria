@@ -76,9 +76,9 @@
                                             <button ng-click="guardarHistorico()" class="btn btn-primary pull-right" style="height: 50px;" ng-disabled="guardaDisable">
                                                 Guardar estatus de la conciliacion
                                             </button>
-                                            <button ng-click="guardarHistoricoSis()" class="btn btn-success pull-right" style="height: 50px;" ng-disabled="guardaDisable">
+                                            <!-- <button ng-click="guardarHistoricoSis()" class="btn btn-success pull-right" style="height: 50px;" ng-disabled="guardaDisable">
                                                 Guardar estatus de la conciliacion SISTEMA
-                                            </button>
+                                            </button> -->
                                         </div>
                                     </div>
                                 </div>
@@ -241,6 +241,7 @@
                                 <table id="bancoPunteo" class="table table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
+                                            <th>Fecha</th>
                                             <th>Banco</th>
                                             <th>Referencia</th>
                                             <th>Concepto</th>
@@ -252,6 +253,7 @@
                                     </thead>
                                     <tbody>
                                         <tr ng-repeat="banco in bancoPadre | filter:{aplicado:0}">
+                                            <td>{{banco.fechaOperacion.split('T')[0]}}</td>
                                             <td>{{banco.banco}}</td>
                                             <td>{{banco.referencia}}</td>
                                             <td>{{banco.concepto}}</td>
@@ -354,6 +356,7 @@
                 <table id="bancoPunteoP" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
+                            <th>Fecha</th>
                             <th>Banco</th>
                             <th>Referencia</th>
                             <th>Concepto</th>
@@ -365,6 +368,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="banco in bancoPadrePun | filter:{aplicado:1}">
+                            <td>{{banco.fechaOperacion.split('T')[0]}}</td>
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
@@ -751,12 +755,15 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="unicontable in universoContable">
-                            <td> {{ unicontable.MOV_FECHOPE | date:'yyyy-MM-dd' }} </td>
+                            <td>
+                                {{ unicontable.MOV_FECHOPE.split('T')[0] }}
+                            </td>
+                            <!-- <td> {{ unicontable.MOV_FECHOPE | date:'yyyy-MM-dd' }} </td> -->
                             <td>{{ unicontable.MOV_TIPOPOL }}</td>
                             <td>{{ unicontable.MOV_CONSPOL }}</td>
                             <td>{{ unicontable.MOV_CONCEPTO }}</td>
-                            <td>{{ unicontable.cargo | currency}}</td>
                             <td>{{ unicontable.abono | currency}}</td>
+                            <td>{{ unicontable.cargo | currency}}</td>
                         </tr>
                         <tfoot>
                             <tr>
@@ -825,7 +832,11 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="uniBanco in universoBancario">
-                            <td> {{ uniBanco.fechaOperacion | date:'yyyy-MM-dd' }} </td>
+                            <td> 
+                                {{ uniBanco.fechaOperacion.split('T')[0] }}
+                                <!-- {{ uniBanco.fechaOperacion | date:'yyyy-MM-dd' }}  -->
+                            </td>
+                                
                             <td>{{ uniBanco.noCuenta }}</td>
                             <td>{{ uniBanco.referencia }}</td>
                             <td>{{ uniBanco.concepto }}</td>
