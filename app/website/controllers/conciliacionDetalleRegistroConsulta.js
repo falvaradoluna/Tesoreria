@@ -40,10 +40,8 @@ conciliacionDetalleRegistroConsulta.prototype.post_totalAbonoCargo = function (r
         { name: 'idUsuario', value: req.body.idUsuario, type: self.model.types.INT },
         { name: 'tipoReporte', value: req.body.tipoReporte, type: self.model.types.INT }
     ];
-    console.log( 'params', params );
+    
     this.model.query('SEL_TOTAL_ABONOCARGO_SP_H', params, function (error, result) {
-        console.log( 'result', result );
-        console.log( 'error', error );
         self.view.expositor(res, {
             error: error,
             result: result
@@ -56,15 +54,15 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function(req, res,
 
     var self = this;
 
-    var params = [{ name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+    var params = [
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
         { name: 'idEstatus', value: req.query.idEstatus, type: self.model.types.INT },
         { name: 'noCuenta', value: req.query.cuentaBancaria, type: self.model.types.STRING },
-        { name: 'fechaElaboracion', value: req.query.fElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: req.query.fCorte, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-
+    console.log('Parametros', params)
     this.model.queryAllRecordSet('[dbo].[SEL_TODO_BANCARIO_SP_H]', params, function(error, result) {
         
         self.view.expositor(res, {
@@ -103,9 +101,10 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoPunteo = function (req, r
     
     var params = [
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT },
+        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING }
     ];
-
+    
     this.model.queryAllRecordSet('[DBO].[SEL_PUNTEO_DETALLE_SP_H]', params, function (error, result) {
 
         self.view.expositor(res, {

@@ -62,7 +62,7 @@
         localStorage.removeItem('bancoPadre');
         variablesLocalStorage();
         $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.paramsHistory.HistoricoId);
-        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.paramsHistory.HistoricoId);
+        $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.paramsHistory.HistoricoId, $scope.busqueda.fechaElaboracion);
         $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.paramsHistory.HistoricoId);
         
         $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
@@ -139,8 +139,10 @@
     // INICIA Obtengo los padres del Banco punteado
     //****************************************************************************************************
     //Ing. Luis Antonio Garcia Perrusquia
-    $scope.getBancoPunteo = function (idempresa, idHistorico) {
-        conciliacionDetalleRegistroConsultaRepository.getBancoPunteo(idempresa, idHistorico).then(function (result) {
+    $scope.getBancoPunteo = function (idempresa, idHistorico, fechaElaboracion) {
+        
+        conciliacionDetalleRegistroConsultaRepository.getBancoPunteo(idempresa, idHistorico, fechaElaboracion)
+        .then(function (result) {
             
             $scope.bancoPadre = result.data[0];
             $scope.auxiliarPadre = result.data[1];
@@ -212,6 +214,8 @@
                 });
             };
 
+            $rootScope.BancoPunteadoAbonosTotales = 0;
+            $rootScope.BancoPunteadoCargosTotales = 0;
             //Suma de los que ya estan punteados BANCOS
             if ($rootScope.BancoPunteadoAbonosTotales == 0 && $rootScope.BancoPunteadoCargosTotales == 0) {
                 angular.forEach(result.data[0], function (value, key) {
@@ -221,6 +225,8 @@
                     }
                 });
             };
+            $rootScope.AuxiliarPunteadoAbonosTotales = 0;
+            $rootScope.AuxiliarPunteadoCargosTotales = 0;
             //Suma de los que ya estan punteados CARGOS
             if ($rootScope.AuxiliarPunteadoAbonosTotales == 0 && $rootScope.AuxiliarPunteadoCargosTotales == 0) {
                 angular.forEach(result.data[1], function (value, key) {

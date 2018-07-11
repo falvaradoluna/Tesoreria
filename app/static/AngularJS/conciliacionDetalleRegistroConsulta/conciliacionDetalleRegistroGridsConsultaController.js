@@ -43,7 +43,7 @@
         $scope.fechaElaboracion = $filter('date')(new Date($scope.fechaElaboracion), 'yyyy-MM-dd');
 
         variablesLocalStorage();
-        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.IdEmpresa, $scope.paramHistory.HistoricoId, $scope.fechaElaboracion);
+        $scope.getDepositosBancos($scope.busqueda.IdBanco, 1, $scope.busqueda.Cuenta, $scope.busqueda.IdEmpresa, $scope.paramHistory.HistoricoId, $scope.busqueda.fechaElaboracion);
         //LQMA comment 17082017
         //$scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, 1, $scope.busqueda.fechaElaboracion, $scope.busqueda.fechaCorte);
     };
@@ -146,12 +146,12 @@
     //******************Función para llenar el grid Depositos Bancos********************************
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion) {//LAGP 03052018
         if (idestatus == 1) { 
-            
+            console.log( 'fechaElaboracionDepositosBancos', fechaElaboracion );
             conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion).then(function(result) {
                 if (result.data.length >= 0) {
-                    console.log( 'resultBancos', result.data[0] );
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
+                    console.log('YO MERO', result.data[0]);
                      //Suma del total monetario, abonos
 
                     // angular.forEach($scope.depositosBancos, function(value, key) {
@@ -196,7 +196,7 @@
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                      //LQMA 17082017 add
-                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, $scope.fechaElaboracion, $scope.paramHistory.HistoricoId);
+                    $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.paramHistory.HistoricoId);
                 }
             });
         } else if (idestatus == 2) {
@@ -216,7 +216,6 @@
         conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico).then(function (result) {
 
             if (result.data[0].length != 0) {
-                console.log( 'auxiliarContable', result.data[0] );
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
                 //Suma del total monetario, abonos
