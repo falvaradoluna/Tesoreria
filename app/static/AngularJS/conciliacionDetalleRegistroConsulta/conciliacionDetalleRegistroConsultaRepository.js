@@ -129,13 +129,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },     
         //SEL_DEPOSITOSDPI_H
-        getBancoDPI: function(idempresa, cuentaBancaria, idHistorico) {
+        getBancoDPI: function(idempresa, cuentaBancaria, fechaElaboracion, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoDPI/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
                     cuentaBancaria: cuentaBancaria,
+                    fechaElaboracion: fechaElaboracion,
                     idHistorico: idHistorico
                 },
                 headers: {

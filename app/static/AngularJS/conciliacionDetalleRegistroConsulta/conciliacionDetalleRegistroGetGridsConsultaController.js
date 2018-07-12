@@ -63,7 +63,7 @@
         variablesLocalStorage();
         $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.paramsHistory.HistoricoId);
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.paramsHistory.HistoricoId, $scope.busqueda.fechaElaboracion);
-        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.paramsHistory.HistoricoId);
+        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.paramsHistory.HistoricoId, $scope.busqueda.fechaElaboracion);
         
         $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
@@ -249,8 +249,8 @@
 
     // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************
-    $scope.getBancoDPI = function (idempresa, cuentaBanco, idHistorico) {
-        conciliacionDetalleRegistroConsultaRepository.getBancoDPI(idempresa, cuentaBanco, idHistorico).then(function (result) {
+    $scope.getBancoDPI = function (idempresa, cuentaBanco, fechaElaboracion, idHistorico) {
+        conciliacionDetalleRegistroConsultaRepository.getBancoDPI(idempresa, cuentaBanco, fechaElaboracion, idHistorico).then(function (result) {
             $scope.bancoDPI = result.data;
             //Obtener la suma total de los registros
             angular.forEach($scope.bancoDPI, function (value, key) {

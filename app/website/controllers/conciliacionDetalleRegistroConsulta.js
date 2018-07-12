@@ -174,11 +174,13 @@ conciliacionDetalleRegistroConsulta.prototype.post_detallePunteo = function (req
 conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res, next) {
 
     var self = this;
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
+        { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
     ];
-    
+    console.log( 'ParamsDPI', params );
     this.model.query('SEL_DEPOSITOSDPI_H', params, function (error, result) {
         
         self.view.expositor(res, {
