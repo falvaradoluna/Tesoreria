@@ -480,7 +480,7 @@
                 <table id="bancoReferenciadoAbono" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>BancoCon</th>
+                            <th>Banco</th>
                             <th>Referencia</th>
                             <th>Fecha</th>
                             <th>Concepto</th>
@@ -492,7 +492,7 @@
                         <tr ng-repeat="banco in uniAbonoBan">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
-                            <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
+                            <td>{{banco.fechaOperacion.split('T')[0]}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
                             <td class="text-center">
@@ -538,7 +538,7 @@
                         <tr ng-repeat="banco in uniCargoBan">
                             <td>{{banco.banco}}</td>
                             <td>{{banco.referencia}}</td>
-                            <td>{{banco.fechaOperacion | date:'yyyy-MM-dd'}}</td>
+                            <td>{{banco.fechaOperacion.split('T')[0]}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.cargo > 0}">{{banco.cargo | currency}}</td>
                             <td class="text-center">
@@ -726,7 +726,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Fecha aqui</th>
+                            <th>Fecha</th>
                             <th>Tipo de Póliza</th>
                             <th># de Póliza</th>
                             <th>Concepto</th>
