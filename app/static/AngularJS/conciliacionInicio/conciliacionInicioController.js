@@ -20,6 +20,7 @@
     $scope.bancoNombre = '';
     $scope.difMonetaria = 0;
     $scope.mesActivo = undefined;
+    $scope.idMes = '';
     //***************************************************************
 
     //*****Variables para ocultar Depositos y Pagos referenciados
@@ -155,11 +156,12 @@
             idBanco: idBanco,
             cuentaBanco: noCuenta,
             fechaActual: date
-        }
-        console.log( 'a', paramsMes );
+        };
+        
         conciliacionInicioRepository.getUltimoMes( paramsMes ).then(function (result) {
-            console.log( 'resultMes', result );
+            $scope.idMes = '';
             if( result.data.length != 0 ){
+                $scope.idMes = result.data[0].mec_idMes;
                 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
                                     "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];  
                 if( result.data[0].mec_numMes < 10 ){
@@ -297,7 +299,8 @@
                                     "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
                                     "MesActivo": $scope.mesActivo,
                                     "PolizaPago": $scope.empresaActual.polizaPago,
-                                    "mensaje": result.data[0].mensaje
+                                    "mensaje": result.data[0].mensaje,
+                                    "idMes": $scope.idMes
                                 };
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 
@@ -359,7 +362,8 @@
                                 "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
                                 "MesActivo": $scope.mesActivo,
                                 "PolizaPago": $scope.empresaActual.polizaPago,
-                                "mensaje": result.data[0].mensaje
+                                "mensaje": result.data[0].mensaje,
+                                "idMes": $scope.idMes
                             };
                             localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                             $('#actualizarBD').modal('hide');
@@ -441,7 +445,8 @@
                                     "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
                                     "MesActivo": $scope.mesActivo,
                                     "PolizaPago": $scope.empresaActual.polizaPago,
-                                    "mensaje": result.data[0].mensaje
+                                    "mensaje": result.data[0].mensaje,
+                                    "idMes": $scope.idMes
                                 };
                                 localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                                 
@@ -503,7 +508,8 @@
                                 "DiferenciaMonetaria": $scope.empresaActual.diferenciaMonetaria,
                                 "MesActivo": $scope.mesActivo,
                                 "PolizaPago": $scope.empresaActual.polizaPago,
-                                "mensaje": result.data[0].mensaje
+                                "mensaje": result.data[0].mensaje,
+                                "idMes": $scope.idMes
                             };
                             localStorage.setItem('paramBusqueda', JSON.stringify($scope.paramBusqueda));
                             $('#actualizarBD').modal('hide');

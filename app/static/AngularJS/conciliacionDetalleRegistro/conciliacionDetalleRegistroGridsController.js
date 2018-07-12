@@ -1086,7 +1086,7 @@
         $scope.ocultarSave = true;
         $scope.save_seleccionados = JSON.parse(localStorage.getItem("seleccionados"));
         $scope.save_grupoHexadecimal = JSON.parse(localStorage.getItem("grupoHexadecimal"));
-
+        console.log( '$scope.busqueda-1', $scope.busqueda.idMes );
         $scope.savePunteoDetalle(0);
     }
 
@@ -1112,6 +1112,7 @@
             $scope.auxGrupoPunteo = 0;
             $scope.detallePunteoSave(auxCont, 0);
         }
+        console.log( '$scope.busqueda-2', $scope.busqueda.idMes );
     }
 
     $scope.detallePunteoSave = function (auxContPadre, auxCont) {
@@ -1119,6 +1120,7 @@
         if (auxCont >= ($scope.gruposPunteo.length)) {
             $scope.savePunteoDetalle(auxContPadre + 1);
         } else {
+            console.log( '$scope.busqueda-3', $scope.busqueda.idMes );
             var value = $scope.gruposPunteo[auxCont]
             var parametros = {
                 grupo: $scope.auxGrupoPunteo,
