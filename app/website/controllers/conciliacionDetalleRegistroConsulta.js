@@ -62,7 +62,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_depositos = function(req, res,
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
-    console.log('Parametros', params)
+    
     this.model.queryAllRecordSet('[dbo].[SEL_TODO_BANCARIO_SP_H]', params, function(error, result) {
         
         self.view.expositor(res, {
@@ -531,7 +531,6 @@ conciliacionDetalleRegistroConsulta.prototype.get_universoBancarioConsulta = fun
         { name: 'noCuenta', value: noCuenta, type: self.model.types.STRING },
         { name: 'cuentaContable', value: cuentaContable, type: self.model.types.STRING },
         { name: 'fechaElaboracion', value: fechaElaboracion, type: self.model.types.STRING },
-        { name: 'fechaCorte', value: fechaCorte, type: self.model.types.STRING },
         { name: 'polizaPago', value: polizaPago, type: self.model.types.STRING },
         { name: 'idBanco', value: idBanco, type: self.model.types.INT }
     ];

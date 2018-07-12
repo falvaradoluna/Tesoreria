@@ -146,12 +146,10 @@
     //******************Función para llenar el grid Depositos Bancos********************************
     $scope.getDepositosBancos = function(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion) {//LAGP 03052018
         if (idestatus == 1) { 
-            console.log( 'fechaElaboracionDepositosBancos', fechaElaboracion );
             conciliacionDetalleRegistroConsultaRepository.getDepositos(idBanco, idestatus, cuentaBancaria, IdEmpresa, idHistorico, fechaElaboracion).then(function(result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
-                    console.log('YO MERO', result.data[0]);
                      //Suma del total monetario, abonos
 
                     // angular.forEach($scope.depositosBancos, function(value, key) {

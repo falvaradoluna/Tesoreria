@@ -91,7 +91,6 @@
     };
 
     $scope.verDetallePunteoRefH = function (detallepunteo) {
-        console.log( 'verDetallePunteoRefH', detallepunteo )
         conciliacionDetalleRegistroConsultaRepository.detallePunteo(
             detallepunteo,
             JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
@@ -207,7 +206,6 @@
             if ($rootScope.AuxiliarPrePunteadoAbonosTotales == 0 && $rootScope.AuxiliarPrePunteadoCargosTotales == 0) {
                 angular.forEach(result.data[1], function (value, key) {
                     if (value.aplicado == 0) {
-                        console.log('value', value);
                         $rootScope.AuxiliarPrePunteadoAbonosTotales += value.abono;
                         $rootScope.AuxiliarPrePunteadoCargosTotales += value.cargo;
                     }
@@ -430,7 +428,6 @@
             $scope.paramsHistory.PolizaPago,
             $scope.paramsHistory.IdBanco )
         .then(function(result){
-            
             if (result.data.length != 0) {
                 if ($rootScope.universoTotalMovimientoBancarioCargo == 0 && $rootScope.universoTotalMovimientoBancarioAbono == 0) {
                     angular.forEach(result.data, function (value, key) {

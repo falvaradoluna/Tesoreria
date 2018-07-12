@@ -790,7 +790,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="uniBanco in universoBancario">
-                            <td> {{ uniBanco.fechaOperacion | date:'yyyy-MM-dd' }} </td>
+                            <td> {{ uniBanco.fechaOperacion.split('T')[0] }} </td>
                             <td>{{ uniBanco.noCuenta }}</td>
                             <td>{{ uniBanco.referencia }}</td>
                             <td>{{ uniBanco.concepto }}</td>
