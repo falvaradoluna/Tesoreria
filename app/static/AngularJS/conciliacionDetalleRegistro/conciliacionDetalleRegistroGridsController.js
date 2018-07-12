@@ -1128,6 +1128,7 @@
                 idAbono: value.idAbono,
                 tipo: value.tipo,
                 usuario: value.usuario,
+                idMes: $scope.busqueda.idMes
             }
             filtrosRepository.savePunteado(parametros).then(function (result) {
                 var resultado = result.data[0];
