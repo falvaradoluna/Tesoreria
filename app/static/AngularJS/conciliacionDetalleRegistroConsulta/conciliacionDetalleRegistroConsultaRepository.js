@@ -86,8 +86,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
                     cuentaContable: cuentaContable,  
-                    fechaElaboracion: fechaElaboracion, //LAGP 03052018  
-                    idHistorico: idHistorico //LQMA 21042018                
+                    fechaElaboracion: fechaElaboracion,
+                    idHistorico: idHistorico               
                 },
                 headers: {
                     'Content-Type': 'application/json'

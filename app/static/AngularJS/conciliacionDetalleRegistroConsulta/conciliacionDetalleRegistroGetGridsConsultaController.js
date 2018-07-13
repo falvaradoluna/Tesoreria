@@ -178,10 +178,7 @@
                     $scope.contableReferenciadosAbonosTotales += valueCon.abono
                 }
             });
-            console.log( '$scope.uniCargoCon', $scope.uniCargoCon );
-            console.log( '$scope.uniAbonoCon', $scope.uniAbonoCon );
-            console.log( '$scope.uniAbonoBan', $scope.uniAbonoBan );
-            console.log( '$scope.uniCargoBan', $scope.uniCargoBan );
+            
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
                 return value.idPAdre == 3;
             });

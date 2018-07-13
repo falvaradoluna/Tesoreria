@@ -66,8 +66,6 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
     //****************************************************************************************************
 
     $scope.verDetallePunteoC = function (detallepunteo, opcion) {
-        console.log('grupoConsulta', detallepunteo);
-        //console.log( 'HIstorico', JSON.parse(localStorage.getItem('paramBusqueda')) );
         conciliacionDetalleRegistroConsultaRepository.detallePunteo(
             detallepunteo, 
             JSON.parse(localStorage.getItem('paramBusqueda')).HistoricoId
@@ -75,7 +73,6 @@ registrationModule.controller('conciliacionDetalleRegistroConsultaController', f
             $('#punteoDetalle').modal('show');
             $scope.detalleBanco = result.data[0];
             $scope.detalleContable = result.data[1];
-            console.log( 'result', result.data );
         });
     };
     
