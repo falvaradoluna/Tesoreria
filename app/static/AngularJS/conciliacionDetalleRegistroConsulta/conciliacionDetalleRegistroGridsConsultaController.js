@@ -110,33 +110,25 @@
         showGridFooter: true,
         enableFiltering: true,
         rowTemplate: '<div> <div ng-style="row.entity.color != \'\' ? {\'background-color\': row.entity.color } : {}" ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>'
-         //LQMA 21082017
-        //,rowTemplate : '<div ng-class="{\'myEstilo1\':row.isSelected,\'myEstilo2\': !row.isSelected}"> <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.uid" class="ui-grid-cell" ui-grid-cell></div></div>'
+        
     };
     $scope.gridDepositosBancos.columnDefs = [
         { name: 'concepto', displayName: 'Concepto', width: 300 },
-        { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{ row.entity.fechaOperacion.substr(0, 10) }}</span></div>'},//, cellFilter: 'date:\'yyyy-MM-dd\'' , cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion  | date : "yyyy-MM-dd"}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{row.entity.fechaOperacion | date : "yyyy-MM-dd"}}</span></div>'},//LQMA 29 //, cellFilter: 'date:\'dd-MM-yyyy\''//},
+        { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{ row.entity.fechaOperacion.substr(0, 10) }}</span></div>' },
         { name: 'referencia', displayName: 'Referencia', width: 200 },
-        //LQMA 07092017                  
-        //{ name: 'referenciaAuxiliar', displayName: 'Referencia Auxiliar', width: 300 },
         { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
         { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
         { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
-        //LQMA add
-        { name: 'indexPrePunteo', displayName: 'Index', width: 0, show:false },
-        { name: 'color', field: 'color', displayName: 'Color', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100, visible: false 
-                ,filter: {  //LQMA 05092017    
-                                       //term: '#c9dde1',
-                                       noTerm: true,                                
-                                        condition: function(searchTerm, cellValue) {                                                                    
-                                                                    //return ($scope.colorXXX.indexOf(cellValue) > -1)?cellValue == cellValue:(cellValue == "#d420c2")?cellValue == cellValue: cellValue == 'xxxxxx'; 
-                                                                    //return (($scope.colorXXX.indexOf(cellValue) > -1) || (cellValue == ''))?cellValue == cellValue:cellValue == 'xxxxxx'; 
-                                                                    return ($scope.arrayColors.indexOf(cellValue) > -1) //(($scope.colorXXX.indexOf(searchTerm) > -1))?cellValue == cellValue:(cellValue == '...')?cellValue == cellValue:cellValue == 'xxxxxx'; 
-                                                                    //return (($scope.colorXXX.indexOf(searchTerm) > -1))?cellValue == searchTerm:cellValue == 'xxxxxx'; 
-                                                                    } 
-                                     
-                                }
-                              //filter: { term: ($scope.colorXXX.indexOf('') > -1)?term:'ooooooo' }                           
+        { name: 'indexPrePunteo', displayName: 'Index', width: 0, show: false },
+        {
+            name: 'color', field: 'color', displayName: 'Color', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100, visible: false
+            , filter: { 
+                noTerm: true,
+                condition: function (searchTerm, cellValue) {
+                    return ($scope.arrayColors.indexOf(cellValue) > -1);
+                }
+
+            }
         }
     ];
     $scope.gridDepositosBancos.multiSelect = true;
@@ -150,6 +142,7 @@
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
+                    
                      //Suma del total monetario, abonos
 
                     // angular.forEach($scope.depositosBancos, function(value, key) {
@@ -193,7 +186,6 @@
 
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
-                     //LQMA 17082017 add
                     $scope.getAuxiliarContable($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.CuentaContable, $scope.busqueda.fechaElaboracion, $scope.paramHistory.HistoricoId);
                 }
             });
@@ -212,12 +204,11 @@
     $scope.getAuxiliarContable = function (idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico) {
         
         conciliacionDetalleRegistroConsultaRepository.getAuxiliar(idEmpresa, idBanco, cuentaContable, fechaElaboracion, idHistorico).then(function (result) {
-
-            if (result.data[0].length != 0) {
+            if (result.data[0].length >= 0) {
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
+                
                 //Suma del total monetario, abonos
-
                 angular.forEach($scope.auxiliarContable, function (value, key) {
                     $scope.totalAbonoContable += value.abono;
                 });

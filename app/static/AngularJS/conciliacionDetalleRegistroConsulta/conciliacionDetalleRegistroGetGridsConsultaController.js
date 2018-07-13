@@ -63,8 +63,7 @@
         variablesLocalStorage();
         $scope.getAuxiliarPunteo($scope.busqueda.IdEmpresa, $scope.busqueda.CuentaContable, $scope.paramsHistory.HistoricoId);
         $scope.getBancoPunteo($scope.busqueda.IdEmpresa, $scope.paramsHistory.HistoricoId, $scope.busqueda.fechaElaboracion);
-        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.paramsHistory.HistoricoId, $scope.busqueda.fechaElaboracion);
-        
+        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta, $scope.busqueda.fechaElaboracion, $scope.paramsHistory.HistoricoId);
         $scope.contablesReferenciados($scope.polizaPago, $scope.busqueda.Cuenta);
         //Elimino la información almacenada de consultas anteriores, limpio las variables locales para estos elementos
         localStorage.removeItem('infoGridAuxiliar');
@@ -178,10 +177,7 @@
                     $scope.contableReferenciadosAbonosTotales += valueCon.abono
                 }
             });
-            console.log( '$scope.uniCargoCon', $scope.uniCargoCon );
-            console.log( '$scope.uniAbonoCon', $scope.uniAbonoCon );
-            console.log( '$scope.uniAbonoBan', $scope.uniAbonoBan );
-            console.log( '$scope.uniCargoBan', $scope.uniCargoBan );
+            
             $scope.BancoPunteado = $filter('filter')($scope.bancoPadre, function (value) {
                 return value.idPAdre == 3;
             });

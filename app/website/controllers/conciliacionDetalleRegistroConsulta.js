@@ -150,27 +150,6 @@ conciliacionDetalleRegistroConsulta.prototype.post_detallePunteo = function (req
     });
 };
 
-// conciliacionDetalleRegistroConsulta.prototype.post_detallePunteo = function (req, res, next) {
-
-//     var self = this;
-
-//     var params = [{ name: 'idDatoBusqueda', value: req.body.idPunteoAuxiliarBanco, type: self.model.types.INT },
-//         { name: 'idBanco', value: req.body.idBanco, type: self.model.types.INT },
-//         { name: 'noCuenta', value: req.body.noCuenta, type: self.model.types.INT },
-//         { name: 'cuentaContable', value: req.body.cuentaContable, type: self.model.types.STRING },
-//         { name: 'accionBusqueda', value: req.body.accionBusqueda, type: self.model.types.INT },
-//         { name: 'idHistorico', value: req.body.idHistorico, type: self.model.types.INT }
-//     ];    
-
-//     this.model.queryAllRecordSet('SEL_PUNTEO_AUXILIAR_DEPOSITO_DETALLES_SP_H', params, function (error, result) {
-//         self.view.expositor(res, {
-//             error: error,
-//             result: result
-//         });
-//     });
-// };
-
-
 conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res, next) {
 
     var self = this;
@@ -178,7 +157,7 @@ conciliacionDetalleRegistroConsulta.prototype.get_bancoDPI = function (req, res,
         { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
         { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING },
         { name: 'fechaElaboracion', value: req.query.fechaElaboracion, type: self.model.types.STRING },
-        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.STRING }
+        { name: 'idHistorico', value: req.query.idHistorico, type: self.model.types.INT }
     ];
     console.log( 'ParamsDPI', params );
     this.model.query('SEL_DEPOSITOSDPI_H', params, function (error, result) {
