@@ -142,7 +142,7 @@
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
-                    console.log( '$scope.depositosBancos', $scope.depositosBancos );
+                    
                      //Suma del total monetario, abonos
 
                     // angular.forEach($scope.depositosBancos, function(value, key) {
@@ -207,7 +207,7 @@
             if (result.data[0].length >= 0) {
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
-                console.log( '$scope.auxiliarContable', $scope.auxiliarContable );
+                
                 //Suma del total monetario, abonos
                 angular.forEach($scope.auxiliarContable, function (value, key) {
                     $scope.totalAbonoContable += value.abono;
