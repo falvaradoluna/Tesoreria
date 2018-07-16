@@ -57,6 +57,7 @@
                 //XLSX from js-xlsx library , which I will add in page view page
                 var workbook = XLSX.read(data, { type: 'binary' });
                 var excelObject = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+                //console.log( 'ObjectExcle', excelObject );
                 $scope.totalIns = excelObject.length;
                 $scope.nombreExcel = file.name;
                 if ($scope.count == excelObject.length) {
@@ -66,10 +67,20 @@
                             swal('LISTO', 'Se cargo con éxito', 'success');
                         }, 1500);
                     } else {
-                        console.log( 'grupoIns', $scope.grupoIns );
                         excelExportRepository.deleteDataLayout( $scope.grupoIns )
                             .then(function (result) {
+                                console.log( 'resultdata', result.data );
                                 if (result.data[0].success == 1) {
+                                    $('#errorTable').DataTable().destroy();
+                                    setTimeout(function () {
+                                        $('#errorTable').DataTable({
+                                            destroy: true,
+                                            "responsive": true,
+                                            searching: false,
+                                            paging: true,
+                                            autoFill: true
+                                        });
+                                    }, 1000);
                                     $('#loading').modal('hide');
                                     $("#errorInsert").modal("show");
                                 } 
@@ -89,11 +100,12 @@
                         excelObject[$scope.count].Referencia,
                         excelObject[$scope.count].DescripcionAmpliada,
                         excelObject[$scope.count].TipoMovimiento,
-                        excelObject[$scope.count].Cargo,
-                        excelObject[$scope.count].Abono,
+                        excelObject[$scope.count].Cargo === undefined ? 0 : excelObject[$scope.count].Cargo,
+                        excelObject[$scope.count].Abono === undefined ? 0 : excelObject[$scope.count].Abono,
                         $scope.grupoIns
                     )
                         .then(function (result) {
+                            //console.log( 'resultCorrecto', result );
                             if (result.data[0].success == 1) {
                                 $scope.grupoIns = result.data[0].grupo;
                                 $scope.countInsert = $scope.countInsert + 1;
@@ -104,6 +116,7 @@
                             $scope.count = $scope.count + 1;
                             $scope.newParseExcelDataAndSave();
                         }, function (error) {
+                            console.log( 'error', error );
                             swal('ALTO', error, 'warning');
                             $('#loading').modal('hide');
                         });
