@@ -194,16 +194,9 @@
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                     if ($rootScope.refreshInt == 1) {
                         setTimeout(function() {
-                            console.log('Antes del apiBancos');
                             $rootScope.gridApiBancos.grid.api.core.clearAllFilters();
                             $rootScope.gridApiBancos.grid.modifyRows($scope.depositosBancos);
                             $rootScope.gridApiBancos.core.refresh();
-                            // $rootScope.gridApiBancos.grid.refreshRows();
-                            // $rootScope.gridApiBancos.core.refresh();
-                            // $rootScope.gridApiBancos.grid.notifyDataChange(uiGridConstants.dataChange.ALL);
-                            // $rootScope.gridApiBancos.grid.refreshCanvas();
-                            // $rootScope.gridApiBancos.core.queueGridRefresh();
-                            console.log('gridApiBancos', $rootScope.gridApiBancos);
                         }, 500);
                     }
 
@@ -230,7 +223,7 @@
             if (result.data[0].length != 0) {
                 $scope.auxiliarContable = result.data[0];
                 $scope.gridAuxiliarContable.data = result.data[0];
-                console.log('$scope.gridAuxiliarContable.data', $scope.gridAuxiliarContable.data);
+                
                 //Suma del total monetario, abonos
                 $scope.totalAbonoContable = 0;
                 $scope.totalCargoContable = 0;
@@ -243,13 +236,10 @@
                 });
                 localStorage.setItem('idRelationOfContableRows', JSON.stringify(result.data[1]));
                 if ($rootScope.refreshInt == 1) {
-                    console.log('En el refresh CONTABLE');
                     setTimeout(function() {
-                        console.log('Antes del apiAuxiliar');
                         $rootScope.gridApiAuxiliar.grid.api.core.clearAllFilters();
                         $rootScope.gridApiAuxiliar.grid.modifyRows($scope.auxiliarContable);
                         $rootScope.gridApiAuxiliar.core.refresh();
-                        console.log('gridApiAuxiliar', $rootScope.gridApiAuxiliar);
                     }, 500);
                 }
             };
