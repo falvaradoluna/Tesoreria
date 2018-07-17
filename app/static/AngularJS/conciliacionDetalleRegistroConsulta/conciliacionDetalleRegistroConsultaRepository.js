@@ -86,8 +86,8 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
                     idEmpresa: idEmpresa,
                     idBanco: idBanco,
                     cuentaContable: cuentaContable,  
-                    fechaElaboracion: fechaElaboracion, //LAGP 03052018  
-                    idHistorico: idHistorico //LQMA 21042018                
+                    fechaElaboracion: fechaElaboracion,
+                    idHistorico: idHistorico               
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -96,13 +96,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },
         //SEL_PUNTEO_DEPOSITOS_PADRES_SP_H
-        getBancoPunteo: function(idempresa, idHistorico) {
+        getBancoPunteo: function(idempresa, idHistorico, fechaElaboracion) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoPunteo/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
-                    idHistorico: idHistorico
+                    idHistorico: idHistorico,
+                    fechaElaboracion: fechaElaboracion
                 },
                 headers: {
                     'Content-Type': 'application/json'
@@ -128,13 +129,14 @@ registrationModule.factory('conciliacionDetalleRegistroConsultaRepository', func
             });
         },     
         //SEL_DEPOSITOSDPI_H
-        getBancoDPI: function(idempresa, cuentaBancaria, idHistorico) {
+        getBancoDPI: function(idempresa, cuentaBancaria, fechaElaboracion, idHistorico) {
             return $http({
                 url: conciliacionDetalleRegistroConsultaURL + 'bancoDPI/',
                 method: "GET",
                 params: {
                     idEmpresa: idempresa,
                     cuentaBancaria: cuentaBancaria,
+                    fechaElaboracion: fechaElaboracion,
                     idHistorico: idHistorico
                 },
                 headers: {

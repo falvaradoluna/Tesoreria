@@ -455,6 +455,7 @@
                         });
                     }
                     $scope.universoBancario = result.data;
+                    console.log( "Este es el universoBancario" );
 
                     $scope.tablaSearch('contableUniBancarioCargo');
                     $('#loading').modal('hide');
