@@ -233,7 +233,7 @@
                 });
             };
 
-            // $scope.tabla('bancoPunteo');
+            $scope.tabla('bancoPunteo');
             $scope.tabla('contableRefAbonos');
             $scope.tabla('contableRefCargos');
             $scope.tabla('bancoReferenciadoAbono');
