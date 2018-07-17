@@ -447,7 +447,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="banco in bancoDPI">
-                            <td>{{banco.banco}}</td>
+                            <td>{{banco.bancoNombre}}</td>
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
@@ -716,7 +716,7 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="unicontable in universoContable">
-                            <td> {{ unicontable.MOV_FECHOPE | date:'yyyy-MM-dd' }} </td>
+                            <td> {{ unicontable.MOV_FECHOPE.split('T')[0] }} </td>
                             <td>{{ unicontable.MOV_TIPOPOL }}</td>
                             <td>{{ unicontable.MOV_CONSPOL }}</td>
                             <td>{{ unicontable.MOV_CONCEPTO }}</td>
