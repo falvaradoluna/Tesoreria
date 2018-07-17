@@ -175,8 +175,6 @@
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
                     $scope.gridDepositosBancos.data = result.data[0];
-                    console.log('$scope.gridDepositosBancos.data', $scope.gridDepositosBancos.data);
-                    // if( $scope.totalCargoBancario == 0 && $scope.totalAbonoBancario == 0 ){
                     $scope.totalCargoBancario = 0;
                     $scope.totalAbonoBancario = 0;
                     angular.forEach($scope.depositosBancos, function(value, key) {
@@ -188,8 +186,6 @@
                             $scope.totalAbonoBancario += value.importe;
                         }
                     });
-                    // };
-
 
                     localStorage.setItem('idRelationOfBancoRows', JSON.stringify(result.data[1]));
                     if ($rootScope.refreshInt == 1) {
@@ -1090,7 +1086,6 @@
         $scope.ocultarSave = true;
         $scope.save_seleccionados = JSON.parse(localStorage.getItem("seleccionados"));
         $scope.save_grupoHexadecimal = JSON.parse(localStorage.getItem("grupoHexadecimal"));
-        console.log( '$scope.busqueda-1', $scope.busqueda.idMes );
         $scope.savePunteoDetalle(0);
     }
 
@@ -1116,7 +1111,6 @@
             $scope.auxGrupoPunteo = 0;
             $scope.detallePunteoSave(auxCont, 0);
         }
-        console.log( '$scope.busqueda-2', $scope.busqueda.idMes );
     }
 
     $scope.detallePunteoSave = function(auxContPadre, auxCont) {
@@ -1124,7 +1118,6 @@
         if (auxCont >= ($scope.gruposPunteo.length)) {
             $scope.savePunteoDetalle(auxContPadre + 1);
         } else {
-            console.log( '$scope.busqueda-3', $scope.busqueda.idMes );
             var value = $scope.gruposPunteo[auxCont]
             var parametros = {
                 grupo: $scope.auxGrupoPunteo,
