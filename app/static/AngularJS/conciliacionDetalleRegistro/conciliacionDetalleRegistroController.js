@@ -311,6 +311,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.grupoDPI = 0;
     $scope.alertaEliminaDPI = function(dpi) {
         $scope.grupoDPI = dpi;
+        console.log( 'dpi', dpi );
         $('#alertaEliminacionDPI').modal('show');
     };
 

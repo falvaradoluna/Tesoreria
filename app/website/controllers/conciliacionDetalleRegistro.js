@@ -120,13 +120,11 @@ conciliacionDetalleRegistro.prototype.get_bancoDPI = function(req, res, next) {
 
     var self = this;
 
-
-    var params = [{ name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
-        { name: 'cuentaBancaria', value: req.query.cuentaBancaria, type: self.model.types.STRING }
+    var params = [
+        { name: 'idMes', value: req.query.idMes, type: self.model.types.INT }
     ];
-
+    console.log( 'paramsDPI', params );
     this.model.query('SEL_DEPOSITOSDPI', params, function(error, result) {
-
 
         self.view.expositor(res, {
             error: error,
@@ -134,8 +132,6 @@ conciliacionDetalleRegistro.prototype.get_bancoDPI = function(req, res, next) {
         });
     });
 };
-
-
 
 conciliacionDetalleRegistro.prototype.post_eliminarPunteo = function(req, res, next) {
 

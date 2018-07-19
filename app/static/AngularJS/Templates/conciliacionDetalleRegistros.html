@@ -465,11 +465,12 @@
                 <table id="bancodpi" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Banco</th>
+                            <th>Fecha Creacion</th>
                             <th>Referencia</th>
                             <th>Concepto</th>
                             <th>Abono</th>
-                            <!-- <th width="70">&nbsp;</th> -->
+                            <th>Estatus</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -479,11 +480,12 @@
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
                             <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
-                            <!-- <td> -->
-                                <!-- <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
+                            <td>{{banco.concepto}}</td>
+                            <td>
+                                <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i> Quitar DPI
-                                </button> -->
-                            <!-- </td> -->
+                                </button>
+                            </td>
                             <td>
                                 <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,2)">
                                     <i class="ti-eye"></i>

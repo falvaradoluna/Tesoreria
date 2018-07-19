@@ -75,7 +75,7 @@
     };
 
     $rootScope.LlenaDPI = function() {
-        $scope.getBancoDPI($scope.busqueda.IdEmpresa, $scope.busqueda.Cuenta);
+        $scope.getBancoDPI($scope.busqueda.idMes);
     }
     $rootScope.Llenatablas = function() {
         $scope.getTotalUniverso();
@@ -218,10 +218,11 @@
 
     // INICIA Obtengo los padres del Banco no identificado
     //****************************************************************************************************
-    $scope.getBancoDPI = function(idempresa, cuentaBanco) {
+    $scope.getBancoDPI = function(idMes) {
         $('#loading').modal('show');
-        conciliacionDetalleRegistroRepository.getBancoDPI(idempresa, cuentaBanco).then(function(result) {
+        conciliacionDetalleRegistroRepository.getBancoDPI(idMes).then(function(result) {
             $scope.bancoDPI = result.data;
+            console.log( '$scope.bancoDPI', $scope.bancoDPI );
             //Obtener la suma total de los registros
             angular.forEach($scope.bancoDPI, function(value, key) {
                 $scope.bancoDPITotal += value.abono;

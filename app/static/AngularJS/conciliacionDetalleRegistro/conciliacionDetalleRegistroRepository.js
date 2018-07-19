@@ -129,13 +129,12 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getBancoDPI: function(idempresa, cuentaBancaria) {
+        getBancoDPI: function(idMes) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'bancoDPI/',
                 method: "GET",
                 params: {
-                    idEmpresa: idempresa,
-                    cuentaBancaria: cuentaBancaria
+                    idMes: idMes
                 },
                 headers: {
                     'Content-Type': 'application/json'
