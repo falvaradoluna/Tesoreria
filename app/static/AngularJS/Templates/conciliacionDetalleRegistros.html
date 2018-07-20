@@ -480,12 +480,12 @@
                         <tr ng-repeat="banco in bancoDPI">
                             <td>{{banco.referencia}}</td>
                             <td>{{banco.concepto}}</td>
-                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.importe | currency}}</td>
+                            <td class="text-right" ng-class="{'text-success text-semibold' : banco.abono > 0}">{{banco.abono | currency}}</td>
                             <td>{{banco.fechaRegistro}}</td>
                             <td>{{banco.mesLetra}}</td>
                             <td width="7%;"><span class="label label-{{banco.class}}">{{banco.label}}</span></td>
                             <td>
-                                <button ng-hide="banco.idCancelado != 0" class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
+                                <button ng-hide="banco.idCancelaDPI != 0" class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i> Quitar DPI
                                 </button>
                             </td>
@@ -495,7 +495,7 @@
                                 </button>
                             </td>
                             <td>
-                                <button ng-hide="banco.idCancelado == 0" class="btn btn-info btn-xs" ng-click="polizaCancelada(banco.MOV_TIPOPOL, banco.anio, banco.mes, banco.MOV_CONSPOL, banco.idEmpresa )">
+                                <button ng-hide="banco.idCancelaDPI == 0" class="btn btn-info btn-xs" ng-click="polizaCancelada(banco.MOV_TIPOPOL, banco.anio, banco.mes, banco.MOV_CONSPOL, banco.idEmpresa )">
                                     <i class="ti-eye"> &nbsp; Poliza Cacelada</i>
                                 </button>
                             </td>
@@ -1381,7 +1381,7 @@
                             </span>
                         <span class="pull-right">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <span>
-                                <button class="btn btn-success pull-right" ng-click="cancelaDPI()">
+                                <button class="btn btn-success pull-right" ng-click="cancelaDPI()" ng-disabled="bloqueoDPI">
                                     <i class="ti-check"></i> Aceptar</button>
                             </span>
                         </span>

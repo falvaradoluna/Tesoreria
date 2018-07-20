@@ -24,6 +24,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     $scope.difMonetaria = 0;
     $scope.mesActivo = false;
     $scope.guardaDisable = false;
+    $scope.bloqueoDPI = false;
 
     //**************Variables para paginación**********************************
     $scope.currentPage = 0;
@@ -370,6 +371,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     }
 
     $scope.cancelaDPI = function() {
+        $scope.bloqueoDPI = true;
         conciliacionDetalleRegistroRepository.getCancelaDPI($scope.grupoDPI, $rootScope.userData.idUsuario).then(function(result) {
             location.reload();
         });
