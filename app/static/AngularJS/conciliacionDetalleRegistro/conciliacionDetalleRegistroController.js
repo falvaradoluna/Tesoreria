@@ -175,9 +175,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
         }
         console.log('Entre a busqueda por numero de factura', $scope.folio + '/' + $scope.empresa + '/' + $scope.sucursal);
         conciliacionDetalleRegistroRepository.getArchivoPdf(param).then(function(result) {
-            console.log(result);
+            
             arregloBytes = result.data.arrayBits;
-            console.log(arregloBytes, 'Solo los arreglos');
+            
             if (arregloBytes.length == 0) {
                 $rootScope.NohayPdf = 1;
                 $rootScope.pdf = [];
@@ -188,12 +188,9 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
                 
                 $('#polizaCancelada').modal('show');
             }
-            //$scope.pdf[key] = URL.createObjectURL(utils.b64toBlob(value, "application/pdf"));
-            // $('#reciboCaja').modal('show');
-
 
             setTimeout(function() {
-                $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").html('');
+                $("#pdfArchivo").html('');
                 $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").appendTo('#pdfArchivo');
 
             }, 100);
