@@ -129,27 +129,45 @@
                 angular.forEach($scope.DPIdata, function (value, key) {
                     if (value.cargo == 0) {
                         conciliacionDetalleRegistroRepository.insertDepositosDPI(value.idBmer, value.idBanco, $scope.busqueda.IdEmpresa, idUsuario).then(function (result) {
+                            console.log( result );
+                            if( result.data[0].success == 1 ){
+                                swal(
+                                    'Listo',
+                                    'Los registros seleccionados se han modificado correctamente',
+                                    'success'
+                                );
+                                setTimeout(function(){
+                                    $scope.refreshGrids();
+                                },2000); 
+                                
+                            }else{
+                                swal(
+                                    'Alto',
+                                    result.data[0].msg,
+                                    'warning'
+                                );
+                            }
                         })
                         contRegBancos += 1;
                     } else {
                         contRegAuxiliar += 1;
                     }
                 });
-                if (contRegBancos > 0) {
-                    $scope.refreshGrids();
-                    swal(
-                        'Listo',
-                        'Los registros seleccionados se han modificado correctamente',
-                        'success'
-                    );
-                }
-                if (contRegAuxiliar > 0) {
-                    swal(
-                        'Listo',
-                        'No es posible enviar cargos bancarios a DPI, por favor verifique su selección',
-                        'success'
-                    );
-                }
+                // if (contRegBancos > 0) {
+                //     $scope.refreshGrids();
+                //     swal(
+                //         'Listo',
+                //         'Los registros seleccionados se han modificado correctamente',
+                //         'success'
+                //     );
+                // }
+                // if (contRegAuxiliar > 0) {
+                //     swal(
+                //         'Listo',
+                //         'No es posible enviar cargos bancarios a DPI, por favor verifique su selección',
+                //         'success'
+                //     );
+                // }
 
             }
         }
