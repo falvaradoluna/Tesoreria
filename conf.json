@@ -5,5 +5,5 @@
     "SQL_server": "192.168.20.29",
     "SQL_database": "TesoreriaPruebas",
     "SQL_connectionTimeout": 60000,
-    "WSDetallePoliza": "http://192.168.20.89:8091/WS_Gen_Pdf.asmx?WSDL"
+    "WSDetallePoliza": "http://192.168.20.92:8091/WS_Gen_Pdf.asmx?WSDL"
 }
