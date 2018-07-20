@@ -81,6 +81,8 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
 
     $scope.selectTableRow = function(index, storeId) {
+        console.log( 'index', index );
+        console.log( 'storeId', storeId );
         if (typeof $scope.dayDataCollapse === 'undefined') {
             $scope.dayDataCollapseFn();
         }
@@ -154,6 +156,53 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
 
     };
+
+    $scope.polizaCancelada = function(tipo, anio, mes, folio, idEmpresa){
+        
+        var folioEmpresaSucursal = ''
+        var arregloBytes = [];
+        $rootScope.pdf = undefined;
+        $scope.contador = 1;
+
+        var param = {
+
+            tipo: tipo,
+            anio: anio,
+            mes: mes,
+            folio: folio,
+            idEmpresa: idEmpresa
+        }
+        console.log('Entre a busqueda por numero de factura', $scope.folio + '/' + $scope.empresa + '/' + $scope.sucursal);
+        conciliacionDetalleRegistroRepository.getArchivoPdf(param).then(function(result) {
+            console.log(result);
+            arregloBytes = result.data.arrayBits;
+            console.log(arregloBytes, 'Solo los arreglos');
+            if (arregloBytes.length == 0) {
+                $rootScope.NohayPdf = 1;
+                $rootScope.pdf = [];
+            } else {
+                
+                $rootScope.NohayPdf = undefined;
+                $rootScope.pdf = URL.createObjectURL(utils.b64toBlob(arregloBytes, "application/pdf"));
+                
+                $('#polizaCancelada').modal('show');
+            }
+            //$scope.pdf[key] = URL.createObjectURL(utils.b64toBlob(value, "application/pdf"));
+            // $('#reciboCaja').modal('show');
+
+
+            setTimeout(function() {
+
+                $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").appendTo('#pdfArchivo');
+
+            }, 100);
+            $('#loading').modal('hide');
+
+
+            console.log($scope.pdf, 'Soy el arreglo ')
+
+        });
+    }
     $scope.verDetallePunteo = function(detallepunteo, opcion) {
         $rootScope.NohayPdf = undefined;
         conciliacionDetalleRegistroRepository.detallePunteo(detallepunteo).then(function(result) {

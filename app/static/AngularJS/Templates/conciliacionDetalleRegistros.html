@@ -473,6 +473,7 @@
                             <th>Estatus</th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -484,13 +485,18 @@
                             <td>{{banco.mesLetra}}</td>
                             <td width="7%;"><span class="label label-{{banco.class}}">{{banco.label}}</span></td>
                             <td>
-                                <button class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
+                                <button ng-hide="banco.idCancelado != 0" class="btn btn-danger btn-xs" ng-click="alertaEliminaDPI(banco.grupo,2)" ng-show="mesActivo">
                                     <i class="demo-pli-cross"></i> Quitar DPI
                                 </button>
                             </td>
                             <td>
                                 <button class="btn btn-info btn-xs" ng-click="verDetallePunteo(banco.grupo,2)">
-                                    <i class="ti-eye"></i>
+                                    <i class="ti-eye">&nbsp; Detalle Punteo</i>
+                                </button>
+                            </td>
+                            <td>
+                                <button ng-hide="banco.idCancelado == 0" class="btn btn-info btn-xs" ng-click="polizaCancelada(banco.MOV_TIPOPOL, banco.anio, banco.mes, banco.MOV_CONSPOL, banco.idEmpresa )">
+                                    <i class="ti-eye"> &nbsp; Poliza Cacelada</i>
                                 </button>
                             </td>
                         </tr>
@@ -1126,6 +1132,40 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!--===================================================-->
+<!--End Modal para colocar el numero del punteo-->
+
+<!--Modal para colocar el numero del punteo-->
+<!--===================================================-->
+<div class="modal fade" id="polizaCancelada" role="dialog" tabindex="-1" aria-labelledby="demo-default-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header label-mint">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="pci-cross pci-circle text-white"></i>
+                </button>
+                <h4 class="modal-title text-white">Poliza Cancelada</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div id="pdfArchivo" ng-show="pdf!=undefined">
+
+                    </div>
+                    <div ng-show="NohayPdf!=undefined">
+                        <div class="alert alert-danger" role="alert" style="top: -400px;">
+                            El archivo de la poliza no existe fisicamente.!
+                        </div>
+                    </div>
+                    <div class="spinner" ng-show="pdf===undefined" style="background-color: black;height: 60px;width: 60px; opacity: .7 important;">
+                        <div class="cube1"></div>
+                        <div class="cube2"></div>
+                    </div>
+                    <!-- </div> -->
+                </div>
             </div>
         </div>
     </div>
