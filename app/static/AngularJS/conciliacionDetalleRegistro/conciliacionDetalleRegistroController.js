@@ -193,7 +193,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
 
 
             setTimeout(function() {
-
+                $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").html('');
                 $("<object class='filesInvoce' data='" + $scope.pdf + "' width='100%' height='500px' >").appendTo('#pdfArchivo');
 
             }, 100);
