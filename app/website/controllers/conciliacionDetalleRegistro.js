@@ -600,7 +600,8 @@ conciliacionDetalleRegistro.prototype.post_cancelaDPI = function(req, res, next)
     var self = this;
 
     var params = [
-        { name: 'rpun_grupoPunteo', value: req.body.grupo, type: self.model.types.INT }
+        { name: 'rpun_grupoPunteo', value: req.body.grupo, type: self.model.types.INT },
+        { name: 'usuario', value: req.body.usuario, type: self.model.types.INT }
     ];
 
     this.model.queryAllRecordSet('CancelarDPI_INS', params, function(error, result) {

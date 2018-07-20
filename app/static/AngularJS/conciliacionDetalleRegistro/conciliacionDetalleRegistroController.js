@@ -321,7 +321,7 @@ registrationModule.controller('conciliacionDetalleRegistroController', function(
     }
 
     $scope.cancelaDPI = function() {
-        conciliacionDetalleRegistroRepository.getCancelaDPI($scope.grupoDPI).then(function(result) {
+        conciliacionDetalleRegistroRepository.getCancelaDPI($scope.grupoDPI, $rootScope.userData.idUsuario).then(function(result) {
             location.reload();
         });
     }

@@ -15,12 +15,13 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
-        getCancelaDPI: function(grupo) {
+        getCancelaDPI: function(grupo, usuario) {
             return $http({
                 url: conciliacionDetalleRegistroURL + 'cancelaDPI/',
                 method: "POST",
                 data: {
-                    grupo: grupo
+                    grupo: grupo,
+                    usuario: usuario
                 },
                 headers: {
                     'Content-Type': 'application/json'
