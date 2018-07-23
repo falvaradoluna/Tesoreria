@@ -157,19 +157,18 @@
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function (result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
-                    // if( $scope.totalCargoBancario == 0 && $scope.totalAbonoBancario == 0 ){
-                        $scope.totalCargoBancario = 0;
-                        $scope.totalAbonoBancario = 0;
-                        angular.forEach($scope.depositosBancos, function (value, key) {
-                            if (value.esCargo == 1) {
-                                $scope.depositosBancos[key]['cargo'] = value.importe;
-                                $scope.totalCargoBancario += value.importe;
-                            } else if (value.esCargo == 0) {
-                                $scope.depositosBancos[key]['abono'] = value.importe;
-                                $scope.totalAbonoBancario += value.importe;
-                            }
-                        });
-                    // };
+                    console.log( '$scope.depositosBancos', $scope.depositosBancos );
+                    $scope.totalCargoBancario = 0;
+                    $scope.totalAbonoBancario = 0;
+                    angular.forEach($scope.depositosBancos, function (value, key) {
+                        if (value.esCargo == 1) {
+                            $scope.depositosBancos[key]['cargo'] = value.importe;
+                            $scope.totalCargoBancario += value.importe;
+                        } else if (value.esCargo == 0) {
+                            $scope.depositosBancos[key]['abono'] = value.importe;
+                            $scope.totalAbonoBancario += value.importe;
+                        }
+                    });
                    
                     $scope.gridDepositosBancos.data = result.data[0];
 
@@ -1298,7 +1297,14 @@
             };
         });
         
-        if( PunteoDPI.length == 0 ){
+        if( PunteoDPI[0].idBmer == 0 ){
+            swal(
+                'Alto',
+                'Este movimiento no se puede mandar a DPI.',
+                'warning'
+            );
+        }
+        else if( PunteoDPI.length == 0 ){
             swal(
                 'Alto',
                 'Debes seleccionar minimo 1 DPI.',
@@ -1311,14 +1317,14 @@
                 'warning'
             );
         }else if (PunteoDPI.length == 1) {
-            $('#alertaGuardarDPI').modal('show');
-            localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
+            // $('#alertaGuardarDPI').modal('show');
+            // localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
 
-            $scope.punteoAuxiliar = [];
-            $scope.punteoBanco = [];
-            $scope.gridApiBancos.selection.clearSelectedRows();
-            $scope.gridApiAuxiliar.selection.clearSelectedRows();
-            $scope.limpiaVariables();
+            // $scope.punteoAuxiliar = [];
+            // $scope.punteoBanco = [];
+            // $scope.gridApiBancos.selection.clearSelectedRows();
+            // $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            // $scope.limpiaVariables();
         } else {
             swal(
                 'Alto',
