@@ -559,6 +559,17 @@
         });
     };
 
+    $scope.generarLoading = function(){
+        setTimeout(function(){
+            if( JSON.parse(localStorage.getItem('DetalleDiferencias') ==  null )){
+                setTimeout(function(){
+                    $scope.generarLoading();
+                },5000);
+            }else{
+                $scope.generaInfoReport();
+            }
+        },2000);
+    }
 
     $scope.generaInfoReport = function () {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
@@ -571,10 +582,8 @@
             $scope.fechaReporteConcilio = $scope.fechaCorte;
         }
         setTimeout(function () {
-
             //Obtengo los datos de detalles/diferencias del local storage
             var detalleDiferencias = JSON.parse(localStorage.getItem('DetalleDiferencias'));
-            console.log( 'detalleDiferencias', detalleDiferencias );
                 $('reproteModalPdf').modal('show');
                 //Genero la promesa para enviar la estructura del reporte 
                 new Promise(function (resolve, reject) {
@@ -641,7 +650,7 @@
                         $('#reproteModalPdf').modal('show');
                     });
                 });
-        }, 7000)
+        }, 2000)
     };
 
     $scope.go = function (path) {
