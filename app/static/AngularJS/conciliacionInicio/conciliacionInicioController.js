@@ -278,6 +278,7 @@
                         if (result.data.length > 0) {
                             
                             $scope.totalesAbonosCargos = result.data[0];
+                            console.log( 'totalesAbonosCargos', $scope.totalesAbonosCargos );
                             $scope.mesActivo = result.data[0].mesActivo;
                             localStorage.setItem('dataSearch', JSON.stringify($scope.totalesAbonosCargos));
                             
@@ -571,7 +572,7 @@
                 $scope.generaInfoReport();
             }
         },2000);
-    }
+    };
 
     $scope.generaInfoReport = function () {
         $scope.busqueda = JSON.parse(localStorage.getItem('paramBusqueda'));
