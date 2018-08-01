@@ -1286,6 +1286,7 @@
     // };
 
     $scope.ShowAlertDPI = function () {
+        
         $scope.isDPI = 1;
         var PunteoDPI = [], AbonoBanco = 0, CargoBanco = 0;
 
@@ -1317,14 +1318,14 @@
                 'warning'
             );
         }else if (PunteoDPI.length == 1) {
-            // $('#alertaGuardarDPI').modal('show');
-            // localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
+            $('#alertaGuardarDPI').modal('show');
+            localStorage.setItem('infoDPIData', JSON.stringify(PunteoDPI));
 
-            // $scope.punteoAuxiliar = [];
-            // $scope.punteoBanco = [];
-            // $scope.gridApiBancos.selection.clearSelectedRows();
-            // $scope.gridApiAuxiliar.selection.clearSelectedRows();
-            // $scope.limpiaVariables();
+            $scope.punteoAuxiliar = [];
+            $scope.punteoBanco = [];
+            $scope.gridApiBancos.selection.clearSelectedRows();
+            $scope.gridApiAuxiliar.selection.clearSelectedRows();
+            $scope.limpiaVariables();
         } else {
             swal(
                 'Alto',
