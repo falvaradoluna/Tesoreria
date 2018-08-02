@@ -41,6 +41,9 @@
     $rootScope.BancoPunteadoAbonosTotales = 0;
     $rootScope.BancoPunteadoCargosTotales = 0;
 
+    //Variable para momestrar la alertar de error de los punteos
+    $scope.alertErrShow = false;
+
     //Punteo especial
     $scope.checkboxEspecial = {
         value : false
@@ -133,8 +136,36 @@
         { name: 'referencia', displayName: 'Referencia', width: 200 },
         { name: 'fechaOperacion', displayName: 'Fecha', width: 100, cellTemplate: '<div class="text-right text-danger text-semibold"><span ng-if="row.entity.fechaAnterior == 1">{{row.entity.fechaOperacion.substr(0, 10)}}</span></div><div class="text-right"><span ng-if="row.entity.fechaAnterior == 0">{{ row.entity.fechaOperacion.substr(0, 10) }}</span></div>' },
         { name: 'refAmpliada', displayName: 'Referencia Ampliada', width: 300 },
-        { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.cargo > 0">{{row.entity.cargo | currency}}</span></div><div class="text-right"><span ng-if="row.entity.cargo == 0">{{row.entity.cargo | currency}}</span></div>' },
-        { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold"><span ng-if="row.entity.abono > 0">{{row.entity.abono | currency}}</span></div><div class="text-right"><span ng-if="row.entity.abono == 0">{{row.entity.abono | currency}}</span></div>' },
+        { name: 'cargo', displayName: 'Cargos', type: 'number', width: 100, cellTemplate: ' <div class="text-right text-success text-semibold">' +
+                                                                                                '<span ng-if="row.entity.cargo > 0 && row.entity.punErr != 1">' +
+                                                                                                    '{{row.entity.cargo | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>'+
+                                                                                            '<div class="text-right">'+
+                                                                                                '<span ng-if="row.entity.cargo == 0">'+
+                                                                                                    '{{row.entity.cargo | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>'+
+                                                                                            '<div class="text-right text-warning text-semibold">'+
+                                                                                                '<span ng-if="row.entity.cargo > 0 && row.entity.punErr == 1">'+
+                                                                                                    '{{row.entity.cargo | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>' },
+        { name: 'abono', displayName: 'Abonos', type: 'number', width: 100, cellTemplate: '<div class="text-right text-success text-semibold">'+
+                                                                                                '<span ng-if="row.entity.abono > 0 && row.entity.punErr != 1">'+
+                                                                                                    '{{row.entity.abono | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>'+
+                                                                                            '<div class="text-right">'+
+                                                                                                '<span ng-if="row.entity.abono == 0">'+
+                                                                                                    '{{row.entity.abono | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>'+
+                                                                                            '<div class="text-right text-warning text-semibold">'+
+                                                                                                '<span ng-if="row.entity.abono > 0 && row.entity.punErr == 1">'+
+                                                                                                    '{{row.entity.abono | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>' },
         { name: 'indexPrePunteo', displayName: 'Index', width: 0, show: false },
         {
             name: 'color', field: 'color', displayName: 'Color', cellFilter: 'currency', cellClass: 'gridCellRight', width: 100, visible: false
@@ -153,11 +184,9 @@
     //******************Función para llenar el grid Depositos Bancos********************************
     $scope.getDepositosBancos = function (idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa) {
         if (idestatus == 1) {
-
             filtrosRepository.getDepositos(idBanco, idestatus, cuentaBancaria, fElaboracion, fCorte, IdEmpresa).then(function (result) {
                 if (result.data.length >= 0) {
                     $scope.depositosBancos = result.data[0];
-                    console.log( '$scope.depositosBancos', $scope.depositosBancos );
                     $scope.totalCargoBancario = 0;
                     $scope.totalAbonoBancario = 0;
                     angular.forEach($scope.depositosBancos, function (value, key) {
@@ -167,6 +196,10 @@
                         } else if (value.esCargo == 0) {
                             $scope.depositosBancos[key]['abono'] = value.importe;
                             $scope.totalAbonoBancario += value.importe;
+                        }
+
+                        if( value.punErr == 1 ){
+                            $scope.alertErrShow = true;
                         }
                     });
                    

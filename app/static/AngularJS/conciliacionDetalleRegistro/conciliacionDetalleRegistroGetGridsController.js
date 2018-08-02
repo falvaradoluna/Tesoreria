@@ -174,8 +174,6 @@
         .then(function(result) {
             $scope.uniConciliadoBancario = result.data[0];
             $scope.uniConciliadoContable = result.data[1];
-            console.log( '$scope.uniConciliadoBancario', result.data[0].length );
-            console.log( '$scope.uniConciliadoContable', result.data[1].length );
             $rootScope.uniAbonoBan = [];
             $rootScope.uniCargoCon = [];
             $rootScope.uniCargoBan = [];

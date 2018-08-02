@@ -217,10 +217,25 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="margin-top: 2%;">
+                    <div class="row" style="margin-top: 2%;" ng-if="alertErrShow == true">
+                        <div class="alert col-md-4" role="alert" style="background-color: #ffd966; border-color: transparent; border-left: 3px solid #d58003; color: #555">
+                            <strong> <i class="fa fa-warning"></i> Información:</strong><br>Punteos Referenciados con discrepancias agenos al proceso.
+                        </div>
+                        <div class="col-md-8" ng-show="mesActivo">
+                            <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()" style="padding: 15px 40px; font-size: 16px;">
+                                <i class="ti-layout-list-thumb"></i> Envíar a DPI
+                            </button> &nbsp;&nbsp;
+                            <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()" style="padding: 15px 40px; font-size: 16px;">
+                                <i class="ti-control-shuffle"> </i>Punteo
+                            </button>
+                            <br>
+                            <br/> &nbsp;
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 2%;" ng-if="alertErrShow == false">
                         <div class="col-md-12" ng-show="mesActivo">
                             <button ng-disabled="showBotones.BtnEnviarDPI == 0" class="btn btn-danger pull-right" ng-click="ShowAlertDPI()" style="padding: 15px 40px; font-size: 16px;">
-                                <i class="ti-layout-list-thumb"></i> Envíar a DPI 
+                                <i class="ti-layout-list-thumb"></i> Envíar a DPI
                             </button> &nbsp;&nbsp;
                             <button ng-disabled="showBotones.BtnPunteros == 0" class="btn btn-primary pull-right" ng-click="ShowAlertPunteo()" style="padding: 15px 40px; font-size: 16px;">
                                 <i class="ti-control-shuffle"> </i>Punteo
