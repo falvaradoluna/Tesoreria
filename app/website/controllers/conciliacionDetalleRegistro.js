@@ -562,6 +562,24 @@ conciliacionDetalleRegistro.prototype.get_totalUniversoBancario = function(req, 
     });
 };
 
+//../detalleError
+conciliacionDetalleRegistro.prototype.get_detalleError = function(req, res, next) {
+    var self = this;
+    
+    var params = [
+        { name: 'idEmpresa', value: req.query.idEmpresa, type: self.model.types.INT },
+        { name: 'idBanco', value: req.query.idBanco, type: self.model.types.INT },
+        { name: 'noCuenta', value: req.query.noCuenta, type: self.model.types.STRING }
+    ];
+    
+    this.model.queryAllRecordSet('SEL_REGISTROS_PUNTEADOS_ERR', params, function(error, result) {
+        self.view.expositor(res, {
+            error: error,
+            result: result
+        });
+    });
+};
+
 //../guardarHistorico
 conciliacionDetalleRegistro.prototype.get_guardarHistorico = function(req, res, next) {
     var self = this;

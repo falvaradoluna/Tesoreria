@@ -29,6 +29,22 @@ registrationModule.factory('conciliacionDetalleRegistroRepository', function($ht
             });
         },
 
+        detallePuntoErr: function(idEmpresa, idBanco, noCuenta){
+            return $http({
+                url: conciliacionDetalleRegistroURL + 'detalleError/',
+                method: "GET",
+                params: {
+                    idEmpresa: idEmpresa,
+                    idBanco: idBanco,
+                    noCuenta: noCuenta
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+
+            });
+        },
+
         insertPuntoDeposito: function(banco, auxiliar, descripcion, estatus, idpadre, idOpcion, idEmpresa, idBanco, tipoPunteo, idUsuario, esCargoBanco, esCargoContable) { //LQMA 01042018
             console.log('insertPuntoDeposito')
             return $http({

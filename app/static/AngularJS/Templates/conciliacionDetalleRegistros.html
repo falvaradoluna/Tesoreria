@@ -223,13 +223,13 @@
                                 <tr>
                                     <td>
                                         <strong> <i class="fa fa-warning"></i> Información:</strong>
-                                        <br>Existen punteos referenciados que no pudieron generarse adecuadamente por motivos ajenos a esta plataforma.
+                                        <br>Existen punteos referenciados que no pudieron generarse adecuadamente por errores de BPRO.
                                     </td>
-                                    <!-- <td width="70">
-                                        <button class="btn btn-warning pull-right text-center" style="padding: 20px 10px">
+                                    <td width="70">
+                                        <button class="btn btn-warning pull-right text-center" style="padding: 20px 10px" ng-click="detallePuntoErr()">
                                             <small>Detalle</small>
                                         </button>
-                                    </td> -->
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -1827,5 +1827,39 @@
         </div>
     </div>
 </div>
+
+<!--===================================================-->
+<div class="modal fade bs-example-modal" id="errorInsert" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog" role="document" style="width: 80%; height: 70%;">
+            <div class="modal-content">
+                <div class="panel-body">
+                    <h3><i class="fa fa-exclamation-circle text-warning" aria-hidden="true"></i> Registros referenciados </h3>
+                    
+                    <table id="errorTable" class="table table-striped table-bordered table-responsive">
+                        <thead>
+                            <tr>
+                                <td><b>Grupo</b></td>
+                                <td><b>Concepto</b></td>
+                                <td><b>Cargo</b></td>
+                                <td><b>Abono </b></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="error in errores">
+                                <td style="color:{{error.color}}"> {{error.rpun_grupoPunteo}}</td>
+                                <td> {{error.concepto}}</td>
+                                <td> {{error.cargos | currency}}</td>
+                                <td> {{error.abonos | currency}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- <label class="text-warning"> <strong> Archivo: {{nombreExcel}}</strong> </label>
+                    <br><br><br> -->
+                    <a class="btn btn-default pull-right" data-dismiss="modal"> Cerrar </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--===================================================-->
 <!--===================================================-->
 <!--End Modal para colocar cargo abono-->

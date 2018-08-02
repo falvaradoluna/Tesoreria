@@ -302,6 +302,45 @@
     };
     //========================================================================================
 
+    $scope.detallePuntoErr = function(){
+        conciliacionDetalleRegistroRepository.detallePuntoErr($scope.busqueda.IdEmpresa, $scope.busqueda.IdBanco, $scope.busqueda.Cuenta)
+        .then(function( result ){
+            if( result.data.length > 0 ){
+                $rootScope.errores = result.data[0];
+                $scope.grupo = '';
+                $scope.colorGroup = '';
+                angular.forEach($rootScope.errores, function(value, key){
+                    if(key == 0){
+                       $scope.grupo = value.rpun_grupoPunteo;
+                       $scope.colorGroup = $scope.getHexColor();
+                       $rootScope.errores[key]['color'] = $scope.colorGroup;
+                    }else{
+                        if($scope.grupo == value.rpun_grupoPunteo){
+                            $rootScope.errores[key]['color'] = $scope.colorGroup;
+                        }else{
+                            $scope.grupo = value.rpun_grupoPunteo;
+                            $scope.colorGroup = $scope.getHexColor();
+                            $rootScope.errores[key]['color'] = $scope.colorGroup;
+                        }
+                    }
+                });
+                $('#errorInsert').modal('show');
+                setTimeout(function(){
+                    $('#errorTable').DataTable().destroy();
+                    $('#errorTable').DataTable({
+                        destroy: true,
+                        "responsive": true,
+                        searching: true,
+                        paging: true,
+                        autoFill: false,
+                        fixedColumns: true
+                    });
+                },500);
+            };
+            console.log( 'resultDet', result );
+        });
+    };
+
     //********************Función para llenar el grid Auxiliar Contable*****************************
 
     $scope.getAuxiliarContable = function (idEmpresa, idBanco, numero_cuenta, idestatus, fElaboracion, fCorte, polizaPago, cuentaBancaria) {
