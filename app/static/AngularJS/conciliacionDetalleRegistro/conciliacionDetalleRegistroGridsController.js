@@ -95,7 +95,7 @@
     };
     $scope.gridAuxiliarContable.columnDefs = [
         { name: 'cargo', displayName: 'Cargo', width: 100, type: 'number', cellTemplate:    '<div class="text-right text-success text-semibold">'+
-                                                                                                '<span ng-if="row.entity.cargo != 0">'+
+                                                                                                '<span ng-if="row.entity.cargo != 0 && row.entity.punErr != 1">'+
                                                                                                     '{{row.entity.cargo | currency}}'+
                                                                                                 '</span>'+
                                                                                             '</div>'+
@@ -103,14 +103,24 @@
                                                                                                 '<span ng-if="row.entity.cargo == 0">'+
                                                                                                     '{{row.entity.cargo | currency}}'+
                                                                                                 '</span>'+
+                                                                                            '</div>'+
+                                                                                            '<div class="text-right text-warning text-semibold">'+
+                                                                                                '<span ng-if="row.entity.cargo != 0 && row.entity.punErr == 1 ">'+
+                                                                                                    '{{row.entity.cargo | currency}}'+
+                                                                                                '</span>'+
                                                                                             '</div>' },
         { name: 'abono', displayName: 'Abono', width: 100, type: 'number', cellTemplate:    '<div class="text-right text-success text-semibold">'+
-                                                                                                '<span ng-if="row.entity.abono != 0">'+
+                                                                                                '<span ng-if="row.entity.abono != 0 && row.entity.punErr != 1">'+
                                                                                                     '{{row.entity.abono | currency}}'+
                                                                                                 '</span>'+
                                                                                             '</div>'+
                                                                                             '<div class="text-right">'+
                                                                                                 '<span ng-if="row.entity.abono == 0">'+
+                                                                                                    '{{row.entity.abono | currency}}'+
+                                                                                                '</span>'+
+                                                                                            '</div>'+
+                                                                                            '<div class="text-right text-warning text-semibold">'+
+                                                                                                '<span ng-if="row.entity.abono != 0 && row.entity.punErr == 1">'+
                                                                                                     '{{row.entity.abono | currency}}'+
                                                                                                 '</span>'+
                                                                                             '</div>' },
